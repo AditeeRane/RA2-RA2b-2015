@@ -428,7 +428,6 @@ using namespace std;
     int eventN=0;
     while( evt->loadNext() ){
       eventN++;
-
       if(evt->PDFweights_()->size()!= PDFsize){
         cout << " PDFweights_()->size(): " << evt->PDFweights_()->size() << endl;
         cout << " Please fix the value of the variable \"PDFsize\". \n Turning off the AccSys calculation \n " ;
@@ -441,7 +440,7 @@ using namespace std;
       }
 
       //if(eventN>100000)break;
-      //if(eventN>20000)break;
+      //if(eventN>5000)break;
 
       eventWeight = evt->weight();
       //eventWeight = evt->weight()/evt->puweight();
@@ -568,6 +567,7 @@ using namespace std;
       HadTauPhiVec.clear();
      
       if(TauHadModel>=4){
+	//std::cout << evt->GenTauHadVec_().size() << std::endl;
         for(int i=0; i<evt->GenTauHadVec_().size();i++){
           if(evt->GenTauHadVec_()[i]==1){
             double pt=evt->GenTauPtVec_()[i];
@@ -604,6 +604,8 @@ using namespace std;
         }
       }
       if(HadTauPtVec.size()>0)hadTau=true;
+
+      //std::cout << "eventN:1 " << eventN << std::endl;
 
       if(verbose!=0){      
         for(int i=0; i<evt->GenTauPtVec_().size();i++){
@@ -705,6 +707,8 @@ using namespace std;
         }
       }      
 
+      //std::cout << "eventN:2 " << eventN << std::endl;
+
       // Total weight
       double totWeight = ( eventWeight )*1.;
       //double totWeight = 1.;
@@ -776,6 +780,8 @@ using namespace std;
           // we are also interested to see how often the leading tau jet is vetoed by IsoTrk
           Iso_all2->Fill( binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],eventWeight);
           int IsoElecIdx=-1, IsoMuIdx=-1, IsoPionIdx=-1;
+
+	  //std::cout << "eventN:3 " << eventN << std::endl;
 
           // Match directly to IsoTrk. But this wouldn't capture all 
           utils->findMatchedObject(IsoElecIdx,Visible3Vec.Eta(),Visible3Vec.Phi(),evt->IsoElecPtVec_(),evt->IsoElecEtaVec_(),evt->IsoElecPhiVec_(),0.4,verbose);

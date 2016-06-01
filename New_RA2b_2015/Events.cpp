@@ -22,16 +22,16 @@
      isoElectronTracks=-1;
      isoMuonTracks=-1;
      isoPionTracks=-1;
-     Leptons=-1;
+     //     Leptons=-1;
      NJets=-1;
      BTags=-1;
      Weight=1;
      puWeight=1.;
      HT=0.0;
-     genHT=0.0;
+     madHT=0.0;
      MHT=0.0;
-     MHT_Phi=0.0; 
-     METPt=0.0;
+     MHTPhi=0.0; 
+     MET=0.0;
      METPhi=0.0;
      DeltaPhi1=-99.;
      DeltaPhi2=-99.;
@@ -41,14 +41,15 @@
      GenMu_GenMuFromTau=0;
      GenTau_GenTauHad=0;
      GenElec_GenElecFromTau=0;
-     slimJet_slimJetID = 0;
+     softJets_ID = 0;
+     Jets_ID = 0;
      GenMus = 0;
      GenEls = 0;
      GenTauNu = 0;
      GenTaus = 0;
 
-     genParticles = 0;
-     genParticles_PDGid = 0;  
+     GenParticles = 0;
+     GenParticles_PdgId = 0;  
      PDFweights =0;
      ScaleWeights = 0;
      Jets = 0;
@@ -59,7 +60,7 @@
      Jets_chargedHadronEnergyFraction = 0;
      Jets_chargedHadronMultiplicity = 0;
      Jets_electronMultiplicity = 0;
-     Jets_jetArea = 0;
+     //     Jets_jetArea = 0;
      Jets_muonEnergyFraction = 0;
      Jets_muonMultiplicity = 0;
      Jets_neutralEmEnergyFraction = 0;
@@ -78,12 +79,18 @@
 //     selectedIDIsoElectronsPtVec=new vector<double>();
      selectedIDElectrons = 0;
 //     selectedIDIsoElectronsPtVec=new vector<double>();
-     slimJetJECdown = 0;
-     slimJetJECup = 0;
-     slimJet = 0;
-     IsolatedElectronTracksVeto = 0;
-     IsolatedMuonTracksVeto = 0;
-     IsolatedPionTracksVeto = 0;
+     softJetsJECdown = 0;
+     JetsJECdown = 0;
+     softJetsJECup = 0;
+     JetsJECup = 0;
+     softJets = 0;
+     Jets = 0;
+     //IsolatedElectronTracksVeto = 0;
+     //IsolatedMuonTracksVeto = 0;
+     //IsolatedPionTracksVeto = 0;
+     TAPElectronTracks = 0;
+     TAPMuonTracks = 0;
+     TAPPionTracks = 0;
 
      TauLorVec = 0;
      TauIdVecagainstElectronLooseMVA5 = 0;
@@ -114,15 +121,15 @@
      fChain->SetBranchAddress("isoElectronTracks", &isoElectronTracks);
      fChain->SetBranchAddress("isoMuonTracks", &isoMuonTracks);
      fChain->SetBranchAddress("isoPionTracks", &isoPionTracks);
-     fChain->SetBranchAddress("Leptons", &Leptons);
+     //     fChain->SetBranchAddress("Leptons", &Leptons);
      fChain->SetBranchAddress("NJets", &NJets);
      fChain->SetBranchAddress("BTags", &BTags);
      fChain->SetBranchAddress("Weight", &Weight);
      fChain->SetBranchAddress("puWeight", &puWeight);
      fChain->SetBranchAddress("HT", &HT);
      fChain->SetBranchAddress("MHT", &MHT);
-     fChain->SetBranchAddress("MHT_Phi", &MHT_Phi);
-     fChain->SetBranchAddress("METPt", &METPt);
+     fChain->SetBranchAddress("MHTPhi", &MHTPhi);
+     fChain->SetBranchAddress("MET", &MET);
      fChain->SetBranchAddress("METPhi", &METPhi); 
      fChain->SetBranchAddress("DeltaPhi1", &DeltaPhi1);
      fChain->SetBranchAddress("DeltaPhi2", &DeltaPhi2);
@@ -145,11 +152,11 @@
        fChain->SetBranchAddress("GenTaus", &GenTaus);
        fChain->SetBranchAddress("GenTau_GenTauHad", &GenTau_GenTauHad);
        fChain->SetBranchAddress("GenTauNu", &GenTauNu);
-       fChain->SetBranchAddress("genHT", &genHT);
+       fChain->SetBranchAddress("madHT", &madHT);
        fChain->SetBranchAddress("GenMu_MT2Activity", &GenMu_MT2Activity);
 
-       fChain->SetBranchAddress("genParticles", &genParticles);
-       fChain->SetBranchAddress("genParticles_PDGid", &genParticles_PDGid);
+       fChain->SetBranchAddress("GenParticles", &GenParticles);
+       fChain->SetBranchAddress("GenParticles_PdgId", &GenParticles_PdgId);
 
      }
      fChain->SetBranchAddress("PDFweights", &PDFweights);
@@ -163,7 +170,7 @@
      fChain->SetBranchAddress("Jets_chargedHadronEnergyFraction", &Jets_chargedHadronEnergyFraction);
      fChain->SetBranchAddress("Jets_chargedHadronMultiplicity", &Jets_chargedHadronMultiplicity);
      fChain->SetBranchAddress("Jets_electronMultiplicity", &Jets_electronMultiplicity);
-     fChain->SetBranchAddress("Jets_jetArea", &Jets_jetArea);
+     //     fChain->SetBranchAddress("Jets_jetArea", &Jets_jetArea);
      fChain->SetBranchAddress("Jets_muonEnergyFraction", &Jets_muonEnergyFraction);
      fChain->SetBranchAddress("Jets_muonMultiplicity", &Jets_muonMultiplicity);
      fChain->SetBranchAddress("Jets_neutralEmEnergyFraction", &Jets_neutralEmEnergyFraction);
@@ -181,13 +188,21 @@
      fChain->SetBranchAddress("Electrons", &Electrons);
 //     fChain->SetBranchAddress("selectedIDIsoElectronsPtVec", &selectedIDIsoElectronsPtVec);
      fChain->SetBranchAddress("selectedIDElectrons", &selectedIDElectrons);
-     fChain->SetBranchAddress("slimJetJECdown", &slimJetJECdown);  
-     fChain->SetBranchAddress("slimJetJECup", &slimJetJECup);
-     fChain->SetBranchAddress("slimJet", &slimJet);
-     fChain->SetBranchAddress("slimJet_slimJetID", &slimJet_slimJetID);
-     fChain->SetBranchAddress("IsolatedElectronTracksVeto", &IsolatedElectronTracksVeto);
-     fChain->SetBranchAddress("IsolatedMuonTracksVeto", &IsolatedMuonTracksVeto);
-     fChain->SetBranchAddress("IsolatedPionTracksVeto", &IsolatedPionTracksVeto);
+     fChain->SetBranchAddress("softJetsJECdown", &softJetsJECdown);  
+     fChain->SetBranchAddress("JetsJECdown", &JetsJECdown);
+     fChain->SetBranchAddress("softJetsJECup", &softJetsJECup);
+     fChain->SetBranchAddress("JetsJECup", &JetsJECup);
+     fChain->SetBranchAddress("softJets", &softJets);
+     fChain->SetBranchAddress("Jets", &Jets);
+     fChain->SetBranchAddress("softJets_ID", &softJets_ID);
+     fChain->SetBranchAddress("Jets_ID", &Jets_ID);
+     //     fChain->SetBranchAddress("IsolatedElectronTracksVeto", &IsolatedElectronTracksVeto);
+     //fChain->SetBranchAddress("IsolatedMuonTracksVeto", &IsolatedMuonTracksVeto);
+     //fChain->SetBranchAddress("IsolatedPionTracksVeto", &IsolatedPionTracksVeto);
+
+     fChain->SetBranchAddress("TAPElectronTracks", &TAPElectronTracks);
+     fChain->SetBranchAddress("TAPMuonTracks", &TAPMuonTracks);
+     fChain->SetBranchAddress("TAPPionTracks", &TAPPionTracks);
 
      fChain->SetBranchAddress("selectedIDIsoMuons_MT2Activity", &selectedIDIsoMuons_MT2Activity);
 
@@ -261,12 +276,12 @@
 
   // HT and MHT
   double Events::ht() const { return HT; }
-  double Events::gen_ht() const { return genHT; }
+  double Events::gen_ht() const { return madHT; }
   double Events::mht() const { return MHT; }
-  double Events::mhtphi() const { return  MHT_Phi; }
+  double Events::mhtphi() const { return  MHTPhi; }
 
   // MET 
-  double Events::met() const { return METPt; }
+  double Events::met() const { return MET; }
   double Events::metphi() const { return METPhi; }
 
 
@@ -400,8 +415,8 @@
      return vec;
    }
 
-   vector<TLorentzVector>     *Events::genParticles_() const {return genParticles;}
-   vector<int>                *Events::genParticles_PDGid_() const {return genParticles_PDGid;}
+   vector<TLorentzVector>     *Events::genParticles_() const {return GenParticles;}
+   vector<int>                *Events::genParticles_PDGid_() const {return GenParticles_PdgId;}
 
    vector<double> * Events::PDFweights_() const {return PDFweights;}
    vector<double> * Events::ScaleWeights_() const {return ScaleWeights;}
@@ -444,7 +459,7 @@
    vector<int>  Events::Jets_chargedHadronMultiplicity_() const { return *Jets_chargedHadronMultiplicity;}
    vector<int>  Events::Jets_electronMultiplicity_() const { return *Jets_electronMultiplicity;}
 
-   vector<double>  Events::Jets_jetArea_() const { return *Jets_jetArea;}
+//   vector<double>  Events::Jets_jetArea_() const { return *Jets_jetArea;}
    vector<double>  Events::Jets_muonEnergyFraction_() const {return *Jets_muonEnergyFraction;}
    vector<int>  Events::Jets_muonMultiplicity_() const {return *Jets_muonMultiplicity;}
    vector<double>  Events::Jets_neutralEmEnergyFraction_() const {return *Jets_neutralEmEnergyFraction;}
@@ -452,33 +467,62 @@
    vector<double>  Events::Jets_photonEnergyFraction_() const {return *Jets_photonEnergyFraction;}
    vector<int>  Events::Jets_photonMultiplicity_() const {return *Jets_photonMultiplicity;}
 
-   vector<TLorentzVector> * Events::slimJetJECdown_() const {return slimJetJECdown;}
-   vector<TLorentzVector> * Events::slimJetJECup_() const {return slimJetJECup;}
-   vector<double>  Events::slimJetPtVec_() const { 
-     vector<double> vec;
-     for(int i=0;i < slimJet->size();i++){
-       vec.push_back(slimJet->at(i).Pt());
-     }
-     return vec;
-   }
-   vector<double>  Events::slimJetEtaVec_() const { 
-     vector<double> vec;
-     for(int i=0;i < slimJet->size();i++){
-       vec.push_back(slimJet->at(i).Eta());
-     }
-     return vec;
-   }
-   vector<double>  Events::slimJetPhiVec_() const { 
-     vector<double> vec;
-     for(int i=0;i < slimJet->size();i++){
-       vec.push_back(slimJet->at(i).Phi());
-     }
-     return vec;
-   }
+    vector<TLorentzVector> * Events::slimJetJECdown_() const {
+      vector<TLorentzVector> *vec = JetsJECdown;
+      for(int i=0; i < softJetsJECdown->size(); i++){
+	vec->push_back(softJetsJECdown->at(i));
+      }
+      return vec;
+    }
 
-   vector<int>     Events::slimJetID_() const { return *slimJet_slimJetID;} 
+    vector<TLorentzVector> * Events::slimJetJECup_() const {
+      vector<TLorentzVector> *vec = JetsJECup;
+      for(int i=0; i < softJetsJECup->size(); i++){
+	vec->push_back(softJetsJECup->at(i));
+      }
+      return vec;
+    }
 
-//   vector<double>  Events::slimmedMuPtVec_() const{ return  *slimmedMuonsPtVec;}
+    vector<double>  Events::slimJetPtVec_() const { 
+      vector<double> vec;
+      for(int i=0;i < Jets->size();i++){
+	vec.push_back(Jets->at(i).Pt());
+      }
+      for(int i=0;i < softJets->size();i++){
+	vec.push_back(softJets->at(i).Pt());
+      }
+      return vec;
+    }
+    vector<double>  Events::slimJetEtaVec_() const { 
+      vector<double> vec;
+      for(int i=0;i < Jets->size();i++){
+	vec.push_back(Jets->at(i).Eta());
+      }
+      for(int i=0;i < softJets->size();i++){
+	vec.push_back(softJets->at(i).Eta());
+      }
+      
+      return vec;
+    }
+    vector<double>  Events::slimJetPhiVec_() const { 
+      vector<double> vec;
+      for(int i=0;i < Jets->size();i++){
+	vec.push_back(Jets->at(i).Phi());
+      }
+      for(int i=0;i < softJets->size();i++){
+	vec.push_back(softJets->at(i).Phi());
+      }
+      return vec;
+    }
+
+    vector<int>     Events::slimJetID_() const { 
+      vector<int> *vec = Jets_ID;
+      for(int i=0;i < softJets_ID->size();i++){
+	vec->push_back(softJets_ID->at(i));
+      }
+      return *vec;
+    } 
+
    vector<double>  Events::MuNoIsoPtVec_() const{
      vector<double> vec;
      for(int i=0;i < selectedIDMuons->size();i++){
@@ -580,66 +624,66 @@
 
    vector<double>  Events::IsoElecPtVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedElectronTracksVeto->size();i++){
-       vec.push_back(IsolatedElectronTracksVeto->at(i).Pt());
+     for(int i=0;i < TAPElectronTracks->size();i++){
+       vec.push_back(TAPElectronTracks->at(i).Pt());
      }
      return vec;
    }
    vector<double>  Events::IsoElecEtaVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedElectronTracksVeto->size();i++){
-       vec.push_back(IsolatedElectronTracksVeto->at(i).Eta());
+     for(int i=0;i < TAPElectronTracks->size();i++){
+       vec.push_back(TAPElectronTracks->at(i).Eta());
      }
      return vec;
    }
    vector<double>  Events::IsoElecPhiVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedElectronTracksVeto->size();i++){
-       vec.push_back(IsolatedElectronTracksVeto->at(i).Phi());
+     for(int i=0;i < TAPElectronTracks->size();i++){
+       vec.push_back(TAPElectronTracks->at(i).Phi());
      }
      return vec;
    }
 
    vector<double>  Events::IsoMuPtVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedMuonTracksVeto->size();i++){
-       vec.push_back(IsolatedMuonTracksVeto->at(i).Pt());
+     for(int i=0;i < TAPMuonTracks->size();i++){
+       vec.push_back(TAPMuonTracks->at(i).Pt());
      }
      return vec;
    }
    vector<double>  Events::IsoMuEtaVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedMuonTracksVeto->size();i++){
-       vec.push_back(IsolatedMuonTracksVeto->at(i).Eta());
+     for(int i=0;i < TAPMuonTracks->size();i++){
+       vec.push_back(TAPMuonTracks->at(i).Eta());
      }
      return vec;
    }
    vector<double>  Events::IsoMuPhiVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedMuonTracksVeto->size();i++){
-       vec.push_back(IsolatedMuonTracksVeto->at(i).Phi());
+     for(int i=0;i < TAPMuonTracks->size();i++){
+       vec.push_back(TAPMuonTracks->at(i).Phi());
      }
      return vec;
    }
 
    vector<double>  Events::IsoPionPtVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedPionTracksVeto->size();i++){
-       vec.push_back(IsolatedPionTracksVeto->at(i).Pt());
+     for(int i=0;i < TAPPionTracks->size();i++){
+       vec.push_back(TAPPionTracks->at(i).Pt());
      }
      return vec;
    }
    vector<double>  Events::IsoPionEtaVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedPionTracksVeto->size();i++){
-       vec.push_back(IsolatedPionTracksVeto->at(i).Eta());
+     for(int i=0;i < TAPPionTracks->size();i++){
+       vec.push_back(TAPPionTracks->at(i).Eta());
      }
      return vec;
    }
    vector<double>  Events::IsoPionPhiVec_() const{ 
      vector<double> vec;
-     for(int i=0;i < IsolatedPionTracksVeto->size();i++){
-       vec.push_back(IsolatedPionTracksVeto->at(i).Phi());
+     for(int i=0;i < TAPPionTracks->size();i++){
+       vec.push_back(TAPPionTracks->at(i).Phi());
      }
      return vec;
    }
@@ -693,11 +737,27 @@
    vector<string>  Events::TriggerNames_() const{ return *TriggerNames;}
    vector<int>     Events::PassTrigger_() const{ return *TriggerPass;}
 
-   vector<int>     Events::GenMuFromTauVec_() const { return *GenMu_GenMuFromTau;}
+vector<int>     Events::GenMuFromTauVec_() const {
+  vector <int> temp;
+  for(unsigned int ii=0; ii<GenMu_GenMuFromTau->size(); ii++)
+    temp.push_back((int) GenMu_GenMuFromTau->at(ii) );
+  return temp;
+}
 
-   vector<int>     Events::GenElecFromTauVec_() const { return *GenElec_GenElecFromTau;}
+vector<int>     Events::GenElecFromTauVec_() const {
+  vector <int> temp;
+  for(unsigned int ii=0; ii<GenElec_GenElecFromTau->size(); ii++)
+    temp.push_back( GenElec_GenElecFromTau->at(ii) );
+  return temp;
+}
 
-  vector<int>     Events::GenTauHadVec_() const { return *GenTau_GenTauHad;}
+vector<int>     Events::GenTauHadVec_() const {
+  vector <int> temp;
+  for(unsigned int ii=0; ii<GenTau_GenTauHad->size(); ii++) {
+    temp.push_back( (int) GenTau_GenTauHad->at(ii) );
+  }
+  return temp;
+}
 
   double Events::csv_() const {return 0.890;} 
 

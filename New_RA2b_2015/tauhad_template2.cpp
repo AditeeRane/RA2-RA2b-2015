@@ -786,7 +786,7 @@ using namespace std;
 
 
 
-      //if(eventN>2000)break;
+      //if(eventN>5000)break;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
       
       if(!evt->DataBool_()){
@@ -1540,12 +1540,13 @@ using namespace std;
 
 
               int binNum_MT = binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()];
+	      //if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
               double mtWeightError, mtWeightPlus, mtWeightMinus, mtWeightError_lowDphi, mtWeightPlus_lowDphi, mtWeightMinus_lowDphi;
               double mtWeight = hMT->GetBinContent(binNum_MT);
               mtWeightError = hMT->GetBinError(binNum_MT);
               double mtWeight_lowDphi = hMT_lowDphi->GetBinContent(binNum_MT);
               mtWeightError_lowDphi = hMT_lowDphi->GetBinError(binNum_MT);
-
+	      if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
 
               // Apply MT efficiency
               if(utils2::applyMT){
@@ -1921,10 +1922,11 @@ using namespace std;
                       //if(subSampleKey.find("template")!=string::npos && (ite->first!="delphi" && ite->first!="low_Dphi" ))continue; 
 
                       //To save cpu we neglect some of early selections
+		      /*
                       if(ite->first=="PreSel" || ite->first=="nolep" || ite->first=="ht_500" 
                           || ite->first=="Njet_4" || ite->first=="isoElec" || ite->first=="isoMu" || ite->first=="nolep"
                         )continue;
-
+*/
                       // Apply IsoTrkVeto after PreSel, nolep, Njet_4, ht_500 and mht_200
                       if(ite->first!="PreSel" && ite->first!="nolep"&&ite->first!="ht_500"&&ite->first!="mht_200"&&ite->first!="Njet_4" 
                          && ite->first!="mht_500"&& ite->first!="delphi_NoIso" && ite->first!="J46_HT5001200_MHT500750" && utils2::applyIsoTrk){            
@@ -2278,10 +2280,11 @@ using namespace std;
               //if(subSampleKey.find("template")!=string::npos && (it->first!="delphi" && it->first!="low_Dphi" ))continue;
 
               //To save cpu we neglect some of early selections
+	      /*
               if(it->first=="PreSel" || it->first=="nolep" || it->first=="ht_500" 
                  || it->first=="Njet_4" || it->first=="isoElec" || it->first=="isoMu" || it->first=="nolep"
                 )continue;
-
+*/
               if (sel->cutName()[i]==it->first){
                 cdtoit = cdtoitt->mkdir((it->first).c_str());
                 cdtoit->cd();
