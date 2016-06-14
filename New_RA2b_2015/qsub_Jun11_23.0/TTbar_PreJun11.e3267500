@@ -1,0 +1,3 @@
+Warning in <TClass::TClass>: no dictionary for class TPaletteAxis is available
+Error in <TBufferFile::ReadObject>: trying to read an emulated class (TPaletteAxis) to store in a compiled pointer (TObject)
+Error in <TBufferFile::ReadObject>: trying to read an emulated class (TPaletteAxis) to store in a compiled pointer (TObject)

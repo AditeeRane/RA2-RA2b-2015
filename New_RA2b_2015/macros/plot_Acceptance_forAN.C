@@ -1,28 +1,17 @@
 
 
-void plot_Acceptance_forAN(std::string elogForPlot="Elog401_"){
+void plot_Acceptance_forAN(std::string elogForPlot=""){
   
   //
   ///////////////////////////////////////////////////////////////////////////////////////////
   ////Some cosmetic work for official documents. 
   gROOT->LoadMacro("tdrstyle.C");
   setTDRStyle();
-  gROOT->LoadMacro("CMS_lumi.C");
-
-  writeExtraText = true;
-  extraText   = "       Supplementary (Simulation)";  // default extra text is "Preliminary"
-  lumi_8TeV  = "19.1 fb^{-1}"; // default is "19.7 fb^{-1}"
-  lumi_7TeV  = "4.9 fb^{-1}";  // default is "5.1 fb^{-1}"
-  lumi_sqrtS = "13 TeV";       // used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
-  //cmsTextSize  = 0.60;
-  //lumiTextSize = 0.52;
-
-  int iPeriod = 0;    // 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV, 0=free form (uses lumi_sqrtS)
-  int iPos=0;
+  gROOT->LoadMacro("CMS_lumi_v2.C");
   
   char tempname[200];
   char tempname2[200];
-  int W = 1200;
+  int W = 800;
   int H = 600;
   int H_ref = 600;
   int W_ref = 800;
@@ -44,8 +33,6 @@ void plot_Acceptance_forAN(std::string elogForPlot="Elog401_"){
   c1->SetRightMargin( R/W );
   c1->SetTopMargin( T/H );
   c1->SetBottomMargin( B/H );
-  c1->SetTopMargin( 0.1 );
-  c1->SetLeftMargin( 0.08 );
   //c1->SetTickx(0);
   //c1->SetTicky(0);
 
@@ -66,16 +53,11 @@ void plot_Acceptance_forAN(std::string elogForPlot="Elog401_"){
   //
   
   //TFile *file = new TFile("LostLepton2_MuonEfficienciesFromTTbar_Elog213.root","R"); 
-  //sprintf(tempname,"TauHad/Stack/%sLostLepton2_MuonEfficienciesFromstacked.root",elogForPlot.c_str());
-  sprintf(tempname,"TauHad/Stack/%s TauHad/Stack/%sLostLepton2_MuonEfficienciesFromstacked.root",elogForPlot.c_str());
-
+  sprintf(tempname,"TauHad/Stack/%sLostLepton2_MuonEfficienciesFromstacked.root",elogForPlot.c_str());
   TFile *file   = new TFile(tempname,"R");
 
   sprintf(tempname,"hAcc");
   thist = (TH1D*)file->Get(tempname)->Clone();
-
-  thist_input = static_cast<TH1D*>(thist->Clone("thist_input"));
-  shift_bin(thist_input,thist);
 
   thist->SetLineColor(1);
   thist->SetLineWidth(3);
@@ -87,117 +69,78 @@ void plot_Acceptance_forAN(std::string elogForPlot="Elog401_"){
   thist->SetMinimum(ymin);
   thist->GetXaxis()->SetLabelFont(42);
   thist->GetXaxis()->SetLabelOffset(0.007);
-  thist->GetXaxis()->SetLabelSize(0.045);
-  thist->GetXaxis()->SetTitleSize(0.06);
-  thist->GetXaxis()->SetTitleOffset(0.9);
+  thist->GetXaxis()->SetLabelSize(0.04);
+  thist->GetXaxis()->SetTitleSize(0.05);
+  thist->GetXaxis()->SetTitleOffset(1.0);
   thist->GetXaxis()->SetTitleFont(42);
   thist->GetYaxis()->SetLabelFont(42);
   thist->GetYaxis()->SetLabelOffset(0.007);
-  thist->GetYaxis()->SetLabelSize(0.045);
-  thist->GetYaxis()->SetTitleSize(0.06);
-  thist->GetYaxis()->SetTitleOffset(0.60);
+  thist->GetYaxis()->SetLabelSize(0.04);
+  thist->GetYaxis()->SetTitleSize(0.05);
+  thist->GetYaxis()->SetTitleOffset(1.20);
   thist->GetYaxis()->SetTitleFont(42);
 
   thist->GetYaxis()->SetTitle("Acceptance");
-  thist->GetXaxis()->SetTitle("Bin number");
+  thist->GetXaxis()->SetTitle("Bin");
   thist->SetMarkerStyle(20);
   thist->Draw();
 
-  TLatex * ttext1 = new TLatex(6.0 , ytext , "N_{jets}=4");
+  TLatex * ttext1 = new TLatex(5.5 , ytext , " N_{jets} = 3");
   ttext1->SetTextFont(42);
-  ttext1->SetTextSize(0.05);
+  ttext1->SetTextSize(0.04);
   ttext1->SetTextAlign(22);
   ttext1->Draw();
-
-  TLatex * ttext2 = new TLatex(17.0 , ytext , "N_{jets}=5");
+  
+  TLatex * ttext2 = new TLatex(16.5 , ytext , " N_{jets} = 4");
   ttext2->SetTextFont(42);
-  ttext2->SetTextSize(0.05);
+  ttext2->SetTextSize(0.04);
   ttext2->SetTextAlign(22);
   ttext2->Draw();
-
-  TLatex * ttext3 = new TLatex(28.0 , ytext , "N_{jets}=6");
-
+  
+  TLatex * ttext3 = new TLatex(27.5 , ytext , " N_{jets} = 5");
   ttext3->SetTextFont(42);
-  ttext3->SetTextSize(0.05);
+  ttext3->SetTextSize(0.04);
   ttext3->SetTextAlign(22);
   ttext3->Draw();
-
-  TLatex * ttext4 = new TLatex(36.5, ytext , "7#leqN_{jets}#leq8");
+  
+  TLatex * ttext4 = new TLatex(38.5 , ytext , " N_{jets} = 6");
   ttext4->SetTextFont(42);
-  ttext4->SetTextSize(0.05);
+  ttext4->SetTextSize(0.04);
   ttext4->SetTextAlign(22);
   ttext4->Draw();
 
-  TLatex * ttext5 = new TLatex(42.5 , ytext , "N_{jets}#geq9");
+  TLatex * ttext5 = new TLatex(46.5 , ytext , "7 #leq N_{jets} #leq 8");
   ttext5->SetTextFont(42);
-  ttext5->SetTextSize(0.05);
+  ttext5->SetTextSize(0.02);
   ttext5->SetTextAlign(22);
   ttext5->Draw();
- 
-  TLine *tline_1 = new TLine(11.5,ymin,11.5,ymax);
+
+  TLatex * ttext6 = new TLatex(52.5 , ytext , "N_{jets} #geq 9");
+  ttext6->SetTextFont(42);
+  ttext6->SetTextSize(0.02);
+  ttext6->SetTextAlign(22);
+  ttext6->Draw();
+
+  TLine *tline_1 = new TLine(11.,ymin,11.,ymax);
   tline_1->SetLineStyle(2);
   tline_1->Draw();
 
-  TLine *tline_2 = new TLine(22.5,ymin,22.5,ymax);
+  TLine *tline_2 = new TLine(22.,ymin,22.,ymax);
   tline_2->SetLineStyle(2);
   tline_2->Draw();
   
-  TLine *tline_3 = new TLine(33.5,ymin,33.5,ymax);
+  TLine *tline_3 = new TLine(33.,ymin,33.,ymax);
   tline_3->SetLineStyle(2);
   tline_3->Draw();
-  
-  TLine *tline_4 = new TLine(39.5,ymin,39.5,ymax);
+
+  TLine *tline_4 = new TLine(44.,ymin,44.,ymax);
   tline_4->SetLineStyle(2);
   tline_4->Draw();
- 
-  CMS_lumi( c1, iPeriod, iPos );   // writing the lumi information and the CMS "logo"
-
-  double xlatex=0.75;
-  double ylatex=0.40;
-  /*
-  TLatex *   tex = new TLatex(xlatex,ylatex,"arXiv:1602.06581");
-  tex->SetTextColor(4);
-  tex->SetTextFont(61);
-  tex->SetTextSize(0.055);
-  tex->SetLineColor(4);
-  tex->SetLineWidth(2);
-  //tex->Draw();
-  tex->DrawLatexNDC(xlatex,ylatex-0.2,"arXiv:1602.06581");
-  */
-  TPaveText pt(xlatex,ylatex,xlatex+0.19,ylatex+0.1,"NDC");
-  pt.AddText("arXiv:1602.06581");
-  pt.SetFillColor(0);
-  pt.SetLineColor(0);
-  pt.SetLineWidth(0);
-  pt.SetBorderSize(0);
-  pt.SetTextColor(4);
-  pt.SetTextFont(61);
-  pt.SetTextSize(0.055);
-  pt.Draw();
-
+  
+  TLine *tline_5 = new TLine(50.,ymin,50.,ymax);
+  tline_5->SetLineStyle(2);
+  tline_5->Draw();
+  
   c1->Print("plot_Acceptance.pdf");
-
-}
-
-void shift_bin(TH1* input, TH1* output){
-
-  char tempname[200];  
-  char temptitle[200];  
-  output->SetName(tempname);
-  output->SetTitle(temptitle);
-  output->SetBins(input->GetNbinsX(),input->GetBinLowEdge(1)-0.5,input->GetBinLowEdge(input->GetNbinsX()+1)-0.5);
-  //input->Print("all");
-  //output = new TH1D(tempname,temptitle,input->GetNbinsX(),input->GetBinLowEdge(1)-0.5,input->GetBinLowEdge(input->GetNbinsX()+1)-0.5); 
-  // 0: underflow
-  // 1: first bin [Use the lowedge of this bin]
-  // input->GetNbinsX(): highest bin 
-  // input->GetNbinsX()+1: overflow bin [use the lowedge of this bin]
-  //
-
-  for (int ibin=1;ibin<=input->GetNbinsX();ibin++){
-    output->SetBinContent(ibin,input->GetBinContent(ibin));    
-    output->SetBinError(ibin,input->GetBinError(ibin));    
-    //std::cout << input->GetBinContent(ibin) << std::endl;
-  }
 
 }

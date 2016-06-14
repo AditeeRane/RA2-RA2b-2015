@@ -40,9 +40,9 @@ using namespace std;
    Int_t           NumInteractions;
    Double_t        TrueNumInteractions;
    //   UChar_t         GoodVtx;
-   Bool_t          HBHENoiseFilter;
-   Bool_t          HBHEIsoNoiseFilter;
-   Bool_t          CSCTightHaloFilter;
+   Int_t          HBHENoiseFilter;
+   Int_t          HBHEIsoNoiseFilter;
+   Int_t          CSCTightHaloFilter;
    Int_t           eeBadScFilter;
    Int_t           EcalDeadCellTriggerPrimitiveFilter;
 
@@ -54,7 +54,7 @@ using namespace std;
    Int_t           isoElectronTracks;
    Int_t           isoMuonTracks;
    Int_t           isoPionTracks;
-   Int_t           Leptons;
+   //   Int_t           Leptons;
    Int_t           NJets;
    Int_t           BTags;
    Double_t         Weight;
@@ -62,9 +62,9 @@ using namespace std;
    Double_t        puWeight;
    Double_t         HT;
    Double_t         MHT;
-   Double_t         MHT_Phi; 
+   Double_t         MHTPhi; 
 //Double_t         MHTPhi;
-   Double_t         METPt;
+   Double_t         MET;
    Double_t         METPhi;
    Double_t         DeltaPhi1;
    Double_t         DeltaPhi2;
@@ -73,18 +73,18 @@ using namespace std;
    TTree *         fChain;
    int             currentEntry_;
    int             template_Entries; 
-   Double_t        genHT;
+   Double_t        madHT;
 
    vector<TLorentzVector> *GenMus;
    vector<TLorentzVector> *GenEls;
    vector<TLorentzVector> *GenTaus;
    vector<TLorentzVector> *GenTauNu;
 
-   vector<TLorentzVector> *genParticles;
-   vector<int>     *genParticles_PDGid;
+   vector<TLorentzVector> *GenParticles;
+   vector<int>     *GenParticles_PdgId;
    vector<double>  *PDFweights;
    vector<double>  *ScaleWeights;
-   vector<TLorentzVector> *Jets;
+   //vector<TLorentzVector> *Jets;
    vector<int>     *Jets_partonFlavor;
    vector<bool>    *HTJetsMask;
    vector<double>  *Jets_bDiscriminatorCSV;
@@ -93,7 +93,9 @@ using namespace std;
    vector<int>     *Jets_chargedHadronMultiplicity;
    vector<int>     *Jets_electronMultiplicity;
 
-   vector<double>  *Jets_jetArea;
+   vector<double>  *Jets_jecFactor;
+   vector<double>  *softJets_jecFactor; 
+   //   vector<double>  *Jets_jetArea;
    vector<double>  *Jets_muonEnergyFraction;
    vector<int>     *Jets_muonMultiplicity;
    vector<double>  *Jets_neutralEmEnergyFraction;
@@ -101,9 +103,15 @@ using namespace std;
    vector<double>  *Jets_photonEnergyFraction;
    vector<int>     *Jets_photonMultiplicity;
 
-   vector<TLorentzVector> *slimJetJECdown;
-   vector<TLorentzVector> *slimJetJECup;
-   vector<TLorentzVector> *slimJet; 
+   
+   
+   vector<TLorentzVector> *softJetsJECdown;
+   vector<TLorentzVector> *softJetsJECup;
+   vector<TLorentzVector> *softJets; 
+   vector<TLorentzVector> *JetsJECdown;
+   vector<TLorentzVector> *JetsJECup;
+   vector<TLorentzVector> *Jets;
+
 //   vector<double>  *slimmedMuonsPtVec;
    vector<TLorentzVector> *Muons;
    vector<TLorentzVector> *selectedIDMuons;
@@ -112,9 +120,12 @@ using namespace std;
    vector<TLorentzVector> *Electrons;
    vector<TLorentzVector> *selectedIDElectrons;
 //   vector<double>  *selectedIDIsoElectronsPtVec;
-   vector<TLorentzVector> *IsolatedElectronTracksVeto;
-   vector<TLorentzVector> *IsolatedMuonTracksVeto;
-   vector<TLorentzVector> *IsolatedPionTracksVeto;
+   //vector<TLorentzVector> *IsolatedElectronTracksVeto;
+   //vector<TLorentzVector> *IsolatedMuonTracksVeto;
+   //vector<TLorentzVector> *IsolatedPionTracksVeto;
+   vector<TLorentzVector> *TAPElectronTracks;
+   vector<TLorentzVector> *TAPMuonTracks;
+   vector<TLorentzVector> *TAPPionTracks;
 
    vector<double>  *selectedIDIsoMuons_MT2Activity;
    vector<double>  *GenMu_MT2Activity;
@@ -136,10 +147,11 @@ using namespace std;
    vector<int>     *TriggerPass;
    vector<string>  *TriggerNames;
 
-   vector<int>     *GenMu_GenMuFromTau;
-   vector<int>     *GenElec_GenElecFromTau;
-   vector<int>     *GenTau_GenTauHad;
-   vector<int>     *slimJet_slimJetID;
+   vector<bool>     *GenMu_GenMuFromTau;
+   vector<bool>     *GenElec_GenElecFromTau;
+   vector<bool>     *GenTau_GenTauHad;
+   vector<int>     *softJets_ID;
+   vector<int>     *Jets_ID;
    Bool_t          JetID;
    Bool_t          JetIDloose; 
 
@@ -213,7 +225,7 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<double>  Jets_chargedHadronEnergyFraction_() const;
    vector<int>     Jets_chargedHadronMultiplicity_() const;
    vector<int>     Jets_electronMultiplicity_() const;
-   vector<double>  Jets_jetArea_() const;
+   //   vector<double>  Jets_jetArea_() const;
    vector<double>  Jets_muonEnergyFraction_() const;
    vector<int>     Jets_muonMultiplicity_() const;
    vector<double>  Jets_neutralEmEnergyFraction_() const;
@@ -230,6 +242,8 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
 
 
    vector<int>     slimJetID_() const;
+   vector<double>  slimJetjecFactor_() const;
+   vector<double>  Jets_jecFactor_() const; 
 
    vector<TLorentzVector> * slimJetJECdown_() const;
    vector<TLorentzVector> * slimJetJECup_() const;
@@ -257,7 +271,7 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<int>     GenMuFromTauVec_() const;   
    vector<int>     GenElecFromTauVec_() const;   
    vector<int>     GenTauHadVec_() const;   
-
+   
    vector<double>  IsoElecPtVec_() const;
    vector<double>  IsoElecEtaVec_() const;
    vector<double>  IsoElecPhiVec_() const;

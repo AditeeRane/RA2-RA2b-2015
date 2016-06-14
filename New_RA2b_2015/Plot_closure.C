@@ -166,11 +166,13 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
   
   if(sample.find("stack")==string::npos)sprintf(tempname,"TauHad/%sGenInfo_HadTauEstimation_%s.root",elogForExp.c_str(),sample.c_str());
   else sprintf(tempname,"TauHad/Stack/%sGenInfo_HadTauEstimation_%s.root",elogForExp.c_str(),sample.c_str());
+  std::cout<<"cp0 tempname " <<tempname<<std::endl;  
   filevec.push_back(TFile::Open(tempname,"R"));
 
   if(sample.find("stack")==string::npos)sprintf(tempname,"TauHad2/%sHadTauEstimation_%s.root",elogForPre.c_str(),sample.c_str());
   else sprintf(tempname,"TauHad2/Stack/%sHadTauEstimation_%s.root",elogForPre.c_str(),sample.c_str());
   // sprintf(tempname,"TauHad2/Storage/HadTauEstimation_TTbar_Feb_17_2015.root");
+  std::cout<<"cp00 tempname " <<tempname<<std::endl;
   filevec.push_back(TFile::Open(tempname,"R"));
 
   //
@@ -267,11 +269,13 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
       if(i==0){
         if(histname=="search"){
           sprintf(tempname,"searchH");
+	  std::cout<<"cp1 tempname " <<tempname<<std::endl;
           GenHist=(TH1D*) filevec.at(i)->Get(tempname)->Clone();
         }
         else{
 
           sprintf(tempname,"allEvents/%s/%s_%s_allEvents",cutname.c_str(),histname.c_str(),cutname.c_str());
+	  std::cout<<"cp2 tempname " <<tempname<<std::endl;
           tempstack = (THStack*)filevec.at(i)->Get(tempname)->Clone();
           GenHist=(TH1D*) tempstack->GetStack()->Last();
         }
@@ -279,11 +283,13 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
       if(i==1){
         if(histname=="search"){
           sprintf(tempname,"searchH");
-          GenHist=(TH1D*) filevec.at(i)->Get(tempname)->Clone();
+	  std::cout<<"cp3 tempname " <<tempname<<std::endl;    
+	  GenHist=(TH1D*) filevec.at(i)->Get(tempname)->Clone();
         }        
         else{
           sprintf(tempname,"allEvents/%s/%s_%s_allEvents",cutname.c_str(),histname.c_str(),cutname.c_str());
-          tempstack = (THStack*)filevec.at(i)->Get(tempname)->Clone();
+	  std::cout<<"cp4 tempname " <<tempname<<std::endl;         
+	  tempstack = (THStack*)filevec.at(i)->Get(tempname)->Clone();
           EstHist=(TH1D*) tempstack->GetStack()->Last();
         }
       }
@@ -417,7 +423,7 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
       //y_legend = 3000.;
       ymax_top = 1400.;
       if(cutname=="Njet_9") ymax_top = 100.;
-      ymin_top = 0.0;
+      ymin_top = -10.0;
       ytext_top = 0.65*ymax_top;
       xlatex=0.65;ylatex=0.5;
       sprintf(xtitlename,"N_{b-jet}");
@@ -465,8 +471,10 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
     if(histname=="DelPhi1"){
       xtext_top = 1.2;
       //y_legend = 1300.;
+      //ymax_top = 10000.;
       ymax_top = 10000.;
-      ymin_top = 1.;
+      //ymin_top = 1.;
+      ymin_top = 0.1;  
       ytext_top = ymax_top*0.05;
       sprintf(xtitlename,"DelPhi1");
       sprintf(ytitlename,"Events");
@@ -478,8 +486,11 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
     if(histname=="DelPhi2"){
       xtext_top = 2.2;
       //y_legend = 1300.;
-      ymax_top = 1000.;
-      ymin_top = 10.;
+      //ymax_top = 1000.;
+      //ymin_top = 10.;
+      ymax_top = 10000.;                                                                                                                                                
+      //ymin_top = 1.;   
+      ymin_top = 0.1;
       ytext_top = ymax_top*0.2;
       sprintf(xtitlename,"DelPhi2");
       sprintf(ytitlename,"Events");
@@ -491,8 +502,8 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
     if(histname=="DelPhi3"){
       xtext_top = 2.2;
       //y_legend = 1300.;
-      ymax_top = 1000.;
-      ymin_top = 10.;
+      ymax_top = 10000.;
+      ymin_top = 0.1;
       ytext_top = ymax_top*0.2;
       sprintf(xtitlename,"DelPhi3");
       sprintf(ytitlename,"Events");

@@ -22,7 +22,7 @@ if [ $type -eq 0 ]; then
         export TStr=$TStr
         export outStr=$outStr
         echo $filenum
-        qsub -l walltime=12:00:00 -N $TStr_$outStr -o qsub/ -e qsub/ -V $submitscript 
+        qsub -l walltime=12:00:00 -N $TStr_$outStr -o qsub/ -e qsub/ -V $submitscript  
 
         sleep 1
 

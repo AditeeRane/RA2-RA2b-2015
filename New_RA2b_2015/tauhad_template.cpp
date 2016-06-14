@@ -225,6 +225,14 @@ using namespace std;
     TH1* hAccPass = new TH1D("hAccPass","Acceptance -- Pass",totNbins_ForAcc,1,totNbins_ForAcc+1);
     hAccAll->Sumw2();
     hAccPass->Sumw2();
+    TH1* hAcc_0b_All = new TH1D("hAcc_0b_All","Acceptance -- All",totNbins_ForAcc,1,totNbins_ForAcc+1);
+    TH1* hAcc_0b_Pass = new TH1D("hAcc_0b_Pass","Acceptance -- Pass",totNbins_ForAcc,1,totNbins_ForAcc+1);
+    hAcc_0b_All->Sumw2();
+    hAcc_0b_Pass->Sumw2();
+    TH1* hAcc_non0b_All = new TH1D("hAcc_non0b_All","Acceptance -- All",totNbins_ForAcc,1,totNbins_ForAcc+1);
+    TH1* hAcc_non0b_Pass = new TH1D("hAcc_non0b_Pass","Acceptance -- Pass",totNbins_ForAcc,1,totNbins_ForAcc+1);
+    hAcc_non0b_All->Sumw2();
+    hAcc_non0b_Pass->Sumw2();
 
     TH1* hAccAll_lowDphi = new TH1D("hAccAll_lowDphi","Acceptance -- All",totNbins_ForAcc,1,totNbins_ForAcc+1);
     TH1* hAccPass_lowDphi = new TH1D("hAccPass_lowDphi","Acceptance -- Pass",totNbins_ForAcc,1,totNbins_ForAcc+1);
@@ -381,6 +389,8 @@ using namespace std;
     }
 
     // For each selection, cut, make a vector containing the same histograms as those in vec
+    //std::cout<<"cutName_size"<<cutName().size()<<endl;
+
     for(int i=0; i<(int) sel->cutName().size();i++){
       cut_histvec_map[sel->cutName()[i]]=vec;
     }
@@ -428,7 +438,6 @@ using namespace std;
     int eventN=0;
     while( evt->loadNext() ){
       eventN++;
-
       if(evt->PDFweights_()->size()!= PDFsize){
         cout << " PDFweights_()->size(): " << evt->PDFweights_()->size() << endl;
         cout << " Please fix the value of the variable \"PDFsize\". \n Turning off the AccSys calculation \n " ;
@@ -441,7 +450,7 @@ using namespace std;
       }
 
       //if(eventN>100000)break;
-      //if(eventN>1000)break;
+      //if(eventN>5000)break;
 
       eventWeight = evt->weight();
       //eventWeight = evt->weight()/evt->puweight();
@@ -568,6 +577,7 @@ using namespace std;
       HadTauPhiVec.clear();
      
       if(TauHadModel>=4){
+	//std::cout << evt->GenTauHadVec_().size() << std::endl;
         for(int i=0; i<evt->GenTauHadVec_().size();i++){
           if(evt->GenTauHadVec_()[i]==1){
             double pt=evt->GenTauPtVec_()[i];
@@ -604,6 +614,8 @@ using namespace std;
         }
       }
       if(HadTauPtVec.size()>0)hadTau=true;
+
+      //std::cout << "eventN:1 " << eventN << std::endl;
 
       if(verbose!=0){      
         for(int i=0; i<evt->GenTauPtVec_().size();i++){
@@ -659,6 +671,8 @@ using namespace std;
            &&sel->mht_200(evt->mht())&&sel->dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4())
         ){
         hAccAll->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight); // the weight has only scaling info.needed for stacking 
+        if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
+        if(evt->nBtags()>0)hAcc_non0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
         if(CalcAccSys){
         for(int iacc=0; iacc < evt->PDFweights_()->size(); iacc++){
           hAccAllVec.at(iacc)->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight*evt->PDFweights_()->at(iacc));
@@ -669,6 +683,8 @@ using namespace std;
         }
         if( genTauPt > LeptonAcceptance::muonPtMin() && std::abs(genTauEta) < LeptonAcceptance::muonEtaMax() ){
           hAccPass->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
+          if(evt->nBtags()==0)hAcc_0b_Pass->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
+          if(evt->nBtags()>0)hAcc_non0b_Pass->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
           if(CalcAccSys){
           for(int iacc=0; iacc < evt->PDFweights_()->size(); iacc++){
              hAccPassVec[iacc]->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight*evt->PDFweights_()->at(iacc));
@@ -704,6 +720,8 @@ using namespace std;
           }
         }
       }      
+
+      //std::cout << "eventN:2 " << eventN << std::endl;
 
       // Total weight
       double totWeight = ( eventWeight )*1.;
@@ -741,13 +759,6 @@ using namespace std;
       else {Tau3Vec.SetPtEtaPhi(0,0,0);/* Ahmad33 cout<<"Warning \n Warning \n Tau3Vec=0 \n "; Ahmad33 */}
       Visible3Vec=Tau3Vec-TauNu3Vec;
 
-      //int newNJet;
-      //int NewNB;
-      //double newHT;
-      //double newMHT;
-      //int binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()];
-      //printf("njet: %d nb: %d ht: %g mht: %g bin#: %d \n",evt->nJets(),evt->nBtags(),evt->ht(),evt->mht(),binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()]);
-      printf("njet: %d nb: %d ht: %g mht: %g bin#: %d bin string %s \n",evt->nJets(),evt->nBtags(),evt->ht(),evt->mht(),binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str());
 
 
       if(pass3){
@@ -784,6 +795,8 @@ using namespace std;
           Iso_all2->Fill( binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],eventWeight);
           int IsoElecIdx=-1, IsoMuIdx=-1, IsoPionIdx=-1;
 
+	  //std::cout << "eventN:3 " << eventN << std::endl;
+
           // Match directly to IsoTrk. But this wouldn't capture all 
           utils->findMatchedObject(IsoElecIdx,Visible3Vec.Eta(),Visible3Vec.Phi(),evt->IsoElecPtVec_(),evt->IsoElecEtaVec_(),evt->IsoElecPhiVec_(),0.4,verbose);
           // 
@@ -807,9 +820,7 @@ using namespace std;
               searchH->Fill( binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],totWeight);
               QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
               searchH_b->Fill( binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
-              
-
-	      if(evt->nBtags()==0)hPredHTMHT0b->Fill( binMap_HTMHT[utils2::findBin_HTMHT(evt->ht(),evt->mht()).c_str()],totWeight);
+              if(evt->nBtags()==0)hPredHTMHT0b->Fill( binMap_HTMHT[utils2::findBin_HTMHT(evt->ht(),evt->mht()).c_str()],totWeight);
               if(evt->nBtags() >0)hPredHTMHTwb->Fill( binMap_HTMHT[utils2::findBin_HTMHT(evt->ht(),evt->mht()).c_str()],totWeight);
               hPredNJetBins->Fill(evt->nJets(),totWeight);
               hPredNbBins->Fill( evt->nBtags(),totWeight);
@@ -835,14 +846,17 @@ using namespace std;
 
       // for plotting purposes
       double tauPt_forPlotting=0.0; 
+      double tauEta_forPlotting=0.0;
       double tauPhi_forPlotting=-99.0;
       double tau_mht_dlephi_forPlotting=-99.0;
       int tauJetIdx_forPlotting = -1;
       double deltaRMax_forPlotting = genTauPt < 50. ? 0.2 : 0.1;
       if( utils->findMatchedObject(tauJetIdx_forPlotting,Visible3Vec.Eta(),Visible3Vec.Phi(), evt->slimJetPtVec_(), evt->slimJetEtaVec_(), evt->slimJetPhiVec_(),deltaRMax_forPlotting,verbose) ){
         tauPt_forPlotting = evt->slimJetPtVec_().at(tauJetIdx_forPlotting);
-        if(tauPt_forPlotting>30.){
-          tauPhi_forPlotting = evt->slimJetPhiVec_().at(tauJetIdx_forPlotting);
+	tauEta_forPlotting = evt->slimJetEtaVec_().at(tauJetIdx_forPlotting);       
+        if(tauPt_forPlotting>30.&& abs(tauEta_forPlotting) < 2.4){
+          //tauEta_forPlotting = evt->slimJetEtaVec_().at(tauJetIdx_forPlotting);
+	  tauPhi_forPlotting = evt->slimJetPhiVec_().at(tauJetIdx_forPlotting);
           tau_mht_dlephi_forPlotting = fabs(TVector2::Phi_mpi_pi( tauPhi_forPlotting - evt->mhtphi()  ));
 
           //printf("phi(tau,mht): %g tauJetPt: %g GenTauPt: %g \n ",tau_mht_dlephi_forPlotting,tauPt_forPlotting,genTauPt);
@@ -975,6 +989,8 @@ using namespace std;
       // ("tau response template") for hadronically decaying taus
       for(int jetIdx = 0; jetIdx < (int) evt->slimJetPtVec_().size(); ++jetIdx) { // Loop over reco jets
         // Select tau jet
+	//std::cout<<"eventN "<<eventN<<"jetid "<<jetIdx<<"tauJetPt "<<evt->slimJetPtVec_().at(jetIdx)<<"tauJetPtUp "<<evt->slimJetJECup_()->at(jetIdx).Pt()<<"tauJetPtDown "<<evt->slimJetJECdown_()->at(jetIdx).Pt()<<std::endl;
+
         if( jetIdx == tauJetIdx ) {
           // Get the response pt bin for the tau
           //printf(" slimSize: %d UpSize: %d DownSize: %d \n ",evt->slimJetPtVec_().size(),evt->slimJetJECup_()->size(),evt->slimJetJECdown_()->size());
@@ -982,6 +998,7 @@ using namespace std;
           const double tauJetPt = evt->slimJetPtVec_().at(jetIdx);
           const double tauJetPtUp = evt->slimJetJECup_()->at(jetIdx).Pt();
           const double tauJetPtDown = evt->slimJetJECdown_()->at(jetIdx).Pt();
+	  //std::cout<<"eventN "<<eventN<<"tauJetIdx "<< tauJetIdx <<"jetid "<<jetIdx<<"tauJetPt "<<tauJetPt<<"tauJetPtUp "<<tauJetPtUp<<"tauJetPtDown "<<tauJetPtDown<<std::endl;
 
           const unsigned int ptBin = utils->TauResponse_ptBin(genTauPt);
           // Fill the corresponding response template
@@ -1066,6 +1083,11 @@ using namespace std;
     // Compute acceptance
     TH1* hAcc = static_cast<TH1*>(hAccPass->Clone("hAcc"));
     hAcc->Divide(hAccPass,hAccAll,1,1,"B");// we use B option here because the two histograms are correlated. see TH1 page in the root manual.
+    TH1* hAcc_0b_ = static_cast<TH1*>(hAcc_0b_Pass->Clone("hAcc_0b_"));
+    hAcc_0b_->Divide(hAcc_0b_Pass,hAcc_0b_All,1,1,"B");// we use B option here because the two histograms are correlated. see TH1 page in the root manual.
+    TH1* hAcc_non0b_ = static_cast<TH1*>(hAcc_non0b_Pass->Clone("hAcc_non0b_"));
+    hAcc_non0b_->Divide(hAcc_non0b_Pass,hAcc_non0b_All,1,1,"B");// we use B option here because the two histograms are correlated. see TH1 page in the root manual.
+
     TH1* hAcc_lowDphi = static_cast<TH1*>(hAccPass_lowDphi->Clone("hAcc_lowDphi"));
     hAcc_lowDphi->Divide(hAccPass_lowDphi,hAccAll_lowDphi,1,1,"B");
     // some temporary histograms for acceptance systematics
@@ -1145,6 +1167,11 @@ using namespace std;
     hAcc->Write();
     hAccAll->Write();
     hAccPass->Write();
+    hAcc_0b_All->Write();
+    hAcc_0b_Pass->Write();
+    hAcc_non0b_All->Write();
+    hAcc_non0b_Pass->Write();
+
     hAcc_lowDphi->Write();
     hAccAll_lowDphi->Write();
     hAccPass_lowDphi->Write();
