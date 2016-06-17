@@ -606,7 +606,7 @@ using namespace std;
 
     // Rate of bTagged tau jet
     //TFile * bRateFile = new TFile("TauHad/Stack/TauBtaggedRate_WJet_stacked_Elog282.root","R");
-    TFile * bRateFile = new TFile("TauHad/Stack/Elog431_TauBtaggedRate_WJet_stacked.root","R");
+    TFile * bRateFile = new TFile("TauHad/Stack/Elog433_TauBtaggedRate_WJet_stacked.root","R");
     cout << " \n\n\n\n\n WJet mistag rate is being applied \n\n\n \n\n\n " ;
 
     sprintf(histname,"TauBtaggedRate");
@@ -614,7 +614,7 @@ using namespace std;
 
     // Probability of muon coming from Tau
     //TFile * Prob_Tau_mu_file = new TFile("TauHad2/Stack/Elog401_Probability_Tau_mu_stacked.root","R");
-    TFile * Prob_Tau_mu_file = new TFile("TauHad2/Stack/Elog431_Probability_Tau_mu_stacked.root","R");
+    TFile * Prob_Tau_mu_file = new TFile("TauHad2/Stack/Elog433_Probability_Tau_mu_stacked.root","R");
     sprintf(histname,"hProb_Tau_mu");
     TH1D * hProb_Tau_mu =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
     sprintf(histname,"hProb_Tau_mu_lowDelphi");
@@ -625,7 +625,7 @@ using namespace std;
 
     //TFile * MuAcc_file = new TFile("TauHad/Stack/Elog401_LostLepton2_MuonEfficienciesFromstacked.root","R");
     //TFile * MuAcc_file = new TFile("TauHad/Stack/Elog427_LostLepton2_MuonEfficienciesFromstacked.root","R");
-    TFile * MuAcc_file = new TFile("TauHad/Stack/Elog431_LostLepton2_MuonEfficienciesFromstacked.root","R");
+    TFile * MuAcc_file = new TFile("TauHad/Stack/Elog433_LostLepton2_MuonEfficienciesFromstacked.root","R");
 
     sprintf(histname,"hAcc");
     TH1D * hAcc =(TH1D *) MuAcc_file->Get(histname)->Clone();
@@ -642,7 +642,7 @@ using namespace std;
 
     // Get IsoTrk efficiencies
     //TFile * IsoEffFile = new TFile("TauHad/Stack/Elog401_IsoEfficiencies_stacked.root","R");
-    TFile * IsoEffFile = new TFile("TauHad/Stack/Elog431_IsoEfficiencies_stacked.root","R");
+    TFile * IsoEffFile = new TFile("TauHad/Stack/Elog433_IsoEfficiencies_stacked.root","R");
     TH1D * hIsoEff =(TH1D *) IsoEffFile->Get("IsoEff")->Clone();
     TH1D * hIsoEff_lowDphi =(TH1D *) IsoEffFile->Get("IsoEff_lowDphi")->Clone();
 
@@ -651,9 +651,10 @@ using namespace std;
 
     // Get MT efficiency that is calculated here in this code
     //TFile * MtFile = new TFile("TauHad2/Elog401_MtEff.root","R");
-    TFile * MtFile = new TFile("TauHad2/Elog431_MtEff.root","R");
+    TFile * MtFile = new TFile("TauHad2/Elog433_MtEff.root","R");
     TH1D * hMT = (TH1D *) MtFile->Get("MtCutEff")->Clone();
-    TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
+    //TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
+    TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff")->Clone();
 
 
     // Inroduce two histogram to understand the probability of a muon coming from tau.
@@ -677,7 +678,7 @@ using namespace std;
     // Use Ahmad's tau template
     TFile * resp_file_temp = new TFile("TauHad/Stack/Elog371_HadTau_TauResponseTemplates_stacked.root","R");
     //TFile * resp_file = new TFile("TauHad/Stack/Elog404_WithJECUpDown_HadTau_TauResponseTemplates_stacked.root","R");
-    TFile * resp_file = new TFile("TauHad/Stack/Elog431_HadTau_TauResponseTemplates_stacked.root","R");
+    TFile * resp_file = new TFile("TauHad/Stack/Elog433_HadTau_TauResponseTemplates_stacked.root","R");
     for(int i=0; i<TauResponse_nBins; i++){
       sprintf(histname,"hTauResp_%d",i);
       vec_resp.push_back( (TH1D*) resp_file->Get( histname )->Clone() );
@@ -1095,7 +1096,7 @@ using namespace std;
             // 3Vec of muon and scaledMu 
             TVector3 SimTauJet3Vec,NewTauJet3Vec,Muon3Vec;
             double NewTauJetPt=0.0;
-	    double NewTauJetEta=0.0;
+      double NewTauJetEta=0.0;
             SimTauJet3Vec.SetPtEtaPhi(simTauJetPt_xy,simTauJetEta,simTauJetPhi_xy);
             Muon3Vec.SetPtEtaPhi(muPt,muEta,muPhi);
 
@@ -1121,19 +1122,19 @@ using namespace std;
             evt->Jets_muonMultiplicity_()[jetIdx]==1)
             {
               //double muFrac = evt->Jets_muonEnergyFraction_()[jetIdx];
-	      double jecCorr = evt->Jets_jecFactor_()[jetIdx];
+        double jecCorr = evt->Jets_jecFactor_()[jetIdx];
               //double muPtModified = (evt->JetsEVec_()[jetIdx]*muFrac/muE)*muPt;
-	      double muPtModified = jecCorr*muPt;
+        double muPtModified = jecCorr*muPt;
               //printf(" mu: ==> PtModified: %g Pt: %g muPtModified/muPt: %g \n ",muPtModified,muPt,muPtModified/muPt); 
               if(muPtModified/muPt < 2.)Muon3Vec.SetPtEtaPhi(muPtModified,muEta,muPhi);
             }
 */
-	    if(slimJetIdx!=-1)
-	      { double jecCorr = evt->slimJetjecFactor_()[slimJetIdx];
-		double muPtModified = jecCorr*muPt;
-		Muon3Vec.SetPtEtaPhi(muPtModified,muEta,muPhi);
-		if(muPtModified/muPt > 2.)std::cout<<"something is wrong"<<std::endl;
-	      }
+      if(slimJetIdx!=-1)
+        { double jecCorr = evt->slimJetjecFactor_()[slimJetIdx];
+    double muPtModified = jecCorr*muPt;
+    Muon3Vec.SetPtEtaPhi(muPtModified,muEta,muPhi);
+    if(muPtModified/muPt > 2.)std::cout<<"something is wrong"<<std::endl;
+        }
 
             // If there is no match, add the tau jet as a new one
             if(slimJetIdx==-1){
@@ -1152,7 +1153,7 @@ using namespace std;
               MuJet_fail->Fill(muPt,eventWeight);
               NewTauJet3Vec=SimTauJet3Vec;
               NewTauJetPt = NewTauJet3Vec.Pt();
-	      NewTauJetEta = NewTauJet3Vec.Eta();
+        NewTauJetEta = NewTauJet3Vec.Eta();
               if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)HT3JetVec.push_back(NewTauJet3Vec);
               if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)MHT3JetVec.push_back(NewTauJet3Vec);
             }
@@ -1166,7 +1167,7 @@ using namespace std;
                 temp3Vec.SetPtEtaPhi(evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i]);
                 NewTauJet3Vec=temp3Vec-Muon3Vec+SimTauJet3Vec;
                 NewTauJetPt = NewTauJet3Vec.Pt();
-		NewTauJetEta = NewTauJet3Vec.Eta();
+    NewTauJetEta = NewTauJet3Vec.Eta();
                 if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)HT3JetVec.push_back(NewTauJet3Vec);
                 if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)MHT3JetVec.push_back(NewTauJet3Vec);
               }
@@ -1209,7 +1210,7 @@ using namespace std;
               
               // New #b
               double NewNB=evt->nBtags();
-	      //std::cout<<"Number of b tags "<<NewNB<<std::endl;
+        //std::cout<<"Number of b tags "<<NewNB<<std::endl;
               // get the rate of tau jet mistagging as a function of pT.
               double bRateError_stat, bRatePlus_stat, bRateMinus_stat;
               double bRate =bRateHist->GetBinContent(bRateHist->GetXaxis()->FindBin(NewTauJet3Vec.Pt()));
@@ -1419,8 +1420,9 @@ using namespace std;
               double IsoSFUp, IsoSFDw, IdSFUp,IdSFDw;
 
               if(sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->Njet_4(newNJet)){
-                //Acc = hAcc->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
-                //AccError = hAcc->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
+                Acc = hAcc->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
+                AccError = hAcc->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
+                /*
                 if((int)NewNB==0){
                   Acc = hAcc_0b->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
                   AccError = hAcc_0b->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);                  
@@ -1430,6 +1432,7 @@ using namespace std;
                   AccError = hAcc_non0b->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
                 }
                 else cout << " something is wrong ! \n "; 
+                */
                 Acc_lowDphi = hAcc_lowDphi->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]); 
                 Acc_lowDphiError = hAcc_lowDphi->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
                 // use original ht mht njet to get acc. Becaue mht is different in 1mu event than hadronic event 
@@ -1524,19 +1527,19 @@ using namespace std;
               if(fastsim){
                 totWeight *= fastsimWeight*0.99; // 0.99 is the jet id efficiency correction. 
                 double puWeight = 
-		  puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
-		//puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->NVtx_(),(int)puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
+      puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
+    //puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->NVtx_(),(int)puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
                 totWeight*= puWeight ;
                 //
                 double isrWeight = isrcorr.GetCorrection(evt->genParticles_(),evt->genParticles_PDGid_());
                 totWeight*=isrWeight;
                 //
                 prob = btagcorr.GetCorrections(evt->JetsLorVec_(),evt->Jets_partonFlavor_(),evt->HTJetsMask_());
-		//
-		if (totWeight>1. && l==1 && m==0) {
-		  printf("puWeight=%8.1f, isrWeight=%8.1f, nvtx=%8d, trueNint=%5.1f, Nint=%5d\n",
-			 puWeight,isrWeight,evt->NVtx_(),evt->TrueNumInteractions_(),evt->NumInteractions_());
-		}
+    //
+    if (totWeight>1. && l==1 && m==0) {
+      printf("puWeight=%8.1f, isrWeight=%8.1f, nvtx=%8d, trueNint=%5.1f, Nint=%5d\n",
+       puWeight,isrWeight,evt->NVtx_(),evt->TrueNumInteractions_(),evt->NumInteractions_());
+    }
               }
 
               weightEffAcc = totWeight;
@@ -1562,13 +1565,13 @@ using namespace std;
 
 
               int binNum_MT = binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()];
-	      //if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
+        //if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
               double mtWeightError, mtWeightPlus, mtWeightMinus, mtWeightError_lowDphi, mtWeightPlus_lowDphi, mtWeightMinus_lowDphi;
               double mtWeight = hMT->GetBinContent(binNum_MT);
               mtWeightError = hMT->GetBinError(binNum_MT);
               double mtWeight_lowDphi = hMT_lowDphi->GetBinContent(binNum_MT);
               mtWeightError_lowDphi = hMT_lowDphi->GetBinError(binNum_MT);
-	      if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
+        if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
 
               // Apply MT efficiency
               if(utils2::applyMT){
@@ -1944,7 +1947,7 @@ using namespace std;
                       //if(subSampleKey.find("template")!=string::npos && (ite->first!="delphi" && ite->first!="low_Dphi" ))continue; 
 
                       //To save cpu we neglect some of early selections
-		      /*
+          /*
                       if(ite->first=="PreSel" || ite->first=="nolep" || ite->first=="ht_500" 
                           || ite->first=="Njet_4" || ite->first=="isoElec" || ite->first=="isoMu" || ite->first=="nolep"
                         )continue;
@@ -2302,7 +2305,7 @@ using namespace std;
               //if(subSampleKey.find("template")!=string::npos && (it->first!="delphi" && it->first!="low_Dphi" ))continue;
 
               //To save cpu we neglect some of early selections
-	      /*
+        /*
               if(it->first=="PreSel" || it->first=="nolep" || it->first=="ht_500" 
                  || it->first=="Njet_4" || it->first=="isoElec" || it->first=="isoMu" || it->first=="nolep"
                 )continue;
@@ -2353,4 +2356,5 @@ using namespace std;
   }
 
   
+
 

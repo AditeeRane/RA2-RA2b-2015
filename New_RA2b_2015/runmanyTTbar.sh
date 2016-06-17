@@ -24,11 +24,27 @@ for TTbarStr in DiLept HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf Inclusive
     export TTbarStr=$TTbarStr
 
     if [ $type -eq 0 ]; then
-      qsub -l walltime=12:00:00 -N TTbar_$TTbarStr_$outStr -o qsub/ -e qsub/ -V $submitscript  
+
+      if [ -e TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root ]; then
+        echo warning !
+        echo exist TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root
+      else
+        echo submitting TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root
+        qsub -l walltime=12:00:00 -N TTbar_$TTbarStr_$outStr -o qsub/ -e qsub/ -V $submitscript  
+      fi
+
     fi
 
     if [ $type -eq 1 ]; then
-      qsub -l walltime=12:00:00 -N TTbar_$TTbarStr_$outStr -o qsub/ -e qsub/ -V $submitscript1  
+
+      if [ -e TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root ]; then
+        echo warning !
+        echo exist TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root
+      else
+        echo submitting TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root
+        qsub -l walltime=12:00:00 -N TTbar_$TTbarStr_$outStr -o qsub/ -e qsub/ -V $submitscript1  
+      fi
+
     fi
 
     sleep 1

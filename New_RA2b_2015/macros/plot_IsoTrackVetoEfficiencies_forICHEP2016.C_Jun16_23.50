@@ -21,10 +21,6 @@ void plot_IsoTrackVetoEfficiencies_forICHEP2016(std::string elogForPlot="Elog401
 
   char tempname[200];
   char tempname2[200];
-  char tempNum[200];
-  char tempDen[200];
-  char tempnameMod[200];
-
   int W = 1200;
   int H = 600;
   int H_ref = 600;
@@ -70,52 +66,10 @@ void plot_IsoTrackVetoEfficiencies_forICHEP2016(std::string elogForPlot="Elog401
   
   sprintf(tempname,"TauHad/Stack/%sIsoEfficiencies_stacked.root",elogForPlot.c_str());
   TFile *file   = new TFile(tempname,"R");
-  sprintf(tempnameMod,"TauHad/Stack/%smodifiedIsoEfficiencies_stacked.root",elogForPlot.c_str());
-  TFile *file2   = new TFile(tempnameMod,"RECREATE");
-
   //TFile *file = new TFile("IsoEfficiencies_TTbar_Elog218.root","R"); 
 
   sprintf(tempname,"IsoEff");
-  sprintf(tempNum,"Iso_pass");
-  sprintf(tempDen,"Iso_all");
-
   thist = (TH1D*)file->Get(tempname)->Clone();
-  histNum = (TH1D*)file->Get(tempNum)->Clone();
-  histDen = (TH1D*)file->Get(tempDen)->Clone();
-
-  int nbins=histNum->GetNbinsX();
-  std::cout<<"nbins "<<nbins<<endl;
-  
-  for(int j=1;j<=nbins;j++){
-    //std::cout<<"..........................."<<endl;                                                                                                                   
-    double binvalue=0;
-    double ratio=thist->GetBinContent(j);
-    double newN=0;
-    double newD=0;
-    std::cout<<" j "<<j<< " bincontent "<< ratio <<endl;
-    //if(j==12 || j==16 || j==18 || j==52 || j==55 ||j==60 || j==61 || j==64 || j==67 ||j==72){
-    /*  if(j==52 || j==55 ||j==60 || j==61 || j==64 || j==67 ||j==72){  
-      int kbin=j+1;
-      int xbin=j;
-      if(j==60 ||j==72) kbin=j-1;
-
-      newN=histNum->GetBinContent(j)+histNum->GetBinContent(kbin);
-      newD=histDen->GetBinContent(j)+histDen->GetBinContent(kbin);
-      ratio=newN/newD;
-      //if(j==12 || j==16 || j==18)
-      //ratio=histNum->GetBinContent(j+1)/histDen->GetBinContent(j+1);
-      binvalue=ratio;
-      double IsoEffOld = thist->GetBinContent(j);
-      double errOld = thist->GetBinError(j);
-      thist->SetBinContent(j,ratio);
-      thist->SetBinError(j,  thist->GetBinError(kbin) );
-
-      //if(binvalue!=0)
-      std::cout<<" Bin "<< j<< " Numerator("<<j<<") "<< histNum->GetBinContent(j) <<" Numerator("<<kbin<<") "<<histNum->GetBinContent(kbin) <<" newNumerator "<<newN<<" Denominator("<<j<<") "<<histDen->GetBinContent(j)<<" Denominator("<<kbin<<") "<< histDen->GetBinContent(kbin)<<" newDenominator "<<newD<< " oldIsoEff("<<j<<") " << IsoEffOld << " newIsoEff("<<j<<") " << ratio << " oldErr("<<j<<") " << errOld << " err("<<kbin<<") " <<  thist->GetBinError(kbin) << " newErr("<<j<<") " << thist->GetBinError(j) << endl;
-
-      } */
-  }
-
 
   thist_input = static_cast<TH1D*>(thist->Clone("thist_input"));
   shift_bin(thist_input,thist);
@@ -247,10 +201,6 @@ void plot_IsoTrackVetoEfficiencies_forICHEP2016(std::string elogForPlot="Elog401
   pt.Draw();
   */
   c1->Print("plot_IsoTrackVetoEfficiencies.png");
-  file2->cd();
-  thist->Write();
-  TH1D *thist_lowDphi = (TH1D*)file->Get("IsoEff_lowDphi")->Clone();
-  thist_lowDphi->Write();
 
 }
 

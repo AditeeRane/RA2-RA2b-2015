@@ -9,10 +9,7 @@ void plot_Acceptance_forICHEP2016(std::string elogForPlot=""){
   
   char tempname[200];
   char tempname2[200];
-  char tempNum[200];
-  char tempDen[200];
- 
- int W = 1200;
+  int W = 1200;
   int H = 600;
   int H_ref = 600;
   int W_ref = 800;
@@ -59,38 +56,6 @@ void plot_Acceptance_forICHEP2016(std::string elogForPlot=""){
 
   sprintf(tempname,"hAcc");
   thist = (TH1D*)file->Get(tempname)->Clone();
-
-  sprintf(tempNum,"hAccPass");
-  sprintf(tempDen,"hAccAll");
-  histNum = (TH1D*)file->Get(tempNum)->Clone();
-  histDen = (TH1D*)file->Get(tempDen)->Clone();
-
-  int nbins=histNum->GetNbinsX();
-  std::cout<<"nbins "<<nbins<<endl;
-
-  for(int j=1;j<=nbins;j++){
-    std::cout<<"..........................."<<endl;
-    double binvalue=0;
-    double ratio=thist->GetBinContent(j);
-    double newN=0;
-    double newD=0;
-    std::cout<<"Bin "<< j<< "thist_j"<<ratio<<endl;
-    if(j==52 || j==55 || j==61 || j==64 || j==67){
-      newN=histNum->GetBinContent(j)+histNum->GetBinContent(j+1);
-      newD=histDen->GetBinContent(j)+histDen->GetBinContent(j+1);      
-      ratio=newN/newD;
-      binvalue=ratio;
-
-      thist->SetBinContent(j,ratio);
-      thist->SetBinError(j,  thist->GetBinError(j+1) );
-
-      if(binvalue!=0)
-	std::cout<<" Bin "<< j<< " histNum_j "<< histNum->GetBinContent(j) <<" histNum_j+1 "<<histNum->GetBinContent(j+1) <<" newN "<<newN<<" histDen_j "<<histDen->GetBinContent(j)<<" histDen_j+1 "<< histDen->GetBinContent(j+1)<<" newD "<<newD<<" thist_j "<<ratio << " errors org " << thist->GetBinError(j) << " new " << eratio << " errJ+1 " <<  thist->GetBinError(j+1) << endl;
-
-    }
-  }
-
-  
 
   thist->SetLineColor(1);
   thist->SetLineWidth(3);

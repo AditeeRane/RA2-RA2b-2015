@@ -101,9 +101,9 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
 
   // Load the files to a vector 
   // These are the HT, MHT, .. variables
-  std::cout<<" Begin singletop filelist "<<endl; 
   for(int i=1; i<=tnHT ; i++){
-    if(i==1)sprintf(tempname,"../HadTauEstimation_t_top_.root");
+    std::cout<<" .................CH1................... "<<endl; 
+   if(i==1)sprintf(tempname,"../HadTauEstimation_t_top_.root");
     else if(i==2)sprintf(tempname,"../HadTauEstimation_t_antitop_.root");
     else if(i==3)sprintf(tempname,"../HadTauEstimation_tW_top_.root");
     else if(i==4)sprintf(tempname,"../HadTauEstimation_tW_antitop_.root");
@@ -112,7 +112,6 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     else{cout << " Error!! There are only 6 T ht binned sample " << endl;}
     T_inputfilevec.push_back(TFile::Open(tempname,"R"));
   }//end of loop over HTbins 
-  std::cout<<" End singletop filelist "<<endl; 
 
 
   // Stack
@@ -132,7 +131,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   histname[9]="MHT2";
   histname[10]="DelPhi4";
   histname[11]="TauJet_MHT_delPhi";
-  //std::cout<<" ...................CH2................. "<<endl;
+  std::cout<<" ...................CH2................. "<<endl;
   Hname.clear();
   Hname[0]="searchH";
   Hname[1]="searchH_b";
@@ -141,15 +140,16 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   Hname[4]="cutflow_preselection";
   Hname[5]="searchH_lowDphi";
  
-  std::cout<<" Begin singletop Stacking "<<endl; 
   for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<tnHT ; i++){                                                  // loop over different HT bins
 
       sprintf(tempname,"%s",(Hname[j]).c_str());
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      std::cout<<" ...................CH3................. "<<endl;  
       if (luminosity>0&&doScale){
 	temphist->Scale(T_scalevec[i]);
+	std::cout<<" ...................CH4................. "<<endl;
       }
       else if (luminosity>0&&!doScale) temphist->Scale(3000);
       temphist->SetFillColor(i+2);
@@ -161,11 +161,11 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
 
     delete tempstack;
     tempstack = new THStack("stack","Binned Sample Stack");
+    std::cout<<" ...................CH5................. "<<endl;
   }
-  std::cout<<" End singletop Stacking "<<endl; 
 
 
-  std::cout<<" Begin singletop Stacking directories "<<endl; 
+
   for(map<int , string >::iterator itt=Ttype.begin(); itt!=Ttype.end();itt++){        // loop over different event types
 
     cdtoitt = file->mkdir((itt->second).c_str());
@@ -178,10 +178,8 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
 
       for(int j=0; j<histname.size(); j++){                                        // loop over different histograms
 
-	std::cout<<"dir " << (itt->second).c_str() << " cutname " << (it->second).c_str() << " histname "<< (histname[j]).c_str() <<endl;
-
         for(int i=0; i<tnHT ; i++){                                                  // loop over different HT bins
-	  //std::cout<<" ...................CH6................. "<<endl;
+	  std::cout<<" ...................CH6................. "<<endl;
           //cout << "================================" << endl;
           //cout << "HT#: " <<i << ", WJtype: " << itt->second << ", cutname: " << it->second << ", hist#: " << j << endl;  
           sprintf(tempname,"%s/%s/%s_%s_%s",(itt->second).c_str(),(it->second).c_str(),(histname[j]).c_str(),(it->second).c_str(),(itt->second).c_str());
@@ -198,17 +196,16 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
 
         delete tempstack;
         tempstack = new THStack("stack","Binned Sample Stack");
-	//std::cout<<" ...................CH7................. "<<endl;
+	std::cout<<" ...................CH7................. "<<endl;
       }//end of loop over histograms
-      //std::cout<<" ...................CH8................. "<<endl;
+      std::cout<<" ...................CH8................. "<<endl;
     }//end of loop over cutnames 
-    //std::cout<<" ...................CH9................. "<<endl;
+    std::cout<<" ...................CH9................. "<<endl;
   }//end of loop over event types
-  std::cout<<" End singletop Stacking directories "<<endl; 
 
   file->Close();
   printf("T main histograms stacked \n ");
-  //std::cout<<" ...................CH10................. "<<endl;
+  std::cout<<" ...................CH10................. "<<endl;
 
 //..........................................//
 // Probability mu from nonW sources
@@ -237,7 +234,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   histname[0]="hProb_Tau_mu";
   histname[1]="hNonW_mu";
   histname[2]="hAll_mu";
-  //std::cout<<" ...................CH8................. "<<endl;
+  std::cout<<" ...................CH8................. "<<endl;
   for(int j=0; j<histname.size(); j++){
 
     if(j==0)continue; // Stacking probability histograms has no meaning.

@@ -22,7 +22,13 @@ if [ $type -eq 0 ]; then
           export WJetStr=$WJetStr
           export outStr=$outStr
           echo $filenum
-          qsub -l walltime=12:00:00 -N WJet_$WJetStr_$outStr -o qsub/ -e qsub/ -V $submitscript  
+          if [ -e TauHad2Multiple/HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root ]; then
+            echo warning !
+            echo exist TauHad2Multiple/HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root
+          else
+            echo submitting TauHad2Multiple/HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root
+            qsub -l walltime=12:00:00 -N WJet_$WJetStr_$outStr -o qsub/ -e qsub/ -V $submitscript  
+          fi
 
           sleep 1
 
@@ -48,7 +54,13 @@ if [ $type -eq 1 ]; then
           export WJetStr=$WJetStr
           export outStr=$outStr
           echo $filenum
-          qsub -l walltime=12:00:00 -N WJet_$WJetStr_$outStr -o qsub/ -e qsub/ -V $submitscript1 
+          if [ -e TauHad2Multiple/HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root ]; then
+            echo warning !
+            echo exist TauHad2Multiple/HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root
+          else
+            echo submitting TauHad2Multiple/HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root          
+            qsub -l walltime=12:00:00 -N WJet_$WJetStr_$outStr -o qsub/ -e qsub/ -V $submitscript1 
+          fi
 
           sleep 1
 

@@ -3,7 +3,7 @@
 using namespace std;
 
 
-CalcMtEff(string Elog="Elog433_",string outStr=""){
+CalcMtEff_forICHEP(string Elog="Elog433_",string outStr=""){
 gStyle->SetOptStat(0);  ///to avoid the stat. on the plots
 char tempname[200];
 int W = 600;
@@ -60,7 +60,7 @@ TFile * after_t = new TFile(tempname,"R");
 sprintf(tempname,"Stack/%sBeforeMT_HadTauEstimation_T_stacked.root",Elog.c_str());
 TFile * before_t = new TFile(tempname,"R");
 */
-sprintf(tempname,"MtEff_%s_.root",outStr.c_str());
+sprintf(tempname,"MtEff.root");
 TFile * outFile = new TFile(tempname,"RECREATE");
 
 ////////
@@ -159,7 +159,7 @@ MtCutEff_tot->Write();
     catLeg1->AddEntry(MtCutEff_tot,"t#bar{t} + WJet + top","l");
     catLeg1->Draw();
 
-sprintf(tempname,"MtEffi_%s_.png",outStr.c_str());
+sprintf(tempname,"MtEffi_%s.png",Elog.c_str());
 c1->Print(tempname);
 
 //////////
@@ -280,7 +280,7 @@ MtCutEff_tot->Write();
     catLeg2->AddEntry(MtCutEff_tot,"t#bar{t} + WJet + top","l");
     catLeg2->Draw();
 
-sprintf(tempname,"MtEff_lowDphi_%s_.png",outStr.c_str());
+sprintf(tempname,"MtEff_lowDphi_%s.png",Elog.c_str());
 c2->Print(tempname);
 
 

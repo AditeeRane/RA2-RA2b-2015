@@ -85,25 +85,19 @@ void plot_IsoTrackVetoEfficiencies_forICHEP2016(std::string elogForPlot="Elog401
 
   int nbins=histNum->GetNbinsX();
   std::cout<<"nbins "<<nbins<<endl;
-  
+
   for(int j=1;j<=nbins;j++){
     //std::cout<<"..........................."<<endl;                                                                                                                   
     double binvalue=0;
     double ratio=thist->GetBinContent(j);
     double newN=0;
     double newD=0;
-    std::cout<<" j "<<j<< " bincontent "<< ratio <<endl;
-    //if(j==12 || j==16 || j==18 || j==52 || j==55 ||j==60 || j==61 || j==64 || j==67 ||j==72){
-    /*  if(j==52 || j==55 ||j==60 || j==61 || j==64 || j==67 ||j==72){  
+    if(j==52 || j==55 ||j==60 || j==61 || j==64 || j==67 ||j==72){
       int kbin=j+1;
-      int xbin=j;
       if(j==60 ||j==72) kbin=j-1;
-
       newN=histNum->GetBinContent(j)+histNum->GetBinContent(kbin);
       newD=histDen->GetBinContent(j)+histDen->GetBinContent(kbin);
       ratio=newN/newD;
-      //if(j==12 || j==16 || j==18)
-      //ratio=histNum->GetBinContent(j+1)/histDen->GetBinContent(j+1);
       binvalue=ratio;
       double IsoEffOld = thist->GetBinContent(j);
       double errOld = thist->GetBinError(j);
@@ -113,7 +107,7 @@ void plot_IsoTrackVetoEfficiencies_forICHEP2016(std::string elogForPlot="Elog401
       //if(binvalue!=0)
       std::cout<<" Bin "<< j<< " Numerator("<<j<<") "<< histNum->GetBinContent(j) <<" Numerator("<<kbin<<") "<<histNum->GetBinContent(kbin) <<" newNumerator "<<newN<<" Denominator("<<j<<") "<<histDen->GetBinContent(j)<<" Denominator("<<kbin<<") "<< histDen->GetBinContent(kbin)<<" newDenominator "<<newD<< " oldIsoEff("<<j<<") " << IsoEffOld << " newIsoEff("<<j<<") " << ratio << " oldErr("<<j<<") " << errOld << " err("<<kbin<<") " <<  thist->GetBinError(kbin) << " newErr("<<j<<") " << thist->GetBinError(j) << endl;
 
-      } */
+    }
   }
 
 

@@ -1,5 +1,3 @@
-
-
 void plot_MuonsFromTaus_forICHEP2016(){
 
   //
@@ -27,6 +25,10 @@ void plot_MuonsFromTaus_forICHEP2016(){
   
   char tempname[200];
   char tempname2[200];
+  char tempNum[200];
+  char tempDen[200];
+  char tempnameMod[200];
+
   int W = 1200;
   int H = 600;
   int H_ref = 600;
@@ -72,12 +74,46 @@ void plot_MuonsFromTaus_forICHEP2016(){
   
   //sprintf(tempname,"TauHad2/Stack/Probability_Tau_mu_stacked.root");
   //sprintf(tempname,"TauHad2/Stack/Elog401_Probability_Tau_mu_stacked.root");
-  sprintf(tempname,"TauHad2/Stack/Elog431_Probability_Tau_mu_stacked.root"); 
+  sprintf(tempname,"TauHad2/Stack/Elog433_Probability_Tau_mu_stacked.root"); 
 
   TFile *file   = new TFile(tempname,"R");
+  sprintf(tempnameMod,"TauHad2/Stack/Elog433_modifiedProbability_Tau_mu_stacked.root");
+  TFile *file2   = new TFile(tempnameMod,"RECREATE");
 
   sprintf(tempname,"hProb_Tau_mu");
+  sprintf(tempNum,"hNonW_mu");
+  sprintf(tempDen,"hAll_mu");
+
   thist = (TH1D*)file->Get(tempname)->Clone();
+  histNum = (TH1D*)file->Get(tempNum)->Clone();
+  histDen = (TH1D*)file->Get(tempDen)->Clone();
+
+  int nbins=histNum->GetNbinsX();
+  std::cout<<"nbins "<<nbins<<endl;
+
+  for(int j=1;j<=nbins;j++){
+    //std::cout<<"..........................."<<endl;                                                                                                                   
+    double binvalue=0;
+    double ratio=thist->GetBinContent(j);
+    double newN=0;
+    double newD=0;
+    if(j==52 || j==55 ||j==61 || j==64 || j==67 ||j==70 ||j==72){
+      int kbin=j+1;
+      if(j==72) kbin=j-1;
+      newN=histNum->GetBinContent(j)+histNum->GetBinContent(kbin);
+      newD=histDen->GetBinContent(j)+histDen->GetBinContent(kbin);
+      ratio=newN/newD;
+      binvalue=ratio;
+      double ProbMuTauOld = thist->GetBinContent(j);
+      double errOld = thist->GetBinError(j);
+      thist->SetBinContent(j,ratio);
+      thist->SetBinError(j,  thist->GetBinError(kbin) );
+
+      //if(binvalue!=0)
+      std::cout<<" Bin "<< j<< " Numerator("<<j<<") "<< histNum->GetBinContent(j) <<" Numerator("<<kbin<<") "<<histNum->GetBinContent(kbin) <<" newNumerator "<<newN<<" Denominator("<<j<<") "<<histDen->GetBinContent(j)<<" Denominator("<<kbin<<") "<< histDen->GetBinContent(kbin)<<" newDenominator "<<newD<< " oldProbMuTau("<<j<<") " << ProbMuTauOld << " newProbMuTau("<<j<<") " << ratio << " oldErr("<<j<<") " << errOld << " err("<<kbin<<") " <<  thist->GetBinError(kbin) << " newErr("<<j<<") " << thist->GetBinError(j) << endl;
+
+    }
+  }
 
   thist_input = static_cast<TH1D*>(thist->Clone("thist_input"));
   shift_bin(thist_input,thist);
@@ -121,53 +157,64 @@ void plot_MuonsFromTaus_forICHEP2016(){
   thist_fixed->Draw();
 
   //TLatex * ttext1 = new TLatex(6.0 , ytext , "N_{jets}=4");
-  TLatex * ttext1 = new TLatex(5.75 , ytext , "3#leqN_{jets}#leq4");
+  TLatex * ttext1 = new TLatex(6.25 , ytext , "N_{jets}=3");
   ttext1->SetTextFont(42);
   ttext1->SetTextSize(0.05);
   ttext1->SetTextAlign(22);
   ttext1->Draw();
 
-  TLatex * ttext2 = new TLatex(17.0 , ytext , "N_{jets}=5");
+  TLatex * ttext2 = new TLatex(18.25 , ytext , "N_{jets}=4");
   ttext2->SetTextFont(42);
   ttext2->SetTextSize(0.05);
   ttext2->SetTextAlign(22);
   ttext2->Draw();
 
-  TLatex * ttext3 = new TLatex(28.0 , ytext , "N_{jets}=6");
+  TLatex * ttext3 = new TLatex(30.25 , ytext , "N_{jets}=5");
 
   ttext3->SetTextFont(42);
   ttext3->SetTextSize(0.05);
   ttext3->SetTextAlign(22);
   ttext3->Draw();
 
-  TLatex * ttext4 = new TLatex(36.5, ytext , "7#leqN_{jets}#leq8");
+  TLatex * ttext4 = new TLatex(42.25, ytext , "N_{jets}=6");
   ttext4->SetTextFont(42);
   ttext4->SetTextSize(0.05);
   ttext4->SetTextAlign(22);
   ttext4->Draw();
 
-  TLatex * ttext5 = new TLatex(42.5 , ytext , "N_{jets}#geq9");
+  TLatex * ttext5 = new TLatex(54.25 , ytext , "7 #leq N_{jets} #leq 8");
   ttext5->SetTextFont(42);
   ttext5->SetTextSize(0.05);
   ttext5->SetTextAlign(22);
   ttext5->Draw();
 
-  TLine *tline_1 = new TLine(11.5,ymin,11.5,ymax);
+  TLatex * ttext6 = new TLatex(66.25 , ytext , "N_{jets} #geq 9");
+  ttext6->SetTextFont(42);
+  ttext6->SetTextSize(0.02);
+  ttext6->SetTextAlign(22);
+  ttext6->Draw();
+
+
+  TLine *tline_1 = new TLine(12.5,ymin,12.5,ymax);
   tline_1->SetLineStyle(2);
   tline_1->Draw();
 
-  TLine *tline_2 = new TLine(22.5,ymin,22.5,ymax);
+  TLine *tline_2 = new TLine(24.5,ymin,24.5,ymax);
   tline_2->SetLineStyle(2);
   tline_2->Draw();
   
-  TLine *tline_3 = new TLine(33.5,ymin,33.5,ymax);
+  TLine *tline_3 = new TLine(36.5,ymin,36.5,ymax);
   tline_3->SetLineStyle(2);
   tline_3->Draw();
   
-  TLine *tline_4 = new TLine(39.5,ymin,39.5,ymax);
+  TLine *tline_4 = new TLine(48.5,ymin,48.5,ymax);
   tline_4->SetLineStyle(2);
   tline_4->Draw();
 
+  TLine *tline_5 = new TLine(60.5,ymin,60.5,ymax);
+  tline_5->SetLineStyle(2);
+  tline_5->Draw();
+ 
   CMS_lumi( c1, iPeriod, iPos );   // writing the lumi information and the CMS "logo"
   
   double xlatex=0.75;
@@ -194,7 +241,11 @@ void plot_MuonsFromTaus_forICHEP2016(){
   pt.SetTextSize(0.055);
   pt.Draw();
 */
-  c1->Print("plot_MuonsFromTaus.pdf");
+  c1->Print("plot_MuonsFromTaus.png");
+  file2->cd();
+  thist->Write();
+  TH1D *thist_lowDphi = (TH1D*)file->Get("hProb_Tau_mu_lowDelphi")->Clone();
+  thist_lowDphi->Write();
 
 }
 
