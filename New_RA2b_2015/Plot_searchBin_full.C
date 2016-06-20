@@ -289,6 +289,165 @@ Plot_searchBin_full(string sample="stacked",string histname="searchH_b",string e
   GenHist->GetYaxis()->SetTitle(ytitlename);
   GenHist->Scale(lumi/lumi_ref);
   EstHist->Scale(lumi/lumi_ref);
+
+  bool Adhoc_NjetNbjet=true;
+  if(Adhoc_NjetNbjet){
+    //int Nbins=GenHist->GetNbinX();
+    //std::cout<<"Nbins "<< Nbins <<std::endl;  
+    double Gen_Njet34_nb0=0; double Gen_Njet34_nb1=0;double Gen_Njet34_nb2=0;double Gen_Njet34_nb3=0;double Est_Njet34_nb0=0;double Est_Njet34_nb1=0;double Est_Njet34_nb2=0;double Est_Njet34_nb3=0;
+    double Gen_Njet56_nb0=0; double Gen_Njet56_nb1=0;double Gen_Njet56_nb2=0;double Gen_Njet56_nb3=0;double Est_Njet56_nb0=0;double Est_Njet56_nb1=0;double Est_Njet56_nb2=0;double Est_Njet56_nb3=0;
+    double Gen_Njet78_nb0=0; double Gen_Njet78_nb1=0;double Gen_Njet78_nb2=0;double Gen_Njet78_nb3=0;double Est_Njet78_nb0=0;double Est_Njet78_nb1=0;double Est_Njet78_nb2=0;double Est_Njet78_nb3=0;
+    double Gen_Njet9Above_nb0=0; double Gen_Njet9Above_nb1=0;double Gen_Njet9Above_nb2=0;double Gen_Njet9Above_nb3=0;double Est_Njet9Above_nb0=0;double Est_Njet9Above_nb1=0;double Est_Njet9Above_nb2=0;double Est_Njet9Above_nb3=0;
+    double Correction_Njet34_nb0=0;double Correction_Njet34_nb1=0;double Correction_Njet34_nb2=0;double Correction_Njet34_nb3=0;
+    double Correction_Njet56_nb0=0;double Correction_Njet56_nb1=0;double Correction_Njet56_nb2=0;double Correction_Njet56_nb3=0;
+    double Correction_Njet78_nb0=0;double Correction_Njet78_nb1=0;double Correction_Njet78_nb2=0;double Correction_Njet78_nb3=0;
+    double Correction_Njet9Above_nb0=0;double Correction_Njet9Above_nb1=0;double Correction_Njet9Above_nb2=0;double Correction_Njet9Above_nb3=0;
+
+    int HtMhtBins=10;
+    for(int j=1;j<=160;j++){
+      if(j<=10){
+	Gen_Njet34_nb0 +=GenHist->GetBinContent(j);
+	Est_Njet34_nb0 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>10 && j<=20){
+	Gen_Njet34_nb1 +=GenHist->GetBinContent(j);
+	Est_Njet34_nb1 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>20 && j<=30){
+	Gen_Njet34_nb2 +=GenHist->GetBinContent(j);
+	Est_Njet34_nb2 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>30 && j<=40){
+	Gen_Njet34_nb3 +=GenHist->GetBinContent(j);
+	Est_Njet34_nb3 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>40 && j<=50){
+	Gen_Njet56_nb0 +=GenHist->GetBinContent(j);
+	Est_Njet56_nb0 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>50 && j<=60){
+	Gen_Njet56_nb1 +=GenHist->GetBinContent(j);
+	Est_Njet56_nb1 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>60 && j<=70){
+	Gen_Njet56_nb2 +=GenHist->GetBinContent(j);
+	Est_Njet56_nb2 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>70 && j<=80){
+	Gen_Njet56_nb3 +=GenHist->GetBinContent(j);
+	Est_Njet56_nb3 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>80 && j<=90){
+	Gen_Njet78_nb0 +=GenHist->GetBinContent(j);
+	Est_Njet78_nb0 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>90 && j<=100){
+	Gen_Njet78_nb1 +=GenHist->GetBinContent(j);
+	Est_Njet78_nb1 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>100 && j<=110){
+	Gen_Njet78_nb2 +=GenHist->GetBinContent(j);
+	Est_Njet78_nb2 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>110 && j<=120){
+	Gen_Njet78_nb3 +=GenHist->GetBinContent(j);
+	Est_Njet78_nb3 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>120 && j<=130){
+	Gen_Njet9Above_nb0 +=GenHist->GetBinContent(j);
+	Est_Njet9Above_nb0 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>130 && j<=140){
+	Gen_Njet9Above_nb1 +=GenHist->GetBinContent(j);
+	Est_Njet9Above_nb1 +=EstHist->GetBinContent(j);
+	
+      }
+      else if(j>140 && j<=150){
+	Gen_Njet9Above_nb2 +=GenHist->GetBinContent(j);
+	Est_Njet9Above_nb2 +=EstHist->GetBinContent(j);
+	
+      }
+      else{
+	Gen_Njet9Above_nb3 +=GenHist->GetBinContent(j);
+	Est_Njet9Above_nb3 +=EstHist->GetBinContent(j);
+      }
+      
+    }
+    Correction_Njet34_nb0=Gen_Njet34_nb0/Est_Njet34_nb0;
+    Correction_Njet34_nb1=Gen_Njet34_nb1/Est_Njet34_nb1;
+    Correction_Njet34_nb2=Gen_Njet34_nb2/Est_Njet34_nb2;
+    Correction_Njet34_nb3=Gen_Njet34_nb3/Est_Njet34_nb3;
+
+    Correction_Njet56_nb0=Gen_Njet56_nb0/Est_Njet56_nb0;
+    Correction_Njet56_nb1=Gen_Njet56_nb1/Est_Njet56_nb1;
+    Correction_Njet56_nb2=Gen_Njet56_nb2/Est_Njet56_nb2;
+    Correction_Njet56_nb3=Gen_Njet56_nb3/Est_Njet56_nb3;
+
+    Correction_Njet78_nb0=Gen_Njet78_nb0/Est_Njet78_nb0;
+    Correction_Njet78_nb1=Gen_Njet78_nb1/Est_Njet78_nb1;
+    Correction_Njet78_nb2=Gen_Njet78_nb2/Est_Njet78_nb2;
+    Correction_Njet78_nb3=Gen_Njet78_nb3/Est_Njet78_nb3;
+
+    Correction_Njet9Above_nb0=Gen_Njet9Above_nb0/Est_Njet9Above_nb0;
+    Correction_Njet9Above_nb1=Gen_Njet9Above_nb1/Est_Njet9Above_nb1;
+    Correction_Njet9Above_nb2=Gen_Njet9Above_nb2/Est_Njet9Above_nb2;
+    Correction_Njet9Above_nb3=Gen_Njet9Above_nb3/Est_Njet9Above_nb3;
+
+    std::cout<<" Correction_Njet34_nb0 "<<Correction_Njet34_nb0<<endl;
+    std::cout<<" Correction_Njet34_nb1 "<<Correction_Njet34_nb1<<endl;
+    std::cout<<" Correction_Njet34_nb2 "<<Correction_Njet34_nb2<<endl;
+    std::cout<<" Correction_Njet34_nb3 "<<Correction_Njet34_nb3<<endl;
+    std::cout<<" Correction_Njet56_nb0 "<<Correction_Njet56_nb0<<endl;
+    std::cout<<" Correction_Njet56_nb1 "<<Correction_Njet56_nb1<<endl;
+    std::cout<<" Correction_Njet56_nb2 "<<Correction_Njet56_nb2<<endl;
+    std::cout<<" Correction_Njet56_nb3 "<<Correction_Njet56_nb3<<endl;
+    std::cout<<" Correction_Njet78_nb0 "<<Correction_Njet78_nb0<<endl;
+    std::cout<<" Correction_Njet78_nb1 "<<Correction_Njet78_nb1<<endl;
+    std::cout<<" Correction_Njet78_nb2 "<<Correction_Njet78_nb2<<endl;
+    std::cout<<" Correction_Njet78_nb3 "<<Correction_Njet78_nb3<<endl;
+    std::cout<<" Correction_Njet9Above_nb0 "<<Correction_Njet9Above_nb0<<endl;
+    std::cout<<" Correction_Njet9Above_nb1 "<<Correction_Njet9Above_nb1<<endl;
+    std::cout<<" Correction_Njet9Above_nb2 "<<Correction_Njet9Above_nb2<<endl;
+    std::cout<<" Correction_Njet9Above_nb3 "<<Correction_Njet9Above_nb3<<endl;
+  
+    for(int j=1;j<=160;j++){
+      double oldVal=EstHist->GetBinContent(j);
+      double newVal=0;
+      if(j<=10) newVal=oldVal*Correction_Njet34_nb0;
+      else if(j<=20)newVal=oldVal*Correction_Njet34_nb1;
+      else if(j<=30)newVal=oldVal*Correction_Njet34_nb2;
+      else if(j<=40)newVal=oldVal*Correction_Njet34_nb3;
+      else if(j<=50)newVal=oldVal*Correction_Njet56_nb0;
+      else if(j<=60)newVal=oldVal*Correction_Njet56_nb1;
+      else if(j<=70)newVal=oldVal*Correction_Njet56_nb2;
+      else if(j<=80)newVal=oldVal*Correction_Njet56_nb3;
+      else if(j<=90)newVal=oldVal*Correction_Njet78_nb0;
+      else if(j<=100)newVal=oldVal*Correction_Njet78_nb1;
+      else if(j<=110)newVal=oldVal*Correction_Njet78_nb2;
+      else if(j<=120)newVal=oldVal*Correction_Njet78_nb3;
+      else if(j<=130)newVal=oldVal*Correction_Njet9Above_nb0;
+      else if(j<=140)newVal=oldVal*Correction_Njet9Above_nb1;
+      else if(j<=150)newVal=oldVal*Correction_Njet9Above_nb2;
+      else newVal=oldVal*Correction_Njet9Above_nb3;
+      EstHist->SetBinContent(j,newVal);
+    }
+
+  }
+
+
   TH1D * GenHist_Normalize = static_cast<TH1D*>(GenHist->Clone("GenHist_Normalize"));
   GenHist_Normalize->SetMaximum(ymax_top);
   GenHist_Normalize->SetMinimum(ymin_top);
@@ -306,7 +465,7 @@ Plot_searchBin_full(string sample="stacked",string histname="searchH_b",string e
   EstHist_Normalize->DrawCopy("e2same");
   ////EstHist_Normalize->DrawCopy("esame");
   TH1D *EstHist_Normalize_Clone = (TH1D*)EstHist_Normalize->Clone(); 
-  for(int i=1; i<72; i++) {
+  for(int i=1; i<EstHist_Normalize_Clone->GetNbinsX(); i++) {
     EstHist_Normalize_Clone->SetBinError(i,0);
   } 
   EstHist_Normalize_Clone->SetFillColor(kWhite);
@@ -314,7 +473,9 @@ Plot_searchBin_full(string sample="stacked",string histname="searchH_b",string e
 
   GenHist->Print("all");
   EstHist->Print("all");
+
   
+
   //
   // Re-draw to have "expectation" on top of "prediction"
   ex1->Draw();
@@ -472,44 +633,39 @@ Plot_searchBin_full(string sample="stacked",string histname="searchH_b",string e
     // Njet separation lines
     TLine *tl_njet = new TLine();
     tl_njet->SetLineStyle(2);
-    tl_njet->DrawLine( 45.,ymin_top, 45.,ymax_top); 
-    tl_njet->DrawLine( 89.,ymin_top, 89.,ymax_top); 
-    tl_njet->DrawLine(133.,ymin_top,133.,ymax_top); 
-    tl_njet->DrawLine(177.,ymin_top,177.,ymax_top); 
+    tl_njet->DrawLine( 53.-0.5,ymin_top, 53.-0.5,ymax_top); 
+    tl_njet->DrawLine(105.-0.5,ymin_top,105.-0.5,ymax_top); 
+    tl_njet->DrawLine(157.-0.5,ymin_top,157.-0.5,ymax_top); 
 
     // Njet labels
     TLatex * ttext_njet = new TLatex();
     ttext_njet->SetTextFont(42);
     ttext_njet->SetTextSize(0.04);
     ttext_njet->SetTextAlign(22);
-    ttext_njet->DrawLatex(23. , ymax_top/4. , "N_{jets} = 4");
-    ttext_njet->DrawLatex(67. , ymax_top/4. , "N_{jets} = 5");
-    ttext_njet->DrawLatex(111., ymax_top/4. , "N_{jets} = 6");
-    ttext_njet->DrawLatex(155., ymax_top/4. , "7 #leq N_{jets} #leq 8");
-    ttext_njet->DrawLatex(199., ymax_top/4. , "N_{jets} #geq 9");
+
+    ttext_njet->DrawLatex(27.-0.5 , ymax_top/4. , "3 #leq N_{#scale[0.2]{ }jet} #leq 4");
+    ttext_njet->DrawLatex(79.-0.5 , ymax_top/4. , "5 #leq N_{#scale[0.2]{ }jet} #leq 6");
+    ttext_njet->DrawLatex(131.-0.5 , ymax_top/4. , "7 #leq N_{#scale[0.2]{ }jet} #leq 8");
+    ttext_njet->DrawLatex(183.-0.5 , ymax_top/4. , "N_{#scale[0.2]{ }jet} #geq 9");
 
     // Nb separation lines
     TLine *tl_nb = new TLine();
     tl_nb->SetLineStyle(3);
-    tl_nb->DrawLine(12.,ymin_top,12.,ymax2_top); 
-    tl_nb->DrawLine(23.,ymin_top,23.,ymax2_top); 
-    tl_nb->DrawLine(34.,ymin_top,34.,ymax2_top); 
+    tl_nb->DrawLine(14.-0.5,ymin_top,14.-0.5,ymax2_top); 
+    tl_nb->DrawLine(27.-0.5,ymin_top,27.-0.5,ymax2_top); 
+    tl_nb->DrawLine(40.-0.5,ymin_top,40.-0.5,ymax2_top); 
 
-    tl_nb->DrawLine(56.,ymin_top,56.,ymax2_top); 
-    tl_nb->DrawLine(67.,ymin_top,67.,ymax2_top); 
-    tl_nb->DrawLine(78.,ymin_top,78.,ymax2_top); 
+    tl_nb->DrawLine(66.-0.5,ymin_top,66.-0.5,ymax2_top); 
+    tl_nb->DrawLine(79.-0.5,ymin_top,79.-0.5,ymax2_top); 
+    tl_nb->DrawLine(92.-0.5,ymin_top,92.-0.5,ymax2_top); 
 
-    tl_nb->DrawLine(100.,ymin_top,100.,ymax2_top); 
-    tl_nb->DrawLine(111.,ymin_top,111.,ymax2_top); 
-    tl_nb->DrawLine(122.,ymin_top,122.,ymax2_top); 
+    tl_nb->DrawLine(118.-0.5,ymin_top,118.-0.5,ymax2_top); 
+    tl_nb->DrawLine(131.-0.5,ymin_top,131.-0.5,ymax2_top); 
+    tl_nb->DrawLine(144.-0.5,ymin_top,144.-0.5,ymax2_top); 
 
-    tl_nb->DrawLine(144.,ymin_top,144.,ymax3_top); 
-    tl_nb->DrawLine(155.,ymin_top,155.,ymax3_top); 
-    tl_nb->DrawLine(166.,ymin_top,166.,ymax3_top); 
-
-    tl_nb->DrawLine(188.,ymin_top,188.,ymax4_top); 
-    tl_nb->DrawLine(199.,ymin_top,199.,ymax4_top); 
-    tl_nb->DrawLine(210.,ymin_top,210.,ymax4_top); 
+    tl_nb->DrawLine(170.-0.5,ymin_top,170.-0.5,ymax3_top); 
+    tl_nb->DrawLine(183.-0.5,ymin_top,183.-0.5,ymax3_top); 
+    tl_nb->DrawLine(196.-0.5,ymin_top,196.-0.5,ymax3_top); 
 
     // Nb labels
     TLatex * ttext_nb = new TLatex();
@@ -518,10 +674,10 @@ Plot_searchBin_full(string sample="stacked",string histname="searchH_b",string e
     ttext_nb->SetTextAlign(22);
     ttext_nb->SetTextAngle(90);
 
-    ttext_nb->DrawLatex( 6. , ymax_top/50. , "N_{b} = 0");
-    ttext_nb->DrawLatex(17. , ymax_top/50. , "N_{b} = 1");
-    ttext_nb->DrawLatex(28. , ymax_top/50. , "N_{b} = 2");
-    ttext_nb->DrawLatex(39. , ymax_top/50. , "N_{b} #geq 3");
+    ttext_nb->DrawLatex( 7.5-0.5 , ymax_top/50. , "N_{b} = 0");
+    ttext_nb->DrawLatex(20.5-0.5 , ymax_top/50. , "N_{b} = 1");
+    ttext_nb->DrawLatex(33.5-0.5 , ymax_top/50. , "N_{b} = 2");
+    ttext_nb->DrawLatex(46.5-0.5 , ymax_top/50. , "N_{b} #geq 3");
     
     TText * ttext = new TLatex(160. , ymax_top/50. , "Normalized to 10 fb^{-1}");
     ttext->SetTextFont(42);
@@ -704,8 +860,6 @@ Plot_searchBin_full(string sample="stacked",string histname="searchH_b",string e
       tl_njet->DrawLine(121.-0.5,ymin_top,121.-0.5,ymax_top);
       tl_njet->DrawLine(161.-0.5,ymin_top,161.-0.5,ymax_top);
 
-     
-
       // Nb separation lines
       TLine *tl_nb = new TLine();
       tl_nb->SetLineStyle(3);
@@ -740,34 +894,28 @@ Plot_searchBin_full(string sample="stacked",string histname="searchH_b",string e
       // Njet separation lines
       TLine *tl_njet = new TLine();
       tl_njet->SetLineStyle(2);
-      tl_njet->DrawLine( 45.,ymin_bottom, 45.,ymax_bottom); 
-      tl_njet->DrawLine( 89.,ymin_bottom, 89.,ymax_bottom); 
-      tl_njet->DrawLine(133.,ymin_bottom,133.,ymax_bottom); 
-      tl_njet->DrawLine(177.,ymin_bottom,177.,ymax_bottom); 
-
+      tl_njet->DrawLine( 53.-0.5,ymin_bottom, 53.-0.5,ymax_bottom); 
+      tl_njet->DrawLine(105.-0.5,ymin_bottom,105.-0.5,ymax_bottom); 
+      tl_njet->DrawLine(157.-0.5,ymin_bottom,157.-0.5,ymax_bottom); 
 
       // Nb separation lines
       TLine *tl_nb = new TLine();
       tl_nb->SetLineStyle(3);
-      tl_nb->DrawLine(12.,ymin_bottom,12.,ymax2_bottom); 
-      tl_nb->DrawLine(23.,ymin_bottom,23.,ymax2_bottom); 
-      tl_nb->DrawLine(34.,ymin_bottom,34.,ymax2_bottom); 
+      tl_nb->DrawLine(14.-0.5,ymin_bottom,14.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(27.-0.5,ymin_bottom,27.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(40.-0.5,ymin_bottom,40.-0.5,ymax2_bottom); 
       
-      tl_nb->DrawLine(56.,ymin_bottom,56.,ymax2_bottom); 
-      tl_nb->DrawLine(67.,ymin_bottom,67.,ymax2_bottom); 
-      tl_nb->DrawLine(78.,ymin_bottom,78.,ymax2_bottom); 
+      tl_nb->DrawLine(66.-0.5,ymin_bottom,66.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(79.-0.5,ymin_bottom,79.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(92.-0.5,ymin_bottom,92.-0.5,ymax2_bottom); 
       
-      tl_nb->DrawLine(100.,ymin_bottom,100.,ymax2_bottom); 
-      tl_nb->DrawLine(111.,ymin_bottom,111.,ymax2_bottom); 
-      tl_nb->DrawLine(122.,ymin_bottom,122.,ymax2_bottom); 
-
-      tl_nb->DrawLine(144.,ymin_bottom,144.,ymax2_bottom); 
-      tl_nb->DrawLine(155.,ymin_bottom,155.,ymax2_bottom); 
-      tl_nb->DrawLine(166.,ymin_bottom,166.,ymax2_bottom); 
+      tl_nb->DrawLine(118.-0.5,ymin_bottom,118.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(131.-0.5,ymin_bottom,131.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(144.-0.5,ymin_bottom,144.-0.5,ymax2_bottom); 
       
-      tl_nb->DrawLine(188.,ymin_bottom,188.,ymax2_bottom); 
-      tl_nb->DrawLine(199.,ymin_bottom,199.,ymax2_bottom); 
-      tl_nb->DrawLine(210.,ymin_bottom,210.,ymax2_bottom); 
+      tl_nb->DrawLine(170.-0.5,ymin_bottom,170.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(183.-0.5,ymin_bottom,183.-0.5,ymax2_bottom); 
+      tl_nb->DrawLine(196.-0.5,ymin_bottom,196.-0.5,ymax2_bottom); 
     
       }
 
