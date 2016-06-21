@@ -424,7 +424,6 @@ Plot_closure(string cutname="delphi", string histname="NBtag",string sample="sta
       xtext_top = 2.8;
       //y_legend = 3000.;
       ymax_top = 1400.;
-      //ymax_top = 5000.;
       if(cutname=="Njet_9") ymax_top = 100.;
       ymin_top = 0.0;
       ytext_top = 0.65*ymax_top;

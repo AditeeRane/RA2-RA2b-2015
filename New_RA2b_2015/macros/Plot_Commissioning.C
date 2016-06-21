@@ -373,8 +373,7 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   if(histname=="DelPhi1" || histname=="DelPhi2" || histname=="DelPhi3" ){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    //ymax_top = 10.;
-    ymax_top = 800.;
+    ymax_top = 10.;
     ymin_top = 0.0;
     xmax = 3.2.;
     xmin = 0.;
@@ -444,13 +443,13 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   ttext->SetTextAlign(11);
   //  ttext->Draw();
 
-  //TLatex *   tex = new TLatex(xlatex,ylatex,"arXiv:1602.06581");
-  // tex->SetTextColor(4);
-  // tex->SetTextFont(61);
-  // tex->SetTextSize(0.0375);
-  // tex->SetLineColor(4);
-  // tex->SetLineWidth(2);
-  // //tex->Draw();
+  TLatex *   tex = new TLatex(xlatex,ylatex,"arXiv:1602.06581");
+   tex->SetTextColor(4);
+   tex->SetTextFont(61);
+   tex->SetTextSize(0.0375);
+   tex->SetLineColor(4);
+   tex->SetLineWidth(2);
+   //tex->Draw();
    
   gPad->RedrawAxis(); 
   

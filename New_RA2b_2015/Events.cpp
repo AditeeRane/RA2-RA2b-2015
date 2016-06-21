@@ -6,9 +6,8 @@
   Events::Events(TTree * ttree_, const std::string sampleKeyString, int verbose) : currentEntry_(-1) {
 
     // Data or MC ?
-    //DataBool=false;
-    DataBool=true;
-
+    DataBool=false;
+    
     // Study Tau ID
     StudyTauId=false;
 
