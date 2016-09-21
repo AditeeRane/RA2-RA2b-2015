@@ -365,9 +365,21 @@ using namespace std;
       hTauResp_xy.at(i) = new TH2D(utils->TauResponse_name(i)+"_xy",";p_{T}(visible)_x / p_{T}(generated-#tau);p_{T}(visible)_y / p_{T}(generated-#tau)",50,0.,2.5,40,-1.,1.);
       hTauResp_xy.at(i)->Sumw2();
     }
+    //*AR,Sep9,2016-This array was introduced in connection with improving dphi closure
+    std::vector<TH2*> hTauGenJetPhi(utils->TauResponse_nBins_());
+    for(unsigned int i = 0; i < utils->TauResponse_nBins_(); ++i){
+      hTauGenJetPhi.at(i)=new TH2D(utils->GenJetPhi_name(i),"DPhi between gen and jet tau vs. their energy ratio",utils->tau_Phi_nbinX(),utils->tau_Phi_lowX(),utils->tau_Phi_upX(),utils->tau_Phi_nbinY(),utils->tau_Phi_lowY(),utils->tau_Phi_upY()); 
+    }
+    //*AR,Sep19,2016-This array was introduced in connection with improving dphi closure
+    std::vector<TH2*> hTauGenJetEta(utils->TauResponse_nBins_());
+    for(unsigned int i = 0; i < utils->TauResponse_nBins_(); ++i){
+      hTauGenJetEta.at(i)=new TH2D(utils->GenJetEta_name(i),"DEta between gen and jet tau vs. their energy ratio",utils->tau_Phi_nbinX(),utils->tau_Phi_lowX(),utils->tau_Phi_upX(),utils->tau_Phi_nbinY(),utils->tau_Phi_lowY(),utils->tau_Phi_upY()); 
+    }
 
     // a template for phi of the tau jets
     TH2D * tau_GenJetPhi = new TH2D("tau_GenJetPhi","DPhi between gen and jet tau vs. their energy ratio",utils->tau_Phi_nbinX(),utils->tau_Phi_lowX(),utils->tau_Phi_upX(),utils->tau_Phi_nbinY(),utils->tau_Phi_lowY(),utils->tau_Phi_upY());
+    //*AR,Sep19,2016- a template for eta of the tau jets
+    TH2D * tau_GenJetEta = new TH2D("tau_GenJetEta","DEta between gen and jet tau vs. their energy ratio",utils->tau_Phi_nbinX(),utils->tau_Phi_lowX(),utils->tau_Phi_upX(),utils->tau_Phi_nbinY(),utils->tau_Phi_lowY(),utils->tau_Phi_upY());
       
     // We would like also to have the pt distribution of the tau Jets
     TH1D * tauJetPtHist = new TH1D("tauJetPtHist","Pt of the tau hadronic jets",80,0,400);
@@ -1117,6 +1129,7 @@ using namespace std;
           hTauRespUp.at(ptBin)->Fill( tauJetPtUp / genTauPt ,eventWeight);
           hTauRespDown.at(ptBin)->Fill( tauJetPtDown / genTauPt ,eventWeight);
 
+	  double tauJetEta = evt->slimJetEtaVec_().at(jetIdx);
           double tauJetPhi = evt->slimJetPhiVec_().at(jetIdx);
           const double tauJetPt_x = tauJetPt * cos( TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) );
           const double tauJetPt_y = tauJetPt * sin( TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) ); 
@@ -1126,11 +1139,31 @@ using namespace std;
           hTauResp_xy.at(ptBin)->Fill(tauJetPt_x / genTauPt , tauJetPt_y / genTauPt ,eventWeight);
 
           if(verbose!=0)printf("ptBin: %d tauJetPt: %g genTauPt: %g \n ",ptBin,tauJetPt,genTauPt); 
-
-          if(TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) < -1.0)tau_GenJetPhi->Fill(tauJetPt / genTauPt ,-1.0 ,eventWeight);
-          else if(TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) > 1.0)tau_GenJetPhi->Fill(tauJetPt / genTauPt , 1.0 ,eventWeight);
-          else tau_GenJetPhi->Fill(tauJetPt / genTauPt , TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) ,eventWeight);
-
+	  
+          if(TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) < -1.0){
+	    tau_GenJetPhi->Fill(tauJetPt / genTauPt ,-1.0 ,eventWeight);
+	    hTauGenJetPhi.at(ptBin)->Fill(tauJetPt / genTauPt ,-1.0 ,eventWeight);
+	  }
+          else if(TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) > 1.0){
+	    tau_GenJetPhi->Fill(tauJetPt / genTauPt , 1.0 ,eventWeight);
+	    hTauGenJetPhi.at(ptBin)->Fill(tauJetPt / genTauPt ,1.0 ,eventWeight);
+	  }
+          else{
+	    tau_GenJetPhi->Fill(tauJetPt / genTauPt , TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) ,eventWeight);
+	    hTauGenJetPhi.at(ptBin)->Fill(tauJetPt / genTauPt , TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) ,eventWeight);
+	  }
+	  if(( genTauEta - tauJetEta) < -1.0){
+	    tau_GenJetEta->Fill(tauJetPt / genTauPt ,-1.0 ,eventWeight);
+	    hTauGenJetEta.at(ptBin)->Fill(tauJetPt / genTauPt ,-1.0 ,eventWeight);
+	  }
+          else if(( genTauEta - tauJetEta) > 1.0){
+	    tau_GenJetEta->Fill(tauJetPt / genTauPt , 1.0 ,eventWeight);
+	    hTauGenJetEta.at(ptBin)->Fill(tauJetPt / genTauPt ,1.0 ,eventWeight);
+	  }
+          else{
+	    tau_GenJetEta->Fill(tauJetPt / genTauPt , ( genTauEta - tauJetEta) ,eventWeight);
+	    hTauGenJetEta.at(ptBin)->Fill(tauJetPt / genTauPt , ( genTauEta - tauJetEta) ,eventWeight);
+	  }
           break; // End the jet loop once the tau jet has been found
         }
       } // End of loop over reco jets
@@ -1532,12 +1565,16 @@ using namespace std;
       hTauResp_y.at(i)->SetLineColor(i);      
       hTauResp_xy.at(i)->Write();
       hTauResp_xy.at(i)->SetLineColor(i);
-      
+      hTauGenJetPhi.at(i)->Write();
+      hTauGenJetPhi.at(i)->SetLineColor(i);
+      hTauGenJetEta.at(i)->Write();
+      hTauGenJetEta.at(i)->SetLineColor(i);
     }
 
     tauJetPtHist->Write();
     tau_GenJetPhi->Write();
-
+    tau_GenJetEta->Write();
+ 
   }// end of main
 
 

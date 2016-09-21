@@ -20,6 +20,20 @@ using namespace std;
       return name;
     }
 
+    TString Utils::GenJetPhi_name(unsigned int ptBin) {
+      TauResponse_checkPtBin(ptBin);
+      TString name = "hGenJetPhi_";
+      name += ptBin;
+      return name;
+    }
+
+    TString Utils::GenJetEta_name(unsigned int ptBin) {
+      TauResponse_checkPtBin(ptBin);
+      TString name = "hGenJetEta_";
+      name += ptBin;
+      return name;
+    }
+
     double Utils::deltaPhi(double phi1, double phi2) {
       return TVector2::Phi_mpi_pi(phi1-phi2);
     }

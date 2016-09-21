@@ -815,6 +815,15 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[14]="hTauResp_1_Down";
   histname[15]="hTauResp_2_Down";
   histname[16]="hTauResp_3_Down";
+  histname[17]="hGenJetPhi_0";
+  histname[18]="hGenJetPhi_1";
+  histname[19]="hGenJetPhi_2";
+  histname[20]="hGenJetPhi_3";
+  histname[21]="tau_GenJetEta";  
+  histname[22]="hGenJetEta_0";
+  histname[23]="hGenJetEta_1";
+  histname[24]="hGenJetEta_2";
+  histname[25]="hGenJetEta_3";
 
 //  histname[4]="genHadTauPtHist";
 
@@ -1547,6 +1556,15 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[14]="hTauResp_1_Down";
   histname[15]="hTauResp_2_Down";
   histname[16]="hTauResp_3_Down";
+  histname[17]="hGenJetPhi_0";
+  histname[18]="hGenJetPhi_1";
+  histname[19]="hGenJetPhi_2";
+  histname[20]="hGenJetPhi_3";
+  histname[21]="tau_GenJetEta";  
+  histname[22]="hGenJetEta_0";
+  histname[23]="hGenJetEta_1";
+  histname[24]="hGenJetEta_2";
+  histname[25]="hGenJetEta_3";
 
 //  histname[4]="genHadTauPtHist";
 
@@ -2266,6 +2284,15 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[14]="hTauResp_1_Down";
   histname[15]="hTauResp_2_Down";
   histname[16]="hTauResp_3_Down";
+  histname[17]="hGenJetPhi_0";
+  histname[18]="hGenJetPhi_1";
+  histname[19]="hGenJetPhi_2";
+  histname[20]="hGenJetPhi_3";
+  histname[21]="tau_GenJetEta";  
+  histname[22]="hGenJetEta_0";
+  histname[23]="hGenJetEta_1";
+  histname[24]="hGenJetEta_2";
+  histname[25]="hGenJetEta_3";
 
 
   // Open the files to read

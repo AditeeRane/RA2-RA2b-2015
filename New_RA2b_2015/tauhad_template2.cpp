@@ -90,6 +90,7 @@ using namespace std;
     int binx = -1;
     vector<TH1*> vec_resp, vec_resp_x,vec_resp_y,vec_respUp,vec_respDown;
     vector<TH2*> vec_resp_xy;
+    vector<TH2*> vec_GenJetPhi;
     vector<double> vec_recoMuMTW;
     vector<double> vec_MTActivity;
     vector<TLorentzVector> vec_recoMuon4vec;
@@ -102,7 +103,7 @@ using namespace std;
     double muE;
     double muMtW=-1.;
     double simTauJetPt,simTauJetPt_x,simTauJetPt_y,simTauJetPt_xy;
-    double simTauJetEta;
+    double simTauJetEta,simTauJetEta_xy;
     double simTauJetPhi,simTauJetPhi_xy;
 
     Double_t ht_bins[15] = { 0., 100.,200.,300.,400.,500.,600.,700.,800.,900.,
@@ -675,8 +676,11 @@ using namespace std;
     trig_pass->Sumw2();
 
     // Use Ahmad's tau template
-    TFile * resp_file_temp = new TFile("TauHad/Stack/Elog371_HadTau_TauResponseTemplates_stacked.root","R");
-    TFile * resp_file = new TFile("TauHad/Stack/Elog433_HadTau_TauResponseTemplates_stacked.root","R");
+    //TFile * resp_file_temp = new TFile("TauHad/Stack/Elog371_HadTau_TauResponseTemplates_stacked.root","R");
+    //TFile * resp_file = new TFile("TauHad/Stack/Elog433_HadTau_TauResponseTemplates_stacked.root","R");
+    TFile * resp_file_temp = new TFile("TauHad/Stack/ARElog68_HadTau_TauResponseTemplates_stacked.root","R");
+    TFile * resp_file = new TFile("TauHad/Stack/ARElog68_HadTau_TauResponseTemplates_stacked.root","R");
+
     for(int i=0; i<TauResponse_nBins; i++){
       sprintf(histname,"hTauResp_%d",i);
       vec_resp.push_back( (TH1D*) resp_file->Get( histname )->Clone() );
@@ -688,10 +692,11 @@ using namespace std;
       }
       sprintf(histname,"hTauResp_%d_xy",i);
       vec_resp_xy.push_back( (TH2D*) resp_file->Get( histname )->Clone() );
-
+      sprintf(histname,"hGenJetPhi_%d",i);
+      vec_GenJetPhi.push_back( (TH2D*) resp_file_temp->Get( histname )->Clone() );
     }
 
-    TH2D * h2tau_phi = (TH2D*) resp_file_temp->Get("tau_GenJetPhi")->Clone();
+    //TH2D * h2tau_phi = (TH2D*) resp_file_temp->Get("tau_GenJetPhi")->Clone();
 
     // Use Rishi's tau template 
     TFile * resp_file_Rishi = new TFile("TauHad/template_singletaugun_match04_74x_v02.root","R");
@@ -775,7 +780,7 @@ using namespace std;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
 
-      //if(eventN>20000)break;
+      //if(eventN>10000)break;
       //if(eventN>50)break;
 
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1059,7 +1064,14 @@ using namespace std;
             }
             
           }
-
+	  double phi_genTau_tauJet=0.;
+	  double eta_genTau_tauJet=0.;
+	  int pt_binx=utils->TauResponse_ptBin(muPt);
+	  TString phi_hist=utils->GenJetPhi_name(pt_binx);
+	  TString eta_hist=utils->GenJetEta_name(pt_binx);
+	  //std::cout<<" muPt "<<muPt<<" phi_hist "<<phi_hist<<endl;
+	  TH2D * h2tau_phi = (TH2D*) resp_file_temp->Get(phi_hist)->Clone();
+	  TH2D * h2tau_eta = (TH2D*) resp_file_temp->Get(eta_hist)->Clone();
           // start of bootstrapping ( if is on ) 
           for(int l=1; l<=nLoops;l++){
             
@@ -1093,12 +1105,14 @@ using namespace std;
             // when bootstapping we work with 1D template. 
             // It was good if we could use 2D ( we are short in time now ) 
             if(utils2::bootstrap){
-              double phi_genTau_tauJet=0.;
+              
               if(binx!=0){
                 if(verbose!=0)cout << "deltaPhi: " << h2tau_phi->ProjectionY("angularTemplate",binx,binx,"")->GetRandom() << endl;
-                phi_genTau_tauJet=h2tau_phi->ProjectionY("angularTemplate",binx,binx,"")->GetRandom();    
+                phi_genTau_tauJet=h2tau_phi->ProjectionY("angularTemplate",binx,binx,"")->GetRandom();
+		eta_genTau_tauJet=h2tau_eta->ProjectionY("angularTemplate",binx,binx,"")->GetRandom();    
               }
               simTauJetPhi_xy=simTauJetPhi + phi_genTau_tauJet ;
+	      simTauJetEta_xy=simTauJetEta + eta_genTau_tauJet ;
               simTauJetPt_xy=simTauJetPt; 
             }
 
