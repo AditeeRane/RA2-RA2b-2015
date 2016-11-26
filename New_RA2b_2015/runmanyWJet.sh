@@ -22,8 +22,8 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 	
 	export filenum=$i
 	export outStr=$outStr
-	echo $filenum
-	echo $code 
+	#echo $filenum
+	#echo $code 
 	export WJetStr=$WJetStr
 	export Suffix=${WJetStr}_${outStr}_$filenum
 	if [ $filenum -lt 10 ]
@@ -51,10 +51,10 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 
 	cd $SUBMIT_DIR
 	eval `scram runtime -sh`
-	echo "ROOTSYS"  ${ROOTSYS}
+	#echo "ROOTSYS"  ${ROOTSYS}
 	
 	if [ $type -eq 0 ]; then
-	    echo $filenum
+	    #echo $filenum
 	    export ArgFour=TauHad2Multiple
 	    export ArgOne=./run_tauHad2    
 #   echo $ArgOne
@@ -97,7 +97,7 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 		echo Transfer_Output_Files = HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root','MuJetMatchRate_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}
 		#echo Transfer_Output_Files = MuJetMatchRate_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 		echo transfer_output_remaps = '"'HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root = TauHad2Multiple/HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root';'MuJetMatchRate_WJet_${WJetStr}_${outStr}_${i}_00.root = TauHad2Multiple/MuJetMatchRate_WJet_${WJetStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
@@ -111,7 +111,7 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 	
 
 	if [ $type -eq 1 ]; then
-	    echo $filenum
+	    #echo $filenum
 	    export ArgFour=TauHadMultiple
 	    export ArgOne=./run_tauHad
 #	    echo $ArgOne
@@ -150,7 +150,7 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 		echo Transfer_Output_Files = GenInfo_HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_WJet_${WJetStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_WJet_${WJetStr}_${outStr}_${i}_00.root','IsoEfficiencies_WJet_${WJetStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromWJet_${WJetStr}_${outStr}_${i}_00.root','Probability_Tau_mu_WJet_${WJetStr}_${outStr}_${i}_00.root','TauBtaggedRate_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 
 #		echo Transfer_Output_Files = GenInfo_HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_WJet_${WJetStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_WJet_${WJetStr}_${outStr}_${i}_00.root','IsoEfficiencies_WJet_${WJetStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromWJet_${WJetStr}_${outStr}_${i}_00.root','Probability_Tau_mu_WJet_${WJetStr}_${outStr}_${i}_00.root','TauBtaggedRate_WJet_${WJetStr}_${outStr}_${i}_00.root','TriggerEff_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}        

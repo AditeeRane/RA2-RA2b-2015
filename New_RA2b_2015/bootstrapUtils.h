@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TH1.h"
 #include "TH2.h"
 
@@ -34,6 +35,8 @@ namespace bootstrapUtils{
   // Copy histogram contents for each event - 1D
   void HistogramFillForEventTH1(TH1* h, TH1* h_noW, TH1* h_evt, TH1* h_noW_evt){
 
+    std::cout << "Obsolete method HistogramFillForEventTH1 with four elements (not two). Caution!" << std::endl; 
+    
       for (int ibin=0;ibin<h_evt->GetNbinsX()+2;ibin++){
         double bin     = h_evt->GetBinCenter(ibin);
         double content = h_evt->GetBinContent(ibin);
@@ -52,6 +55,8 @@ namespace bootstrapUtils{
 
   // Copy histogram contents for each event - 2D
   void HistogramFillForEventTH2(TH2* h, TH2* h_noW, TH2* h_evt, TH2* h_noW_evt){
+
+    std::cout << "Obsolete method HistogramFillForEventTH2 with four elements (not two). Caution!" << std::endl; 
 
       for (int ibin=0;ibin<h_evt->GetNbinsX()+2;ibin++){
         for (int jbin=0;jbin<h_evt->GetNbinsY()+2;jbin++){
@@ -74,6 +79,15 @@ namespace bootstrapUtils{
   // Copy histogram contents for each event - 1D
   void HistogramFillForEventTH1(TH1* h, TH1* h_evt){
 
+    /*
+    if (h_evt->GetBinContent(7)>0. || h_evt->GetBinContent(17)>0. || h_evt->GetBinContent(27)>0.){
+      std::cout << "inside bootstrap utils: input" << std::endl;
+      std::cout << h_evt->GetBinContent(7) << std::endl;
+      std::cout << h_evt->GetBinContent(17) << std::endl;
+      std::cout << h_evt->GetBinContent(27) << std::endl;
+    }
+    */
+
       for (int ibin=0;ibin<h_evt->GetNbinsX()+2;ibin++){
         double bin     = h_evt->GetBinCenter(ibin);
         double content = h_evt->GetBinContent(ibin);
@@ -84,6 +98,15 @@ namespace bootstrapUtils{
           //KH h_noW->Fill(bin);
         }
       }
+
+      /*
+    if (h_evt->GetBinContent(7)>0. || h_evt->GetBinContent(17)>0. || h_evt->GetBinContent(27)>0.){
+      std::cout << "inside bootstrap utils: output" << std::endl;
+      std::cout << h->GetBinContent(7) << std::endl;
+      std::cout << h->GetBinContent(17) << std::endl;
+      std::cout << h->GetBinContent(27) << std::endl;
+    }
+      */
 
       h_evt->Reset();
       //h_noW_evt->Reset();

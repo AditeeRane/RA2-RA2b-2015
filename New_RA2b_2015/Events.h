@@ -94,7 +94,7 @@ using namespace std;
    vector<double>  *ScaleWeights;
    //vector<TLorentzVector> *Jets;
    vector<int>     *Jets_partonFlavor;
-   vector<bool>    *HTJetsMask;
+   vector<bool>    *Jets_HTMask;
    vector<double>  *Jets_bDiscriminatorCSV;
    vector<double>  *Jets_chargedEmEnergyFraction;
    vector<double>  *Jets_chargedHadronEnergyFraction;
@@ -258,8 +258,8 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<double>  GenJetPhiVec_() const;
 
    vector<int>    * Jets_partonFlavor_() const;
-   vector<bool>   * HTJetsMask_() const;
-
+   vector<bool>   * Jets_HTMask_() const;
+   vector<bool>   * Jets_HTMask_mod_(int idx) const;
 
    vector<int>     slimJetID_() const;
    vector<double>  slimJetjecFactor_() const;

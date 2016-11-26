@@ -37,9 +37,7 @@ class mainClass{
 public:
 mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
-  bool doScale = false;
   double scalefactor=3000.; // normalized to 3/fb
-  //double scalefactor=225;
   Selection * sel = new Selection();
   cutname = sel->cutName();
 
@@ -47,56 +45,14 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   TTbartype[0]="allEvents";
   Ttype[0]="allEvents";
 
+  const int tnHT  = 5;    // Single top
+  const int wjnHT = 7;    // Total number of HT bin samples
+  const int ttbarnHT = 1; // Total number of HT bin samples
+
 // .....................................................................................................................................................//
 // Single Top Section
 // .....................................................................................................................................................//
-
-  //build a vector of scale factors
-  //first load the cross sections into a vector
-  vector<double> T_xs_vec;
-  //T_xs_vec.push_back(2.);     // T_s
-  //T_xs_vec.push_back(103.4);  // T_t 
-  //T_xs_vec.push_back(35.);    // T_tW
-  //T_xs_vec.push_back(1.);     // Tbar_s
-  //T_xs_vec.push_back(61.6);   // Tbar_t 
-  //T_xs_vec.push_back(35.);    // Tbar_tW
-  T_xs_vec.push_back(44.07); // t_top
-  T_xs_vec.push_back(26.23);  // t_antitop
-  T_xs_vec.push_back(35.8);  // tW_top
-  T_xs_vec.push_back(35.8); // tW_antitop
-  T_xs_vec.push_back(3.34);  // s
-  //T_xs_vec.push_back(3.34);  // s
-
-  const int tnHT = (int) T_xs_vec.size();   // Total number of HT bin samples
-
-  for(int i=1; i<=tnHT ; i++){
-    /*
-    if(i==1)sprintf(tempname,"../../Results/results_T_s_.root");
-    else if(i==2)sprintf(tempname,"../../Results/results_T_t_.root");
-    else if(i==3)sprintf(tempname,"../../Results/results_T_u_.root");
-    else if(i==4)sprintf(tempname,"../../Results/results_Tbar_s_.root");
-    else if(i==5)sprintf(tempname,"../../Results/results_Tbar_t_.root");
-    else if(i==6)sprintf(tempname,"../../Results/results_Tbar_u_.root");
-    else{cout << " Error!! There are only 6 T ht binned sample " << endl;}
-    file = new TFile(tempname, "R");
-    sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
-    tempvalue = (luminosity*T_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
-    */
-    if     (i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_t_top_.root");
-    else if(i==2)sprintf(tempname,"../GenInfo_HadTauEstimation_t_antitop_.root");
-    else if(i==3)sprintf(tempname,"../GenInfo_HadTauEstimation_tW_top_.root");
-    else if(i==4)sprintf(tempname,"../GenInfo_HadTauEstimation_tW_antitop_.root");
-    else if(i==5)sprintf(tempname,"../GenInfo_HadTauEstimation_s_channel_.root");
-    //else if(i==6)sprintf(tempname,"../GenInfo_HadTauEstimation_Tbar_s_.root");
-    else{cout << " Error!! There are only 6 single top sample " << endl;}
-    file = new TFile(tempname, "R");
-    sprintf(tempname,"cutflow_preselection");
-    std::cout << luminosity << " " << T_xs_vec[i-1] << (* (TH1D* ) file->Get(tempname)).GetBinContent(1) << std::endl;
-    tempvalue = (luminosity*T_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetBinContent(1));
-    T_scalevec.push_back(tempvalue);
-  }//end of loop over HTbins 
-  std::cout << "T normalization scale factor determination done \n " << std::endl;
-
+  
   //..........................................//
   // main histograms like HT, MHT, ...
   //..........................................//
@@ -113,7 +69,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     else{cout << " Error!! There are only 6 T ht binned sample " << endl;}
     T_inputfilevec.push_back(TFile::Open(tempname,"R"));
   }//end of loop over HTbins 
-
 
   // Stack
   tempstack = new THStack("stack","Binned Sample Stack");
@@ -152,8 +107,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
       sprintf(tempname,"%s",(Hname[j]).c_str());
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -167,7 +121,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   }
 
   // Loop over event types, cutnames, etc
-  for(map<int , string >::iterator itt=Ttype.begin(); itt!=Ttype.end();itt++){        // loop over different event types
+  for(map<int , string >::iterator itt=Ttype.begin(); itt!=Ttype.end();itt++){      // loop over different event types
 
     cdtoitt = file->mkdir((itt->second).c_str());
     cdtoitt->cd();
@@ -177,16 +131,13 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
       cdtoit =  cdtoitt->mkdir((it->second).c_str());
       cdtoit->cd();
 
-      for(int j=0; j<histname.size(); j++){                                        // loop over different histograms
+      for(int j=0; j<histname.size(); j++){                                         // loop over different histograms
 
-        for(int i=0; i<tnHT ; i++){                                                  // loop over different HT bins
+        for(int i=0; i<tnHT ; i++){                                                 // loop over different HT bins
 
-          //cout << "================================" << endl;
-          //cout << "HT#: " <<i << ", WJtype: " << itt->second << ", cutname: " << it->second << ", hist#: " << j << endl;  
           sprintf(tempname,"%s/%s/%s_%s_%s",(itt->second).c_str(),(it->second).c_str(),(histname[j]).c_str(),(it->second).c_str(),(itt->second).c_str());
           temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-          if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-          else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+          temphist->Scale(scalefactor);
           temphist->SetFillColor(i+2);
           tempstack->Add(temphist);
 
@@ -206,7 +157,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("T main histograms stacked \n ");
-
 
   //..........................................//
   // IsoTrk  
@@ -264,7 +214,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[23]="Iso_pass_nb_njet2_lowDphi";
   histname[24]="Iso_all_nb_njet2_lowDphi";
 
-
   std::cout<< " Before looping"<< std::endl;
   for(int j=0; j<histname.size(); j++){
 
@@ -273,8 +222,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
       std::cout<< " looping over ht bins"<< std::endl;
@@ -408,14 +356,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
       
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
       std::cout<<"luminosity "<<luminosity <<endl;
-      if (luminosity>0&&doScale){
-	std::cout<<" doScale true "<<std::endl;
-	temphist->Scale(T_scalevec[i]);
-      }
-      else if (luminosity>0&&!doScale){
-	std::cout<<" doScale false "<<std::endl;
-	temphist->Scale(scalefactor);
-      }
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       std::cout<<" Adds hist to stack"<<std::endl;
       tempstack->Add(temphist);
@@ -476,8 +417,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -511,8 +451,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -546,8 +485,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -582,8 +520,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -612,51 +549,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 // .....................................................................................................................................................//
 // WJet Section
 // .....................................................................................................................................................//
-
-  //build a vector of scale factors
-  //first load the cross sections into a vector
-  vector<double> WJet_xs_vec;
-  double k_w = 1.23;
-  //WJet_xs_vec.push_back(k_w*1817.0); // HT 100-200
-  //WJet_xs_vec.push_back(k_w*471.6);  // HT 200-400
-  //WJet_xs_vec.push_back(k_w*55.61);  // HT 400-600
-  //WJet_xs_vec.push_back(k_w*18.81);  // HT 600-Inf
-  // Based on https://twiki.cern.ch/twiki/bin/view/CMS/RA2b13TeVCommissioning#Technical_details
-  WJet_xs_vec.push_back(1635.); // HT 100-200
-  WJet_xs_vec.push_back(437.);  // HT 200-400
-  WJet_xs_vec.push_back(59.5);  // HT 400-600
-  WJet_xs_vec.push_back(22.8);  // HT 600-800
-  WJet_xs_vec.push_back(1);  // HT 800_1200
-  WJet_xs_vec.push_back(1);  // HT 1200_2500
-  WJet_xs_vec.push_back(1);  // HT 2500_Inf
-
-  const int wjnHT = (int) WJet_xs_vec.size();   // Total number of HT bin samples
-
-  for(int i=1; i<=wjnHT ; i++){
-    /*
-    if(i==1)sprintf(tempname,"../../Results/results_WJet_100_200_.root");
-    else if(i==2)sprintf(tempname,"../../Results/results_WJet_200_400_.root");
-    else if(i==3)sprintf(tempname,"../../Results/results_WJet_400_600_.root");
-    else if(i==4)sprintf(tempname,"../../Results/results_WJet_600_inf_.root");
-    else{cout << " Error!! There are only 4 WJet ht binned sample " << endl;}
-    file = new TFile(tempname, "R");
-    sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
-    tempvalue = (luminosity*WJet_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
-    */
-    if(i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_100_200_.root");
-    else if(i==2)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_200_400_.root");
-    else if(i==3)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_400_600_.root");
-    else if(i==4)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_600_800_.root");
-    else if(i==5)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_800_1200_.root");
-    else if(i==6)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_1200_2500_.root");
-    else if(i==7)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_2500_Inf_.root");
-    else{cout << " Error!! There are only 4 WJet ht binned sample " << endl;}
-    file = new TFile(tempname, "R");
-    sprintf(tempname,"cutflow_preselection");
-    tempvalue = (luminosity*WJet_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetBinContent(1));
-    WJet_scalevec.push_back(tempvalue);
-  }//end of loop over HTbins 
-  std::cout << "WJet normalization scale factor determination done \n " << std::endl;
 
   //..........................................//
   // main histograms like HT, MHT, ...
@@ -714,8 +606,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
       sprintf(tempname,"%s",(Hname[j]).c_str());
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -750,8 +641,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 	  
           sprintf(tempname,"%s/%s/%s_%s_%s",(itt->second).c_str(),(it->second).c_str(),(histname[j]).c_str(),(it->second).c_str(),(itt->second).c_str());
           temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-          if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-          else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+          temphist->Scale(scalefactor);
           temphist->SetFillColor(i+2);
           tempstack->Add(temphist);
 
@@ -831,8 +721,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
   
@@ -888,8 +777,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -952,8 +840,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -987,8 +874,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1023,8 +909,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1059,8 +944,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1150,8 +1034,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1285,8 +1168,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1351,8 +1233,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1381,36 +1262,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 // .....................................................................................................................................................//
 // TTbar Section
 // .....................................................................................................................................................//
-
-  //build a vector of scale factors
-  //first load the cross sections into a vector
-  vector<double> TTbar_xs_vec;
-
-  //TTbar_xs_vec.push_back(806.1); // 
-  // Based on https://twiki.cern.ch/twiki/bin/view/CMS/RA2b13TeVCommissioning#Technical_details
-  TTbar_xs_vec.push_back(815.96); // 
-
-  const int ttbarnHT = (int) TTbar_xs_vec.size();   // Total number of HT bin samples
-
-  for(int i=1; i<=ttbarnHT ; i++){
-    /*
-    if(i==1)sprintf(tempname,"../../Results/results_TTbar_.root");
-    else{cout << " Error!! There are only 1 TTbar ht binned sample " << endl;}
-    file = new TFile(tempname, "R");
-    sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
-    tempvalue = (luminosity*TTbar_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
-    */
-    if(i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_TTbar_.root");
-    else{cout << " Error!! There are only 1 inclusive TTbar sample " << endl;}
-    file = new TFile(tempname, "R");
-    sprintf(tempname,"cutflow_preselection");
-    tempvalue = (luminosity*TTbar_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetBinContent(1));
-    TTbar_scalevec.push_back(tempvalue);
-  }//end of loop over HTbins 
-  std::cout << "TTbar normalization scale factor determination done \n " << std::endl;
-  
-
-
 
 //..........................................//
 // main histograms like HT, MHT, ...
@@ -1460,8 +1311,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
       sprintf(tempname,"%s",(Hname[j]).c_str());
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1473,8 +1323,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     tempstack = new THStack("stack","Binned Sample Stack");
 
   }
-
-
 
   for(map<int , string >::iterator itt=TTbartype.begin(); itt!=TTbartype.end();itt++){        // loop over different event types
 
@@ -1496,8 +1344,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 	  std::cout<<" tempname "<<tempname <<endl; 
 	  temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
 	  std::cout<<" get tempname " <<endl;
-          if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-          else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+          temphist->Scale(scalefactor);
           temphist->SetFillColor(i+2);
           tempstack->Add(temphist);
 
@@ -1570,8 +1417,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
   
@@ -1620,8 +1466,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1672,8 +1517,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1730,8 +1574,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1765,8 +1608,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1800,8 +1642,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1836,8 +1677,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -1921,8 +1761,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -2051,8 +1890,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -2109,8 +1947,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 

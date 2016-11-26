@@ -48,10 +48,10 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 
 	cd $SUBMIT_DIR
 	eval `scram runtime -sh`
-	echo "ROOTSYS"  ${ROOTSYS}
+	#echo "ROOTSYS"  ${ROOTSYS}
 	
 	if [ $type -eq 0 ]; then
-	    echo $filenum
+	    #echo $filenum
 	    export ArgFour=TauHad2Multiple
 	    export ArgOne=./run_tauHad2    
 # echo $ArgOne
@@ -93,7 +93,7 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 		echo Transfer_Output_Files = HadTauEstimation_${TStr}_${outStr}_${i}_00.root','MuJetMatchRate_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}
 		#echo Transfer_Output_Files = MuJetMatchRate_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 		echo transfer_output_remaps = '"'HadTauEstimation_${TStr}_${outStr}_${i}_00.root = TauHad2Multiple/HadTauEstimation_${TStr}_${outStr}_${i}_00.root';'MuJetMatchRate_${TStr}_${outStr}_${i}_00.root = TauHad2Multiple/MuJetMatchRate_${TStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
@@ -107,7 +107,7 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 	
 
 	if [ $type -eq 1 ]; then
-	    echo $filenum
+	    #echo $filenum
 	    export ArgFour=TauHadMultiple
 	    export ArgOne=./run_tauHad
 #	    echo $ArgOne
@@ -146,7 +146,7 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 
 	#	echo Transfer_Output_Files = GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 

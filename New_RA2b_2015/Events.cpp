@@ -54,7 +54,7 @@
      ScaleWeights = 0;
      Jets = 0;
      Jets_partonFlavor = 0;
-     HTJetsMask = 0;
+     Jets_HTMask = 0;
      Jets_bDiscriminatorCSV = 0;
      Jets_chargedEmEnergyFraction = 0;
      Jets_chargedHadronEnergyFraction = 0;
@@ -174,7 +174,7 @@
      fChain->SetBranchAddress("ScaleWeights", &ScaleWeights);
      fChain->SetBranchAddress("Jets", &Jets);
      fChain->SetBranchAddress("Jets_partonFlavor", &Jets_partonFlavor);
-     fChain->SetBranchAddress("HTJetsMask", &HTJetsMask);
+     fChain->SetBranchAddress("Jets_HTMask", &Jets_HTMask);
 
      fChain->SetBranchAddress("Jets_bDiscriminatorCSV", &Jets_bDiscriminatorCSV);
      fChain->SetBranchAddress("Jets_chargedEmEnergyFraction", &Jets_chargedEmEnergyFraction);
@@ -474,8 +474,16 @@
    }
    vector<TLorentzVector>  *Events::JetsLorVec_() const{return Jets;}
    vector<int> *Events::Jets_partonFlavor_() const { return Jets_partonFlavor;}
-   vector<bool> *Events::HTJetsMask_() const { return HTJetsMask;}
+   vector<bool> *Events::Jets_HTMask_() const { return Jets_HTMask;}
 
+   vector<bool> *Events::Jets_HTMask_mod_(int idx) const { // mask muon jet
+     std::vector<bool>* vec = new std::vector<bool>();
+     for(int i=0;i < Jets_HTMask->size();i++){
+       if (i==idx) vec->push_back(false);
+       else vec->push_back(Jets_HTMask->at(i));
+     }
+     return vec;
+   }
 
    vector<double>  Events::csvVec() const { return *Jets_bDiscriminatorCSV;}
    vector<double>  Events::Jets_chargedEmEnergyFraction_() const { return *Jets_chargedEmEnergyFraction;}
