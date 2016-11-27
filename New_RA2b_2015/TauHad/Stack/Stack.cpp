@@ -498,6 +498,185 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphistIII->SetTitle("hAcc");
   temphistIII->Write();
 
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet2";
+  histname[1]="hAccPass_nb_njet2";
+  histname[2]="hAccAll_nb_njet2";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet2"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet2");
+  temphistIII->SetTitle("hAcc_nb_njet2");
+  temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet34";
+  histname[1]="hAccPass_nb_njet34";
+  histname[2]="hAccAll_nb_njet34";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet34"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet34");
+  temphistIII->SetTitle("hAcc_nb_njet34");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet56";
+  histname[1]="hAccPass_nb_njet56";
+  histname[2]="hAccAll_nb_njet56";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet56"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet56");
+  temphistIII->SetTitle("hAcc_nb_njet56");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet78";
+  histname[1]="hAccPass_nb_njet78";
+  histname[2]="hAccAll_nb_njet78";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet78"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet78");
+  temphistIII->SetTitle("hAcc_nb_njet78");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet9";
+  histname[1]="hAccPass_nb_njet9";
+  histname[2]="hAccAll_nb_njet9";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet9"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet9");
+  temphistIII->SetTitle("hAcc_nb_njet9");
+  temphistIII->Write();
+
+
+
   histname.clear();
   histname[0]="hAcc_0b_";
   histname[1]="hAcc_0b_Pass";
@@ -589,7 +768,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
     }//end of loop over HTbins 1..7
 
-    std::cout<<" Under acceptance_end of loop over Htbins"<<std::endl;
+    //std::cout<<" Under acceptance_end of loop over Htbins"<<std::endl;
     temphist = (TH1D *) tempstack->GetStack()->Last();
     if(j==1)temphistI=(TH1D*)temphist->Clone();
     if(j==2)temphistII=(TH1D*)temphist->Clone();
@@ -604,6 +783,183 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphistIII->SetName("hAcc_lowDphi");
   temphistIII->SetTitle("hAcc_lowDphi");
   temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet2_lowDphi";
+  histname[1]="hAccPass_nb_njet2_lowDphi";
+  histname[2]="hAccAll_nb_njet2_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet2_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet2_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet2_lowDphi");
+  temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet34_lowDphi";
+  histname[1]="hAccPass_nb_njet34_lowDphi";
+  histname[2]="hAccAll_nb_njet34_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet34_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet34_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet34_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet56_lowDphi";
+  histname[1]="hAccPass_nb_njet56_lowDphi";
+  histname[2]="hAccAll_nb_njet56_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet56_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet56_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet56_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet78_lowDphi";
+  histname[1]="hAccPass_nb_njet78_lowDphi";
+  histname[2]="hAccAll_nb_njet78_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet78_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet78_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet78_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet9_lowDphi";
+  histname[1]="hAccPass_nb_njet9_lowDphi";
+  histname[2]="hAccAll_nb_njet9_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<tnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet9_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet9_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet9_lowDphi");
+  temphistIII->Write();
+
 
 
   file->Close();
@@ -974,6 +1330,185 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphistIII->SetTitle("hAcc");
   temphistIII->Write();
 
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet2";
+  histname[1]="hAccPass_nb_njet2";
+  histname[2]="hAccAll_nb_njet2";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet2"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet2");
+  temphistIII->SetTitle("hAcc_nb_njet2");
+  temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet34";
+  histname[1]="hAccPass_nb_njet34";
+  histname[2]="hAccAll_nb_njet34";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet34"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet34");
+  temphistIII->SetTitle("hAcc_nb_njet34");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet56";
+  histname[1]="hAccPass_nb_njet56";
+  histname[2]="hAccAll_nb_njet56";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet56"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet56");
+  temphistIII->SetTitle("hAcc_nb_njet56");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet78";
+  histname[1]="hAccPass_nb_njet78";
+  histname[2]="hAccAll_nb_njet78";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet78"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet78");
+  temphistIII->SetTitle("hAcc_nb_njet78");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet9";
+  histname[1]="hAccPass_nb_njet9";
+  histname[2]="hAccAll_nb_njet9";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet9"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet9");
+  temphistIII->SetTitle("hAcc_nb_njet9");
+  temphistIII->Write();
+
+
   histname.clear();
   histname[0]="hAcc_0b_";
   histname[1]="hAcc_0b_Pass";
@@ -1080,6 +1615,187 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphistIII->SetName("hAcc_lowDphi");
   temphistIII->SetTitle("hAcc_lowDphi");
   temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet2_lowDphi";
+  histname[1]="hAccPass_nb_njet2_lowDphi";
+  histname[2]="hAccAll_nb_njet2_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet2_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet2_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet2_lowDphi");
+  temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet34_lowDphi";
+  histname[1]="hAccPass_nb_njet34_lowDphi";
+  histname[2]="hAccAll_nb_njet34_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet34_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet34_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet34_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet56_lowDphi";
+  histname[1]="hAccPass_nb_njet56_lowDphi";
+  histname[2]="hAccAll_nb_njet56_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet56_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet56_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet56_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet78_lowDphi";
+  histname[1]="hAccPass_nb_njet78_lowDphi";
+  histname[2]="hAccAll_nb_njet78_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet78_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet78_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet78_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet9_lowDphi";
+  histname[1]="hAccPass_nb_njet9_lowDphi";
+  histname[2]="hAccAll_nb_njet9_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) WJet_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(WJet_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet9_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet9_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet9_lowDphi");
+  temphistIII->Write();
+
+
+
+
 
 
   file->Close();
@@ -1493,9 +2209,9 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
           //cout << "================================" << endl;
           //cout << "HT#: " <<i << ", TTbartype: " << itt->second << ", cutname: " << it->second << ", hist#: " << j << endl;  
           sprintf(tempname,"%s/%s/%s_%s_%s",(itt->second).c_str(),(it->second).c_str(),(histname[j]).c_str(),(it->second).c_str(),(itt->second).c_str());
-	  std::cout<<" tempname "<<tempname <<endl; 
+	  //std::cout<<" tempname "<<tempname <<endl; 
 	  temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-	  std::cout<<" get tempname " <<endl;
+	  //std::cout<<" get tempname " <<endl;
           if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
           else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
           temphist->SetFillColor(i+2);
@@ -1752,6 +2468,186 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphistIII->Write();
 
 
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet2";
+  histname[1]="hAccPass_nb_njet2";
+  histname[2]="hAccAll_nb_njet2";
+  //std::cout<<"****Seg vio****"<<endl;
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet2"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet2");
+  temphistIII->SetTitle("hAcc_nb_njet2");
+  temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet34";
+  histname[1]="hAccPass_nb_njet34";
+  histname[2]="hAccAll_nb_njet34";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet34"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet34");
+  temphistIII->SetTitle("hAcc_nb_njet34");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet56";
+  histname[1]="hAccPass_nb_njet56";
+  histname[2]="hAccAll_nb_njet56";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet56"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet56");
+  temphistIII->SetTitle("hAcc_nb_njet56");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet78";
+  histname[1]="hAccPass_nb_njet78";
+  histname[2]="hAccAll_nb_njet78";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet78"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet78");
+  temphistIII->SetTitle("hAcc_nb_njet78");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet9";
+  histname[1]="hAccPass_nb_njet9";
+  histname[2]="hAccAll_nb_njet9";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet9"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet9");
+  temphistIII->SetTitle("hAcc_nb_njet9");
+  temphistIII->Write();
+
+
+
+
   histname.clear();
   histname[0]="hAcc_0b_";
   histname[1]="hAcc_0b_Pass";
@@ -1857,6 +2753,191 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphistIII->SetName("hAcc_lowDphi");
   temphistIII->SetTitle("hAcc_lowDphi");
   temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet2_lowDphi";
+  histname[1]="hAccPass_nb_njet2_lowDphi";
+  histname[2]="hAccAll_nb_njet2_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet2_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet2_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet2_lowDphi");
+  temphistIII->Write();
+
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet34_lowDphi";
+  histname[1]="hAccPass_nb_njet34_lowDphi";
+  histname[2]="hAccAll_nb_njet34_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet34_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet34_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet34_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet56_lowDphi";
+  histname[1]="hAccPass_nb_njet56_lowDphi";
+  histname[2]="hAccAll_nb_njet56_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet56_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet56_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet56_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet78_lowDphi";
+  histname[1]="hAccPass_nb_njet78_lowDphi";
+  histname[2]="hAccAll_nb_njet78_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet78_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet78_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet78_lowDphi");
+  temphistIII->Write();
+
+  histname.clear();
+  histname[0]="hAcc_nb_njet9_lowDphi";
+  histname[1]="hAccPass_nb_njet9_lowDphi";
+  histname[2]="hAccAll_nb_njet9_lowDphi";
+
+  for(int j=0; j<histname.size(); j++){
+
+    if(j==0)continue; // Stacking probability histograms has no meaning.
+    sprintf(tempname,"%s",(histname[j]).c_str());
+
+    for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
+
+      temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+      if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
+      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->SetFillColor(i+2);
+      tempstack->Add(temphist);
+
+    }//end of loop over HTbins 1..7
+
+    temphist = (TH1D *) tempstack->GetStack()->Last();
+    if(j==1)temphistI=(TH1D*)temphist->Clone();
+    if(j==2)temphistII=(TH1D*)temphist->Clone();
+    temphist->Write(tempname);
+    delete tempstack;
+    tempstack = new THStack("stack","Binned Sample Stack");
+
+
+  }
+  temphistIII = static_cast<TH1D*>(temphistI->Clone("hAcc_nb_njet9_lowDphi"));
+  temphistIII->Divide(temphistI,temphistII,temphistII->GetSumOfWeights(),temphistI->GetSumOfWeights(),"B");
+  temphistIII->SetName("hAcc_nb_njet9_lowDphi");
+  temphistIII->SetTitle("hAcc_nb_njet9_lowDphi");
+  temphistIII->Write();
+
+
+
+
+
+
+
+
 
   file->Close();
   printf("TTbar acceptance calculated. \n ");
@@ -2470,6 +3551,104 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
 
   histname.clear();
+  histname[0]="hAccPass_nb_njet2";
+  histname[1]="hAccAll_nb_njet2";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet34";
+  histname[1]="hAccAll_nb_njet34";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet56";
+  histname[1]="hAccAll_nb_njet56";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet78";
+  histname[1]="hAccAll_nb_njet78";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet9";
+  histname[1]="hAccAll_nb_njet9";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
   histname[0]="hAcc_0b_Pass";
   histname[1]="hAcc_0b_All";
 
@@ -2529,6 +3708,103 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   }
 
+  histname.clear();
+  histname[0]="hAccPass_nb_njet2_lowDphi";
+  histname[1]="hAccAll_nb_njet2_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet34_lowDphi";
+  histname[1]="hAccAll_nb_njet34_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet56_lowDphi";
+  histname[1]="hAccAll_nb_njet56_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet78_lowDphi";
+  histname[1]="hAccAll_nb_njet78_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet9_lowDphi";
+  histname[1]="hAccAll_nb_njet9_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
   file3->Close();
   file2->Close();
   file->Close();
@@ -2546,6 +3822,56 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphist->Divide(temphist,temphist2,1,1,"B");
   temphist->SetName("hAcc");
   temphist->SetTitle("hAcc");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet2");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet2");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet2");
+  temphist->SetTitle("hAcc_nb_njet2");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet34");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet34");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet34");
+  temphist->SetTitle("hAcc_nb_njet34");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet56");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet56");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet56");
+  temphist->SetTitle("hAcc_nb_njet56");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet78");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet78");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet78");
+  temphist->SetTitle("hAcc_nb_njet78");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet9");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet9");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet9");
+  temphist->SetTitle("hAcc_nb_njet9");
   temphist->Write();
 
   sprintf(tempname,"hAcc_0b_Pass");
@@ -2579,6 +3905,55 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphist->SetTitle("hAcc_lowDphi");
   temphist->Write();
 
+  sprintf(tempname,"hAccPass_nb_njet2_lowDphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet2_lowDphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet2_lowDphi");
+  temphist->SetTitle("hAcc_nb_njet2_lowDphi");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet34_lowDphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet34_lowDphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet34_lowDphi");
+  temphist->SetTitle("hAcc_nb_njet34_lowDphi");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet56_lowDphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet56_lowDphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet56_lowDphi");
+  temphist->SetTitle("hAcc_nb_njet56_lowDphi");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet78_lowDphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet78_lowDphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet78_lowDphi");
+  temphist->SetTitle("hAcc_nb_njet78_lowDphi");
+  temphist->Write();
+
+  sprintf(tempname,"hAccPass_nb_njet9_lowDphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAccAll_nb_njet9_lowDphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hAcc_nb_njet9_lowDphi");
+  temphist->SetTitle("hAcc_nb_njet9_lowDphi");
+  temphist->Write();
 
   file->Close();
   file2->Close();

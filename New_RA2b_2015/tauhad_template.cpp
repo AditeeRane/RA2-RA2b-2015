@@ -221,9 +221,33 @@ int main(int argc, char *argv[]){
   map<string,int> binMap_mht_nj = utils2::BinMap_mht_nj();
   int totNbins_mht_nj=binMap_mht_nj.size();
   TH1* hAccAll = new TH1D("hAccAll","Acceptance -- All",totNbins_ForAcc,1,totNbins_ForAcc+1);
+  TH1* hAccAll_nb_njet2 = new TH1D("hAccAll_nb_njet2","Acceptance -- All nb_njet2",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet34 = new TH1D("hAccAll_nb_njet34","Acceptance -- All nb_njet34",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet56 = new TH1D("hAccAll_nb_njet56","Acceptance -- All nb_njet56",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet78 = new TH1D("hAccAll_nb_njet78","Acceptance -- All nb_njet78",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet9 = new TH1D("hAccAll_nb_njet9","Acceptance -- All nb_njet9",4,-0.5,3.5);
+  
   TH1* hAccPass = new TH1D("hAccPass","Acceptance -- Pass",totNbins_ForAcc,1,totNbins_ForAcc+1);
+  TH1* hAccPass_nb_njet2 = new TH1D("hAccPass_nb_njet2","Acceptance -- Pass nb_njet2",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet34 = new TH1D("hAccPass_nb_njet34","Acceptance -- Pass nb_njet34",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet56 = new TH1D("hAccPass_nb_njet56","Acceptance -- Pass nb_njet56",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet78 = new TH1D("hAccPass_nb_njet78","Acceptance -- Pass nb_njet78",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet9 = new TH1D("hAccPass_nb_njet9","Acceptance -- Pass nb_njet9",4,-0.5,3.5);
+  
   hAccAll->Sumw2();
+  hAccAll_nb_njet2->Sumw2();
+  hAccAll_nb_njet34->Sumw2();
+  hAccAll_nb_njet56->Sumw2();
+  hAccAll_nb_njet78->Sumw2();
+  hAccAll_nb_njet9->Sumw2();
+
   hAccPass->Sumw2();
+  hAccPass_nb_njet2->Sumw2();
+  hAccPass_nb_njet34->Sumw2();
+  hAccPass_nb_njet56->Sumw2();
+  hAccPass_nb_njet78->Sumw2();
+  hAccPass_nb_njet9->Sumw2();
+
   TH1* hPDFWeights = new TH1D("hPDFWeights","PDFWeights Distribution",10000,0.,100.);
   TH1* hScaleWeights = new TH1D("hScaleWeights","ScaleWeights Distribution",10000,0.,100.);
   TH1* hPDFWeights_lowDphi = new TH1D("hPDFWeights_lowDphi","PDFWeights_lowDphi Distribution",10000,0.,100.);
@@ -239,9 +263,32 @@ int main(int argc, char *argv[]){
   hAcc_non0b_Pass->Sumw2();
 
   TH1* hAccAll_lowDphi = new TH1D("hAccAll_lowDphi","Acceptance -- All",totNbins_ForAcc,1,totNbins_ForAcc+1);
+  TH1* hAccAll_nb_njet2_lowDphi = new TH1D("hAccAll_nb_njet2_lowDphi","Acceptance -- All nb_njet2_lowDphi",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet34_lowDphi = new TH1D("hAccAll_nb_njet34_lowDphi","Acceptance -- All nb_njet34_lowDphi",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet56_lowDphi = new TH1D("hAccAll_nb_njet56_lowDphi","Acceptance -- All nb_njet56_lowDphi",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet78_lowDphi = new TH1D("hAccAll_nb_njet78_lowDphi","Acceptance -- All nb_njet78_lowDphi",4,-0.5,3.5);
+  TH1* hAccAll_nb_njet9_lowDphi = new TH1D("hAccAll_nb_njet9_lowDphi","Acceptance -- All nb_njet9_lowDphi",4,-0.5,3.5);
+
   TH1* hAccPass_lowDphi = new TH1D("hAccPass_lowDphi","Acceptance -- Pass",totNbins_ForAcc,1,totNbins_ForAcc+1);
+  TH1* hAccPass_nb_njet2_lowDphi = new TH1D("hAccPass_nb_njet2_lowDphi","Acceptance -- Pass nb_njet2_lowDphi",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet34_lowDphi = new TH1D("hAccPass_nb_njet34_lowDphi","Acceptance -- Pass nb_njet34_lowDphi",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet56_lowDphi = new TH1D("hAccPass_nb_njet56_lowDphi","Acceptance -- Pass nb_njet56_lowDphi",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet78_lowDphi = new TH1D("hAccPass_nb_njet78_lowDphi","Acceptance -- Pass nb_njet78_lowDphi",4,-0.5,3.5);
+  TH1* hAccPass_nb_njet9_lowDphi = new TH1D("hAccPass_nb_njet9_lowDphi","Acceptance -- Pass nb_njet9_lowDphi",4,-0.5,3.5);
+
   hAccAll_lowDphi->Sumw2();
+  hAccAll_nb_njet2_lowDphi->Sumw2();
+  hAccAll_nb_njet34_lowDphi->Sumw2();
+  hAccAll_nb_njet56_lowDphi->Sumw2();
+  hAccAll_nb_njet78_lowDphi->Sumw2();
+  hAccAll_nb_njet9_lowDphi->Sumw2();
+
   hAccPass_lowDphi->Sumw2();
+  hAccPass_nb_njet2_lowDphi->Sumw2();
+  hAccPass_nb_njet34_lowDphi->Sumw2();
+  hAccPass_nb_njet56_lowDphi->Sumw2();
+  hAccPass_nb_njet78_lowDphi->Sumw2();
+  hAccPass_nb_njet9_lowDphi->Sumw2();
 
   //-----
   TH1* hAcc4DAll = new TH1D("hAcc4DAll","Acceptance -- All -- Nj-Nb-HTMHT",totNbins_QCD,1,totNbins_QCD+1);
@@ -784,7 +831,13 @@ int main(int argc, char *argv[]){
        &&sel->dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4())
        ){
       hAccAll->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight); // the weight has only scaling info.needed for stacking 
-      if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
+      if (evt->nJets()==2) hAccAll_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+      if (evt->nJets()>=3 && evt->nJets()<=4) hAccAll_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+      if (evt->nJets()>=5 && evt->nJets()<=6) hAccAll_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+      if (evt->nJets()>=7 && evt->nJets()<=8) hAccAll_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+      if (evt->nJets()>=9) hAccAll_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+            
+if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
       if(evt->nBtags()>0)hAcc_non0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
       //std::cout<<"CalcAccSys "<<CalcAccSys<<endl;
       if(CalcAccSys){
@@ -799,6 +852,12 @@ int main(int argc, char *argv[]){
       }
       if( genTauPt > LeptonAcceptance::muonPtMin() && std::abs(genTauEta) < LeptonAcceptance::muonEtaMax() ){
 	hAccPass->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
+	if (evt->nJets()==2) hAccPass_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+	if (evt->nJets()>=3 && evt->nJets()<=4) hAccPass_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+	if (evt->nJets()>=5 && evt->nJets()<=6) hAccPass_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+	if (evt->nJets()>=7 && evt->nJets()<=8) hAccPass_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+	if (evt->nJets()>=9) hAccPass_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+
 	if(evt->nBtags()==0)hAcc_0b_Pass->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
 	if(evt->nBtags()>0)hAcc_non0b_Pass->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
 	if(CalcAccSys){
@@ -816,6 +875,12 @@ int main(int argc, char *argv[]){
        &&sel->mht_200(evt->mht())&& !(sel->dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4()))
        ){
       hAccAll_lowDphi->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
+      if (evt->nJets()==2) hAccAll_nb_njet2_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+      if (evt->nJets()>=3 && evt->nJets()<=4) hAccAll_nb_njet34_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+      if (evt->nJets()>=5 && evt->nJets()<=6) hAccAll_nb_njet56_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+      if (evt->nJets()>=7 && evt->nJets()<=8) hAccAll_nb_njet78_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+      if (evt->nJets()>=9) hAccAll_nb_njet9_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+
       if(CalcAccSys){
         for(int iacc=0; iacc < evt->PDFweights_()->size(); iacc++){
 	  hPDFWeights_lowDphi->Fill(evt->PDFweights_()->at(iacc));
@@ -828,6 +893,12 @@ int main(int argc, char *argv[]){
       }
       if( genTauPt > LeptonAcceptance::muonPtMin() && std::abs(genTauEta) < LeptonAcceptance::muonEtaMax() ){
 	hAccPass_lowDphi->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight);
+	if (evt->nJets()==2) hAccPass_nb_njet2_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+	if (evt->nJets()>=3 && evt->nJets()<=4) hAccPass_nb_njet34_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+	if (evt->nJets()>=5 && evt->nJets()<=6) hAccPass_nb_njet56_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+	if (evt->nJets()>=7 && evt->nJets()<=8) hAccPass_nb_njet78_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+	if (evt->nJets()>=9) hAccPass_nb_njet9_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );  
+
 	if(CalcAccSys){
 	  for(int iacc=0; iacc < evt->PDFweights_()->size(); iacc++){
 	    hAccPass_lowDphiVec[iacc]->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt->nJets(),evt->ht(),evt->mht()).c_str()] ,eventWeight*evt->PDFweights_()->at(iacc));
@@ -1344,6 +1415,22 @@ int main(int argc, char *argv[]){
   // Compute acceptance
   TH1* hAcc = static_cast<TH1*>(hAccPass->Clone("hAcc"));
   hAcc->Divide(hAccPass,hAccAll,1,1,"B");// we use B option here because the two histograms are correlated. see TH1 page in the root manual.
+  TH1* hAcc_nb_njet2 = static_cast<TH1*>(hAccPass_nb_njet2->Clone("hAcc_nb_njet2"));
+  hAcc_nb_njet2->Divide(hAccPass_nb_njet2,hAccAll_nb_njet2,1,1,"B");
+  if (hAccPass_nb_njet2->GetSumOfWeights()>0.) hAcc_nb_njet2->Scale(hAccAll_nb_njet2->GetSumOfWeights()/hAccPass_nb_njet2->GetSumOfWeights());
+ 
+  TH1* hAcc_nb_njet34 = static_cast<TH1*>(hAccPass_nb_njet34->Clone("hAcc_nb_njet34"));
+  hAcc_nb_njet34->Divide(hAccPass_nb_njet34,hAccAll_nb_njet34,1,1,"B");
+  if (hAccPass_nb_njet34->GetSumOfWeights()>0.) hAcc_nb_njet34->Scale(hAccAll_nb_njet34->GetSumOfWeights()/hAccPass_nb_njet34->GetSumOfWeights());
+  TH1* hAcc_nb_njet56 = static_cast<TH1*>(hAccPass_nb_njet56->Clone("hAcc_nb_njet56"));
+  hAcc_nb_njet56->Divide(hAccPass_nb_njet56,hAccAll_nb_njet56,1,1,"B");
+  if (hAccPass_nb_njet56->GetSumOfWeights()>0.) hAcc_nb_njet56->Scale(hAccAll_nb_njet56->GetSumOfWeights()/hAccPass_nb_njet56->GetSumOfWeights());
+  TH1* hAcc_nb_njet78 = static_cast<TH1*>(hAccPass_nb_njet78->Clone("hAcc_nb_njet78"));
+  hAcc_nb_njet78->Divide(hAccPass_nb_njet78,hAccAll_nb_njet78,1,1,"B");
+  if (hAccPass_nb_njet78->GetSumOfWeights()>0.) hAcc_nb_njet78->Scale(hAccAll_nb_njet78->GetSumOfWeights()/hAccPass_nb_njet78->GetSumOfWeights());
+  TH1* hAcc_nb_njet9 = static_cast<TH1*>(hAccPass_nb_njet9->Clone("hAcc_nb_njet9"));
+  hAcc_nb_njet9->Divide(hAccPass_nb_njet9,hAccAll_nb_njet9,1,1,"B");
+  if (hAccPass_nb_njet9->GetSumOfWeights()>0.) hAcc_nb_njet9->Scale(hAccAll_nb_njet9->GetSumOfWeights()/hAccPass_nb_njet9->GetSumOfWeights());
   TH1* hAcc_0b_ = static_cast<TH1*>(hAcc_0b_Pass->Clone("hAcc_0b_"));
   hAcc_0b_->Divide(hAcc_0b_Pass,hAcc_0b_All,1,1,"B");// we use B option here because the two histograms are correlated. see TH1 page in the root manual.
   TH1* hAcc_non0b_ = static_cast<TH1*>(hAcc_non0b_Pass->Clone("hAcc_non0b_"));
@@ -1351,6 +1438,23 @@ int main(int argc, char *argv[]){
 
   TH1* hAcc_lowDphi = static_cast<TH1*>(hAccPass_lowDphi->Clone("hAcc_lowDphi"));
   hAcc_lowDphi->Divide(hAccPass_lowDphi,hAccAll_lowDphi,1,1,"B");
+  TH1* hAcc_nb_njet2_lowDphi = static_cast<TH1*>(hAccPass_nb_njet2_lowDphi->Clone("hAcc_nb_njet2_lowDphi"));
+  hAcc_nb_njet2_lowDphi->Divide(hAccPass_nb_njet2_lowDphi,hAccAll_nb_njet2_lowDphi,1,1,"B");
+  if (hAccPass_nb_njet2_lowDphi->GetSumOfWeights()>0.) hAcc_nb_njet2_lowDphi->Scale(hAccAll_nb_njet2_lowDphi->GetSumOfWeights()/hAccPass_nb_njet2_lowDphi->GetSumOfWeights());
+  TH1* hAcc_nb_njet34_lowDphi = static_cast<TH1*>(hAccPass_nb_njet34_lowDphi->Clone("hAcc_nb_njet34_lowDphi"));
+  hAcc_nb_njet34_lowDphi->Divide(hAccPass_nb_njet34_lowDphi,hAccAll_nb_njet34_lowDphi,1,1,"B");
+  if (hAccPass_nb_njet34_lowDphi->GetSumOfWeights()>0.) hAcc_nb_njet34_lowDphi->Scale(hAccAll_nb_njet34_lowDphi->GetSumOfWeights()/hAccPass_nb_njet34_lowDphi->GetSumOfWeights());
+  TH1* hAcc_nb_njet56_lowDphi = static_cast<TH1*>(hAccPass_nb_njet56_lowDphi->Clone("hAcc_nb_njet56_lowDphi"));
+  hAcc_nb_njet56_lowDphi->Divide(hAccPass_nb_njet56_lowDphi,hAccAll_nb_njet56_lowDphi,1,1,"B");
+  if (hAccPass_nb_njet56_lowDphi->GetSumOfWeights()>0.) hAcc_nb_njet56_lowDphi->Scale(hAccAll_nb_njet56_lowDphi->GetSumOfWeights()/hAccPass_nb_njet56_lowDphi->GetSumOfWeights());
+  
+  TH1* hAcc_nb_njet78_lowDphi = static_cast<TH1*>(hAccPass_nb_njet78_lowDphi->Clone("hAcc_nb_njet78_lowDphi"));
+  hAcc_nb_njet78_lowDphi->Divide(hAccPass_nb_njet78_lowDphi,hAccAll_nb_njet78_lowDphi,1,1,"B");
+  if (hAccPass_nb_njet78_lowDphi->GetSumOfWeights()>0.) hAcc_nb_njet78_lowDphi->Scale(hAccAll_nb_njet78_lowDphi->GetSumOfWeights()/hAccPass_nb_njet78_lowDphi->GetSumOfWeights());
+  TH1* hAcc_nb_njet9_lowDphi = static_cast<TH1*>(hAccPass_nb_njet9_lowDphi->Clone("hAcc_nb_njet9_lowDphi"));
+  hAcc_nb_njet9_lowDphi->Divide(hAccPass_nb_njet9_lowDphi,hAccAll_nb_njet9_lowDphi,1,1,"B");
+  if (hAccPass_nb_njet9_lowDphi->GetSumOfWeights()>0.) hAcc_nb_njet9_lowDphi->Scale(hAccAll_nb_njet9_lowDphi->GetSumOfWeights()/hAccPass_nb_njet9_lowDphi->GetSumOfWeights());
+
   // some temporary histograms for acceptance systematics
   vector<TH1*> hAccVec, hAcc_lowDphiVec, hAcc_DeviationFromNomVec, hAcc_DeviationFromNom_lowDphiVec;
   vector<TH1*> hScaleAccVec, hScaleAcc_lowDphiVec, hScaleAcc_DeviationFromNomVec, hScaleAcc_DeviationFromNom_lowDphiVec;
@@ -1426,16 +1530,52 @@ int main(int argc, char *argv[]){
   sprintf(tempname,"%s/LostLepton2_MuonEfficienciesFrom%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
   TFile outFile2(tempname,"RECREATE");
   hAcc->Write();
+  hAcc_nb_njet2->Write();
+  hAcc_nb_njet34->Write();
+  hAcc_nb_njet56->Write();
+  hAcc_nb_njet78->Write();
+  hAcc_nb_njet9->Write();
+
   hAccAll->Write();
+  hAccAll_nb_njet2->Write();
+  hAccAll_nb_njet34->Write();
+  hAccAll_nb_njet56->Write();
+  hAccAll_nb_njet78->Write();
+  hAccAll_nb_njet9->Write();
+
   hAccPass->Write();
+  hAccPass_nb_njet2->Write();
+  hAccPass_nb_njet34->Write();
+  hAccPass_nb_njet56->Write();
+  hAccPass_nb_njet78->Write();
+  hAccPass_nb_njet9->Write();
+
   hAcc_0b_All->Write();
   hAcc_0b_Pass->Write();
   hAcc_non0b_All->Write();
   hAcc_non0b_Pass->Write();
 
   hAcc_lowDphi->Write();
+  hAcc_nb_njet2_lowDphi->Write();
+  hAcc_nb_njet34_lowDphi->Write();
+  hAcc_nb_njet56_lowDphi->Write();
+  hAcc_nb_njet78_lowDphi->Write();
+  hAcc_nb_njet9_lowDphi->Write();
+
   hAccAll_lowDphi->Write();
+  hAccAll_nb_njet2_lowDphi->Write();
+  hAccAll_nb_njet34_lowDphi->Write();
+  hAccAll_nb_njet56_lowDphi->Write();
+  hAccAll_nb_njet78_lowDphi->Write();
+  hAccAll_nb_njet9_lowDphi->Write();
+
   hAccPass_lowDphi->Write();
+  hAccPass_nb_njet2_lowDphi->Write();
+  hAccPass_nb_njet34_lowDphi->Write();
+  hAccPass_nb_njet56_lowDphi->Write();
+  hAccPass_nb_njet78_lowDphi->Write();
+  hAccPass_nb_njet9_lowDphi->Write();
+
   if(CalcAccSys){
     TDirectory *tdir = outFile2.mkdir("Systematics"); 
     tdir->cd();

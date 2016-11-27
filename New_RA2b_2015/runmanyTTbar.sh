@@ -6,6 +6,7 @@ outStr=$2
 export SUBMIT_DIR=`pwd -P`
 
 for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive T_SingleLep Tbar_SingleLep; do
+#for TTbarStr in HT_2500_Inf; do
 #for TTbarStr in T_SingleLep Tbar_SingleLep; do
 #for TTbarStr in Tbar_SingleLep; do
 

@@ -114,7 +114,7 @@ using namespace std;
     sprintf(prefix,"root://cmseos.fnal.gov/");
     //sprintf(prefix,"/data3/");
 
-    std::cout<<"***********Check seg vio******************"<<endl;
+    
     //build a vector of histograms
     TH1D weight_hist = TH1D("weight", "Weight Distribution", 5,0,5);
     vec.push_back(weight_hist);
@@ -224,7 +224,7 @@ using namespace std;
     searchH_lowDphi->Sumw2();
     // Make another hist to be filled during bootstrapping
     TH1 * searchH_evt_lowDphi = static_cast<TH1D*>(searchH_lowDphi->Clone("searchH_evt_lowDphi"));
-    
+
     // Introduce QCD histogram
     map<string,int> binMap_QCD = utils2::BinMap_QCD();
     int totNbins_QCD=binMap_QCD.size();
@@ -640,15 +640,38 @@ using namespace std;
     TH1D * hProb_Tau_mu =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
     sprintf(histname,"hProb_Tau_mu_lowDelphi");
     TH1D * hProb_Tau_mu_lowDelphi =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
-
+    std::cout<<"***********Check seg vio1******************"<<endl;
     // Acceptance and efficiencies
-    TFile * MuAcc_file = new TFile("Inputs/ARElog63_LostLepton2_MuonEfficienciesFromstacked.root","R");
+    //    TFile * MuAcc_file = new TFile("Inputs/ARElog63_LostLepton2_MuonEfficienciesFromstacked.root","R");
+    TFile * MuAcc_file = new TFile("Inputs/ARElog91_LostLepton2_MuonEfficienciesFromstacked.root","R");
     sprintf(histname,"hAcc");
     TH1D * hAcc =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    
+    sprintf(histname,"hAcc_nb_njet2");
+    TH1D * hAcc_NbNjet2 =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet34");
+    TH1D * hAcc_NbNjet34 =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet56");
+    TH1D * hAcc_NbNjet56 =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet78");
+    TH1D * hAcc_NbNjet78 =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet9");
+    TH1D * hAcc_NbNjet9 =(TH1D *) MuAcc_file->Get(histname)->Clone();
+
     //    TH1D * hAcc_0b =(TH1D *) MuAcc_file->Get("hAcc_0b_")->Clone();
     //    TH1D * hAcc_non0b =(TH1D *) MuAcc_file->Get("hAcc_non0b_")->Clone();
     TH1D * hAcc_lowDphi =(TH1D *) MuAcc_file->Get("hAcc_lowDphi")->Clone();
-
+    sprintf(histname,"hAcc_nb_njet2_lowDphi");
+    TH1D * hAcc_NbNjet2_lowDphi =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet34_lowDphi");
+    TH1D * hAcc_NbNjet34_lowDphi =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet56_lowDphi");
+    TH1D * hAcc_NbNjet56_lowDphi =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet78_lowDphi");
+    TH1D * hAcc_NbNjet78_lowDphi =(TH1D *) MuAcc_file->Get(histname)->Clone();
+    sprintf(histname,"hAcc_nb_njet9_lowDphi");
+    TH1D * hAcc_NbNjet9_lowDphi =(TH1D *) MuAcc_file->Get(histname)->Clone();
+  
     //
     // Reco and ISO MC efficiencies
     TFile * MuIsoEff_Arne = new TFile("Inputs/Efficiencies_Simon_v9.root","R");
@@ -1733,12 +1756,26 @@ using namespace std;
               double Acc, AccError, AccPlus, AccMinus, Acc_lowDphi, Acc_lowDphiError, AccPlus_lowDphi, AccMinus_lowDphi;
               double AccSysPlus, AccSysMinus, AccSysPlus_lowDphi, AccSysMinus_lowDphi, ScaleAccSysPlus, ScaleAccSysMinus, ScaleAccSysPlus_lowDphi, ScaleAccSysMinus_lowDphi;
               double IsoSFUp, IsoSFDw, IdSFUp,IdSFDw;
+	      double Acc_Nb;
+	      double Acc_Nb_lowDphi;
 
               if(sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->Njet_4(newNJet)){
                 Acc = hAcc->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
+		if (evt->nJets()==2) Acc_Nb = hAcc_NbNjet2->GetBinContent( hAcc_NbNjet2->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=3 && evt->nJets()<=4) Acc_Nb = hAcc_NbNjet34->GetBinContent( hAcc_NbNjet34->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=5 && evt->nJets()<=6) Acc_Nb = hAcc_NbNjet56->GetBinContent( hAcc_NbNjet56->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=7 && evt->nJets()<=8) Acc_Nb = hAcc_NbNjet78->GetBinContent( hAcc_NbNjet78->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=9) Acc_Nb = hAcc_NbNjet9->GetBinContent( hAcc_NbNjet9->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		Acc *=Acc_Nb;
                 AccError = hAcc->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
                 Acc_lowDphi = hAcc_lowDphi->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]); 
-                Acc_lowDphiError = hAcc_lowDphi->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
+		if (evt->nJets()==2) Acc_Nb_lowDphi = hAcc_NbNjet2_lowDphi->GetBinContent( hAcc_NbNjet2_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=3 && evt->nJets()<=4) Acc_Nb_lowDphi = hAcc_NbNjet34_lowDphi->GetBinContent( hAcc_NbNjet34_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=5 && evt->nJets()<=6) Acc_Nb_lowDphi = hAcc_NbNjet56_lowDphi->GetBinContent( hAcc_NbNjet56_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=7 && evt->nJets()<=8) Acc_Nb_lowDphi = hAcc_NbNjet78_lowDphi->GetBinContent( hAcc_NbNjet78_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+		if (evt->nJets()>=9) Acc_Nb_lowDphi = hAcc_NbNjet9_lowDphi->GetBinContent( hAcc_NbNjet9_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	        Acc_lowDphi *=Acc_Nb_lowDphi;
+		Acc_lowDphiError = hAcc_lowDphi->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
               }else{
                 Acc=0.9;
                 Acc_lowDphi=0.9;
