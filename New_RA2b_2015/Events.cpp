@@ -63,7 +63,8 @@
 
      Jets_jecFactor = 0;
      softJets_jecFactor = 0;
-
+     Jets_jecUnc = 0;
+     softJets_jecUnc = 0;
      //     Jets_jetArea = 0;
      Jets_muonEnergyFraction = 0;
      Jets_muonMultiplicity = 0;
@@ -83,9 +84,9 @@
 //     selectedIDIsoElectronsPtVec=new vector<double>();
      selectedIDElectrons = 0;
 //     selectedIDIsoElectronsPtVec=new vector<double>();
-     softJetsJECdown = 0;
+     //softJetsJECdown = 0;
      JetsJECdown = 0;
-     softJetsJECup = 0;
+     //softJetsJECup = 0;
      JetsJECup = 0;
      softJets = 0;
      Jets = 0;
@@ -199,9 +200,9 @@
      fChain->SetBranchAddress("Electrons", &Electrons);
 //     fChain->SetBranchAddress("selectedIDIsoElectronsPtVec", &selectedIDIsoElectronsPtVec);
      fChain->SetBranchAddress("ElectronsNoIso", &selectedIDElectrons);
-     fChain->SetBranchAddress("SoftJetsJECdown", &softJetsJECdown);  
+     //fChain->SetBranchAddress("SoftJetsJECdown", &softJetsJECdown);  
      fChain->SetBranchAddress("JetsJECdown", &JetsJECdown);
-     fChain->SetBranchAddress("SoftJetsJECup", &softJetsJECup);
+     //fChain->SetBranchAddress("SoftJetsJECup", &softJetsJECup);
      fChain->SetBranchAddress("JetsJECup", &JetsJECup);
      fChain->SetBranchAddress("SoftJets", &softJets);
      fChain->SetBranchAddress("Jets", &Jets);
@@ -209,6 +210,8 @@
      fChain->SetBranchAddress("Jets_ID", &Jets_ID);
      fChain->SetBranchAddress("Jets_jecFactor", &Jets_jecFactor);
      fChain->SetBranchAddress("SoftJets_jecFactor", &softJets_jecFactor);
+     fChain->SetBranchAddress("Jets_jecUnc", &Jets_jecUnc);
+     fChain->SetBranchAddress("SoftJets_jecUnc", &softJets_jecUnc);
 
      //     fChain->SetBranchAddress("IsolatedElectronTracksVeto", &IsolatedElectronTracksVeto);
      //fChain->SetBranchAddress("IsolatedMuonTracksVeto", &IsolatedMuonTracksVeto);
@@ -495,11 +498,18 @@
     vector<TLorentzVector> Events::slimJetJECdown_() const {
       //vector<TLorentzVector> *vec = JetsJECdown;
       vector<TLorentzVector> vec;
-      for(int i=0; i < JetsJECdown->size(); i++){
-	vec.push_back((TLorentzVector)JetsJECdown->at(i));
+      for(int i=0; i < Jets->size(); i++){
+	TLorentzVector tlv;
+	double ptDown=Jets->at(i).Pt()*(1-Jets_jecUnc->at(i));
+	tlv.SetPtEtaPhiM(ptDown,Jets->at(i).Eta(),Jets->at(i).Phi(),Jets->at(i).M());
+	vec.push_back(tlv);
       }
-      for(int i=0; i < softJetsJECdown->size(); i++){
-	vec.push_back(softJetsJECdown->at(i));
+      for(int i=0; i < softJets->size(); i++){
+	TLorentzVector tlv;
+	double ptDown=softJets->at(i).Pt()*(1-softJets_jecUnc->at(i));
+	tlv.SetPtEtaPhiM(ptDown,softJets->at(i).Eta(),softJets->at(i).Phi(),softJets->at(i).M());
+	vec.push_back(tlv);
+	//	vec.push_back(softJetsJECdown->at(i));
       }
       //      std::cout<<" JetJECdown_().size() "<<JetsJECdown->size()<<" ";
       //std::cout<<" softJetJECdown_().size() "<<softJetsJECdown->size()<<" ";
@@ -510,19 +520,34 @@
     vector<TLorentzVector> Events::slimJetJECup_() const {
       //vector<TLorentzVector> *vec1 = JetsJECup;
       vector<TLorentzVector> vec;  //JetsJECup;
+      for(int i=0; i < Jets->size(); i++){
+	TLorentzVector tlv;
+	double ptUp=Jets->at(i).Pt()*(1+Jets_jecUnc->at(i));
+	tlv.SetPtEtaPhiM(ptUp,Jets->at(i).Eta(),Jets->at(i).Phi(),Jets->at(i).M());
+	vec.push_back(tlv);
+      }
+      for(int i=0; i < softJets->size(); i++){
+	TLorentzVector tlv;
+	double ptUp=softJets->at(i).Pt()*(1+softJets_jecUnc->at(i));
+	tlv.SetPtEtaPhiM(ptUp,softJets->at(i).Eta(),softJets->at(i).Phi(),softJets->at(i).M());
+	vec.push_back(tlv);
+	//	vec.push_back(softJetsJECdown->at(i));
+      }
+      /*
       for(int i=0; i < JetsJECup->size(); i++){
 	vec.push_back((TLorentzVector)JetsJECup->at(i));
       }
       for(int i=0; i < softJetsJECup->size(); i++){
 	vec.push_back(softJetsJECup->at(i));
       }
+*/
       //std::cout<<" JetJECup_().size() "<<JetsJECup->size()<<" ";
       //std::cout<<" softJetJECup_().size() "<<softJetsJECup->size()<<" ";
       //std::cout<<" slimJetJECup_().size() "<<vec.size()<<std::endl;
       return vec;
     }
 
-    vector<double>  Events::slimJetPtVec_() const { 
+      vector<double>  Events::slimJetPtVec_() const { 
       vector<double> vec;
       for(int i=0;i < Jets->size();i++){
 	vec.push_back(Jets->at(i).Pt());
@@ -538,26 +563,32 @@
 
     vector<double>  Events::slimJetupPtVec_() const { 
       vector<double> vec;
-      for(int i=0;i < JetsJECup->size();i++){
-	vec.push_back(JetsJECup->at(i).Pt());
+      for(int i=0;i < Jets->size();i++){
+	double ptUp=Jets->at(i).Pt()*(1+Jets_jecUnc->at(i));
+	vec.push_back(ptUp);
       }
-      for(int i=0;i < softJetsJECup->size();i++){
-	vec.push_back(softJetsJECup->at(i).Pt());
+      for(int i=0;i < softJets->size();i++){
+	double ptUp=softJets->at(i).Pt()*(1+softJets_jecUnc->at(i));
+	vec.push_back(ptUp);
       }
       //std::cout<<" Jets.size() "<<Jets->size()<<" ";
       //std::cout<<" softJets.size() "<<softJets->size()<<" ";
       //std::cout<<" slimJetPtVec_().size() "<<vec.size()<<std::endl;
       return vec;      
     }
+
+    
     vector<double>  Events::slimJetdownPtVec_() const { 
       vector<double> vec;
-      for(int i=0;i < JetsJECdown->size();i++){
-	vec.push_back(JetsJECdown->at(i).Pt());
+      for(int i=0;i < Jets->size();i++){
+	double ptDown=Jets->at(i).Pt()*(1-Jets_jecUnc->at(i));
+	vec.push_back(ptDown);
       }
-      for(int i=0;i < softJetsJECdown->size();i++){
-	vec.push_back(softJetsJECdown->at(i).Pt());
-      }
-      //std::cout<<" Jets.size() "<<Jets->size()<<" ";
+      for(int i=0;i < softJets->size();i++){
+	double ptDown=softJets->at(i).Pt()*(1-softJets_jecUnc->at(i));
+	vec.push_back(ptDown);
+      }      
+//std::cout<<" Jets.size() "<<Jets->size()<<" ";
       //std::cout<<" softJets.size() "<<softJets->size()<<" ";
       //std::cout<<" slimJetPtVec_().size() "<<vec.size()<<std::endl;
       return vec;      
@@ -582,11 +613,11 @@
     }
     vector<double>  Events::slimJetupEtaVec_() const { 
       vector<double> vec;
-      for(int i=0;i < JetsJECup->size();i++){
-	vec.push_back(JetsJECup->at(i).Eta());
+      for(int i=0;i < Jets->size();i++){
+	vec.push_back(Jets->at(i).Eta());
       }
-      for(int i=0;i < softJetsJECup->size();i++){
-	vec.push_back(softJetsJECup->at(i).Eta());
+      for(int i=0;i < softJets->size();i++){
+	vec.push_back(softJets->at(i).Eta());
       }
       //std::cout<<" Jets.size() "<<Jets->size()<<" ";
       //std::cout<<" softJets.size() "<<softJets->size()<<" ";
@@ -595,11 +626,11 @@
     }
     vector<double>  Events::slimJetdownEtaVec_() const { 
       vector<double> vec;
-      for(int i=0;i < JetsJECdown->size();i++){
-	vec.push_back(JetsJECdown->at(i).Eta());
+      for(int i=0;i < Jets->size();i++){
+	vec.push_back(Jets->at(i).Eta());
       }
-      for(int i=0;i < softJetsJECdown->size();i++){
-	vec.push_back(softJetsJECdown->at(i).Eta());
+      for(int i=0;i < softJets->size();i++){
+	vec.push_back(softJets->at(i).Eta());
       }
       //std::cout<<" Jets.size() "<<Jets->size()<<" ";
       //std::cout<<" softJets.size() "<<softJets->size()<<" ";
@@ -627,11 +658,11 @@
     }
     vector<double>  Events::slimJetupPhiVec_() const { 
       vector<double> vec;
-      for(int i=0;i < JetsJECup->size();i++){
-	vec.push_back(JetsJECup->at(i).Phi());
+      for(int i=0;i < Jets->size();i++){
+	vec.push_back(Jets->at(i).Phi());
       }
-      for(int i=0;i < softJetsJECup->size();i++){
-	vec.push_back(softJetsJECup->at(i).Phi());
+      for(int i=0;i < softJets->size();i++){
+	vec.push_back(softJets->at(i).Phi());
       }
       //std::cout<<" Jets.size() "<<Jets->size()<<" ";
       //std::cout<<" softJets.size() "<<softJets->size()<<" ";
@@ -640,11 +671,11 @@
     }
     vector<double>  Events::slimJetdownPhiVec_() const { 
       vector<double> vec;
-      for(int i=0;i < JetsJECdown->size();i++){
-	vec.push_back(JetsJECdown->at(i).Phi());
+      for(int i=0;i < Jets->size();i++){
+	vec.push_back(Jets->at(i).Phi());
       }
-      for(int i=0;i < softJetsJECdown->size();i++){
-	vec.push_back(softJetsJECdown->at(i).Phi());
+      for(int i=0;i < softJets->size();i++){
+	vec.push_back(softJets->at(i).Phi());
       }
       //std::cout<<" Jets.size() "<<Jets->size()<<" ";
       //std::cout<<" softJets.size() "<<softJets->size()<<" ";

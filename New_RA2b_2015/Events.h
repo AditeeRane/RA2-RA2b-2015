@@ -103,6 +103,9 @@ using namespace std;
 
    vector<double>  *Jets_jecFactor;
    vector<double>  *softJets_jecFactor; 
+   vector<double>  *Jets_jecUnc;
+   vector<double>  *softJets_jecUnc; 
+   
    //   vector<double>  *Jets_jetArea;
    vector<double>  *Jets_muonEnergyFraction;
    vector<int>     *Jets_muonMultiplicity;
@@ -111,8 +114,8 @@ using namespace std;
    vector<double>  *Jets_photonEnergyFraction;
    vector<int>     *Jets_photonMultiplicity;
    
-   vector<TLorentzVector> *softJetsJECdown;
-   vector<TLorentzVector> *softJetsJECup;
+   //  vector<TLorentzVector> *softJetsJECdown;
+   //vector<TLorentzVector> *softJetsJECup;
    vector<TLorentzVector> *softJets; 
    vector<TLorentzVector> *JetsJECdown;
    vector<TLorentzVector> *JetsJECup;

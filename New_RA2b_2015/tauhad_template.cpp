@@ -594,8 +594,8 @@ int main(int argc, char *argv[]){
       cout << " Please fix the value of the variable \"Scalesize\". \n Turning off the AccSys calculation \n " ;
       CalcAccSys = false;
     }
-
-    if(eventN>10000)break;
+    
+    //if(eventN>10000)break;
     //if(eventN>5000)break;
      
     eventWeight = evt->weight();
@@ -1172,6 +1172,7 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
     }
     if(tauJetUpIdx ==-1 || tauJetDnIdx ==-1)
       continue;
+    //std::cout<<" tauJetIdx "<<tauJetIdx<<" tauJetUpIdx "<<tauJetUpIdx<<" tauJetDnIdx "<<tauJetDnIdx<<endl;
     /*
     // Fill tauJet Pt histogram
     double failRate = hFailRate_GenTau_Jet->GetBinContent(hFailRate_GenTau_Jet->GetXaxis()->FindBin(genTauPt));
@@ -1244,7 +1245,7 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
     const double tauJetPtDown = evt->slimJetdownPtVec_().at(tauJetDnIdx);
     
     //std::cout<<" tauJetPtDown "<<tauJetPtDown<<endl;   
-    //std::cout<<"eventN "<<eventN<<"tauJetIdx "<< tauJetIdx <<"jetid "<<jetIdx<<"tauJetPt "<<tauJetPt<<"tauJetPtUp "<<tauJetPtUp<<"tauJetPtDown "<<tauJetPtDown<<std::endl;
+    //    std::cout<<"eventN "<<eventN<<"tauJetIdx "<< tauJetIdx <<"tauJetPt "<<tauJetPt<<"tauJetPtUp "<<tauJetPtUp<<"tauJetPtDown "<<tauJetPtDown<<std::endl;
     //std::cout<<" eventN "<<eventN<<"*****************************Check Seg Violation************************"<<endl;
     
     
