@@ -1014,14 +1014,36 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
 
       //
       // Plotting
+
       numerator->GetYaxis()->SetNdivisions(505);
       numerator->GetYaxis()->SetTickLength(0.015);
       numerator->GetXaxis()->SetTickLength(0.08);
       numerator->SetTitle("");
       ex1->Draw();
+      char binlab[100];
+      numerator->GetXaxis()->LabelsOption("h");
+      numerator->GetXaxis()->SetLabelOffset(0.03);
+      for(int i=1;i<=numerator->GetNbinsX();i++){
+	if( ! (i%10) ) {
+	  sprintf(binlab, "%i", i);
+	  numerator->GetXaxis()->SetBinLabel(i,binlab);
+	} else if(i==numerator->GetNbinsX()) {
+	  sprintf(binlab, "174");
+	  numerator->GetXaxis()->SetBinLabel(i,binlab);
+	} else {
+	  sprintf(binlab, " ");
+	  numerator->GetXaxis()->SetBinLabel(i,binlab);
+	}
+      }
       numerator->DrawCopy();
 
       ex2->Draw();
+
+      for(int i=1;i<=denominator->GetNbinsX();i++){
+	sprintf(binlab, " ");
+	denominator->GetXaxis()->SetBinLabel(i,binlab);
+      }
+
       denominator->DrawCopy("e2same");
       //denominator->DrawCopy("same");
       TH1D *denominator_Clone = (TH1D*)denominator->Clone();

@@ -121,7 +121,7 @@ namespace utils2{
       }
 
   // A map is needed between strings like "132" or "2143" that specify the searc bins
-  // (see findBin fundtion above) and an integer that can take from 1 to 108 (# of search bins)
+  // (see finBin fundtion above) and an integer that can take from 1 to 108 (# of search bins)
       std::map <std::string,int> BinMap(){
 	std::cout<<"-------------------BinMap function getting printed-----------------"<<std::endl;
 	int binN=0;
@@ -507,8 +507,9 @@ namespace utils2{
 
   // Define the Njet&nbtag bin number ()
   int findBin_NJetNBtag(int njet, int nbtag){
-
+    int Njet=njet;
     int nbtagbin = nbtag;
+    int NjetNbtagBin=-100;
     if (nbtagbin>=4) nbtagbin=3; // nbtagbin:0,1,2,3
 
     int njetbin = -1;
@@ -518,23 +519,56 @@ namespace utils2{
     else if (njet>=7&&njet<=8) njet=3;
     else if (njet>=9)          njet=4;
 
-    int NjetNbtagBin = 4*njet+nbtag;
-    
+    if(Njet==2)
+      NjetNbtagBin = 4*njet+nbtag;
+    else 
+      NjetNbtagBin = 4*njet+nbtag-1;
+    //std::cout<<" Njet "<<Njet<<" njet "<<njet<<" nbtag "<<nbtag<<" NjetNbtagBin "<<NjetNbtagBin<<endl;
     return NjetNbtagBin; 
   }
 
-  int nMHT=5;
-  double GetTriggerEffCorr(bool signal, double MHT, int statUnc=0, int systUnc=0){
+  int nMHT=4;
+  double GetTriggerEffCorr(bool signal, double HT, double MHT, int statUnc=0, int systUnc=0){
     double w = 1;
     if(signal) {
-      double central[nMHT] = {0.982, 0.985, 0.995, 1.00, 1.00};
-      double stat_up[nMHT] = {0.004, 0.006, 0.003, 0.00, 0.00};
-      double stat_dn[nMHT] = {0.005, 0.009, 0.007, 0.02, 0.02};
-      double syst_up[nMHT] = {0.02, 0.02, 0.02, 0.02, 0.02}; 
-      double syst_dn[nMHT] = {0.02, 0.02, 0.02, 0.02, 0.02}; 
+      double central[nMHT] = {1.0, 1.0, 1.0, 1.0};
+      double stat_up[nMHT] = {0.0, 0.0, 0.0, 0.0};
+      double stat_dn[nMHT] = {0.0, 0.0, 0.0, 0.0};
+      double syst_up[nMHT] = {0.0, 0.0, 0.0, 0.0}; 
+      double syst_dn[nMHT] = {0.0, 0.0, 0.0, 0.0}; 
+
+      if(HT>1500){
+	double central_temp[nMHT] = {0.88, 0.93, 0.928, 0.984};
+	double stat_up_temp[nMHT] = {0.027, 0.027, 0.022, 0.01};
+	double stat_dn_temp[nMHT] = {0.033, 0.039, 0.029, 0.021};
+	double syst_up_temp[nMHT] = {0.02, 0.02, 0.02, 0.016}; 
+	double syst_dn_temp[nMHT] = {0.02, 0.02, 0.02, 0.02}; 
+	for(int ii=0; ii<nMHT; ii++) {
+	  central[ii] = central_temp[ii];
+	  stat_up[ii] = stat_up_temp[ii];
+	  stat_dn[ii] = stat_dn_temp[ii];
+	  syst_up[ii] = syst_up_temp[ii]; 
+	  syst_dn[ii] = syst_dn_temp[ii]; 
+	}
+      }
+      else{
+	double central_temp[nMHT] = {0.981, 0.988, 0.993, 0.989};
+	double stat_up_temp[nMHT] = {0.001, 0.001, 0.001, 0.003};
+	double stat_dn_temp[nMHT] = {0.001, 0.002, 0.002, 0.004};
+	double syst_up_temp[nMHT] = {0.019, 0.012, 0.007, 0.011}; 
+	double syst_dn_temp[nMHT] = {0.02, 0.02, 0.02, 0.02}; 
+	for(int ii=0; ii<nMHT; ii++) {
+	  central[ii] = central_temp[ii];
+	  stat_up[ii] = stat_up_temp[ii];
+	  stat_dn[ii] = stat_dn_temp[ii];
+	  syst_up[ii] = syst_up_temp[ii]; 
+	  syst_dn[ii] = syst_dn_temp[ii]; 
+	}
+      }
+      
 
       //bin lower edges
-      double MHTbins[nMHT+1] = {250,300,350,500,750,9999};
+      double MHTbins[nMHT+1] = {250,300,350,500,9999};
 		  
       int bin = -1;
       for(int b = 0; b < nMHT; ++b){
@@ -546,6 +580,8 @@ namespace utils2{
 		  
       if(bin==-1) return 0.;
 		  
+      //std::cout << "GetTriggerEffCorr " << "HT " << HT << " MHT  " << MHT << " central " << central[bin] << std::endl;
+     
       w = central[bin];
 		  
       if(statUnc==1) w += stat_up[bin];

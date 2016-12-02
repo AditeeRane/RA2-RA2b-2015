@@ -33,7 +33,7 @@ Input arguments:
 
  */
 
-Plot_Commissioning(string histname="NJet", string cutname="delphi", 
+void Plot_Commissioning(string histname="NJet", string cutname="delphi", 
 		   //double lumi=2.26198, double lumiControl=2.24572,
 		   double lumi=2.584653, double lumiControl=2.585297,
 		   string PDname="SingleMuon",
@@ -51,15 +51,15 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   bool skipRare = true;
   
   gROOT->LoadMacro("tdrstyle.C");
-  setTDRStyle();
+  //setTDRStyle();
   gStyle->SetPalette(1) ; // for better color output
   gROOT->LoadMacro("CMS_lumi.C");
 
-  writeExtraText = true;       // if extra text
-  extraText  = "         Preliminary";  // default extra text is "Preliminary"
-  lumi_8TeV  = "19.1 fb^{-1}"; // default is "19.7 fb^{-1}"
-  lumi_7TeV  = "4.9 fb^{-1}";  // default is "5.1 fb^{-1}"
-  lumi_sqrtS = "13 TeV";       // used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+  bool writeExtraText = true;       // if extra text
+  TString extraText  = "         Preliminary";  // default extra text is "Preliminary"
+  TString lumi_8TeV  = "19.1 fb^{-1}"; // default is "19.7 fb^{-1}"
+  TString lumi_7TeV  = "4.9 fb^{-1}";  // default is "5.1 fb^{-1}"
+  TString lumi_sqrtS = "13 TeV";       // used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
   int iPeriod = 0;    // 1=7TeV, 2=8TeV, 3=7+8TeV, 7=7+8+13TeV, 0=free form (uses lumi_sqrtS)
   // second parameter in example_plot is iPos, which drives the position of the CMS logo in the plot
@@ -75,10 +75,17 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   sprintf(tempname,"%8.1f",lumi);
   line+=tempname;
   line+=" fb^{-1} (13 TeV)";
-  TString lumi_sqrtS = line;
+  lumi_sqrtS = line;
 
   ///////////////////////////////////////////////////////////////////////////////////////////
+  //TPad * canvas_1;
+  //TPad * canvas_2;
+  TH1 *hExpT;
 
+  TH1 *hExpTT_Rebin;
+  TH1 *hExpWJ_Rebin;
+  TH1 *hPre_Rebin;
+  TH1 *hExp_Rebin;  
   int W = 600;
   int H = 600;
   int H_ref = 600;
@@ -105,26 +112,26 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   //  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_v17a_.root",PDname.c_str()); 
   //  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_v16b_.root",PDname.c_str());
   //  sprintf(tempname,"TauHad2/ARElog49_7.6ifb_HadTauEstimation_data_%s_V9bc_.root",PDname.c_str()); 
-  sprintf(tempname,"TauHad2/ARElog56_12.9ifb_HadTauEstimation_data_%s_V9bcd_.root",PDname.c_str());
+  sprintf(tempname,"TauHad2/ARElog94_36.35ifb_HadTauEstimation_data_%s_V11_.root",PDname.c_str());
   TFile * PreData = new TFile(tempname,"R");
-  TFile * ExpTT = new TFile("TauHad/Stack/ARElog47_GenInfo_HadTauEstimation_TTbar_stacked.root","R");
-  TFile * ExpWJ = new TFile("TauHad/Stack/ARElog47_GenInfo_HadTauEstimation_WJet_stacked.root","R");
-  TFile * ExpT  = new TFile("TauHad/Stack/ARElog47_GenInfo_HadTauEstimation_T_stacked.root","R");
+  TFile * ExpTT = new TFile("TauHad/Stack/ARElog94_GenInfo_HadTauEstimation_TTbar_stacked.root","R");
+  TFile * ExpWJ = new TFile("TauHad/Stack/ARElog94_GenInfo_HadTauEstimation_WJet_stacked.root","R");
+  TFile * ExpT  = new TFile("TauHad/Stack/ARElog94_GenInfo_HadTauEstimation_T_stacked.root","R");
   TFile * ExpRare;
   if (!skipRare) ExpRare = new TFile("TauHad/GenInfo_HadTauEstimation_Rare_Elog410.root","R");
   //
   // Define legend
   //
-  Float_t legendX1 = .55; //.50;
-  Float_t legendX2 = .9; //.70;
-  Float_t legendY1 = .65; //.65;
-  Float_t legendY2 = .85;
+  Float_t legendX1 = .58; //.50;
+  Float_t legendX2 = .88; //.70;
+  Float_t legendY1 = .68; //.65;
+  Float_t legendY2 = .88;
 
   TLegend* catLeg1 = new TLegend(legendX1,legendY1,legendX2,legendY2);
   catLeg1->SetTextSize(0.032);
   catLeg1->SetTextFont(42);
 
-  catLeg1->SetTextSize(0.042);
+  catLeg1->SetTextSize(0.032);
   catLeg1->SetTextFont(42);
   catLeg1->SetFillColor(0);
   catLeg1->SetLineColor(0);
@@ -148,9 +155,9 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   canvas->SetTicky(0);
 
   canvas->Divide(1, 2);
-  canvas_1->SetTopMargin(0.1);
-  canvas_2->SetBottomMargin(1.8);
-
+  //canvas_1->SetTopMargin(0.1);
+  //canvas_2->SetBottomMargin(1.8);
+  std::cout<<" ******Check SegVio***********"<<endl;
   //
   // Define pads
   //
@@ -179,10 +186,10 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   // draw top figure
   canvas_up->cd();
 
-  TH1D * hExpTT, * hExpWJ, * hPreTT, * hPreWJ12, * hPreWJ24, * hPreWJ46, * hPreWJ6I;
-  TH1D * hExpRare;
-  TH1D * hPreData, * hPreData_StatError;
-  TH1D * histTemplate;
+  TH1 * hExpTT, * hExpWJ, * hPreTT, * hPreWJ12, * hPreWJ24, * hPreWJ46, * hPreWJ6I;
+  TH1 * hExpRare;
+  TH1 * hPreData, * hPreData_StatError;
+  TH1 * histTemplate;
   THStack * stackTT, * stackWJ, * stackT, * ExpStack;
   ExpStack = new THStack("","");
 
@@ -214,7 +221,7 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   if (!skipRare) hExpRare=(TH1D*)ExpRare->Get(tempname)->Clone("EXpRare");
 
   /////TH1D * hPre = static_cast<TH1D*>(hPreTT->Clone("hPre"));
-  TH1D * hPre = static_cast<TH1D*>(hPreData->Clone("hPre"));
+  TH1 * hPre = static_cast<TH1*>(hPreData->Clone("hPre"));
   hPre->Scale(lumi/lumiControl);
 
   TH1D * hExp_forScale = static_cast<TH1D*>(hExpTT->Clone("hExp_forScale"));
@@ -254,7 +261,7 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
     hExpT->SetFillColor(kRed);
   }
   
-  TH1D * hExp = static_cast<TH1D*>(hExpTT->Clone("hExp"));
+  TH1 * hExp = static_cast<TH1*>(hExpTT->Clone("hExp"));
   if(!skipRare)hExp->Add(hExpRare);
   hExp->Add(hExpWJ);
   if (!skipSingleTop) hExp->Add(hExpT);
@@ -263,10 +270,10 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
     Double_t mht_bins[13] = {
           0., 50.,100.,150.,200.,250.,300.,350.,400.,500.,
 	700.,1000.,5000.};
-    TH1D *hExpTT_Rebin = hExpTT->Rebin(12,"hExpTT_Rebin",mht_bins);
-    TH1D *hExpWJ_Rebin = hExpWJ->Rebin(12,"hExpWJ_Rebin",mht_bins);
-    TH1D *hPre_Rebin   = hPre->Rebin(12,"hPre_Rebin",mht_bins);
-    TH1D *hExp_Rebin   = hExp->Rebin(12,"hExp_Rebin",mht_bins);
+    hExpTT_Rebin = hExpTT->Rebin(12,"hExpTT_Rebin",mht_bins);
+    hExpWJ_Rebin = hExpWJ->Rebin(12,"hExpWJ_Rebin",mht_bins);
+    hPre_Rebin   = hPre->Rebin(12,"hPre_Rebin",mht_bins);
+    hExp_Rebin   = hExp->Rebin(12,"hExp_Rebin",mht_bins);
     hPre_Rebin->Print("all");
     hExp_Rebin->Print("all");
     /*
@@ -292,10 +299,10 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   }
   if (histname=="HT"){
     Double_t HT_bins[14]={0.,100.,300.,500.,700.,900.,1100.,1300.,1500.,1700.,1900.,2100.,2300.,2500.};
-    TH1D *hExpTT_Rebin = hExpTT->Rebin(13,"hExpTT_Rebin",HT_bins);
-    TH1D *hExpWJ_Rebin = hExpWJ->Rebin(13,"hExpWJ_Rebin",HT_bins);
-    TH1D *hPre_Rebin   = hPre->Rebin(13,"hPre_Rebin",HT_bins);
-    TH1D *hExp_Rebin   = hExp->Rebin(13,"hExp_Rebin",HT_bins);
+    TH1 *hExpTT_Rebin = hExpTT->Rebin(13,"hExpTT_Rebin",HT_bins);
+    TH1 *hExpWJ_Rebin = hExpWJ->Rebin(13,"hExpWJ_Rebin",HT_bins);
+    TH1 *hPre_Rebin   = hPre->Rebin(13,"hPre_Rebin",HT_bins);
+    TH1 *hExp_Rebin   = hExp->Rebin(13,"hExp_Rebin",HT_bins);
     hPre_Rebin->Print("all");
     hExp_Rebin->Print("all");
     /*
@@ -329,7 +336,7 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   if(histname=="MHT"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 10000.;
+    ymax_top = 30000.;
     ymin_top = 0.15;
     xmax = 1000.;
     //if (cutname=="delphi") xmax = 700.;
@@ -359,7 +366,7 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   if(histname=="HT"){
     xtext_top = 2200.;
     //y_legend  = 2000.;
-    ymax_top = 8000.;
+    ymax_top = 30000.;
     ymin_top = 0.15;
     xmax = 2500.;
     //if (cutname=="delphi") xmax = 1500.;
@@ -412,7 +419,7 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
     //ymax_top = 10.;
     ymax_top = 800.;
     ymin_top = 0.0;
-    xmax = 3.2.;
+    xmax = 3.2;
     xmin = 0.;
     if (histname=="DelPhi1") sprintf(xtitlename,"#Delta#phi(MHT,jet1) [rad]");
     if (histname=="DelPhi2") sprintf(xtitlename,"#Delta#phi(MHT,jet2) [rad]");
@@ -469,7 +476,7 @@ Plot_Commissioning(string histname="NJet", string cutname="delphi",
   catLeg1->Draw();
   
   {
-    CMS_lumi( canvas_up, iPeriod, iPos );   // writing the lumi information and the CMS "logo"
+    //void CMS_lumi( canvas_up, iPeriod, iPos );   // writing the lumi information and the CMS "logo"
   }
   canvas->Update();
   canvas->RedrawAxis();

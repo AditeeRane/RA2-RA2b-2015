@@ -138,6 +138,16 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   Hname[3]="QCD_Low";
   Hname[4]="cutflow_preselection";
   Hname[5]="searchH_lowDphi";
+  Hname[6]="searchH_nb_njet2";
+  Hname[7]="searchH_nb_njet34";
+  Hname[8]="searchH_nb_njet56";
+  Hname[9]="searchH_nb_njet78";
+  Hname[10]="searchH_nb_njet9";
+  Hname[11]="searchH_nb_njet2_lowDphi";
+  Hname[12]="searchH_nb_njet34_lowDphi";
+  Hname[13]="searchH_nb_njet56_lowDphi";
+  Hname[14]="searchH_nb_njet78_lowDphi";
+  Hname[15]="searchH_nb_njet9_lowDphi";
  
   for(int j=0; j< Hname.size(); j++){
 
@@ -504,6 +514,17 @@ cout << " flag \n " ;
   Hname[3]="QCD_Low";
   Hname[4]="cutflow_preselection";
   Hname[5]="searchH_lowDphi";
+  Hname[6]="searchH_nb_njet2";
+  Hname[7]="searchH_nb_njet34";
+  Hname[8]="searchH_nb_njet56";
+  Hname[9]="searchH_nb_njet78";
+  Hname[10]="searchH_nb_njet9";
+  Hname[11]="searchH_nb_njet2_lowDphi";
+  Hname[12]="searchH_nb_njet34_lowDphi";
+  Hname[13]="searchH_nb_njet56_lowDphi";
+  Hname[14]="searchH_nb_njet78_lowDphi";
+  Hname[15]="searchH_nb_njet9_lowDphi";
+ 
 
   for(int j=0; j< Hname.size(); j++){
 
@@ -1023,7 +1044,17 @@ cout << " flag \n " ;
   Hname[3]="QCD_Low";
   Hname[4]="cutflow_preselection";
   Hname[5]="searchH_lowDphi";
-
+  Hname[6]="searchH_nb_njet2";
+  Hname[7]="searchH_nb_njet34";
+  Hname[8]="searchH_nb_njet56";
+  Hname[9]="searchH_nb_njet78";
+  Hname[10]="searchH_nb_njet9";
+  Hname[11]="searchH_nb_njet2_lowDphi";
+  Hname[12]="searchH_nb_njet34_lowDphi";
+  Hname[13]="searchH_nb_njet56_lowDphi";
+  Hname[14]="searchH_nb_njet78_lowDphi";
+  Hname[15]="searchH_nb_njet9_lowDphi";
+ 
   for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<ttbarnHT ; i++){                                                  // loop over different HT bins
@@ -1492,7 +1523,17 @@ cout << " flag \n " ;
   Hname[3]="QCD_Low";
   Hname[4]="cutflow_preselection";
   Hname[5]="searchH_lowDphi";
-
+  Hname[6]="searchH_nb_njet2";
+  Hname[7]="searchH_nb_njet34";
+  Hname[8]="searchH_nb_njet56";
+  Hname[9]="searchH_nb_njet78";
+  Hname[10]="searchH_nb_njet9";
+  Hname[11]="searchH_nb_njet2_lowDphi";
+  Hname[12]="searchH_nb_njet34_lowDphi";
+  Hname[13]="searchH_nb_njet56_lowDphi";
+  Hname[14]="searchH_nb_njet78_lowDphi";
+  Hname[15]="searchH_nb_njet9_lowDphi";
+ 
   for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<NSamples ; i++){                                                  // loop over different HT bins
