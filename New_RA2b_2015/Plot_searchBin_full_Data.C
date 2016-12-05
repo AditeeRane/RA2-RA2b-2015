@@ -23,6 +23,11 @@ root.exe -b -q 'Plot_searchBin_full_Data.C("stacked","hPredNJetBins",1.28)'
 root.exe -b -q 'Plot_searchBin_full_Data.C("stacked","hPredNbBins",1.28)'
 
 */
+void printToCoordinates(int x, int y, const std::string& text)
+{
+  printf("\033[%d;%dH%s\n", x, x, text.c_str());
+}
+
 
 void shift_bin(TH1* input, TH1* output){
 
@@ -392,10 +397,19 @@ void Plot_searchBin_full_Data(string sample="stacked",string histname="searchH_b
   gPad->RedrawAxis();
 
   //
-  
+  char line[100] = "";
   char lumilabel[200];
   sprintf(lumilabel,"%8.1f fb^{-1}",lumiTarget);
+  strcat( line, lumilabel);
+  bool writeExtraText = true;
+  char extraText[100]   = "CMS Preliminary                                         ";
+  strcat(extraText,line);
+  printToCoordinates(10, 80, extraText);
 
+  TLatex * toptext = new TLatex();
+  toptext->SetTextSize(0.07);
+  toptext->DrawLatex(1.-0.5 , ymax_top , extraText);
+  float extraTextFont = 52;
   if(histname.find("searchH_b")!=string::npos ){
 	    
     //-----------------------------------------------------------
