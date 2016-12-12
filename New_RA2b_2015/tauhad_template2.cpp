@@ -607,11 +607,11 @@ using namespace std;
       eventType[3]="IsoSysPlus";    // Muon Iso SF uncertainty
       eventType[4]="IsoSysMinus";   //
 
-//      eventType[5]="BMistagPlus";
-//      eventType[6]="BMistagMinus";
-//      eventType[7]="MuRecoIsoPlus";
-//      eventType[8]="MuRecoIsoMinus";
-// 
+      //      eventType[5]="BMistagPlus";
+      // eventType[6]="BMistagMinus";
+      //eventType[7]="MuRecoIsoPlus";
+      //eventType[8]="MuRecoIsoMinus";
+ 
 /*
       eventType[1]="BMistagPlus";   // Bmistag efficiency
       eventType[2]="BMistagMinus";  //
@@ -652,22 +652,44 @@ using namespace std;
 
     // Rate of bTagged tau jet
     //TFile * bRateFile = new TFile("Inputs/ARElog63_TauBtaggedRate_WJet_stacked.root","R");
-    //*AR,Oct14,2016-Instead of getting b mistag rate of tau directly we will take the difference between tau and mu mistag rates for reassignment of Nb bins
-    TFile * bRateFile = new TFile("Inputs/hist_bRateDiff_TauVsMu_WJet.root","R");
+    //*AR,Oct14,2016-Instead of getting b mistag rate of tau directly we will take the difference between tau and mu mistag rates from WJet for reassignment of Nb bins
+    TFile * bRateFile = new TFile("Inputs/hist_bRateDiff_TauVsMu_08Dec.root","R");
     //TFile * bRateFile = new TFile("Inputs/hist_AvebRateDiff_TauVsMu.root","R");
     cout << " \n\n\n\n\n WJet mistag rate is being applied \n\n\n \n\n\n " ;
 
-    //sprintf(histname,"TauBtaggedRate");
+    //    sprintf(histname,"TauBtaggedRate");
     //sprintf(histname,"hAveDiff");
     sprintf(histname,"hDiff");
     TH1D * bRateHist = (TH1D * ) bRateFile->Get(histname)->Clone();
 
     // Probability of muon coming from Tau
-    TFile * Prob_Tau_mu_file = new TFile("Inputs/ARElog63_Probability_Tau_mu_stacked.root","R");
+    TFile * Prob_Tau_mu_file = new TFile("Inputs/ARElog97_Probability_Tau_mu_stacked.root","R");
     sprintf(histname,"hProb_Tau_mu");
     TH1D * hProb_Tau_mu =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet2");
+    TH1D * hProb_Tau_mu_nb_njet2 =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet34");
+    TH1D * hProb_Tau_mu_nb_njet34 =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet56");
+    TH1D * hProb_Tau_mu_nb_njet56 =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet78");
+    TH1D * hProb_Tau_mu_nb_njet78 =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet9");
+    TH1D * hProb_Tau_mu_nb_njet9 =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    
     sprintf(histname,"hProb_Tau_mu_lowDelphi");
     TH1D * hProb_Tau_mu_lowDelphi =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet2_lowDelphi");
+    TH1D * hProb_Tau_mu_nb_njet2_lowDelphi =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet34_lowDelphi");
+    TH1D * hProb_Tau_mu_nb_njet34_lowDelphi =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet56_lowDelphi");
+    TH1D * hProb_Tau_mu_nb_njet56_lowDelphi =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet78_lowDelphi");
+    TH1D * hProb_Tau_mu_nb_njet78_lowDelphi =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+    sprintf(histname,"hProb_Tau_mu_nb_njet9_lowDelphi");
+    TH1D * hProb_Tau_mu_nb_njet9_lowDelphi =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
+
     std::cout<<"***********Check seg vio1******************"<<endl;
     // Acceptance and efficiencies
     //    TFile * MuAcc_file = new TFile("Inputs/ARElog63_LostLepton2_MuonEfficienciesFromstacked.root","R");
@@ -755,13 +777,60 @@ using namespace std;
     // Inroduce two histogram to understand the probability of a muon coming from tau.
     // and also those reco mu that does not match a gen mu
     TH1D * hAll_mu = new TH1D("hAll_mu","mu from W -- search bin",totNbins_ForIso,1,totNbins_ForIso+1);
+    TH1* hAll_mu_nb_njet2 = new TH1D("hAll_mu_nb_njet2","mu from W -- search bin nb_njet2",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet34 = new TH1D("hAll_mu_nb_njet34","mu from W -- search bin nb_njet34",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet56 = new TH1D("hAll_mu_nb_njet56","mu from W -- search bin nb_njet56",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet78 = new TH1D("hAll_mu_nb_njet78","mu from W -- search bin nb_njet78",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet9 = new TH1D("hAll_mu_nb_njet9","mu from W -- search bin nb_njet9",4,-0.5,3.5);
+  
     hAll_mu->Sumw2();
+    hAll_mu_nb_njet2->Sumw2();
+    hAll_mu_nb_njet34->Sumw2();
+    hAll_mu_nb_njet56->Sumw2();
+    hAll_mu_nb_njet78->Sumw2();
+    hAll_mu_nb_njet9->Sumw2();
+
     TH1D * hNonW_mu = new TH1D("hNonW_mu","mu from Tau -- search bin",totNbins_ForIso,1,totNbins_ForIso+1);
+    TH1* hNonW_mu_nb_njet2 = new TH1D("hNonW_mu_nb_njet2","mu from Tau -- search bin nb_njet2",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet34 = new TH1D("hNonW_mu_nb_njet34","mu from Tau -- search bin nb_njet34",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet56 = new TH1D("hNonW_mu_nb_njet56","mu from Tau -- search bin nb_njet56",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet78 = new TH1D("hNonW_mu_nb_njet78","mu from Tau -- search bin nb_njet78",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet9 = new TH1D("hNonW_mu_nb_njet9","mu from Tau -- search bin nb_njet9",4,-0.5,3.5);
+
     hNonW_mu->Sumw2();
+    hNonW_mu_nb_njet2->Sumw2();
+    hNonW_mu_nb_njet34->Sumw2();
+    hNonW_mu_nb_njet56->Sumw2();
+    hNonW_mu_nb_njet78->Sumw2();
+    hNonW_mu_nb_njet9->Sumw2();
+
     TH1D * hAll_mu_lowDelphi = new TH1D("hAll_mu_lowDelphi","mu from W -- search bin",totNbins_ForIso,1,totNbins_ForIso+1);
+    TH1* hAll_mu_nb_njet2_lowDelphi = new TH1D("hAll_mu_nb_njet2_lowDelphi","mu from W -- search bin nb_njet2",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet34_lowDelphi = new TH1D("hAll_mu_nb_njet34_lowDelphi","mu from W -- search bin nb_njet34",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet56_lowDelphi = new TH1D("hAll_mu_nb_njet56_lowDelphi","mu from W -- search bin nb_njet56",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet78_lowDelphi = new TH1D("hAll_mu_nb_njet78_lowDelphi","mu from W -- search bin nb_njet78",4,-0.5,3.5);
+    TH1* hAll_mu_nb_njet9_lowDelphi = new TH1D("hAll_mu_nb_njet9_lowDelphi","mu from W -- search bin nb_njet9",4,-0.5,3.5);
+
     hAll_mu_lowDelphi->Sumw2();
+    hAll_mu_nb_njet2_lowDelphi->Sumw2();
+    hAll_mu_nb_njet34_lowDelphi->Sumw2();
+    hAll_mu_nb_njet56_lowDelphi->Sumw2();
+    hAll_mu_nb_njet78_lowDelphi->Sumw2();
+    hAll_mu_nb_njet9_lowDelphi->Sumw2();
+
     TH1D * hNonW_mu_lowDelphi = new TH1D("hNonW_mu_lowDelphi","mu from Tau -- search bin",totNbins_ForIso,1,totNbins_ForIso+1);
+    TH1* hNonW_mu_nb_njet2_lowDelphi = new TH1D("hNonW_mu_nb_njet2_lowDelphi","mu from Tau -- search bin nb_njet2",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet34_lowDelphi = new TH1D("hNonW_mu_nb_njet34_lowDelphi","mu from Tau -- search bin nb_njet34",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet56_lowDelphi = new TH1D("hNonW_mu_nb_njet56_lowDelphi","mu from Tau -- search bin nb_njet56",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet78_lowDelphi = new TH1D("hNonW_mu_nb_njet78_lowDelphi","mu from Tau -- search bin nb_njet78",4,-0.5,3.5);
+    TH1* hNonW_mu_nb_njet9_lowDelphi = new TH1D("hNonW_mu_nb_njet9_lowDelphi","mu from Tau -- search bin nb_njet9",4,-0.5,3.5);
+
     hNonW_mu_lowDelphi->Sumw2();
+    hNonW_mu_nb_njet2_lowDelphi->Sumw2();
+    hNonW_mu_nb_njet34_lowDelphi->Sumw2();
+    hNonW_mu_nb_njet56_lowDelphi->Sumw2();
+    hNonW_mu_nb_njet78_lowDelphi->Sumw2();
+    hNonW_mu_nb_njet9_lowDelphi->Sumw2();
 
     // calculate the trigger efficiency 
     TH1D * trig_all = new TH1D("trig_all"," trigger all -- search bin",totNbins,1,totNbins+1);
@@ -881,7 +950,7 @@ using namespace std;
       eventWeight = evt->weight();
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>20000)break;
+      //if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1865,9 +1934,25 @@ using namespace std;
 
               // Not all the muons are coming from W. Some of them are coming from Tau which should not be considered in our estimation.
               double Prob_Tau_muError, Prob_Tau_muPlus, Prob_Tau_muMinus, Prob_Tau_muError_lowDelphi, Prob_Tau_muPlus_lowDelphi, Prob_Tau_muMinus_lowDelphi;
-              double Prob_Tau_mu = hProb_Tau_mu->GetBinContent(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
-              Prob_Tau_muError = hProb_Tau_mu->GetBinError(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
+	      double Prob_Tau_mu_Nb;double Prob_Tau_mu_Nb_lowDelphi;
+	      double Prob_Tau_mu = hProb_Tau_mu->GetBinContent(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
+	      if (evt->nJets()==2) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet2->GetBinContent( hProb_Tau_mu_nb_njet2->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=3 && evt->nJets()<=4) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet34->GetBinContent( hProb_Tau_mu_nb_njet34->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=5 && evt->nJets()<=6) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet56->GetBinContent( hProb_Tau_mu_nb_njet56->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=7 && evt->nJets()<=8) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet78->GetBinContent( hProb_Tau_mu_nb_njet78->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=9) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet9->GetBinContent( hProb_Tau_mu_nb_njet9->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      Prob_Tau_mu *=Prob_Tau_mu_Nb;
+	      
+	      Prob_Tau_muError = hProb_Tau_mu->GetBinError(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
               double Prob_Tau_mu_lowDelphi = hProb_Tau_mu_lowDelphi->GetBinContent(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
+	      if (evt->nJets()==2) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet2_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet2_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=3 && evt->nJets()<=4) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet34_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet34_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=5 && evt->nJets()<=6) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet56_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet56_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=7 && evt->nJets()<=8) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet78_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet78_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      if (evt->nJets()>=9) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet9_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet9_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
+	      Prob_Tau_mu_lowDelphi *=Prob_Tau_mu_Nb_lowDelphi;
+
+
               Prob_Tau_muError_lowDelphi = hProb_Tau_mu_lowDelphi->GetBinError(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
 	      	      	      
               Prob_Tau_muPlus=Prob_Tau_mu+Prob_Tau_muError;
@@ -2111,8 +2196,28 @@ using namespace std;
                   // Non W muons calculation
                   if(!isData){
                     hAll_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-                    if(GenMuIdx<0)hNonW_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-                    else if(evt->GenMuFromTauVec_()[GenMuIdx]==1)hNonW_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
+		    if (evt->nJets()==2) hAll_mu_nb_njet2_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=3 && evt->nJets()<=4) hAll_mu_nb_njet34_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=5 && evt->nJets()<=6) hAll_mu_nb_njet56_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=7 && evt->nJets()<=8) hAll_mu_nb_njet78_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=9) hAll_mu_nb_njet9_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+
+                    if(GenMuIdx<0){
+		      hNonW_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
+		      if (evt->nJets()==2) hNonW_mu_nb_njet2_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=9) hNonW_mu_nb_njet9_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    }
+                    else if(evt->GenMuFromTauVec_()[GenMuIdx]==1){
+		      hNonW_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
+		      if (evt->nJets()==2) hNonW_mu_nb_njet2_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=9) hNonW_mu_nb_njet9_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    }
                   }
                 }
               }
@@ -2133,10 +2238,29 @@ using namespace std;
                   // Non W muons calculation
                   if(!isData){ 
                     hAll_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-                    if(GenMuIdx<0)hNonW_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-                    else if(evt->GenMuFromTauVec_()[GenMuIdx]==1)hNonW_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  }
+		    if (evt->nJets()==2) hAll_mu_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=3 && evt->nJets()<=4) hAll_mu_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=5 && evt->nJets()<=6) hAll_mu_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=7 && evt->nJets()<=8) hAll_mu_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    if (evt->nJets()>=9) hAll_mu_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
 
+                    if(GenMuIdx<0){
+		      hNonW_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
+		      if (evt->nJets()==2) hNonW_mu_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=9) hNonW_mu_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+                    }
+		    else if(evt->GenMuFromTauVec_()[GenMuIdx]==1){
+		      hNonW_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
+		      if (evt->nJets()==2) hNonW_mu_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		      if (evt->nJets()>=9) hNonW_mu_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
+		    }
+		  }
                   // calculate trigger efficiency 
                   trig_all->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
                   if(trigPass)trig_pass->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight); 
@@ -2687,16 +2811,87 @@ using namespace std;
       // Calculate probability of finding non-W muons
       TH1* hNonWMuProb = static_cast<TH1*>(hNonW_mu->Clone("hProb_Tau_mu"));
       hNonWMuProb->Divide(hNonW_mu,hAll_mu,1,1,"B");
+      TH1* hNonWMuProb_nb_njet2 = static_cast<TH1*>(hNonW_mu_nb_njet2->Clone("hProb_Tau_mu_nb_njet2"));
+      hNonWMuProb_nb_njet2->Divide(hNonW_mu_nb_njet2,hAll_mu_nb_njet2,1,1,"B");
+      if (hNonW_mu_nb_njet2->GetSumOfWeights()>0.) hNonWMuProb_nb_njet2->Scale(hAll_mu_nb_njet2->GetSumOfWeights()/hNonW_mu_nb_njet2->GetSumOfWeights());
+      TH1* hNonWMuProb_nb_njet34 = static_cast<TH1*>(hNonW_mu_nb_njet34->Clone("hProb_Tau_mu_nb_njet34"));
+      hNonWMuProb_nb_njet34->Divide(hNonW_mu_nb_njet34,hAll_mu_nb_njet34,1,1,"B");
+      if (hNonW_mu_nb_njet34->GetSumOfWeights()>0.) hNonWMuProb_nb_njet34->Scale(hAll_mu_nb_njet34->GetSumOfWeights()/hNonW_mu_nb_njet34->GetSumOfWeights());
+      TH1* hNonWMuProb_nb_njet56 = static_cast<TH1*>(hNonW_mu_nb_njet56->Clone("hProb_Tau_mu_nb_njet56"));
+      hNonWMuProb_nb_njet56->Divide(hNonW_mu_nb_njet56,hAll_mu_nb_njet56,1,1,"B");
+      if (hNonW_mu_nb_njet56->GetSumOfWeights()>0.) hNonWMuProb_nb_njet56->Scale(hAll_mu_nb_njet56->GetSumOfWeights()/hNonW_mu_nb_njet56->GetSumOfWeights());
+      TH1* hNonWMuProb_nb_njet78 = static_cast<TH1*>(hNonW_mu_nb_njet78->Clone("hProb_Tau_mu_nb_njet78"));
+      hNonWMuProb_nb_njet78->Divide(hNonW_mu_nb_njet78,hAll_mu_nb_njet78,1,1,"B");
+      if (hNonW_mu_nb_njet78->GetSumOfWeights()>0.) hNonWMuProb_nb_njet78->Scale(hAll_mu_nb_njet78->GetSumOfWeights()/hNonW_mu_nb_njet78->GetSumOfWeights());
+      TH1* hNonWMuProb_nb_njet9 = static_cast<TH1*>(hNonW_mu_nb_njet9->Clone("hProb_Tau_mu_nb_njet9"));
+      hNonWMuProb_nb_njet9->Divide(hNonW_mu_nb_njet9,hAll_mu_nb_njet9,1,1,"B");
+      if (hNonW_mu_nb_njet9->GetSumOfWeights()>0.) hNonWMuProb_nb_njet9->Scale(hAll_mu_nb_njet9->GetSumOfWeights()/hNonW_mu_nb_njet9->GetSumOfWeights());
+
+
+
       TH1* hNonWMuProb_lowDelphi = static_cast<TH1*>(hNonW_mu_lowDelphi->Clone("hProb_Tau_mu_lowDelphi"));
       hNonWMuProb_lowDelphi->Divide(hNonW_mu_lowDelphi,hAll_mu_lowDelphi,1,1,"B");
+      TH1* hNonWMuProb_nb_njet2_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet2_lowDelphi->Clone("hProb_Tau_mu_nb_njet2_lowDelphi"));
+      hNonWMuProb_nb_njet2_lowDelphi->Divide(hNonW_mu_nb_njet2_lowDelphi,hAll_mu_nb_njet2_lowDelphi,1,1,"B");
+      if (hNonW_mu_nb_njet2_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet2_lowDelphi->Scale(hAll_mu_nb_njet2_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet2_lowDelphi->GetSumOfWeights());
+
+      TH1* hNonWMuProb_nb_njet34_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet34_lowDelphi->Clone("hProb_Tau_mu_nb_njet34_lowDelphi"));
+      hNonWMuProb_nb_njet34_lowDelphi->Divide(hNonW_mu_nb_njet34_lowDelphi,hAll_mu_nb_njet34_lowDelphi,1,1,"B");
+      if (hNonW_mu_nb_njet34_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet34_lowDelphi->Scale(hAll_mu_nb_njet34_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet34_lowDelphi->GetSumOfWeights());
+
+      TH1* hNonWMuProb_nb_njet56_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet56_lowDelphi->Clone("hProb_Tau_mu_nb_njet56_lowDelphi"));
+      hNonWMuProb_nb_njet56_lowDelphi->Divide(hNonW_mu_nb_njet56_lowDelphi,hAll_mu_nb_njet56_lowDelphi,1,1,"B");
+      if (hNonW_mu_nb_njet56_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet56_lowDelphi->Scale(hAll_mu_nb_njet56_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet56_lowDelphi->GetSumOfWeights());
+
+      TH1* hNonWMuProb_nb_njet78_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet78_lowDelphi->Clone("hProb_Tau_mu_nb_njet78_lowDelphi"));
+      hNonWMuProb_nb_njet78_lowDelphi->Divide(hNonW_mu_nb_njet78_lowDelphi,hAll_mu_nb_njet78_lowDelphi,1,1,"B");
+      if (hNonW_mu_nb_njet78_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet78_lowDelphi->Scale(hAll_mu_nb_njet78_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet78_lowDelphi->GetSumOfWeights());
+
+      TH1* hNonWMuProb_nb_njet9_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet9_lowDelphi->Clone("hProb_Tau_mu_nb_njet9_lowDelphi"));
+      hNonWMuProb_nb_njet9_lowDelphi->Divide(hNonW_mu_nb_njet9_lowDelphi,hAll_mu_nb_njet9_lowDelphi,1,1,"B");
+      if (hNonW_mu_nb_njet9_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet9_lowDelphi->Scale(hAll_mu_nb_njet9_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet9_lowDelphi->GetSumOfWeights());
+
       sprintf(tempname,"%s/Probability_Tau_mu_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
       TFile muProbFile(tempname,"RECREATE");     
       hNonWMuProb->Write();
+      hNonWMuProb_nb_njet2->Write();
+      hNonWMuProb_nb_njet34->Write();
+      hNonWMuProb_nb_njet56->Write();
+      hNonWMuProb_nb_njet78->Write();
+      hNonWMuProb_nb_njet9->Write();
+
       hAll_mu->Write();
+      hAll_mu_nb_njet2->Write();
+      hAll_mu_nb_njet34->Write();
+      hAll_mu_nb_njet56->Write();
+      hAll_mu_nb_njet78->Write();
+      hAll_mu_nb_njet9->Write();
+
       hNonW_mu->Write();
+      hNonW_mu_nb_njet2->Write();
+      hNonW_mu_nb_njet34->Write();
+      hNonW_mu_nb_njet56->Write();
+      hNonW_mu_nb_njet78->Write();
+      hNonW_mu_nb_njet9->Write();
+
       hNonWMuProb_lowDelphi->Write();
+      hNonWMuProb_nb_njet2_lowDelphi->Write();
+      hNonWMuProb_nb_njet34_lowDelphi->Write();
+      hNonWMuProb_nb_njet56_lowDelphi->Write();
+      hNonWMuProb_nb_njet78_lowDelphi->Write();
+      hNonWMuProb_nb_njet9_lowDelphi->Write();
       hAll_mu_lowDelphi->Write();
+      hAll_mu_nb_njet2_lowDelphi->Write();
+      hAll_mu_nb_njet34_lowDelphi->Write();
+      hAll_mu_nb_njet56_lowDelphi->Write();
+      hAll_mu_nb_njet78_lowDelphi->Write();
+      hAll_mu_nb_njet9_lowDelphi->Write();
       hNonW_mu_lowDelphi->Write();
+      hNonW_mu_nb_njet2_lowDelphi->Write();
+      hNonW_mu_nb_njet34_lowDelphi->Write();
+      hNonW_mu_nb_njet56_lowDelphi->Write();
+      hNonW_mu_nb_njet78_lowDelphi->Write();
+      hNonW_mu_nb_njet9_lowDelphi->Write();
       muProbFile.Close();
 
       // Calculate trigger efficiency 

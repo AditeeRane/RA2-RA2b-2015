@@ -87,8 +87,8 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 				    //
 				    string elogForMCExp="ARElog90_",
 				    string elogForMCPre="ARElog91_",
-				    string elogForSys="ARElog84_",          // MC-based systematics evaluation for Btag mistag uncertainties and muon efficiency stat uncertainties
-				    string elogForMuSys="ARElog84_",        // MC-based systematics evaluation for muon ID&Iso systematic efficiencies
+				    string elogForSys="ARElog98_",          // MC-based systematics evaluation for Btag mistag uncertainties and muon efficiency stat uncertainties
+				    string elogForMuSys="ARElog98_",        // MC-based systematics evaluation for muon ID&Iso systematic efficiencies
 				    //string elogForJECSysUp="Elog426_",     // JEC Up systematics
 				    //string elogForJECSysDn="Elog426_",     // JEC Down systematics
 				    //string elogForJECSysRef="Elog426_",    // JEC uncertainty reference

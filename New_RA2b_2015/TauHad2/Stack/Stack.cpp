@@ -27,6 +27,12 @@ class mainClass{
   map<int, string> Ttype, WJettype, TTbartype;
   TFile *file, *file2, *file3, *file30;
   TH1D *temphist, *temphist2, *temphist30, *temphistI, *temphistII, *temphistIII, *temphistMuI, *temphistMuII, *temphistMuIII;
+  TH1D *temphistInj2, *temphistIInj2, *temphistIIInj2, *temphistInj2_lowDphi, *temphistIInj2_lowDphi, *temphistIIInj2_lowDphi;
+  TH1D *temphistInj34, *temphistIInj34, *temphistIIInj34, *temphistInj34_lowDphi, *temphistIInj34_lowDphi, *temphistIIInj34_lowDphi;
+  TH1D *temphistInj56, *temphistIInj56, *temphistIIInj56, *temphistInj56_lowDphi, *temphistIInj56_lowDphi, *temphistIIInj56_lowDphi;
+  TH1D *temphistInj78, *temphistIInj78, *temphistIIInj78, *temphistInj78_lowDphi, *temphistIInj78_lowDphi, *temphistIIInj78_lowDphi;
+  TH1D *temphistInj9,  *temphistIInj9,  *temphistIIInj9,  *temphistInj9_lowDphi,  *temphistIInj9_lowDphi,  *temphistIIInj9_lowDphi;
+
   THStack * tempstack;
   TDirectory *cdtoitt, *cdtoit;
 
@@ -168,7 +174,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     tempstack = new THStack("stack","Binned Sample Stack");
 
   }
-
+  std::cout<<".........Seg Vio........."<<endl;
 
 
   for(map<int , string >::iterator itt=Ttype.begin(); itt!=Ttype.end();itt++){        // loop over different event types
@@ -240,10 +246,26 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   histname[0]="hProb_Tau_mu";
   histname[1]="hNonW_mu";
   histname[2]="hAll_mu";
+  histname[3]="hProb_Tau_mu_nb_njet2";
+  histname[4]="hProb_Tau_mu_nb_njet34";
+  histname[5]="hProb_Tau_mu_nb_njet56";
+  histname[6]="hProb_Tau_mu_nb_njet78";
+  histname[7]="hProb_Tau_mu_nb_njet9";
+  histname[8]="hNonW_mu_nb_njet2";
+  histname[9]="hNonW_mu_nb_njet34";
+  histname[10]="hNonW_mu_nb_njet56";
+  histname[11]="hNonW_mu_nb_njet78";
+  histname[12]="hNonW_mu_nb_njet9";
+  histname[13]="hAll_mu_nb_njet2";
+  histname[14]="hAll_mu_nb_njet34";
+  histname[15]="hAll_mu_nb_njet56";
+  histname[16]="hAll_mu_nb_njet78";
+  histname[17]="hAll_mu_nb_njet9";
+  
   std::cout<<" ............................. "<<endl;
   for(int j=0; j<histname.size(); j++){
 
-    if(j==0)continue; // Stacking probability histograms has no meaning.
+    if(j==0 || j==3 || j==4 || j==5 || j==6 || j==7)continue; // Stacking probability histograms has no meaning.
     sprintf(tempname,"%s",(histname[j]).c_str());
 
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
@@ -259,6 +281,17 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     temphist = (TH1D *) tempstack->GetStack()->Last();
     if(j==1)temphistI=(TH1D*)temphist->Clone();
     if(j==2)temphistII=(TH1D*)temphist->Clone();
+    if(j==8)temphistInj2=(TH1D*)temphist->Clone();
+    if(j==13)temphistIInj2=(TH1D*)temphist->Clone();
+    if(j==9)temphistInj34=(TH1D*)temphist->Clone();
+    if(j==14)temphistIInj34=(TH1D*)temphist->Clone();
+    if(j==10)temphistInj56=(TH1D*)temphist->Clone();
+    if(j==15)temphistIInj56=(TH1D*)temphist->Clone();
+    if(j==11)temphistInj78=(TH1D*)temphist->Clone();
+    if(j==16)temphistIInj78=(TH1D*)temphist->Clone();
+    if(j==12)temphistInj9=(TH1D*)temphist->Clone();
+    if(j==17)temphistIInj9=(TH1D*)temphist->Clone();
+
     temphist->Write(tempname);
     delete tempstack;
     tempstack = new THStack("stack","Binned Sample Stack");
@@ -270,15 +303,62 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   temphistIII->SetTitle("hProb_Tau_mu");
   temphistIII->Write();
 
+  temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2"));
+  temphistIIInj2->Divide(temphistInj2,temphistIInj2,temphistIInj2->GetSumOfWeights(),temphistInj2->GetSumOfWeights(),"B");
+  temphistIIInj2->SetName("hProb_Tau_mu_nb_njet2");
+  temphistIIInj2->SetTitle("hProb_Tau_mu_nb_njet2");
+  temphistIIInj2->Write();
+
+  temphistIIInj34 = static_cast<TH1D*>(temphistInj34->Clone("hProb_Tau_mu_nb_njet34"));
+  temphistIIInj34->Divide(temphistInj34,temphistIInj34,temphistIInj34->GetSumOfWeights(),temphistInj34->GetSumOfWeights(),"B");
+  temphistIIInj34->SetName("hProb_Tau_mu_nb_njet34");
+  temphistIIInj34->SetTitle("hProb_Tau_mu_nb_njet34");
+  temphistIIInj34->Write();
+
+  temphistIIInj56 = static_cast<TH1D*>(temphistInj56->Clone("hProb_Tau_mu_nb_njet56"));
+  temphistIIInj56->Divide(temphistInj56,temphistIInj56,temphistIInj56->GetSumOfWeights(),temphistInj56->GetSumOfWeights(),"B");
+  temphistIIInj56->SetName("hProb_Tau_mu_nb_njet56");
+  temphistIIInj56->SetTitle("hProb_Tau_mu_nb_njet56");
+  temphistIIInj56->Write();
+
+  temphistIIInj78 = static_cast<TH1D*>(temphistInj78->Clone("hProb_Tau_mu_nb_njet78"));
+  temphistIIInj78->Divide(temphistInj78,temphistIInj78,temphistIInj78->GetSumOfWeights(),temphistInj78->GetSumOfWeights(),"B");
+  temphistIIInj78->SetName("hProb_Tau_mu_nb_njet78");
+  temphistIIInj78->SetTitle("hProb_Tau_mu_nb_njet78");
+  temphistIIInj78->Write();
+
+  temphistIIInj9 = static_cast<TH1D*>(temphistInj9->Clone("hProb_Tau_mu_nb_njet9"));
+  temphistIIInj9->Divide(temphistInj9,temphistIInj9,temphistIInj9->GetSumOfWeights(),temphistInj9->GetSumOfWeights(),"B");
+  temphistIIInj9->SetName("hProb_Tau_mu_nb_njet9");
+  temphistIIInj9->SetTitle("hProb_Tau_mu_nb_njet9");
+  temphistIIInj9->Write();
+
+
 
   histname.clear();
   histname[0]="hProb_Tau_mu_lowDelphi";
   histname[1]="hNonW_mu_lowDelphi";
   histname[2]="hAll_mu_lowDelphi";
+  histname[3]="hProb_Tau_mu_nb_njet2_lowDelphi";
+  histname[4]="hProb_Tau_mu_nb_njet34_lowDelphi";
+  histname[5]="hProb_Tau_mu_nb_njet56_lowDelphi";
+  histname[6]="hProb_Tau_mu_nb_njet78_lowDelphi";
+  histname[7]="hProb_Tau_mu_nb_njet9_lowDelphi";
+  histname[8]="hNonW_mu_nb_njet2_lowDelphi";
+  histname[9]="hNonW_mu_nb_njet34_lowDelphi";
+  histname[10]="hNonW_mu_nb_njet56_lowDelphi";
+  histname[11]="hNonW_mu_nb_njet78_lowDelphi";
+  histname[12]="hNonW_mu_nb_njet9_lowDelphi";
+  histname[13]="hAll_mu_nb_njet2_lowDelphi";
+  histname[14]="hAll_mu_nb_njet34_lowDelphi";
+  histname[15]="hAll_mu_nb_njet56_lowDelphi";
+  histname[16]="hAll_mu_nb_njet78_lowDelphi";
+  histname[17]="hAll_mu_nb_njet9_lowDelphi";
 
   for(int j=0; j<histname.size(); j++){
 
-    if(j==0)continue; // Stacking probability histograms has no meaning.
+    //    if(j==0)continue; // Stacking probability histograms has no meaning.
+    if(j==0 || j==3 || j==4 || j==5 || j==6 || j==7)continue;
     sprintf(tempname,"%s",(histname[j]).c_str());
 
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
@@ -294,6 +374,17 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     temphist = (TH1D *) tempstack->GetStack()->Last();
     if(j==1)temphistI=(TH1D*)temphist->Clone();
     if(j==2)temphistII=(TH1D*)temphist->Clone();
+    if(j==8)temphistInj2=(TH1D*)temphist->Clone();
+    if(j==13)temphistIInj2=(TH1D*)temphist->Clone();
+    if(j==9)temphistInj34=(TH1D*)temphist->Clone();
+    if(j==14)temphistIInj34=(TH1D*)temphist->Clone();
+    if(j==10)temphistInj56=(TH1D*)temphist->Clone();
+    if(j==15)temphistIInj56=(TH1D*)temphist->Clone();
+    if(j==11)temphistInj78=(TH1D*)temphist->Clone();
+    if(j==16)temphistIInj78=(TH1D*)temphist->Clone();
+    if(j==12)temphistInj9=(TH1D*)temphist->Clone();
+    if(j==17)temphistIInj9=(TH1D*)temphist->Clone();
+
     temphist->Write(tempname);
     delete tempstack;
     tempstack = new THStack("stack","Binned Sample Stack");
@@ -304,6 +395,36 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   temphistIII->SetName("hProb_Tau_mu_lowDelphi");
   temphistIII->SetTitle("hProb_Tau_mu_lowDelphi");
   temphistIII->Write();
+
+  temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2_lowDelphi"));
+  temphistIIInj2->Divide(temphistInj2,temphistIInj2,temphistIInj2->GetSumOfWeights(),temphistInj2->GetSumOfWeights(),"B");
+  temphistIIInj2->SetName("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphistIIInj2->SetTitle("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphistIIInj2->Write();
+
+  temphistIIInj34 = static_cast<TH1D*>(temphistInj34->Clone("hProb_Tau_mu_nb_njet34_lowDelphi"));
+  temphistIIInj34->Divide(temphistInj34,temphistIInj34,temphistIInj34->GetSumOfWeights(),temphistInj34->GetSumOfWeights(),"B");
+  temphistIIInj34->SetName("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphistIIInj34->SetTitle("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphistIIInj34->Write();
+
+  temphistIIInj56 = static_cast<TH1D*>(temphistInj56->Clone("hProb_Tau_mu_nb_njet56_lowDelphi"));
+  temphistIIInj56->Divide(temphistInj56,temphistIInj56,temphistIInj56->GetSumOfWeights(),temphistInj56->GetSumOfWeights(),"B");
+  temphistIIInj56->SetName("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphistIIInj56->SetTitle("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphistIIInj56->Write();
+
+  temphistIIInj78 = static_cast<TH1D*>(temphistInj78->Clone("hProb_Tau_mu_nb_njet78_lowDelphi"));
+  temphistIIInj78->Divide(temphistInj78,temphistIInj78,temphistIInj78->GetSumOfWeights(),temphistInj78->GetSumOfWeights(),"B");
+  temphistIIInj78->SetName("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphistIIInj78->SetTitle("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphistIIInj78->Write();
+
+  temphistIIInj9 = static_cast<TH1D*>(temphistInj9->Clone("hProb_Tau_mu_nb_njet9_lowDelphi"));
+  temphistIIInj9->Divide(temphistInj9,temphistIInj9,temphistIInj9->GetSumOfWeights(),temphistInj9->GetSumOfWeights(),"B");
+  temphistIIInj9->SetName("hProb_Tau_mu_nb_njet9_lowDelphi");
+  temphistIIInj9->SetTitle("hProb_Tau_mu_nb_njet9_lowDelphi");
+  temphistIIInj9->Write();
 
 
   file->Close();
@@ -621,10 +742,26 @@ cout << " flag \n " ;
   histname[0]="hProb_Tau_mu";
   histname[1]="hNonW_mu";
   histname[2]="hAll_mu";
+  histname[3]="hProb_Tau_mu_nb_njet2";
+  histname[4]="hProb_Tau_mu_nb_njet34";
+  histname[5]="hProb_Tau_mu_nb_njet56";
+  histname[6]="hProb_Tau_mu_nb_njet78";
+  histname[7]="hProb_Tau_mu_nb_njet9";
+  histname[8]="hNonW_mu_nb_njet2";
+  histname[9]="hNonW_mu_nb_njet34";
+  histname[10]="hNonW_mu_nb_njet56";
+  histname[11]="hNonW_mu_nb_njet78";
+  histname[12]="hNonW_mu_nb_njet9";
+  histname[13]="hAll_mu_nb_njet2";
+  histname[14]="hAll_mu_nb_njet34";
+  histname[15]="hAll_mu_nb_njet56";
+  histname[16]="hAll_mu_nb_njet78";
+  histname[17]="hAll_mu_nb_njet9";
 
   for(int j=0; j<histname.size(); j++){
 
-    if(j==0)continue; // Stacking probability histograms has no meaning.
+    //    if(j==0)continue; // Stacking probability histograms has no meaning.
+    if(j==0 || j==3 || j==4 || j==5 || j==6 || j==7)continue;
     sprintf(tempname,"%s",(histname[j]).c_str());
 
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
@@ -640,6 +777,17 @@ cout << " flag \n " ;
     temphist = (TH1D *) tempstack->GetStack()->Last();
     if(j==1)temphistI=(TH1D*)temphist->Clone();
     if(j==2)temphistII=(TH1D*)temphist->Clone();
+    if(j==8)temphistInj2=(TH1D*)temphist->Clone();
+    if(j==13)temphistIInj2=(TH1D*)temphist->Clone();
+    if(j==9)temphistInj34=(TH1D*)temphist->Clone();
+    if(j==14)temphistIInj34=(TH1D*)temphist->Clone();
+    if(j==10)temphistInj56=(TH1D*)temphist->Clone();
+    if(j==15)temphistIInj56=(TH1D*)temphist->Clone();
+    if(j==11)temphistInj78=(TH1D*)temphist->Clone();
+    if(j==16)temphistIInj78=(TH1D*)temphist->Clone();
+    if(j==12)temphistInj9=(TH1D*)temphist->Clone();
+    if(j==17)temphistIInj9=(TH1D*)temphist->Clone();
+
     temphist->Write(tempname);
     delete tempstack;
     tempstack = new THStack("stack","Binned Sample Stack");
@@ -651,15 +799,61 @@ cout << " flag \n " ;
   temphistIII->SetTitle("hProb_Tau_mu");
   temphistIII->Write();
 
+  temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2"));
+  temphistIIInj2->Divide(temphistInj2,temphistIInj2,temphistIInj2->GetSumOfWeights(),temphistInj2->GetSumOfWeights(),"B");
+  temphistIIInj2->SetName("hProb_Tau_mu_nb_njet2");
+  temphistIIInj2->SetTitle("hProb_Tau_mu_nb_njet2");
+  temphistIIInj2->Write();
+
+  temphistIIInj34 = static_cast<TH1D*>(temphistInj34->Clone("hProb_Tau_mu_nb_njet34"));
+  temphistIIInj34->Divide(temphistInj34,temphistIInj34,temphistIInj34->GetSumOfWeights(),temphistInj34->GetSumOfWeights(),"B");
+  temphistIIInj34->SetName("hProb_Tau_mu_nb_njet34");
+  temphistIIInj34->SetTitle("hProb_Tau_mu_nb_njet34");
+  temphistIIInj34->Write();
+
+  temphistIIInj56 = static_cast<TH1D*>(temphistInj56->Clone("hProb_Tau_mu_nb_njet56"));
+  temphistIIInj56->Divide(temphistInj56,temphistIInj56,temphistIInj56->GetSumOfWeights(),temphistInj56->GetSumOfWeights(),"B");
+  temphistIIInj56->SetName("hProb_Tau_mu_nb_njet56");
+  temphistIIInj56->SetTitle("hProb_Tau_mu_nb_njet56");
+  temphistIIInj56->Write();
+
+  temphistIIInj78 = static_cast<TH1D*>(temphistInj78->Clone("hProb_Tau_mu_nb_njet78"));
+  temphistIIInj78->Divide(temphistInj78,temphistIInj78,temphistIInj78->GetSumOfWeights(),temphistInj78->GetSumOfWeights(),"B");
+  temphistIIInj78->SetName("hProb_Tau_mu_nb_njet78");
+  temphistIIInj78->SetTitle("hProb_Tau_mu_nb_njet78");
+  temphistIIInj78->Write();
+
+  temphistIIInj9 = static_cast<TH1D*>(temphistInj9->Clone("hProb_Tau_mu_nb_njet9"));
+  temphistIIInj9->Divide(temphistInj9,temphistIInj9,temphistIInj9->GetSumOfWeights(),temphistInj9->GetSumOfWeights(),"B");
+  temphistIIInj9->SetName("hProb_Tau_mu_nb_njet9");
+  temphistIIInj9->SetTitle("hProb_Tau_mu_nb_njet9");
+  temphistIIInj9->Write();
+
 
   histname.clear();
   histname[0]="hProb_Tau_mu_lowDelphi";
   histname[1]="hNonW_mu_lowDelphi";
   histname[2]="hAll_mu_lowDelphi";
+  histname[3]="hProb_Tau_mu_nb_njet2_lowDelphi";
+  histname[4]="hProb_Tau_mu_nb_njet34_lowDelphi";
+  histname[5]="hProb_Tau_mu_nb_njet56_lowDelphi";
+  histname[6]="hProb_Tau_mu_nb_njet78_lowDelphi";
+  histname[7]="hProb_Tau_mu_nb_njet9_lowDelphi";
+  histname[8]="hNonW_mu_nb_njet2_lowDelphi";
+  histname[9]="hNonW_mu_nb_njet34_lowDelphi";
+  histname[10]="hNonW_mu_nb_njet56_lowDelphi";
+  histname[11]="hNonW_mu_nb_njet78_lowDelphi";
+  histname[12]="hNonW_mu_nb_njet9_lowDelphi";
+  histname[13]="hAll_mu_nb_njet2_lowDelphi";
+  histname[14]="hAll_mu_nb_njet34_lowDelphi";
+  histname[15]="hAll_mu_nb_njet56_lowDelphi";
+  histname[16]="hAll_mu_nb_njet78_lowDelphi";
+  histname[17]="hAll_mu_nb_njet9_lowDelphi";
 
   for(int j=0; j<histname.size(); j++){
 
-    if(j==0)continue; // Stacking probability histograms has no meaning.
+    //    if(j==0)continue; // Stacking probability histograms has no meaning.
+    if(j==0 || j==3 || j==4 || j==5 || j==6 || j==7)continue;
     sprintf(tempname,"%s",(histname[j]).c_str());
 
     for(int i=0; i<wjnHT ; i++){ // loop over different HT bins
@@ -675,6 +869,17 @@ cout << " flag \n " ;
     temphist = (TH1D *) tempstack->GetStack()->Last();
     if(j==1)temphistI=(TH1D*)temphist->Clone();
     if(j==2)temphistII=(TH1D*)temphist->Clone();
+    if(j==8)temphistInj2=(TH1D*)temphist->Clone();
+    if(j==13)temphistIInj2=(TH1D*)temphist->Clone();
+    if(j==9)temphistInj34=(TH1D*)temphist->Clone();
+    if(j==14)temphistIInj34=(TH1D*)temphist->Clone();
+    if(j==10)temphistInj56=(TH1D*)temphist->Clone();
+    if(j==15)temphistIInj56=(TH1D*)temphist->Clone();
+    if(j==11)temphistInj78=(TH1D*)temphist->Clone();
+    if(j==16)temphistIInj78=(TH1D*)temphist->Clone();
+    if(j==12)temphistInj9=(TH1D*)temphist->Clone();
+    if(j==17)temphistIInj9=(TH1D*)temphist->Clone();
+
     temphist->Write(tempname);
     delete tempstack;
     tempstack = new THStack("stack","Binned Sample Stack");
@@ -685,6 +890,36 @@ cout << " flag \n " ;
   temphistIII->SetName("hProb_Tau_mu_lowDelphi");
   temphistIII->SetTitle("hProb_Tau_mu_lowDelphi");
   temphistIII->Write();
+
+  temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2_lowDelphi"));
+  temphistIIInj2->Divide(temphistInj2,temphistIInj2,temphistIInj2->GetSumOfWeights(),temphistInj2->GetSumOfWeights(),"B");
+  temphistIIInj2->SetName("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphistIIInj2->SetTitle("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphistIIInj2->Write();
+
+  temphistIIInj34 = static_cast<TH1D*>(temphistInj34->Clone("hProb_Tau_mu_nb_njet34_lowDelphi"));
+  temphistIIInj34->Divide(temphistInj34,temphistIInj34,temphistIInj34->GetSumOfWeights(),temphistInj34->GetSumOfWeights(),"B");
+  temphistIIInj34->SetName("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphistIIInj34->SetTitle("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphistIIInj34->Write();
+
+  temphistIIInj56 = static_cast<TH1D*>(temphistInj56->Clone("hProb_Tau_mu_nb_njet56_lowDelphi"));
+  temphistIIInj56->Divide(temphistInj56,temphistIInj56,temphistIInj56->GetSumOfWeights(),temphistInj56->GetSumOfWeights(),"B");
+  temphistIIInj56->SetName("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphistIIInj56->SetTitle("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphistIIInj56->Write();
+
+  temphistIIInj78 = static_cast<TH1D*>(temphistInj78->Clone("hProb_Tau_mu_nb_njet78_lowDelphi"));
+  temphistIIInj78->Divide(temphistInj78,temphistIInj78,temphistIInj78->GetSumOfWeights(),temphistInj78->GetSumOfWeights(),"B");
+  temphistIIInj78->SetName("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphistIIInj78->SetTitle("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphistIIInj78->Write();
+
+  temphistIIInj9 = static_cast<TH1D*>(temphistInj9->Clone("hProb_Tau_mu_nb_njet9_lowDelphi"));
+  temphistIIInj9->Divide(temphistInj9,temphistIInj9,temphistIInj9->GetSumOfWeights(),temphistInj9->GetSumOfWeights(),"B");
+  temphistIIInj9->SetName("hProb_Tau_mu_nb_njet9_lowDelphi");
+  temphistIIInj9->SetTitle("hProb_Tau_mu_nb_njet9_lowDelphi");
+  temphistIIInj9->Write();
 
 
   file->Close();
@@ -1142,10 +1377,26 @@ cout << " flag \n " ;
   histname[0]="hProb_Tau_mu";
   histname[1]="hNonW_mu";
   histname[2]="hAll_mu";
+  histname[3]="hProb_Tau_mu_nb_njet2";
+  histname[4]="hProb_Tau_mu_nb_njet34";
+  histname[5]="hProb_Tau_mu_nb_njet56";
+  histname[6]="hProb_Tau_mu_nb_njet78";
+  histname[7]="hProb_Tau_mu_nb_njet9";
+  histname[8]="hNonW_mu_nb_njet2";
+  histname[9]="hNonW_mu_nb_njet34";
+  histname[10]="hNonW_mu_nb_njet56";
+  histname[11]="hNonW_mu_nb_njet78";
+  histname[12]="hNonW_mu_nb_njet9";
+  histname[13]="hAll_mu_nb_njet2";
+  histname[14]="hAll_mu_nb_njet34";
+  histname[15]="hAll_mu_nb_njet56";
+  histname[16]="hAll_mu_nb_njet78";
+  histname[17]="hAll_mu_nb_njet9";
 
   for(int j=0; j<histname.size(); j++){
 
-    if(j==0)continue; // Stacking probability histograms has no meaning.
+    //    if(j==0)continue; // Stacking probability histograms has no meaning.
+    if(j==0 || j==3 || j==4 || j==5 || j==6 || j==7)continue;
     sprintf(tempname,"%s",(histname[j]).c_str());
 
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
@@ -1161,6 +1412,17 @@ cout << " flag \n " ;
     temphist = (TH1D *) tempstack->GetStack()->Last();
     if(j==1)temphistI=(TH1D*)temphist->Clone();
     if(j==2)temphistII=(TH1D*)temphist->Clone();
+    if(j==8)temphistInj2=(TH1D*)temphist->Clone();
+    if(j==13)temphistIInj2=(TH1D*)temphist->Clone();
+    if(j==9)temphistInj34=(TH1D*)temphist->Clone();
+    if(j==14)temphistIInj34=(TH1D*)temphist->Clone();
+    if(j==10)temphistInj56=(TH1D*)temphist->Clone();
+    if(j==15)temphistIInj56=(TH1D*)temphist->Clone();
+    if(j==11)temphistInj78=(TH1D*)temphist->Clone();
+    if(j==16)temphistIInj78=(TH1D*)temphist->Clone();
+    if(j==12)temphistInj9=(TH1D*)temphist->Clone();
+    if(j==17)temphistIInj9=(TH1D*)temphist->Clone();
+
     temphist->Write(tempname);
     delete tempstack;
     tempstack = new THStack("stack","Binned Sample Stack");
@@ -1172,15 +1434,61 @@ cout << " flag \n " ;
   temphistIII->SetTitle("hProb_Tau_mu");
   temphistIII->Write();
 
+temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2"));
+  temphistIIInj2->Divide(temphistInj2,temphistIInj2,temphistIInj2->GetSumOfWeights(),temphistInj2->GetSumOfWeights(),"B");
+  temphistIIInj2->SetName("hProb_Tau_mu_nb_njet2");
+  temphistIIInj2->SetTitle("hProb_Tau_mu_nb_njet2");
+  temphistIIInj2->Write();
+
+  temphistIIInj34 = static_cast<TH1D*>(temphistInj34->Clone("hProb_Tau_mu_nb_njet34"));
+  temphistIIInj34->Divide(temphistInj34,temphistIInj34,temphistIInj34->GetSumOfWeights(),temphistInj34->GetSumOfWeights(),"B");
+  temphistIIInj34->SetName("hProb_Tau_mu_nb_njet34");
+  temphistIIInj34->SetTitle("hProb_Tau_mu_nb_njet34");
+  temphistIIInj34->Write();
+
+  temphistIIInj56 = static_cast<TH1D*>(temphistInj56->Clone("hProb_Tau_mu_nb_njet56"));
+  temphistIIInj56->Divide(temphistInj56,temphistIInj56,temphistIInj56->GetSumOfWeights(),temphistInj56->GetSumOfWeights(),"B");
+  temphistIIInj56->SetName("hProb_Tau_mu_nb_njet56");
+  temphistIIInj56->SetTitle("hProb_Tau_mu_nb_njet56");
+  temphistIIInj56->Write();
+
+  temphistIIInj78 = static_cast<TH1D*>(temphistInj78->Clone("hProb_Tau_mu_nb_njet78"));
+  temphistIIInj78->Divide(temphistInj78,temphistIInj78,temphistIInj78->GetSumOfWeights(),temphistInj78->GetSumOfWeights(),"B");
+  temphistIIInj78->SetName("hProb_Tau_mu_nb_njet78");
+  temphistIIInj78->SetTitle("hProb_Tau_mu_nb_njet78");
+  temphistIIInj78->Write();
+
+  temphistIIInj9 = static_cast<TH1D*>(temphistInj9->Clone("hProb_Tau_mu_nb_njet9"));
+  temphistIIInj9->Divide(temphistInj9,temphistIInj9,temphistIInj9->GetSumOfWeights(),temphistInj9->GetSumOfWeights(),"B");
+  temphistIIInj9->SetName("hProb_Tau_mu_nb_njet9");
+  temphistIIInj9->SetTitle("hProb_Tau_mu_nb_njet9");
+  temphistIIInj9->Write();
+
 
   histname.clear();
   histname[0]="hProb_Tau_mu_lowDelphi";
   histname[1]="hNonW_mu_lowDelphi";
   histname[2]="hAll_mu_lowDelphi";
+  histname[3]="hProb_Tau_mu_nb_njet2_lowDelphi";
+  histname[4]="hProb_Tau_mu_nb_njet34_lowDelphi";
+  histname[5]="hProb_Tau_mu_nb_njet56_lowDelphi";
+  histname[6]="hProb_Tau_mu_nb_njet78_lowDelphi";
+  histname[7]="hProb_Tau_mu_nb_njet9_lowDelphi";
+  histname[8]="hNonW_mu_nb_njet2_lowDelphi";
+  histname[9]="hNonW_mu_nb_njet34_lowDelphi";
+  histname[10]="hNonW_mu_nb_njet56_lowDelphi";
+  histname[11]="hNonW_mu_nb_njet78_lowDelphi";
+  histname[12]="hNonW_mu_nb_njet9_lowDelphi";
+  histname[13]="hAll_mu_nb_njet2_lowDelphi";
+  histname[14]="hAll_mu_nb_njet34_lowDelphi";
+  histname[15]="hAll_mu_nb_njet56_lowDelphi";
+  histname[16]="hAll_mu_nb_njet78_lowDelphi";
+  histname[17]="hAll_mu_nb_njet9_lowDelphi";
 
   for(int j=0; j<histname.size(); j++){
 
-    if(j==0)continue; // Stacking probability histograms has no meaning.
+    //    if(j==0)continue; // Stacking probability histograms has no meaning.
+    if(j==0 || j==3 || j==4 || j==5 || j==6 || j==7)continue;
     sprintf(tempname,"%s",(histname[j]).c_str());
 
     for(int i=0; i<ttbarnHT ; i++){ // loop over different HT bins
@@ -1196,6 +1504,17 @@ cout << " flag \n " ;
     temphist = (TH1D *) tempstack->GetStack()->Last();
     if(j==1)temphistI=(TH1D*)temphist->Clone();
     if(j==2)temphistII=(TH1D*)temphist->Clone();
+    if(j==8)temphistInj2=(TH1D*)temphist->Clone();
+    if(j==13)temphistIInj2=(TH1D*)temphist->Clone();
+    if(j==9)temphistInj34=(TH1D*)temphist->Clone();
+    if(j==14)temphistIInj34=(TH1D*)temphist->Clone();
+    if(j==10)temphistInj56=(TH1D*)temphist->Clone();
+    if(j==15)temphistIInj56=(TH1D*)temphist->Clone();
+    if(j==11)temphistInj78=(TH1D*)temphist->Clone();
+    if(j==16)temphistIInj78=(TH1D*)temphist->Clone();
+    if(j==12)temphistInj9=(TH1D*)temphist->Clone();
+    if(j==17)temphistIInj9=(TH1D*)temphist->Clone();
+
     temphist->Write(tempname);
     delete tempstack;
     tempstack = new THStack("stack","Binned Sample Stack");
@@ -1206,6 +1525,36 @@ cout << " flag \n " ;
   temphistIII->SetName("hProb_Tau_mu_lowDelphi");
   temphistIII->SetTitle("hProb_Tau_mu_lowDelphi");
   temphistIII->Write();
+
+  temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2_lowDelphi"));
+  temphistIIInj2->Divide(temphistInj2,temphistIInj2,temphistIInj2->GetSumOfWeights(),temphistInj2->GetSumOfWeights(),"B");
+  temphistIIInj2->SetName("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphistIIInj2->SetTitle("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphistIIInj2->Write();
+
+  temphistIIInj34 = static_cast<TH1D*>(temphistInj34->Clone("hProb_Tau_mu_nb_njet34_lowDelphi"));
+  temphistIIInj34->Divide(temphistInj34,temphistIInj34,temphistIInj34->GetSumOfWeights(),temphistInj34->GetSumOfWeights(),"B");
+  temphistIIInj34->SetName("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphistIIInj34->SetTitle("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphistIIInj34->Write();
+
+  temphistIIInj56 = static_cast<TH1D*>(temphistInj56->Clone("hProb_Tau_mu_nb_njet56_lowDelphi"));
+  temphistIIInj56->Divide(temphistInj56,temphistIInj56,temphistIInj56->GetSumOfWeights(),temphistInj56->GetSumOfWeights(),"B");
+  temphistIIInj56->SetName("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphistIIInj56->SetTitle("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphistIIInj56->Write();
+
+  temphistIIInj78 = static_cast<TH1D*>(temphistInj78->Clone("hProb_Tau_mu_nb_njet78_lowDelphi"));
+  temphistIIInj78->Divide(temphistInj78,temphistIInj78,temphistIInj78->GetSumOfWeights(),temphistInj78->GetSumOfWeights(),"B");
+  temphistIIInj78->SetName("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphistIIInj78->SetTitle("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphistIIInj78->Write();
+
+  temphistIIInj9 = static_cast<TH1D*>(temphistInj9->Clone("hProb_Tau_mu_nb_njet9_lowDelphi"));
+  temphistIIInj9->Divide(temphistInj9,temphistIInj9,temphistIInj9->GetSumOfWeights(),temphistInj9->GetSumOfWeights(),"B");
+  temphistIIInj9->SetName("hProb_Tau_mu_nb_njet9_lowDelphi");
+  temphistIIInj9->SetTitle("hProb_Tau_mu_nb_njet9_lowDelphi");
+  temphistIIInj9->Write();
 
   file->Close();
   printf("TTbar Mu from nonW calculated. \n ");
@@ -1620,6 +1969,16 @@ cout << " flag \n " ;
   histname.clear();
   histname[0]="hNonW_mu";
   histname[1]="hAll_mu";
+  histname[2]="hNonW_mu_nb_njet2";
+  histname[3]="hNonW_mu_nb_njet34";
+  histname[4]="hNonW_mu_nb_njet56";
+  histname[5]="hNonW_mu_nb_njet78";
+  histname[6]="hNonW_mu_nb_njet9";
+  histname[7]="hAll_mu_nb_njet2";
+  histname[8]="hAll_mu_nb_njet34";
+  histname[9]="hAll_mu_nb_njet56";
+  histname[10]="hAll_mu_nb_njet78";
+  histname[11]="hAll_mu_nb_njet9";
 
 
   for(int j=0; j<histname.size(); j++){
@@ -1640,6 +1999,16 @@ cout << " flag \n " ;
   histname.clear();
   histname[0]="hNonW_mu_lowDelphi";
   histname[1]="hAll_mu_lowDelphi";
+  histname[2]="hNonW_mu_nb_njet2_lowDelphi";
+  histname[3]="hNonW_mu_nb_njet34_lowDelphi";
+  histname[4]="hNonW_mu_nb_njet56_lowDelphi";
+  histname[5]="hNonW_mu_nb_njet78_lowDelphi";
+  histname[6]="hNonW_mu_nb_njet9_lowDelphi";
+  histname[7]="hAll_mu_nb_njet2_lowDelphi";
+  histname[8]="hAll_mu_nb_njet34_lowDelphi";
+  histname[9]="hAll_mu_nb_njet56_lowDelphi";
+  histname[10]="hAll_mu_nb_njet78_lowDelphi";
+  histname[11]="hAll_mu_nb_njet9_lowDelphi";
 
   for(int j=0; j<histname.size(); j++){
 
@@ -1652,14 +2021,14 @@ cout << " flag \n " ;
     temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
-
+    
   }
 
   file30->Close();
   file3->Close();
   file2->Close();
   file->Close();
-
+  
   // Open a file to write
   sprintf(tempname,"Probability_Tau_mu_stacked.root");
   file2 = new TFile(tempname,"R");
@@ -1675,6 +2044,51 @@ cout << " flag \n " ;
   temphist->SetTitle("hProb_Tau_mu");
   temphist->Write();
 
+  sprintf(tempname,"hNonW_mu_nb_njet2");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet2");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet2");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet2");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet34");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet34");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet34");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet34");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet56");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet56");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet56");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet56");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet78");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet78");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet78");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet78");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet9");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet9");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet9");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet9");
+  temphist->Write();
+
 
   sprintf(tempname,"hNonW_mu_lowDelphi");
   temphist = (TH1D *) file->Get(tempname)->Clone();
@@ -1683,6 +2097,51 @@ cout << " flag \n " ;
   temphist->Divide(temphist,temphist2,1,1,"B");
   temphist->SetName("hProb_Tau_mu_lowDelphi");
   temphist->SetTitle("hProb_Tau_mu_lowDelphi");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet2_lowDelphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet2_lowDelphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet2_lowDelphi");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet34_lowDelphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet34_lowDelphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet34_lowDelphi");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet56_lowDelphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet56_lowDelphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet56_lowDelphi");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet78_lowDelphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet78_lowDelphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet78_lowDelphi");
+  temphist->Write();
+
+  sprintf(tempname,"hNonW_mu_nb_njet9_lowDelphi");
+  temphist = (TH1D *) file->Get(tempname)->Clone();
+  sprintf(tempname,"hAll_mu_nb_njet9_lowDelphi");
+  temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+  temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
+  temphist->SetName("hProb_Tau_mu_nb_njet9_lowDelphi");
+  temphist->SetTitle("hProb_Tau_mu_nb_njet9_lowDelphi");
   temphist->Write();
 
 
