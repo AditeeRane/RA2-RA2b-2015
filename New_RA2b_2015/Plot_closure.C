@@ -94,8 +94,8 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
   // Luminosity information for scaling
   //double lumi     = 2.109271; // normaliza to this lumi (fb-1)
   //  double lumi     = 2.26198; // normaliza to this lumi (fb-1)
-  double lumi     = 24.5;
-  double lumi_ref = 24.5; // normaliza to 3 (fb-1)
+  double lumi     = 36.35;
+  double lumi_ref = 3.0; // normaliza to 3 (fb-1)
   ///////////////////////////////////////////////////////////////////////////////////////////
   ////Some cosmetic work for official documents. 
   //
@@ -426,7 +426,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
       //y_legend  = 2000.;
       //xlatex=1896.257;ylatex=11.59619;
       xlatex=0.65;ylatex=0.5;
-      ymax_top = 300000.;
+      ymax_top = 500000.;
       ymin_top = 0.2;
       sprintf(xtitlename,"H_{T} [GeV]");
       sprintf(ytitlename,"Events / 200 GeV");
@@ -440,7 +440,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
     if(histname=="MHT"){
       xtext_top = 650.;
       //y_legend = 500.;
-      ymax_top = 1000000.;
+      ymax_top = 2000000.;
       //xlatex=726.1259;ylatex=12.97329;
       xlatex=0.65;ylatex=0.5;
       ymin_top = 0.05;
@@ -457,7 +457,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
       xtext_top = 2.8;
       //y_legend = 3000.;
       //ymax_top = 1400.;
-      ymax_top = 2000.;
+      ymax_top = 30000.;
       if(cutname=="Njet_9") ymax_top = 100.;
       ymin_top = 0.0;
       ytext_top = 0.65*ymax_top;
@@ -473,7 +473,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
     if(histname=="NJet"){
       xtext_top = 11.;
       //y_legend = 2000.;
-      ymax_top = 300000.;
+      ymax_top = 500000.;
       ymin_top = 2.;
       //ytext_top = ymax_top*0.005;
       //xlatex=14.88397;ylatex=0.962934;

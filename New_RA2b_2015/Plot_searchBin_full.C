@@ -98,7 +98,8 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
   // Luminosity information for scaling
   //double lumi     = 2.109271; // normaliza to this lumi (fb-1)
   //double lumi     = 2.26198; // normaliza to this lumi (fb-1)
-  double lumi     = 24.5;
+  //  double lumi     = 24.5;
+  double lumi     = 36.35;
   double lumi_ref = 3.0; // normaliza to 3 (fb-1)
   
   ///////////////////////////////////////////////////////////////////////////////////////////
@@ -125,40 +126,22 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
   TFile * EstFile = new TFile(tempname,"R");
   printf("Opened %s\n",tempname);
 
-  //
-  // Define legend
-  //
-  //  Float_t legendX1 = .70; //.50;
-  //Float_t legendX2 = .95; //.70;
-  //Float_t legendX2 = .95;  
-  //Float_t legendY1 = .50; //.65;
-  // Float_t legendY1 = .54;
-  //Float_t legendY2 = .67;
-  //  Float_t legendY2 = .79;
 
-  Float_t legendX1 = .65; //.50;
-  //Float_t legendX2 = .95; //.70;
+  // Define legend
+  Float_t legendX1 = .65;
   Float_t legendX2 = .90;  
-  Float_t legendY1 = .50; //.65;
-  // Float_t legendY1 = .54;
+  Float_t legendY1 = .50;
   Float_t legendY2 = .67;
 
   TLegend* catLeg1 = new TLegend(legendX1,legendY1,legendX2,legendY2);
-  //catLeg1->SetTextSize(0.060);
-  //catLeg1->SetTextSize(0.055);
-  //catLeg1->SetTextSize(0.044);
   catLeg1->SetTextSize(0.036);
   catLeg1->SetTextFont(42); 
-  //catLeg1->SetTextFont(40);
   catLeg1->SetFillColor(0);
   catLeg1->SetLineColor(1);
   catLeg1->SetBorderSize(1);
 
-  //
   // Define canvas
-  //
   TCanvas *canvas = new TCanvas("canvas","canvas",10,10,W,H);
-
   canvas->SetFillColor(0);
   canvas->SetBorderMode(0);
   canvas->SetFrameFillStyle(0);
@@ -169,16 +152,12 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
   canvas->SetBottomMargin( B/H );
   canvas->SetTickx(0);
   canvas->SetTicky(0);
-
   canvas->Divide(1, 2);
   
-  //
   // Define pads
-  //
   TPad* canvas_up = (TPad*) canvas->GetListOfPrimitives()->FindObject("canvas_1");
   TPad* canvas_dw = (TPad*) canvas->GetListOfPrimitives()->FindObject("canvas_2");
 
-  //
   // define the size
   double up_height     = 0.8;  // please tune so that the upper figures size will meet your requirement
   double dw_correction = 1.30; // please tune so that the smaller canvas size will work in your environment
@@ -217,10 +196,10 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
   double NJet_x_max=15.;
   double NBtag_x_max=4.;
   //double search_x_max=191.-0.5;//73.-0.5;//108.-0.5
-  double search_x_max=175.-0.5;
+  double search_x_max=175.0-0.5;
   if(histname.find("QCD")!=string::npos)search_x_max=224.;
   if(histname.find("QCD")!=string::npos)search_x_max=248.;
-  double search_x_min=1.-0.5;
+  double search_x_min=1.0-0.5;
 
   sprintf(tempname,"%s",histname.c_str());
   if(sample.find("stacked")!=string::npos){
@@ -228,98 +207,61 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
     EstHist_input=(TH1D*) tempstack->GetStack()->Last();
     tempstack=(THStack*)GenFile->Get(tempname)->Clone();   
     GenHist_input=(TH1D*) tempstack->GetStack()->Last();
-    /*
-    tempstack=(THStack*)EstFile->Get(tempname)->Clone();
-    EstHistD=(TH1D*) tempstack->GetStack()->Last();
-    tempstack=(THStack*)GenFile->Get(tempname)->Clone();
-    GenHistD=(TH1D*) tempstack->GetStack()->Last();    
-    */
   }
   else{
     EstHist_input=(TH1D*) EstFile->Get(tempname)->Clone();
     GenHist_input=(TH1D*) GenFile->Get(tempname)->Clone();
-    /*
-    EstHistD_input=(TH1D*) EstFile->Get(tempname)->Clone();
-    GenHistD_input=(TH1D*) GenFile->Get(tempname)->Clone();
-    */
   }
   std::cout<<" test_one "<<endl;
 
-  //GenHist_input->Print("all");
   TH1D * GenHist = static_cast<TH1D*>(GenHist_input->Clone("GenHist"));
   TH1D * EstHist = static_cast<TH1D*>(EstHist_input->Clone("EstHist"));
   shift_bin(GenHist_input,GenHist);
   shift_bin(EstHist_input,EstHist);
   //GenHist->Print("all");
   //return;
-
-  GenHist->SetLineColor(4);
   EstHist->SetLineColor(4);
-  //GenHist->GetXaxis()->SetLabelFont(42);
-  //GenHist->GetXaxis()->SetLabelOffset(0.007);
-  //GenHist->GetXaxis()->SetLabelSize(0.04);
-  //GenHist->GetXaxis()->SetTitleSize(0.05);
-  //GenHist->GetXaxis()->SetTitleOffset(0.9);
-  //GenHist->GetXaxis()->SetTitleOffset(0.5);
-  //GenHist->GetXaxis()->SetTitleFont(42);
-  //GenHist->GetYaxis()->SetLabelFont(42);
-  //GenHist->GetYaxis()->SetLabelOffset(0.007);
-  //GenHist->GetYaxis()->SetLabelSize(0.04);
+  GenHist->SetLineColor(4);
   GenHist->GetYaxis()->SetLabelSize(0.045*1.15);
   GenHist->GetYaxis()->SetTitleSize(0.06*1.15);
   GenHist->GetYaxis()->SetTitleOffset(0.6);
   GenHist->GetYaxis()->SetTitleFont(42);
-
-
-  //EstHist->GetXaxis()->SetLabelFont(42);
-  //EstHist->GetXaxis()->SetLabelOffset(0.007);
-  //EstHist->GetXaxis()->SetLabelSize(0.04);
-  //EstHist->GetXaxis()->SetTitleSize(0.05);
-  //EstHist->GetXaxis()->SetTitleOffset(0.9);
-  //EstHist->GetXaxis()->SetTitleFont(42);
-  //EstHist->GetYaxis()->SetLabelFont(42);
-  //EstHist->GetYaxis()->SetLabelOffset(0.007);
-  //EstHist->GetYaxis()->SetLabelSize(0.04);
-  //EstHist->GetYaxis()->SetTitleSize(0.08);
-  //EstHist->GetYaxis()->SetTitleOffset(2.0);
-  //EstHist->GetYaxis()->SetTitleFont(42);
   sprintf(xtitlename,"Search region bin number");
   sprintf(ytitlename,"Events");
-  gPad->SetLogy();
   GenHist->SetMaximum(ymax_top);
   GenHist->SetMinimum(ymin_top);
   GenHist->GetXaxis()->SetRangeUser(search_x_min,search_x_max);
-
-  //GenHist->GetYaxis()->SetTickLength(0.015);
-  //GenHist->GetXaxis()->SetTickLength(0.02);
-
-  //gPad->SetGridx(1);
-  TExec *ex1 = new TExec("ex1","gStyle->SetErrorX(0);");
-  TExec *ex2 = new TExec("ex2","gStyle->SetErrorX(0.5);");
-
   GenHist->SetTitle("");
   GenHist->SetMarkerStyle(20);
   GenHist->SetMarkerSize(1.2);
   GenHist->SetLineColor(1);
-  //GenHist->GetXaxis()->SetTitle(xtitlename);
   GenHist->GetYaxis()->SetTitle(ytitlename);
+
+  gPad->SetLogy();
+
+  // scale to correct lumi
   GenHist->Scale(lumi/lumi_ref);
   EstHist->Scale(lumi/lumi_ref);
 
+
+  //TExec *ex1 = new TExec("ex1","gStyle->SetErrorX(0);");
+  //TExec *ex2 = new TExec("ex2","gStyle->SetErrorX(0.5);");
+
+  TExec *ex1 = new TExec("ex1","gStyle->SetErrorX(0);");
+  TExec *ex2 = new TExec("ex2","gStyle->SetErrorX(0.5);");
+
   //std::cout<<" test_2 "<<endl;
-  
-  //  bool AdhocQCD_NjetNbjet=true;
-  bool AdhocQCD_NjetNbjet=false; 
- //if(AdhocQCD_NjetNbjet && histname.find("QCD")!=string::npos){
+
+  // Calculate average njnb corrections for QCD Prediction
+  bool AdhocQCD_NjetNbjet=true;
   if(AdhocQCD_NjetNbjet && histname.find("QCD")!=string::npos){
-    //    std::cout<<"----------------------------------------- "<<std::endl;
-    std::cout<<" hist name "<<histname<<std::endl;
+    std::cout<<"For QCD: hist name "<<histname<<std::endl;
     double GenHistHtMht=0.;
     double EstHistHtMht=0.;
     double rem=0;
     double ratio=0;
-    int binHtMht=13; int totbins=231;
-    int NjetEnd=0;
+    int    binHtMht=13; int totbins=231;
+    int    NjetEnd=0;
     double Correction_Njet2_nb0=0;double Correction_Njet2_nb1=0;double Correction_Njet2_nb2=0;
     double Correction_Njet34_nb0=0;double Correction_Njet34_nb1=0;double Correction_Njet34_nb2=0;double Correction_Njet34_nb3=0;
     double Correction_Njet56_nb0=0;double Correction_Njet56_nb1=0;double Correction_Njet56_nb2=0;double Correction_Njet56_nb3=0;
@@ -328,8 +270,9 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
 
     for(int i=1;i<=totbins;i++){
       std::cout<<" i "<< i <<" NjetEnd "<<NjetEnd<<endl;
-      if(i>143)
-	binHtMht=11;
+
+      if(i>143) binHtMht=11;
+
       GenHistHtMht +=GenHist->GetBinContent(i);
       EstHistHtMht +=EstHist->GetBinContent(i);
       std::cout<<" i "<< i<<" GenHist_i "<<GenHist->GetBinContent(i) <<" EstHist_i "<<EstHist->GetBinContent(i) <<" GenHistHtMht "<<GenHistHtMht<<" EstHistHtMht "<<EstHistHtMht<<" ratio "<<GenHistHtMht/EstHistHtMht<<std::endl;
@@ -364,7 +307,7 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
       else
         continue;
 
-    }
+    } //loop over qcd search bins
     std::cout<<" Correction_Njet2_nb0 "<<Correction_Njet2_nb0<<endl;
     std::cout<<" Correction_Njet2_nb1 "<<Correction_Njet2_nb1<<endl;
     std::cout<<" Correction_Njet2_nb2 "<<Correction_Njet2_nb2<<endl;
@@ -385,6 +328,7 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
     std::cout<<" Correction_Njet9Above_nb2 "<<Correction_Njet9Above_nb2<<endl;
     std::cout<<" Correction_Njet9Above_nb3 "<<Correction_Njet9Above_nb3<<endl;
 
+    // Update QCD prediction with the correction factors
     for(int j=1;j<=231;j++){
       double oldVal=EstHist->GetBinContent(j);
       double newVal=0;
@@ -409,13 +353,13 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
       else newVal=oldVal*Correction_Njet9Above_nb3;
       EstHist->SetBinContent(j,newVal);
     }
+  } // end QCD corrections
 
-  }
-
-  bool Adhoc_NjetNbjet=false;
+  // Caclulate NjNb corrections for search reasons
+  bool Adhoc_NjetNbjet=true;
   if(Adhoc_NjetNbjet && histname.find("searchH_b")!=string::npos){
-    //int Nbins=GenHist->GetNbinX();
-    std::cout<<"Nbins "<< 174 <<std::endl;
+    
+    //std::cout<<"Nbins Gen: "<< GenHist->GetXaxis()->GetNbins() << " Est " << EstHist->GetXaxis()->GetNbins()<<std::endl;
   
     double Gen_Njet2_nb0=0; double Gen_Njet2_nb1=0;double Gen_Njet2_nb2=0;
     double Est_Njet2_nb0=0; double Est_Njet2_nb1=0;double Est_Njet2_nb2=0;
@@ -434,99 +378,79 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
       if(j<=10){
 	Gen_Njet2_nb0 +=GenHist->GetBinContent(j);
 	Est_Njet2_nb0 +=EstHist->GetBinContent(j);
-	
-      }
+      } 
       else if(j>10 && j<=20){
 	Gen_Njet2_nb1 +=GenHist->GetBinContent(j);
 	Est_Njet2_nb1 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>20 && j<=30){
 	Gen_Njet2_nb2 +=GenHist->GetBinContent(j);
 	Est_Njet2_nb2 +=EstHist->GetBinContent(j);
-	
       }
-
       else if(j>30 && j<=40){
 	Gen_Njet34_nb0 +=GenHist->GetBinContent(j);
 	Est_Njet34_nb0 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>40 && j<=50){
 	Gen_Njet34_nb1 +=GenHist->GetBinContent(j);
 	Est_Njet34_nb1 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>50 && j<=60){
 	Gen_Njet34_nb2 +=GenHist->GetBinContent(j);
 	Est_Njet34_nb2 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>60 && j<=70){
 	Gen_Njet34_nb3 +=GenHist->GetBinContent(j);
 	Est_Njet34_nb3 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>70 && j<=80){
 	Gen_Njet56_nb0 +=GenHist->GetBinContent(j);
 	Est_Njet56_nb0 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>80 && j<=90){
 	Gen_Njet56_nb1 +=GenHist->GetBinContent(j);
 	Est_Njet56_nb1 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>90 && j<=100){
 	Gen_Njet56_nb2 +=GenHist->GetBinContent(j);
 	Est_Njet56_nb2 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>100 && j<=110){
 	Gen_Njet56_nb3 +=GenHist->GetBinContent(j);
 	Est_Njet56_nb3 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>110 && j<=118){
 	Gen_Njet78_nb0 +=GenHist->GetBinContent(j);
 	Est_Njet78_nb0 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>118 && j<=126){
 	Gen_Njet78_nb1 +=GenHist->GetBinContent(j);
 	Est_Njet78_nb1 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>126 && j<=134){
 	Gen_Njet78_nb2 +=GenHist->GetBinContent(j);
 	Est_Njet78_nb2 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>134 && j<=142){
 	Gen_Njet78_nb3 +=GenHist->GetBinContent(j);
 	Est_Njet78_nb3 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>142 && j<=150){
 	Gen_Njet9Above_nb0 +=GenHist->GetBinContent(j);
 	Est_Njet9Above_nb0 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>150 && j<=158){
 	Gen_Njet9Above_nb1 +=GenHist->GetBinContent(j);
 	Est_Njet9Above_nb1 +=EstHist->GetBinContent(j);
-	
       }
       else if(j>158 && j<=166){
 	Gen_Njet9Above_nb2 +=GenHist->GetBinContent(j);
 	Est_Njet9Above_nb2 +=EstHist->GetBinContent(j);
-	
       }
       else{
 	Gen_Njet9Above_nb3 +=GenHist->GetBinContent(j);
 	Est_Njet9Above_nb3 +=EstHist->GetBinContent(j);
       }
-      
     }
     Correction_Njet2_nb0=Gen_Njet2_nb0/Est_Njet2_nb0;
     Correction_Njet2_nb1=Gen_Njet2_nb1/Est_Njet2_nb1;
@@ -571,11 +495,11 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
     std::cout<<" Correction_Njet9Above_nb1 "<<Correction_Njet9Above_nb1<<endl;
     std::cout<<" Correction_Njet9Above_nb2 "<<Correction_Njet9Above_nb2<<endl;
     std::cout<<" Correction_Njet9Above_nb3 "<<Correction_Njet9Above_nb3<<endl;
-  
+
+    // Upcating predictions with the NjNb corrections
     for(int j=1;j<=174;j++){
       double oldVal=EstHist->GetBinContent(j);
       double newVal=0;
-
       if(j<=10) newVal=oldVal*Correction_Njet2_nb0;
       else if(j<=20)newVal=oldVal*Correction_Njet2_nb1;
       else if(j<=30)newVal=oldVal*Correction_Njet2_nb2;
@@ -597,16 +521,15 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
       else newVal=oldVal*Correction_Njet9Above_nb3;
       EstHist->SetBinContent(j,newVal);
     }
-
-  }
-
+  } // Correcting prection in SRs
+  std::cout<<"****** end calculating njnb closure correction facors " <<endl;
 
   TH1D * GenHist_Normalize = static_cast<TH1D*>(GenHist->Clone("GenHist_Normalize"));
   GenHist_Normalize->SetMaximum(ymax_top);
   GenHist_Normalize->SetMinimum(ymin_top);
   ex1->Draw();
   //GenHist_Normalize->GetListOfFunctions()->Add(ex1);
-  GenHist_Normalize->DrawCopy("e");
+  GenHist_Normalize->DrawCopy("e");  //Draw histogram using error bars
 
   EstHist->SetFillStyle(3144);
   EstHist->SetFillColor(kRed-10);
@@ -624,8 +547,8 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
   EstHist_Normalize_Clone->SetFillColor(kWhite);
   EstHist_Normalize_Clone->Draw("esame"); 
 
-  GenHist->Print("all");
-  EstHist->Print("all");
+//GenHist->Print("all");
+//EstHist->Print("all");
 
   
 
@@ -920,9 +843,7 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
       numerator->Divide(GenHist_Clone,EstHist_NoError,1,1,"");
       denominator->Divide(EstHist_Clone,EstHist_NoError,1,1,"");
 
-      numerator_fullstaterr->Divide(GenHist_Clone,EstHist_Clone,1,1,"");  // Expectation/Prediction
-      numerator_fullstaterr->Add(One_NoError,-1.);                        // Expectation/Prediction-1
-
+      
       // draw bottom figure
       canvas_dw->cd();
       // font size
@@ -940,9 +861,7 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
       // Common to all bottom plots
       //
       //sprintf(ytitlename,"#frac{Estimate - #tau_{had} BG}{#tau_{had} BG} ");
-      sprintf(ytitlename,"#frac{Direct}{Prediction} ");
-      numerator->SetMaximum(ymax_bottom);
-      numerator->SetMinimum(ymin_bottom);
+      
 
       //
       // Specific to each bottom plot
@@ -967,8 +886,8 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
       numerator->GetYaxis()->SetTitle(ytitlename);
 
       //gPad->SetGridx(1);
-
-
+      /*    
+          
       if (pull==1){
 
 	sprintf(ytitlename,"#frac{Exp - Pre}{Stat Error} ");
@@ -984,6 +903,7 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
 	  numerator_fullstaterr->SetBinContent(ibin,numerator_fullstaterr->GetBinContent(ibin)/numerator_fullstaterr->GetBinError(ibin));
 	  numerator_fullstaterr->SetBinError(ibin,0.);
 	}
+	std::cout<<" Pull=1 "<<endl;
 	numerator_fullstaterr->Print("all");
 	
 	numerator_fullstaterr->GetXaxis()->SetLabelSize(font_size_dw);
@@ -1010,60 +930,199 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
 	//tline0->Draw();
 
       }
-      else {
 
-      //
-      // Plotting
+*/
+                
+      if (pull==1){
+	sprintf(ytitlename," pull ");
+	//std::cout << numerator_fullstaterr->GetNbinsX() << " One_NoError " << One_NoError->GetNbinsX() << std::endl;
+	numerator_fullstaterr->Divide(GenHist_Clone,EstHist_Clone,1,1,"");  // Expectation/Prediction
+	//numerator_fullstaterr->Add(One_NoError,-1.);                        // Expectation/Prediction-1
+	//numerator_fullstaterr->Print("all");
+	//*AR, Dec17,2016-Following loop was added as numerator_fullstaterr->Add(One_NoError,-1.) was giving warning that two histograms with 174 and 348 are added.
 
-      numerator->GetYaxis()->SetNdivisions(505);
-      numerator->GetYaxis()->SetTickLength(0.015);
-      numerator->GetXaxis()->SetTickLength(0.08);
-      numerator->SetTitle("");
-      ex1->Draw();
-      char binlab[100];
-      numerator->GetXaxis()->LabelsOption("h");
-      numerator->GetXaxis()->SetLabelOffset(0.03);
-      for(int i=1;i<=numerator->GetNbinsX();i++){
-	if( ! (i%10) ) {
-	  sprintf(binlab, "%i", i);
-	  numerator->GetXaxis()->SetBinLabel(i,binlab);
-	} else if(i==numerator->GetNbinsX()) {
-	  sprintf(binlab, "174");
-	  numerator->GetXaxis()->SetBinLabel(i,binlab);
-	} else {
-	  sprintf(binlab, " ");
-	  numerator->GetXaxis()->SetBinLabel(i,binlab);
+	//*AR, Dec17,2016-Gets numerator of pull
+	for (int ibin=1; ibin<=numerator_fullstaterr->GetNbinsX(); ibin++){
+	  numerator_fullstaterr->SetBinContent(ibin,numerator_fullstaterr->GetBinContent(ibin)-1);
+	  numerator_fullstaterr->SetBinError(ibin,numerator_fullstaterr->GetBinError(ibin));
 	}
+	numerator_fullstaterr->SetMaximum(8.);
+	numerator_fullstaterr->SetMinimum(-8.);
+	std::cout<<" numerator_fullstaterr "<< numerator_fullstaterr->GetNbinsX()<<endl;
+	//
+	// Specific to each bottom plot
+	//
+	// Setting style
+	
+	
+	//*AR, Dec17,2016-Gets pull
+
+	for (int ibin=1; ibin<=numerator_fullstaterr->GetNbinsX(); ibin++){ 
+	  if(numerator_fullstaterr->GetBinError(ibin) < 0.00000001){
+	    numerator_fullstaterr->SetBinContent(ibin, 0);
+	  }else{
+	    numerator_fullstaterr->SetBinContent(ibin,numerator_fullstaterr->GetBinContent(ibin)/numerator_fullstaterr->GetBinError(ibin));
+	  }         
+	  numerator_fullstaterr->SetBinError(ibin,0.);
+	}
+
+
+	/*
+	for (int ibin=1; ibin<=numerator_fullstaterr->GetNbinsX(); ibin++){ // scan including underflow and overflow bins
+	    numerator_fullstaterr->SetBinContent(ibin,numerator_fullstaterr->GetBinContent(ibin)/numerator_fullstaterr->GetBinError(ibin));
+	    numerator_fullstaterr->SetBinError(ibin,0.);
+	}
+	*/
+	for(int j=1;j<=numerator_fullstaterr->GetNbinsX();j++){
+	  if(numerator_fullstaterr->GetBinContent(j)>3 || numerator_fullstaterr->GetBinContent(j)<-3)
+	    std::cout<<" bin_number "<<j<<" pull "<<numerator_fullstaterr->GetBinContent(j)<<endl;
+	}
+
+	//	for (int ibin=0; ibin<numerator_fullstaterr->GetNbinsX()+2; ibin++){ // scan including underflow and overflow bins
+	//numerator_fullstaterr->SetBinContent(ibin,numerator_fullstaterr->GetBinContent(ibin)/numerator_fullstaterr->GetBinError(ibin));
+	// numerator_fullstaterr->SetBinError(ibin,0.);
+	//}
+	
+	//	numerator_fullstaterr->Print("all");
+		
+	numerator_fullstaterr->GetXaxis()->SetLabelSize(0.18*0.045/0.06);
+	numerator_fullstaterr->GetXaxis()->SetTitleSize(0.18);
+	numerator_fullstaterr->GetXaxis()->SetTitleOffset(0.9);
+	numerator_fullstaterr->GetXaxis()->SetTitleFont(42);
+	//numerator_fullstaterr->GetYaxis()->SetLabelFont(42);
+      //numerator_fullstaterr->GetYaxis()->SetLabelOffset(0.007);
+	numerator_fullstaterr->GetYaxis()->SetLabelSize(0.18*0.045/0.06);
+	numerator_fullstaterr->GetYaxis()->SetTitleSize(0.18);
+	//numerator_fullstaterr->GetYaxis()->SetTitleOffset(0.5);
+	numerator_fullstaterr->GetYaxis()->SetTitleOffset(0.2);
+	numerator_fullstaterr->GetYaxis()->SetTitleFont(42);
+	numerator_fullstaterr->GetXaxis()->SetTitle(xtitlename);
+	numerator_fullstaterr->GetYaxis()->SetTitle(ytitlename);
+//
+//	numerator_fullstaterr->GetXaxis()->SetTitleSize(0.12);
+//	numerator_fullstaterr->GetXaxis()->SetTitleOffset(0.9);
+//	numerator_fullstaterr->GetXaxis()->SetTitleFont(42);
+//	numerator_fullstaterr->GetYaxis()->SetTitleSize(0.13);
+//	numerator_fullstaterr->GetYaxis()->SetTitleOffset(0.25);
+//	numerator_fullstaterr->GetYaxis()->SetTitleFont(42);
+//	
+//	numerator_fullstaterr->GetXaxis()->SetTitle(xtitlename);
+//	numerator_fullstaterr->GetYaxis()->SetTitle(ytitlename);
+//	//numerator_fullstaterr->SetFillColor(kGreen-3);
+	numerator_fullstaterr->SetFillColor(kRed-10);
+
+	
+	numerator_fullstaterr->GetYaxis()->SetNdivisions(505);
+	numerator_fullstaterr->GetYaxis()->SetTickLength(0.015);
+	numerator_fullstaterr->GetXaxis()->SetTickLength(0.08);
+	numerator_fullstaterr->SetTitle("");
+	ex1->Draw();
+	char binlab[100];
+	numerator_fullstaterr->GetXaxis()->LabelsOption("h");
+	//	numerator_fullstaterr->GetXaxis()->SetLabelOffset(0.03);
+	for(int i=1;i<=numerator_fullstaterr->GetNbinsX();i++){
+	  if( ! (i%10) ) {
+	    sprintf(binlab, "%i", i);
+	    numerator_fullstaterr->GetXaxis()->SetBinLabel(i,binlab);
+	  } else if(i==numerator_fullstaterr->GetNbinsX()) {
+	    sprintf(binlab, "174");
+	    numerator_fullstaterr->GetXaxis()->SetBinLabel(i,binlab);
+	  } else {
+	    sprintf(binlab, " ");
+	    numerator_fullstaterr->GetXaxis()->SetBinLabel(i,binlab);
+	  }
+	}
+	
+	numerator_fullstaterr->DrawCopy();
+	
+	ymin_top = -8.0;
+	/*
+	  for(int i=1;i<=denominator->GetNbinsX();i++){
+	  sprintf(binlab, " ");
+	  denominator->GetXaxis()->SetBinLabel(i,binlab);
+	  }
+	  
+	  denominator->DrawCopy("e2same");
+	  //denominator->DrawCopy("same");
+	  TH1D *denominator_Clone = (TH1D*)denominator->Clone();
+	  denominator_Clone->SetFillColor(kWhite);
+	  denominator_Clone->Draw("hist same"); 
+	  
+	  ex1->Draw();
+	  numerator->DrawCopy("same");
+	  std::cout<<" numerator*************************** "<<endl;
+	  numerator->Print("all");
+	  std::cout<<" denominator*************************** "<<endl;
+	  denominator->Print("all");
+	  std::cout<<" numerator_fullstaterr*************************** "<<endl;
+	  numerator_fullstaterr->Print("all");
+	*/
+	
+	//numerator_fullstaterr->DrawCopy();
+	
+	//
+	// Drawing lines
+	tline0->SetLineStyle(2);
+	//tline0->Draw();
+
       }
-      numerator->DrawCopy();
-
-      ex2->Draw();
-
-      for(int i=1;i<=denominator->GetNbinsX();i++){
-	sprintf(binlab, " ");
-	denominator->GetXaxis()->SetBinLabel(i,binlab);
-      }
-
-      denominator->DrawCopy("e2same");
-      //denominator->DrawCopy("same");
-      TH1D *denominator_Clone = (TH1D*)denominator->Clone();
-      denominator_Clone->SetFillColor(kWhite);
-      denominator_Clone->Draw("hist same"); 
-
-      ex1->Draw();
-      numerator->DrawCopy("same");
-      std::cout<<" numerator*************************** "<<endl;
-      numerator->Print("all");
-      std::cout<<" denominator*************************** "<<endl;
-      denominator->Print("all");
-      std::cout<<" numerator_fullstaterr*************************** "<<endl;
-      numerator_fullstaterr->Print("all");
-
-      //
+      
+      else {
+	sprintf(ytitlename,"#frac{Direct}{Prediction} ");
+	numerator->SetMaximum(ymax_bottom); //1.99-specific to Direct/Pred ratio plot
+	numerator->SetMinimum(ymin_bottom); //0.01--specific to Direct/Pred ratio plot	
+	//
+	// Plotting
+	
+	numerator->GetYaxis()->SetNdivisions(505);
+	numerator->GetYaxis()->SetTickLength(0.015);
+	numerator->GetXaxis()->SetTickLength(0.08);
+	numerator->SetTitle("");
+	ex1->Draw();
+	char binlab[100];
+	numerator->GetXaxis()->LabelsOption("h");
+	numerator->GetXaxis()->SetLabelOffset(0.03);
+	for(int i=1;i<=numerator->GetNbinsX();i++){
+	  if( ! (i%10) ) {
+	    sprintf(binlab, "%i", i);
+	    numerator->GetXaxis()->SetBinLabel(i,binlab);
+	  } else if(i==numerator->GetNbinsX()) {
+	    sprintf(binlab, "174");
+	    numerator->GetXaxis()->SetBinLabel(i,binlab);
+	  } else {
+	    sprintf(binlab, " ");
+	    numerator->GetXaxis()->SetBinLabel(i,binlab);
+	  }
+	}
+	numerator->DrawCopy();
+	
+	ex2->Draw();
+	
+	for(int i=1;i<=denominator->GetNbinsX();i++){
+	  sprintf(binlab, " ");
+	  denominator->GetXaxis()->SetBinLabel(i,binlab);
+	}
+	
+	denominator->DrawCopy("e2same");
+	//denominator->DrawCopy("same");
+	TH1D *denominator_Clone = (TH1D*)denominator->Clone();
+	denominator_Clone->SetFillColor(kWhite);
+	denominator_Clone->Draw("hist same"); 
+	
+	ex1->Draw();
+	numerator->DrawCopy("same");
+	std::cout<<" numerator*************************** "<<endl;
+	//numerator->Print("all");
+	std::cout<<" denominator*************************** "<<endl;
+	//denominator->Print("all");
+	//std::cout<<" numerator_fullstaterr*************************** "<<endl;
+	//numerator_fullstaterr->Print("all");
+	
+	//
       // Drawing lines
-      tline->SetLineStyle(2);
-      //tline->Draw();
-
+	tline->SetLineStyle(2);
+	//tline->Draw();
+	
       }
       
 

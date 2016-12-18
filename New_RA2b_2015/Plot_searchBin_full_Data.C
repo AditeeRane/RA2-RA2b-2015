@@ -399,10 +399,10 @@ void Plot_searchBin_full_Data(string sample="stacked",string histname="searchH_b
   //
   char line[100] = "";
   char lumilabel[200];
-  sprintf(lumilabel,"%8.1f fb^{-1}",lumiTarget);
+  sprintf(lumilabel,"%8.2f fb^{-1}",lumiTarget);
   strcat( line, lumilabel);
   bool writeExtraText = true;
-  char extraText[100]   = "CMS Preliminary                                         ";
+  char extraText[100]   = "CMS Preliminary                                            ";
   strcat(extraText,line);
   printToCoordinates(10, 80, extraText);
 
