@@ -724,8 +724,8 @@ using namespace std;
   
     //
     // Reco and ISO MC efficiencies
-    TFile * MuIsoEff_Arne = new TFile("Inputs/Efficiencies_Simon_v9.root","R");
-    TH2F *hMuRecoPTActivity_Arne = (TH2F*)MuIsoEff_Arne->Get("Efficiencies/MuRecoActivityPT/MuRecoActivityPT");
+    TFile * MuIsoEff_Arne = new TFile("Inputs/Efficiencies_Simon_LatestbyV11.root","R");
+    TH2F *hMuRecoPTEta_Arne = (TH2F*)MuIsoEff_Arne->Get("Efficiencies/MuRecoPTEta/MuRecoPTEta");
     TH2F *hMuIsoPTActivity_Arne = (TH2F*)MuIsoEff_Arne->Get("Efficiencies/MuIsoActivityPT/MuIsoActivityPT");
 
     // Data/MC scale factors
@@ -1483,7 +1483,7 @@ using namespace std;
 	      //*AR,Oct14,2016-For three bins diff between tau and mu mistag is negative
 	      double absbRate=bRateHist->GetBinContent(bRateHist->GetXaxis()->FindBin(NewTauJet3Vec.Pt()));
               double bRate =abs(absbRate);
-              bRateError_stat = bRateHist->GetBinError(bRateHist->GetXaxis()->FindBin(NewTauJet3Vec.Pt()));
+	      bRateError_stat = bRateHist->GetBinError(bRateHist->GetXaxis()->FindBin(NewTauJet3Vec.Pt()));
               if(bRate==0)bRate=0.0000000000000000001;
               bRatePlus_stat=bRate+bRateError_stat;
               bRateMinus_stat=bRate-bRateError_stat;
@@ -1836,9 +1836,9 @@ using namespace std;
 
 	      //
               // Here Eff is not a good naming. What this really mean is efficiency and also isolation together
-              Eff_Arne=hMuRecoPTActivity_Arne->GetBinContent(hMuRecoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuRecoPTActivity_Arne->GetYaxis()->FindBin(muPt));
-              Reco_error_Arne = hMuRecoPTActivity_Arne->GetBinError(hMuRecoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuRecoPTActivity_Arne->GetYaxis()->FindBin(muPt));
-              Eff_Arne*=hMuIsoPTActivity_Arne->GetBinContent(hMuIsoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuIsoPTActivity_Arne->GetYaxis()->FindBin(muPt));
+	      Eff_Arne = hMuRecoPTEta_Arne->GetBinContent(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(fabs(muEta)));
+	      Reco_error_Arne = hMuRecoPTEta_Arne->GetBinError(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(fabs(muEta)));
+	      Eff_Arne*=hMuIsoPTActivity_Arne->GetBinContent(hMuIsoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuIsoPTActivity_Arne->GetYaxis()->FindBin(muPt));
               Iso_error_Arne = hMuIsoPTActivity_Arne->GetBinError(hMuIsoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuIsoPTActivity_Arne->GetYaxis()->FindBin(muPt));
 
 	      // Data/MC scale factor
@@ -1902,7 +1902,10 @@ using namespace std;
               if(Acc==0){Acc=0.9;cout << " Warning! Acc==0 \n ";}
               if(Acc_lowDphi==0)Acc_lowDphi=0.9;
               if(Eff==0)Eff=0.75;
-              if(Eff_Arne==0){Eff_Arne=0.75;cout << " Warning! Eff_Arne==0 \n ";}
+              if(Eff_Arne==0){
+		Eff_Arne=0.75;
+		std::cout << " Warning! Eff_Arne==0 "<<" "<<" eventN "<<eventN<<" muPt "<<muPt<<" muEta "<<muEta<<endl;
+	      }
 
               AccPlus = Acc+AccError;
               AccMinus = Acc-AccError;
@@ -1941,7 +1944,7 @@ using namespace std;
 	      if (evt->nJets()>=5 && evt->nJets()<=6) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet56->GetBinContent( hProb_Tau_mu_nb_njet56->FindBin( utils2::findBin_NBtag(NewNB) ) );
 	      if (evt->nJets()>=7 && evt->nJets()<=8) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet78->GetBinContent( hProb_Tau_mu_nb_njet78->FindBin( utils2::findBin_NBtag(NewNB) ) );
 	      if (evt->nJets()>=9) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet9->GetBinContent( hProb_Tau_mu_nb_njet9->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      Prob_Tau_mu *=Prob_Tau_mu_Nb;
+	      //Prob_Tau_mu *=Prob_Tau_mu_Nb;
 	      
 	      Prob_Tau_muError = hProb_Tau_mu->GetBinError(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
               double Prob_Tau_mu_lowDelphi = hProb_Tau_mu_lowDelphi->GetBinContent(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
@@ -1950,7 +1953,7 @@ using namespace std;
 	      if (evt->nJets()>=5 && evt->nJets()<=6) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet56_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet56_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
 	      if (evt->nJets()>=7 && evt->nJets()<=8) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet78_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet78_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
 	      if (evt->nJets()>=9) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet9_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet9_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      Prob_Tau_mu_lowDelphi *=Prob_Tau_mu_Nb_lowDelphi;
+	      //Prob_Tau_mu_lowDelphi *=Prob_Tau_mu_Nb_lowDelphi;
 
 
               Prob_Tau_muError_lowDelphi = hProb_Tau_mu_lowDelphi->GetBinError(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);

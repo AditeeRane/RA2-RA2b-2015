@@ -184,7 +184,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
   // sprintf(tempname,"TauHad2/Storage/HadTauEstimation_TTbar_Feb_17_2015.root");
   std::cout<<"cp00 tempname " <<tempname<<std::endl;
   filevec.push_back(TFile::Open(tempname,"R"));
-
+  //*AR, Dec19,2016- Creates filevec with Exp and Pred files
   //
   // Define legend
   //
@@ -278,7 +278,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
   for(int i=0; i<filevec.size(); i++){
 
     if(sample.find("stacked")!=string::npos){
-
+      //*AR-Dec19,2016-- If i=0, histogram from Exp file and for i=1 from Pred file read as "GenHist" and "EstHist" respectively and final stacked histogram is saved as thist
       if(i==0){
         if(histname=="search"){
           sprintf(tempname,"searchH");
@@ -314,7 +314,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
       tempstack->Print();
       std::cout << "tempstack ends" << std::endl;
 
-    }
+    }// end of if (sample.find("stacked")--relevent for us
     else{
       
       if(i==0){
@@ -343,7 +343,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
       thist=static_cast<TH1D*>(filevec.at(i)->Get(tempname)->Clone());
       thist->SetLineColor(2*i+2);
       
-    }
+    } //end of else of (sample.find("stacked")
 
     //KH
     if(histname=="NBtag" || histname=="NJet"){
@@ -386,7 +386,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
 
     thist->SetTitle("");
     //    thist->Scale(lumi/lumi_ttbar);
-    thist->Scale(lumi/lumi_ref);
+    thist->Scale(lumi/lumi_ref); // For i=0 Exp is scaled to given lumi and for i=1 Pred scaled to given lumi
 
     //
     // Setting style
@@ -628,7 +628,7 @@ void Plot_closure(string cutname="delphi", string histname="NBtag",string sample
 	EstHist_Normalize_Clone->SetBinError(ibin,0.00001);
       }
       EstHist_Normalize_Clone->SetFillColor(kWhite);
-      EstHist_Normalize_Clone->Draw("esame");
+      EstHist_Normalize_Clone->Draw("esame"); //Draws Pred on top of Exp
       // Troy trick ends
 
       if (debug) {

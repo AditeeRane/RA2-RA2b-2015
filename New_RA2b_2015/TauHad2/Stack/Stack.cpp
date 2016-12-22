@@ -117,7 +117,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     else{cout << " Error!! There are only 6 T ht binned sample " << endl;}
     T_inputfilevec.push_back(TFile::Open(tempname,"R"));
   }//end of loop over HTbins 
-  std::cout<<".........Seg Vio........."<<endl;
+
 
   // Stack
   tempstack = new THStack("stack","Binned Sample Stack");
@@ -1330,7 +1330,9 @@ cout << " flag \n " ;
           //cout << "================================" << endl;
           //cout << "HT#: " <<i << ", TTbartype: " << itt->second << ", cutname: " << it->second << ", hist#: " << j << endl;  
           sprintf(tempname,"%s/%s/%s_%s_%s",(itt->second).c_str(),(it->second).c_str(),(histname[j]).c_str(),(it->second).c_str(),(itt->second).c_str());
+	  std::cout<<" tempname "<<tempname<<endl;
           temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
+	  std::cout<<"........Seg Vio........"<<endl;
           if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
           else if (luminosity>0&&!doScale) temphist->Scale(3000);
           temphist->SetFillColor(i+2);
