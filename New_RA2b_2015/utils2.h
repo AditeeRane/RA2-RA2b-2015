@@ -424,12 +424,12 @@ namespace utils2{
 	  else bHtMht=99;
 	}
 	else if(njet>=7){
-	  if(ht >= 300 && ht <500 && mht>=250 && mht<300)bHtMht=1;else if(ht >= 500 && ht <1000 && mht>=250 && mht<300)bHtMht=2;else if(ht >= 1000 && mht>=250 && mht<300)bHtMht=3;
-	  else if(ht >= 500 && ht <1000 && mht>=300 && mht<350)bHtMht=4;else if(ht >= 1000 && mht>=300 && mht<350)bHtMht=5;
-	  else if(ht >=500 && ht<1000 && mht>=350 && mht<500)bHtMht=6;else if(ht >=1000 && mht>=350 && mht<500)bHtMht=7;
-	  else if(ht >= 500 && ht <1000 && mht>=500 && mht<750)bHtMht=8;else if(ht >= 1000 && mht>=500 && mht<750)bHtMht=9;
-	  else if(ht >= 750 && ht<1500 && mht>=750)bHtMht=10;
-	  else if(ht >= 1500 && mht>=750)bHtMht=11;
+	  if(ht >= 500 && ht <1000 && mht>=250 && mht<300)bHtMht=1;else if(ht >= 1000 && mht>=250 && mht<300)bHtMht=2;
+	  else if(ht >= 500 && ht <1000 && mht>=300 && mht<350)bHtMht=3;else if(ht >= 1000 && mht>=300 && mht<350)bHtMht=4;
+	  else if(ht >=500 && ht<1000 && mht>=350 && mht<500)bHtMht=5;else if(ht >=1000 && mht>=350 && mht<500)bHtMht=6;
+	  else if(ht >= 500 && ht <1000 && mht>=500 && mht<750)bHtMht=7;else if(ht >= 1000 && mht>=500 && mht<750)bHtMht=8;
+	  else if(ht >= 750 && ht<1500 && mht>=750)bHtMht=9;
+	  else if(ht >= 1500 && mht>=750)bHtMht=10;
 	  else bHtMht=99;
 	}
 
@@ -449,7 +449,7 @@ namespace utils2{
       for(int bNjet=1; bNjet<=5;  bNjet++){
 	if(bNjet ==1)Max_bNbtag=3;
 	else Max_bNbtag=4;
-	if(bNjet>3)Max_bHtMht=11;
+	if(bNjet>3)Max_bHtMht=10;
 	else Max_bHtMht=13;
         for(int bNbtag=1; bNbtag<=Max_bNbtag; bNbtag++){
           for(int bHtMht=1; bHtMht<=Max_bHtMht; bHtMht++){

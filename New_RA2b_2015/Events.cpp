@@ -13,7 +13,7 @@
     StudyTauId=false;
 
     // fastsim
-    fastsim=false;
+    fastsim=true;
     
     //Initialize some varaibles
      RunNum=-1;
