@@ -176,7 +176,7 @@
      fChain->SetBranchAddress("ScaleWeights", &ScaleWeights);
      fChain->SetBranchAddress("Jets", &Jets);
      fChain->SetBranchAddress("Jets_partonFlavor", &Jets_partonFlavor);
-     fChain->SetBranchAddress("HTJetsMask", &HTJetsMask);
+     fChain->SetBranchAddress("Jets_HTMask", &HTJetsMask);
 
      fChain->SetBranchAddress("Jets_bDiscriminatorCSV", &Jets_bDiscriminatorCSV);
      fChain->SetBranchAddress("Jets_chargedEmEnergyFraction", &Jets_chargedEmEnergyFraction);

@@ -466,14 +466,14 @@ using namespace std;
       }
       //
       sprintf(tempname,
-      "%s/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV10/scan/tree_SLm/tree_%s_%s_%s_fast.root",
+      "%s/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/scan/tree_SLm/tree_%s_%s_%s_fast.root",
       prefix,skimInput[1].c_str(),skimInput[2].c_str(),skimInput[3].c_str());
       //
       skimfile = TFile::Open(tempname,"R");
       if(!skimfile->IsOpen()){
         cout << " \n\n first attempt to find the skim file failed. Trying to find it ... \n\n";
         sprintf(tempname,
-        "%s/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV10/scan/tree_SLm/tree_%s_%s_%s_fast.root",
+        "%s/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/scan/tree_SLm/tree_%s_%s_%s_fast.root",
 	prefix,skimInput[1].c_str(),skimInput[2].c_str(),skimInput[3].c_str());
       }
       skimfile = TFile::Open(tempname,"R");
@@ -950,7 +950,7 @@ using namespace std;
       eventWeight = evt->weight();
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      if(eventN>10000)break;
+      //if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
