@@ -32,6 +32,15 @@ vector<string> split(const string &s, char delim) {
   return elems;
 }
 
+
+  const char* RenameBins(int x){
+    const char *binString[174]={
+      "NJets0_BTags0_MHT0_HT0","NJets0_BTags0_MHT0_HT1","NJets0_BTags0_MHT0_HT2","NJets0_BTags0_MHT1_HT3","NJets0_BTags0_MHT1_HT4","NJets0_BTags0_MHT1_HT5","NJets0_BTags0_MHT2_HT6","NJets0_BTags0_MHT2_HT7","NJets0_BTags0_MHT3_HT8","NJets0_BTags0_MHT3_HT9","NJets0_BTags1_MHT0_HT0","NJets0_BTags1_MHT0_HT1","NJets0_BTags1_MHT0_HT2","NJets0_BTags1_MHT1_HT3","NJets0_BTags1_MHT1_HT4","NJets0_BTags1_MHT1_HT5","NJets0_BTags1_MHT2_HT6","NJets0_BTags1_MHT2_HT7","NJets0_BTags1_MHT3_HT8","NJets0_BTags1_MHT3_HT9","NJets0_BTags2_MHT0_HT0","NJets0_BTags2_MHT0_HT1","NJets0_BTags2_MHT0_HT2","NJets0_BTags2_MHT1_HT3","NJets0_BTags2_MHT1_HT4","NJets0_BTags2_MHT1_HT5","NJets0_BTags2_MHT2_HT6","NJets0_BTags2_MHT2_HT7","NJets0_BTags2_MHT3_HT8","NJets0_BTags2_MHT3_HT9","NJets1_BTags0_MHT0_HT0","NJets1_BTags0_MHT0_HT1","NJets1_BTags0_MHT0_HT2","NJets1_BTags0_MHT1_HT3","NJets1_BTags0_MHT1_HT4","NJets1_BTags0_MHT1_HT5","NJets1_BTags0_MHT2_HT6","NJets1_BTags0_MHT2_HT7","NJets1_BTags0_MHT3_HT8","NJets1_BTags0_MHT3_HT9","NJets1_BTags1_MHT0_HT0","NJets1_BTags1_MHT0_HT1","NJets1_BTags1_MHT0_HT2","NJets1_BTags1_MHT1_HT3","NJets1_BTags1_MHT1_HT4","NJets1_BTags1_MHT1_HT5","NJets1_BTags1_MHT2_HT6","NJets1_BTags1_MHT2_HT7","NJets1_BTags1_MHT3_HT8","NJets1_BTags1_MHT3_HT9","NJets1_BTags2_MHT0_HT0","NJets1_BTags2_MHT0_HT1","NJets1_BTags2_MHT0_HT2","NJets1_BTags2_MHT1_HT3","NJets1_BTags2_MHT1_HT4","NJets1_BTags2_MHT1_HT5","NJets1_BTags2_MHT2_HT6","NJets1_BTags2_MHT2_HT7","NJets1_BTags2_MHT3_HT8","NJets1_BTags2_MHT3_HT9","NJets1_BTags3_MHT0_HT0","NJets1_BTags3_MHT0_HT1","NJets1_BTags3_MHT0_HT2","NJets1_BTags3_MHT1_HT3","NJets1_BTags3_MHT1_HT4","NJets1_BTags3_MHT1_HT5","NJets1_BTags3_MHT2_HT6","NJets1_BTags3_MHT2_HT7","NJets1_BTags3_MHT3_HT8","NJets1_BTags3_MHT3_HT9","NJets2_BTags0_MHT0_HT0","NJets2_BTags0_MHT0_HT1","NJets2_BTags0_MHT0_HT2","NJets2_BTags0_MHT1_HT3","NJets2_BTags0_MHT1_HT4","NJets2_BTags0_MHT1_HT5","NJets2_BTags0_MHT2_HT6","NJets2_BTags0_MHT2_HT7","NJets2_BTags0_MHT3_HT8","NJets2_BTags0_MHT3_HT9","NJets2_BTags1_MHT0_HT0","NJets2_BTags1_MHT0_HT1","NJets2_BTags1_MHT0_HT2","NJets2_BTags1_MHT1_HT3","NJets2_BTags1_MHT1_HT4","NJets2_BTags1_MHT1_HT5","NJets2_BTags1_MHT2_HT6","NJets2_BTags1_MHT2_HT7","NJets2_BTags1_MHT3_HT8","NJets2_BTags1_MHT3_HT9","NJets2_BTags2_MHT0_HT0","NJets2_BTags2_MHT0_HT1","NJets2_BTags2_MHT0_HT2","NJets2_BTags2_MHT1_HT3","NJets2_BTags2_MHT1_HT4","NJets2_BTags2_MHT1_HT5","NJets2_BTags2_MHT2_HT6","NJets2_BTags2_MHT2_HT7","NJets2_BTags2_MHT3_HT8","NJets2_BTags2_MHT3_HT9","NJets2_BTags3_MHT0_HT0","NJets2_BTags3_MHT0_HT1","NJets2_BTags3_MHT0_HT2","NJets2_BTags3_MHT1_HT3","NJets2_BTags3_MHT1_HT4","NJets2_BTags3_MHT1_HT5","NJets2_BTags3_MHT2_HT6","NJets2_BTags3_MHT2_HT7","NJets2_BTags3_MHT3_HT8","NJets2_BTags3_MHT3_HT9","NJets3_BTags0_MHT0_HT0","NJets3_BTags0_MHT0_HT1","NJets3_BTags0_MHT1_HT2","NJets3_BTags0_MHT1_HT3","NJets3_BTags0_MHT2_HT4","NJets3_BTags0_MHT2_HT5","NJets3_BTags0_MHT3_HT6","NJets3_BTags0_MHT3_HT7","NJets3_BTags1_MHT0_HT0","NJets3_BTags1_MHT0_HT1","NJets3_BTags1_MHT1_HT2","NJets3_BTags1_MHT1_HT3","NJets3_BTags1_MHT2_HT4","NJets3_BTags1_MHT2_HT5","NJets3_BTags1_MHT3_HT6","NJets3_BTags1_MHT3_HT7","NJets3_BTags2_MHT0_HT0","NJets3_BTags2_MHT0_HT1","NJets3_BTags2_MHT1_HT2","NJets3_BTags2_MHT1_HT3","NJets3_BTags2_MHT2_HT4","NJets3_BTags2_MHT2_HT5","NJets3_BTags2_MHT3_HT6","NJets3_BTags2_MHT3_HT7","NJets3_BTags3_MHT0_HT0","NJets3_BTags3_MHT0_HT1","NJets3_BTags3_MHT1_HT2","NJets3_BTags3_MHT1_HT3","NJets3_BTags3_MHT2_HT4","NJets3_BTags3_MHT2_HT5","NJets3_BTags3_MHT3_HT6","NJets3_BTags3_MHT3_HT7","NJets4_BTags0_MHT0_HT0","NJets4_BTags0_MHT0_HT1","NJets4_BTags0_MHT1_HT2","NJets4_BTags0_MHT1_HT3","NJets4_BTags0_MHT2_HT4","NJets4_BTags0_MHT2_HT5","NJets4_BTags0_MHT3_HT6","NJets4_BTags0_MHT3_HT7","NJets4_BTags1_MHT0_HT0","NJets4_BTags1_MHT0_HT1","NJets4_BTags1_MHT1_HT2","NJets4_BTags1_MHT1_HT3","NJets4_BTags1_MHT2_HT4","NJets4_BTags1_MHT2_HT5","NJets4_BTags1_MHT3_HT6","NJets4_BTags1_MHT3_HT7","NJets4_BTags2_MHT0_HT0","NJets4_BTags2_MHT0_HT1","NJets4_BTags2_MHT1_HT2","NJets4_BTags2_MHT1_HT3","NJets4_BTags2_MHT2_HT4","NJets4_BTags2_MHT2_HT5","NJets4_BTags2_MHT3_HT6","NJets4_BTags2_MHT3_HT7","NJets4_BTags3_MHT0_HT0","NJets4_BTags3_MHT0_HT1","NJets4_BTags3_MHT1_HT2","NJets4_BTags3_MHT1_HT3","NJets4_BTags3_MHT2_HT4","NJets4_BTags3_MHT2_HT5","NJets4_BTags3_MHT3_HT6","NJets4_BTags3_MHT3_HT7"};
+
+    return binString[x-1];
+  }
+
+
 void WrapUpT2ttSignalContamination(string type="T1bbbb",string outStr="Jul"){
 
 using namespace std;
@@ -65,11 +74,11 @@ using namespace std;
   struct stat t_stat; 
   stat(tempname, &t_stat);
   tm  timeinfo = *localtime(&t_stat.st_ctime); // or gmtime() depending on what you want
-  printf(" File's date: year: %g month: %g day: %g \n",1900+timeinfo.tm_year,1+timeinfo.tm_mon,timeinfo.tm_mday );
+  printf(" File's date: year: %d month: %d day: %d \n",1900+timeinfo.tm_year,1+timeinfo.tm_mon,timeinfo.tm_mday );
   // Today's date
   time_t now = time(0);
   tm ltm = *localtime(&now);
-  printf(" Today: year: %g month: %g day: %g \n",1900+ltm.tm_year,1+ltm.tm_mon,ltm.tm_mday );
+  printf(" Today: year: %d month: %d day: %d \n",1900+ltm.tm_year,1+ltm.tm_mon,ltm.tm_mday );
   // the real check
   if( (timeinfo.tm_year != ltm.tm_year) || (timeinfo.tm_mon != ltm.tm_mon) || (timeinfo.tm_mday != ltm.tm_mday) ){
     cout << " Warning: file is not updated today. Make sure you are using the correct file.\n";
@@ -78,18 +87,20 @@ using namespace std;
 
 
   ///read the file names from the .txt files and load them to a vector.
+  //*AR,Dec24,2016-filenames contain mother_daughter mass points
   while(fin.getline(filenames, 500) ){filesVec.push_back(filenames);}
   std::cout<<" filesVec_size "<<filesVec.size()<<endl;
   //HadTauEstimation_RA2bin_T1tttt_1950_600_fast-_00.root
   for(unsigned int in=0; in<filesVec.size(); in++){
-
+ 
 // *AR -Jul22,2016-With Rishi's request to be consistent with Simon's naming
-          vector<string> elems =  split(filesVec.at(in), '_');
+    vector<string> elems =  split(filesVec.at(in), '_');
     
-      sprintf(tempname,"mStop_%s_mLSP_%s",elems.at(0).c_str(),elems.at(1).c_str());
-      std::cout<<" histname "<< tempname <<endl;
+    //*AR -Jul22,2016-Creates name for output histogram
+    sprintf(tempname,"mStop_%s_mLSP_%s",elems.at(0).c_str(),elems.at(1).c_str());
+    std::cout<<" histname "<< tempname <<endl;
     
-      sprintf(filenames,"TauHad2Multiple/HadTauEstimation_RA2bin_%s_%s_fast-%s_00.root",type.c_str(),filesVec.at(in).c_str(),outStr.c_str());
+    sprintf(filenames,"TauHad2Multiple/HadTauEstimation_RA2bin_%s_%s_fast-%s_00.root",type.c_str(),filesVec.at(in).c_str(),outStr.c_str());
     //    sprintf(filenames,"TauHad2Multiple/HadTauEstimation_%s-Apr22_00.root",filesVec.at(in).c_str());  
     TFile * infile = new TFile(filenames,"READ");
     if(!infile->IsOpen()){
@@ -98,8 +109,13 @@ using namespace std;
     }
 
     //cout << " name: " <<  filesVec.at(in) << endl;
-
+    //*AR-Dec24,2016-Reads histograms from prediction file,scale to proper lumi and write into the directories inside output root file
     temphist = (TH1D*) infile->Get("searchH_b")->Clone();
+    
+    for (int i=1;i<=174;i++){
+      temphist->GetXaxis()->SetBinLabel(i,RenameBins(i));
+    }
+
     temphist->Scale(ScaleLumiTo/ScaleLumiFrom);
     temphist->SetName(tempname);
     temphist->SetTitle(tempname);
@@ -118,7 +134,7 @@ using namespace std;
     tdirQCD_Low->cd();
     temphist->Write();    
     
-  }
+  }//end of for(unsigned int in=0; in<filesVec.size(); in++)
 
 
 }

@@ -25,6 +25,12 @@ using namespace std;
       name += ptBin;
       return name;
     }
+    TString Utils::TauPtEta_name(unsigned int ptBin) {
+      TauResponse_checkPtBin(ptBin);
+      TString name = "hGenPtEta_";
+      name += ptBin;
+      return name;
+    }
 
     double Utils::deltaPhi(double phi1, double phi2) {
       return TVector2::Phi_mpi_pi(phi1-phi2);

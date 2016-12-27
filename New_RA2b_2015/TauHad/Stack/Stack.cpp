@@ -1178,6 +1178,13 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[20]="hGenPt_3";
   histname[21]="hGenPt";
   histname[22]="tau_GenJetPhiVsEta";
+  histname[23]="hGenPtEta_0";
+  histname[24]="hGenPtEta_1";
+  histname[25]="hGenPtEta_2";
+  histname[26]="hGenPtEta_3";
+  histname[27]="hGenPtEta";
+
+
 //  histname[4]="genHadTauPtHist";
 
   for(int j=0; j<histname.size(); j++){
@@ -2277,6 +2284,12 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[20]="hGenPt_3";
   histname[21]="hGenPt";
   histname[22]="tau_GenJetPhiVsEta";
+  histname[23]="hGenPtEta_0";
+  histname[24]="hGenPtEta_1";
+  histname[25]="hGenPtEta_2";
+  histname[26]="hGenPtEta_3";
+  histname[27]="hGenPtEta";
+
 //  histname[4]="genHadTauPtHist";
 
   for(int j=0; j<histname.size(); j++){
@@ -3366,6 +3379,12 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[20]="hGenPt_3";
   histname[21]="hGenPt";
   histname[22]="tau_GenJetPhiVsEta";
+  histname[23]="hGenPtEta_0";
+  histname[24]="hGenPtEta_1";
+  histname[25]="hGenPtEta_2";
+  histname[26]="hGenPtEta_3";
+  histname[27]="hGenPtEta";
+
   // Open the files to read
   sprintf(tempname,"HadTau_TauResponseTemplates_TTbar_stacked.root");
   file = new TFile(tempname,"R");
@@ -3381,15 +3400,16 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    
+    std::cout<<" j "<<j<<" tempname "<<(histname[j]).c_str()<<" 1 "<<temphist->Integral("width")<<" 2 "<<temphist2->Integral("width")<<endl; 
     temphist->Add(temphist,temphist2,1,1);
+    std::cout<<" j "<<j<<" Added "<<temphist->Integral("width")<<endl;
     
-
+    //    std::cout<<" j "<< j<<" tempname "<<tempname<<endl;
     // Normalize the response distributions to get the probability density
     if( temphist->Integral("width") > 0. && histname[j]!="tau_GenJetPhi" && histname[j]!="tau_GenJetPhiVsEta" ){
       temphist->Scale(1./temphist->Integral("width"));
     }
-
+    std::cout<<" j "<<j<<" Scaled "<<temphist->Integral("width")<<endl;
     temphist->Write();
 
     
