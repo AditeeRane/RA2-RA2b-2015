@@ -482,7 +482,7 @@ using namespace std;
       h_njetsisr = (TH1*)skimfile->Get("NJetsISR");
       isrcorr.SetWeights(h_isr,h_njetsisr);
       //
-    }
+    }//end of fastsim
 
     ///read the file names from the .txt files and load them to a vector.
     while(fin.getline(filenames, 500) ){filesVec.push_back(filenames);}
@@ -838,7 +838,7 @@ using namespace std;
     TH1D * trig_pass = new TH1D("trig_pass"," trigger pass -- search bin",totNbins,1,totNbins+1);
     trig_pass->Sumw2();
     //*AR,Oct4,2016-Using taugun templates instead of MC templates
-    TFile * resp_file_taugun = new TFile("Inputs/hist_taugun_aditee.root","R");
+    TFile * resp_file_taugun = new TFile("Inputs/hist_taugun_aditee_Reweighted.root","R");
     // Use Ahmad's tau template
     TFile * resp_file_temp = new TFile("Inputs/Elog371_HadTau_TauResponseTemplates_stacked.root","R");
     TFile * resp_file = new TFile("Inputs/Elog433_HadTau_TauResponseTemplates_stacked.root","R");
@@ -950,7 +950,7 @@ using namespace std;
       eventWeight = evt->weight();
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      if(eventN>10000)break;
+      //if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1314,6 +1314,7 @@ using namespace std;
             MuJet_all->Fill(muPt,eventWeight);
             utils->findMatchedObject(slimJetIdx,muEta,muPhi,evt->slimJetPtVec_(),evt->slimJetEtaVec_(), evt->slimJetPhiVec_(),deltaRMax,verbose);
 	    // for fastsim	    
+	    //*AR, Dec28,2016-If genHTMHT is true, looks for a jet matching to muon from GenJet collection
 	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT)
 	    utils->findMatchedObject(GenJetIdx,muEta,muPhi,evt->GenJetPtVec_(),evt->GenJetEtaVec_(), evt->GenJetPhiVec_(),deltaRMax,verbose);
 
@@ -1394,20 +1395,24 @@ using namespace std;
 		
 	      }
 	      MuJet_fail->Fill(muPt,eventWeight);
-	      NewTauJet3Vec=SimTauJet3Vec;
+	      NewTauJet3Vec=SimTauJet3Vec;   //SimTauJet3Vec=(muPt*scale,muEta,muPhi+phi_genTau_tauJet)
 	      NewTauJetPt = NewTauJet3Vec.Pt();
 	      NewTauJetEta = NewTauJet3Vec.Eta();
+	      //*AR,Dec28,2016-Start constructing GenHT3JetVec and GenMHT3JetVec of jets
+	      //*AR,Dec28,2016-This implies first element of GenHT3JetVec/GenMHT3JetVec or HT3JetVec/MHT3JetVec are same.
 	      if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)GenHT3JetVec.push_back(NewTauJet3Vec);
 	      if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)GenMHT3JetVec.push_back(NewTauJet3Vec);
             }
 	    for(int i=0;i<evt->GenJetPtVec_().size();i++){
               if(i!=GenJetIdx){
+		//*AR,Dec28,2016-Other elements of GenHT3JetVec/GenMHT3JetVec are from GenJet collection
 		temp3Vec.SetPtEtaPhi(evt->GenJetPtVec_()[i],evt->GenJetEtaVec_()[i],evt->GenJetPhiVec_()[i]);
 		if(evt->GenJetPtVec_()[i]>30. && fabs(evt->GenJetEtaVec_()[i])<2.4)GenHT3JetVec.push_back(temp3Vec);
 		if(evt->GenJetPtVec_()[i]>30. && fabs(evt->GenJetEtaVec_()[i])<5.)GenMHT3JetVec.push_back(temp3Vec);
 	      }
 	      else if(i==GenJetIdx){
 		temp3Vec.SetPtEtaPhi(evt->GenJetPtVec_()[i],evt->GenJetEtaVec_()[i],evt->GenJetPhiVec_()[i]);
+		//*AR,Dec28,2016-Should not this be: NewTauJet3Vec=temp3Vec-Muon3Vec+SimTauJet3Vec?
 		NewTauJet3Vec=temp3Vec+SimTauJet3Vec;
 		NewTauJetPt = NewTauJet3Vec.Pt();
 		NewTauJetEta = NewTauJet3Vec.Eta();
@@ -1421,6 +1426,7 @@ using namespace std;
             // Order the HT3JetVec and MHT3JetVec based on their pT
             HT3JetVec = utils->Order_the_Vec(HT3JetVec); 
             MHT3JetVec = utils->Order_the_Vec(MHT3JetVec);
+	    //*AR,Dec28,2016-Similar to HT3JetVec/MHT3JetVec,GenHT3JetVec and GenMHT3JetVec are ordered based on pT.
 	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
             GenHT3JetVec = utils->Order_the_Vec(GenHT3JetVec); 
             GenMHT3JetVec = utils->Order_the_Vec(GenMHT3JetVec);
@@ -1440,6 +1446,8 @@ using namespace std;
 	    // for fastsim	    
             double newGenHT=0,newGenMHT=0,newGenMHTPhi=-1;
             TVector3 newGenMHT3Vec;
+	    //*AR,Dec28,2016-newGenHT and newGenMHT are calculated from GenHT3JetVec/GenMHT3JetVec
+	    // and they are assigned to variables newHT and newMHT respectively.
 	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
 	    for(int i=0;i<GenHT3JetVec.size();i++){
 	      newGenHT+=GenHT3JetVec[i].Pt();
@@ -1761,6 +1769,7 @@ using namespace std;
 	      //AR------In reality(while collecting data) search region uses MET triggers-HLT PFMET100 PFMHT100 IDTight/HLT PFMETNoMu100 PFMHTNoMu100 IDTight which has MHT dependant efficiency. But in data prediction we just use Single muon trigger and correct for it's efficiency. In addition data prediction should be scaled down by MET trigger efficiency to make it consistent with observed data.
   
 	      bool ApplyMETEff=false;
+	      //*AR, Dec28,2016-MET Eff corrections not applied for genHTMHT=true
 	      if(( isData || fastsim ) && !utils2::genHTMHT) ApplyMETEff=true;
 	      int METstatUnc=0;
 	      int METsystUnc=0;
@@ -2319,27 +2328,27 @@ using namespace std;
 		    }
 		    
         //KH-Feb2016-starts
-        double newHT_tmp,newMHT_tmp,newNJet_tmp,NewNB_tmp;
-        newHT_tmp=newHT; newMHT_tmp=newMHT; newNJet_tmp=newNJet; NewNB_tmp=NewNB;
+		    double newHT_tmp,newMHT_tmp,newNJet_tmp,NewNB_tmp;
+		    newHT_tmp=newHT; newMHT_tmp=newMHT; newNJet_tmp=newNJet; NewNB_tmp=NewNB;
                     if (newHT_tmp>1500.) newHT_tmp=1499.;
-        if (newMHT_tmp>1200.) newMHT_tmp=1199.;
-        if (newNJet_tmp>=13) newNJet_tmp=12;
-        if (NewNB_tmp>=4) NewNB_tmp=3.;
-        hSearchBinHT_evt->Fill( newHT_tmp , searchWeight);
-        hSearchBinMHT_evt->Fill( newMHT_tmp , searchWeight);
-        hSearchBinNjets_evt->Fill( newNJet_tmp , searchWeight);
-        hSearchBinNb_evt->Fill( NewNB_tmp , searchWeight);
-        //KH-Feb2016-ends
-
-        // Fill QCD histograms
-        //QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight);
-	double checkNan=searchWeight*factor_Up_NjNb;	
+		    if (newMHT_tmp>1200.) newMHT_tmp=1199.;
+		    if (newNJet_tmp>=13) newNJet_tmp=12;
+		    if (NewNB_tmp>=4) NewNB_tmp=3.;
+		    hSearchBinHT_evt->Fill( newHT_tmp , searchWeight);
+		    hSearchBinMHT_evt->Fill( newMHT_tmp , searchWeight);
+		    hSearchBinNjets_evt->Fill( newNJet_tmp , searchWeight);
+		    hSearchBinNb_evt->Fill( NewNB_tmp , searchWeight);
+		    //KH-Feb2016-ends
+		    
+		    // Fill QCD histograms
+		    //QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight);
+		    double checkNan=searchWeight*factor_Up_NjNb;	
 	//if(checkNan>1.)
-	
+		    
 	//std::cout<<"QCD_Up "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" factor_Up_NjNb "<<factor_Up_NjNb<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;
-
-	QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*factor_Up_NjNb);
-		  }
+		    
+		    QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*factor_Up_NjNb);
+		  }//end of else
                   if(NewNB==0)hPredHTMHT0b_evt->Fill( binMap_HTMHT[utils2::findBin_HTMHT(newHT,newMHT).c_str()],searchWeight);  
                   if(NewNB >0)hPredHTMHTwb_evt->Fill( binMap_HTMHT[utils2::findBin_HTMHT(newHT,newMHT).c_str()],searchWeight);
                   hPredNJetBins_evt->Fill(newNJet,searchWeight);
