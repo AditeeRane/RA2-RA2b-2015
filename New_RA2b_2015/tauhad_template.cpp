@@ -446,7 +446,10 @@ int main(int argc, char *argv[]){
       
   // We would like also to have the pt distribution of the tau Jets
   TH1D * tauJetPtHist = new TH1D("tauJetPtHist","Pt of the tau hadronic jets",80,0,400);
-
+  TH2D * tauJetJECtemplate=new TH2D("tauJetJECtemplate","tauJet JEC as a function it's raw pt and eta",10000,0,1000,400,-4.0,4.0);
+  TH2D * tauJetJECtemplateStat=new TH2D("tauJetJECtemplateStat","Number of entries of tauJet JEC as a function it's raw pt and eta",10000,0,1000,400,-4.0,4.0);
+  // TH2D * AvetauJetJECtemplate=new TH2D("AvetauJetJECtemplate","Average JEC factors per bin",10000,0,1000,400,-4.0,4.0);
+ 
   // Because of bad reconstruction or so, sometimes no jet matches a Gen. hadronic tau. 
   // So we need to add into account the fail rate here. 
   // First open the fail rate histogram
@@ -1238,7 +1241,19 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
       
       
     const double tauJetPt = evt->slimJetPtVec_().at(tauJetIdx);
-    //std::cout<<" tauJetPt "<<tauJetPt<<endl; 
+    const double tauJetEta = evt->slimJetEtaVec_().at(tauJetIdx);
+    const double tauJetJEC = evt->slimJetjecFactor_().at(tauJetIdx);
+    //    if((int)(tauJetPt/tauJetJEC)==40 && tauJetEta>1.00 && tauJetEta<2.00)
+    int nx=tauJetJECtemplate->GetXaxis()->FindBin(tauJetPt/tauJetJEC);
+    int ny=tauJetJECtemplate->GetYaxis()->FindBin(tauJetEta);
+    //std::cout<<" pt "<<tauJetPt<<" raw pt "<<tauJetPt/tauJetJEC<<" eta "<<tauJetEta<<" jec "<<tauJetJEC<<" nx "<<nx<<" ny "<<ny<<endl;
+    if(fabs(tauJetEta)<4.0 && tauJetPt<=1000){
+      double FillTemplate=tauJetJEC+tauJetJECtemplate->GetBinContent(nx,ny);
+      double FillTemplateStat=1+tauJetJECtemplateStat->GetBinContent(nx,ny);      
+      tauJetJECtemplate->SetBinContent(nx,ny,FillTemplate);
+      tauJetJECtemplateStat->SetBinContent(nx,ny,FillTemplateStat);      
+    }
+  //std::cout<<" tauJetPt "<<tauJetPt<<endl; 
     //	  const double tauJetPtUp = evt->slimJetJECup_.at(jetIdx).Pt();
     //std::cout<<" tauJetPtUp "<<tauJetPtUp<<endl;
     //const double tauJetPtDown = evt->slimJetJECdown_().at(jetIdx).Pt();
@@ -1752,6 +1767,8 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
   if( tau_GenPtEta->Integral("width") > 0. ) 
     tau_GenPtEta->Scale(1./tau_GenPtEta->Integral("width"));
 
+  TH2D* AvetauJetJECtemplate = static_cast<TH2D*>(tauJetJECtemplate->Clone("AvetauJetJECtemplate"));
+  AvetauJetJECtemplate->Divide(tauJetJECtemplateStat);
   // --- Save the Histograms to File -----------------------------------
   sprintf(tempname,"%s/HadTau_TauResponseTemplates_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
   TFile outFile(tempname,"RECREATE");
@@ -1779,6 +1796,9 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
   tauJetPtHist->Write();
   tau_GenJetPhi->Write();
   tau_GenJetPhiVsEta->Write();
+  tauJetJECtemplate->Write();
+  tauJetJECtemplateStat->Write();
+  AvetauJetJECtemplate->Write();
 }// end of main
 
 
