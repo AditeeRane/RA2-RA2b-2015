@@ -539,9 +539,9 @@ using namespace std;
       //fastsimWeight = (3000. * SampleXS)/TotNEve;
       printf(" Luminosity 3000/pb fastsimWeight: %g \n",fastsimWeight);
     }
-    /*  
-  else if (!evt->DataBool_()){  // fullsim
- 
+     
+    else if (!evt->DataBool_()){  // fullsim
+      
       std::cout << subSampleKey << std::endl;
       string skimName;
       if      (subSampleKey=="TTJets_T_SingleLep")    skimName = "tree_TTJets_SingleLeptFromT.root";
@@ -562,7 +562,7 @@ using namespace std;
       btagcorr.SetEffs(skimfile);
       btagcorr.SetCalib("btag/CSVv2_ichep.csv");      
     }
-*/
+
 
     // --- Analyse the events --------------------------------------------
 
