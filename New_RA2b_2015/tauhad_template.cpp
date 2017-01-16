@@ -20,7 +20,7 @@
 #include "TH1.h"
 #include "TVector2.h" 
 #include "TVector3.h"
-
+#include "BTagCorrector.h"
 using namespace std;
 
 class histClass{
@@ -60,6 +60,7 @@ int main(int argc, char *argv[]){
   vector<string> filesVec;
   ifstream fin(InRootList.c_str());
   TChain *sample_AUX = new TChain("TreeMaker2/PreSelection");
+  TFile *skimfile;
   char tempname[200];
   char histname[200];
   vector<TH1D > vec;
@@ -567,7 +568,16 @@ int main(int argc, char *argv[]){
 
   // Determine which model to work with
   int TauHadModel=utils2::TauHadModel;
-
+  string skimName;
+  BTagCorrector btagcorr;
+  vector<double> btagProb;
+  if(!evt->DataBool_() && utils2::btagSF){
+    skimfile = TFile::Open(utils2::LFNtoPFN(utils2::skimFileName(subSampleKey)).c_str(),"R");
+    if(!skimfile->IsOpen()){cout << "skim file is not open \n " ;return 2;}
+    else cout << " skimfile: " << utils2::LFNtoPFN(utils2::skimFileName(subSampleKey)).c_str() << endl;
+    btagcorr.SetEffs(skimfile);
+    btagcorr.SetCalib("btag/CSVv2_ichep.csv");
+  }
 
   int sampletype=-1;
   if(subSampleKey.find("TTbar_Inclusive")!=string::npos)sampletype=0; //TTbar_Inclusive
@@ -704,11 +714,11 @@ int main(int argc, char *argv[]){
 
     //we want to consider events that pass the baseline cuts
     if( sel->ht_base(evt->ht()) && sel->mht_base(evt->mht()) && sel->Njet_base(evt->nJets()) ){
-
+      btagProb = btagcorr.GetCorrections(evt->JetsLorVec_(),evt->Jets_partonFlavor_(),evt->Jets_HTMask_());
       if(verbose!=0)printf("============================================================= \n eventN: %d \n ",eventN);
       if(verbose!=0 && eleN==0 && muN==1)printf("#####################\nNo elec and 1 muon event \n eventN: %d \n ",eventN);
       if(muN==1)muPt=evt->GenMuPtVec_().at(0);
-    
+      
       // If no elec and 1 muon
       // Fill the hW_mu anyways.
       // See what is the parent of the mu. if tau fill the tau hist.
@@ -1040,9 +1050,16 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
 	if(passIso){
 	  // Fill Search bin histogram
 	  searchH->Fill( binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],totWeight);
-	  QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
-	  //	      if(!(evt->nJets()>=7 && evt->mht()<500 && evt->ht()<500))              
-	  searchH_b->Fill( binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
+	  if (utils2::btagSF){
+	    for(int iii=0;iii< btagProb.size();iii++){
+	      QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),iii,evt->ht(),evt->mht()).c_str()],totWeight*btagProb[iii]);
+	      searchH_b->Fill( binMap_b[utils2::findBin(evt->nJets(),iii,evt->ht(),evt->mht()).c_str()],totWeight*btagProb[iii]);
+	    }
+	  }
+	  else { //
+	    QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
+	    searchH_b->Fill( binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
+	  }
 	  if(evt->nBtags()==0)hPredHTMHT0b->Fill( binMap_HTMHT[utils2::findBin_HTMHT(evt->ht(),evt->mht()).c_str()],totWeight);
 	  if(evt->nBtags() >0)hPredHTMHTwb->Fill( binMap_HTMHT[utils2::findBin_HTMHT(evt->ht(),evt->mht()).c_str()],totWeight);
 	  hPredNJetBins->Fill(evt->nJets(),totWeight);
@@ -1061,8 +1078,14 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
       if(sel->ht_500(evt->ht()) && sel->mht_200(evt->mht()) && sel->Njet_4(evt->nJets()) && sel->low_dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4()) ){
 	// Fill QCD histograms
 	if(passIso){
-
-	  QCD_Low->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
+	  if (utils2::btagSF){
+	    for(int iii=0;iii< btagProb.size();iii++){
+	      QCD_Low->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),iii,evt->ht(),evt->mht()).c_str()],totWeight*btagProb[iii]);
+	    }
+	  }
+	  else {
+	    QCD_Low->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight);
+	  }
 	  searchH_lowDphi->Fill(binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],totWeight);
 
 	}

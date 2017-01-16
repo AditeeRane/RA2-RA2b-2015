@@ -24,7 +24,9 @@ namespace utils2{
 
   // Do the bootstrapping?
   bool bootstrap = true; // default true
-
+  // btagSF model
+  bool btagSF=true;
+  
   bool applyMT = true; // default true
   // We calculate MTEff in the same code where it is also being used. 
   // So, it doesn't make sense to apply MT weight when calculating it.
@@ -86,8 +88,41 @@ namespace utils2{
     return NEve;
   }
 
+  // Logical filename to physical filename
+  string LFNtoPFN(string PFN){
+    string prefix="root://cmseos.fnal.gov/";
+    return prefix+PFN;
+  }
 
-//###############################################################################################################
+  // get the skimFileName
+  string skimFileName(string subSampleKey){
+    string skimPath="/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV10/tree_SLm/";
+    string skimName="tree_TTJets_SingleLeptFromT.root";
+    if(subSampleKey.find("TTbar_DiLept")!=string::npos)skimName="tree_TTJets_DiLept.root";
+    else if(subSampleKey.find("TTbar_HT_600_800")!=string::npos)skimName="tree_TTJets_HT-600to800.root";
+    else if(subSampleKey.find("TTbar_HT_800_1200")!=string::npos)skimName="tree_TTJets_HT-800to1200.root";
+    else if(subSampleKey.find("TTbar_HT_1200_2500")!=string::npos)skimName="tree_TTJets_HT-1200to2500.root";
+    else if(subSampleKey.find("TTbar_HT_2500_Inf")!=string::npos)skimName="tree_TTJets_HT-2500toInf.root";
+    else if(subSampleKey.find("TTbar_Inclusive")!=string::npos)skimName="tree_TTJets.root";
+    else if(subSampleKey.find("TTbar_T_SingleLep")!=string::npos)skimName="tree_TTJets_SingleLeptFromT.root";
+    else if(subSampleKey.find("TTbar_Tbar_SingleLep")!=string::npos)skimName="tree_TTJets_SingleLeptFromTbar.root"; //
+    else if(subSampleKey.find("WJet_HT_100_200")!=string::npos)skimName="tree_WJetsToLNu_HT-100to200.root";
+    else if(subSampleKey.find("WJet_HT_200_400")!=string::npos)skimName="tree_WJetsToLNu_HT-200to400.root";
+    else if(subSampleKey.find("WJet_HT_400_600")!=string::npos)skimName="tree_WJetsToLNu_HT-400to600.root";
+    else if(subSampleKey.find("WJet_HT_600_800")!=string::npos)skimName="tree_WJetsToLNu_HT-600to800.root";
+    else if(subSampleKey.find("WJet_HT_800_1200")!=string::npos)skimName="tree_WJetsToLNu_HT-800to1200.root";
+    else if(subSampleKey.find("WJet_HT_1200_2500")!=string::npos)skimName="tree_WJetsToLNu_HT-1200to2500.root";
+    else if(subSampleKey.find("WJet_HT_2500_Inf")!=string::npos)skimName="tree_WJetsToLNu_HT-2500toInf.root"; //
+    else if(subSampleKey.find("ST_tW_antitop")!=string::npos)skimName="tree_ST_tW_antitop.root";
+    else if(subSampleKey.find("ST_tW_top")!=string::npos)skimName="tree_ST_tW_top.root";
+    else if(subSampleKey.find("ST_t_top")!=string::npos)skimName="tree_ST_t-channel_top.root";
+    else if(subSampleKey.find("ST_t_antitop")!=string::npos)skimName="tree_ST_t-channel_antitop.root"; //
+    else if(subSampleKey.find("s_channel")!=string::npos)skimName="tree_ST_s-channel.root"; //
+    else cout << " there is no skim file for the given smaple. The weight is not correct now! \n " << endl;
+    
+    return skimPath+skimName;
+  }
+  //###############################################################################################################
 // Full search bins
 
   // find appropriate bin number for the given (Njet,Nbtag,ht,mht)

@@ -1,25 +1,26 @@
 #! /bin/bash
-
+# bash hadd_all.sh : normal
+# bash hadd_all.sh 1: when we also need Probability_Tau_mu and TauBtaggedRate. any argument is fine.
 #
 # for prediction
 #-----------------
-
+export prediction_additional=$1
 cd TauHad2Multiple
 
 for i in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf ; do 
-
-  rm HadTauEstimation_WJet_${i}_.root
-  hadd HadTauEstimation_WJet_${i}_.root  `ls HadTauEstimation_WJet_${i}_*00.root `  
-  cp HadTauEstimation_WJet_${i}_.root ../TauHad2
-
-  rm Probability_Tau_mu_WJet_${i}_.root
-  hadd Probability_Tau_mu_WJet_${i}_.root `ls Probability_Tau_mu_WJet_${i}*00.root `
-  cp Probability_Tau_mu_WJet_${i}_.root ../TauHad2
-
-  rm TauBtaggedRate_WJet_${i}_.root
-  hadd TauBtaggedRate_WJet_${i}_.root `ls TauBtaggedRate_WJet_${i}*00.root `
-  cp TauBtaggedRate_WJet_${i}_.root ../TauHad2
-
+    rm HadTauEstimation_WJet_${i}_.root
+    hadd HadTauEstimation_WJet_${i}_.root `ls HadTauEstimation_WJet_${i}_*00.root `
+    cp HadTauEstimation_WJet_${i}_.root ../TauHad2
+    if [ $prediction_additional ]
+    then
+	rm Probability_Tau_mu_WJet_${i}_.root
+	hadd Probability_Tau_mu_WJet_${i}_.root `ls Probability_Tau_mu_WJet_${i}*00.root `
+	cp Probability_Tau_mu_WJet_${i}_.root ../TauHad2
+	
+	rm TauBtaggedRate_WJet_${i}_.root
+	hadd TauBtaggedRate_WJet_${i}_.root `ls TauBtaggedRate_WJet_${i}*00.root `
+	cp TauBtaggedRate_WJet_${i}_.root ../TauHad2
+    fi
 
 done 
 
@@ -28,28 +29,53 @@ for i in  t_top tW_top t_antitop tW_antitop s_channel; do
   rm HadTauEstimation_${i}_.root
   hadd HadTauEstimation_${i}_.root  `ls HadTauEstimation_${i}_*00.root `
   cp HadTauEstimation_${i}_.root ../TauHad2
+  if [ $prediction_additional ]
+  then
+      rm Probability_Tau_mu_${i}_.root
+      hadd Probability_Tau_mu_${i}_.root `ls Probability_Tau_mu_${i}*00.root `
+      cp Probability_Tau_mu_${i}_.root ../TauHad2
+      
+      rm TauBtaggedRate_${i}_.root
+      hadd TauBtaggedRate_${i}_.root `ls TauBtaggedRate_${i}*00.root `
+      cp TauBtaggedRate_${i}_.root ../TauHad2
+  fi
+done
 
-  rm Probability_Tau_mu_${i}_.root
-  hadd Probability_Tau_mu_${i}_.root `ls Probability_Tau_mu_${i}*00.root `
-  cp Probability_Tau_mu_${i}_.root ../TauHad2
+for i in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive T_SingleLep Tbar_SingleLep; do
 
-  rm TauBtaggedRate_${i}_.root
-  hadd TauBtaggedRate_${i}_.root `ls TauBtaggedRate_${i}*00.root `
-  cp TauBtaggedRate_${i}_.root ../TauHad2
+ rm HadTauEstimation_TTbar_${i}_$2.root
+ hadd HadTauEstimation_TTbar_${i}_$2.root `ls HadTauEstimation_TTbar_${i}_*00.root `
+ cp HadTauEstimation_TTbar_${i}_$2.root ../TauHad2
 
+ if [ $prediction_additional ]
+ then
+ rm Probability_Tau_mu_TTbar_${i}_$2.root
+ hadd Probability_Tau_mu_TTbar_${i}_$2.root `ls Probability_Tau_mu_TTbar_${i}_*00.root `
+ cp Probability_Tau_mu_TTbar_${i}_$2.root ../TauHad2
+
+ rm TauBtaggedRate_TTbar_${i}_$2.root
+ hadd TauBtaggedRate_TTbar_${i}_$2.root `ls TauBtaggedRate_TTbar_${i}_*00.root `
+ cp TauBtaggedRate_TTbar_${i}_$2.root ../TauHad2
+ fi
 done
 
 rm HadTauEstimation_TTbar_.root
+hadd HadTauEstimation_TTbar_.root `ls HadTauEstimation_TTbar_*_.root `
+cp HadTauEstimation_TTbar_.root ../TauHad2
+
 hadd HadTauEstimation_TTbar_.root  `ls HadTauEstimation_TTbar_*00.root `
 cp HadTauEstimation_TTbar_.root ../TauHad2/
+if [ $prediction_additional ]
+then
+    rm Probability_Tau_mu_TTbar_.root
+    hadd Probability_Tau_mu_TTbar_.root `ls Probability_Tau_mu_TTbar_*_.root `
+    cp Probability_Tau_mu_TTbar_.root ../TauHad2
 
-rm Probability_Tau_mu_TTbar_.root
-hadd Probability_Tau_mu_TTbar_.root `ls Probability_Tau_mu_TTbar*00.root `
-cp Probability_Tau_mu_TTbar_.root ../TauHad2
+    rm TauBtaggedRate_TTbar_.root
+    hadd TauBtaggedRate_TTbar_.root `ls TauBtaggedRate_TTbar_*_.root `
+    cp TauBtaggedRate_TTbar_.root ../TauHad2
+fi
 
-rm TauBtaggedRate_TTbar_.root
-hadd TauBtaggedRate_TTbar_.root `ls TauBtaggedRate_TTbar*00.root `
-cp TauBtaggedRate_TTbar_.root ../TauHad2
 
 cd ..
 

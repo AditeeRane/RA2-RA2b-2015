@@ -540,25 +540,11 @@ using namespace std;
       printf(" Luminosity 3000/pb fastsimWeight: %g \n",fastsimWeight);
     }
      
-    else if (!evt->DataBool_()){  // fullsim
+    else if (!evt->DataBool_() && utils2::btagSF){  // fullsim
+      skimfile = TFile::Open(utils2::LFNtoPFN(utils2::skimFileName(subSampleKey)).c_str(),"R");
       
-      std::cout << subSampleKey << std::endl;
-      string skimName;
-      if      (subSampleKey=="TTJets_T_SingleLep")    skimName = "tree_TTJets_SingleLeptFromT.root";
-      else if (subSampleKey=="TTJets_Tbar_SingleLep") skimName = "tree_TTJets_SingleLeptFromTbar.root";
-      else if (subSampleKey=="TTJets_Inclusive")      skimName = "tree_TTJets.root";
-      else if (subSampleKey=="TTJets_DiLept")         skimName = "tree_TTJets_DiLept.root";
-      else if (subSampleKey=="TTJets_HT_600_800")     skimName = "tree_TTJets_HT_600_800.root";
-      else if (subSampleKey=="TTJets_HT_800_1200")    skimName = "tree_TTJets_HT_800_1200.root";
-      else if (subSampleKey=="TTJets_HT_1200_2500")   skimName = "tree_TTJets_HT_1200_2500.root";
-      else if (subSampleKey=="TTJets_HT_2500_Inf")    skimName = "tree_TTJets_HT_2500_Inf.root";
-      else                                            skimName = "tree_TTJets_SingleLeptFromT.root"; // avoid crash
-      sprintf(tempname,
-	      "%s/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV10/tree_SLm/%s",
-	      prefix,skimName.c_str());
-      skimfile = TFile::Open(tempname,"R");
       if(!skimfile->IsOpen()){cout << "skim file is not open \n " ;return 2;} 
-      else cout << " skimfile: " << tempname << endl;
+      else cout << " skimfile: " << utils2::LFNtoPFN(utils2::skimFileName(subSampleKey)).c_str() << endl;  
       btagcorr.SetEffs(skimfile);
       btagcorr.SetCalib("btag/CSVv2_ichep.csv");      
     }
@@ -1313,6 +1299,15 @@ using namespace std;
 	    int GenJetIdx=-1;
             MuJet_all->Fill(muPt,eventWeight);
             utils->findMatchedObject(slimJetIdx,muEta,muPhi,evt->slimJetPtVec_(),evt->slimJetEtaVec_(), evt->slimJetPhiVec_(),deltaRMax,verbose);
+	    double dr = utils->deltaR(muEta,evt->slimJetEtaVec_()[slimJetIdx],muPhi,evt->slimJetPhiVec_()[slimJetIdx]);
+	    if (dr>0.3 && l==1){
+	      printf("mupt,mueta,muphi,jetpt,jeteta,jetphi = %6.2f %6.2f %6.2f | %6.2f %6.2f %6.2f\n",
+		     muPt,muEta,muPhi,
+		     evt->slimJetPtVec_()[slimJetIdx],
+		     evt->slimJetEtaVec_()[slimJetIdx],
+		     evt->slimJetPhiVec_()[slimJetIdx]
+		     );
+	    }
 	    // for fastsim	    
 	    //*AR, Dec28,2016-If genHTMHT is true, looks for a jet matching to muon from GenJet collection
 	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT)
@@ -2006,7 +2001,7 @@ using namespace std;
 	      totWeight *= METtrigEffCorr*trigEffCorr*NjNbCorr*MuonPtMinCorr;	      
 	      //std::cout<<" ***CH5*** "<< " totWeight "<<totWeight<<endl;
               // if fastsim
-              vector<double> prob;
+              vector<double> btagProb;
               if(fastsim){
                 totWeight *= fastsimWeight*0.99; // 0.99 is the jet id efficiency correction. 
                 double puWeight = 
@@ -2018,14 +2013,37 @@ using namespace std;
 		double isrWeight = isrcorr.GetCorrection(evt->NJetsISR_());
                 totWeight*=isrWeight;
                 //
-                prob = btagcorr.GetCorrections(evt->JetsLorVec_(),evt->Jets_partonFlavor_(),evt->HTJetsMask_());
-		//
+                //
 		if (totWeight>1. && l==1 && m==0) {
 		  printf("puWeight=%8.1f, isrWeight=%8.1f, nvtx=%8d, trueNint=%5.1f, Nint=%5d\n",
 			 puWeight,isrWeight,evt->NVtx_(),evt->TrueNumInteractions_(),evt->NumInteractions_());
 		}
               } // fastsim ends
-
+	      if (!evt->DataBool_()){
+		btagProb = btagcorr.GetCorrections(evt->JetsLorVec_(),evt->Jets_partonFlavor_(),evt->Jets_HTMask_mod_(slimJetIdx));
+		/*
+		  for(int i=0;i<evt->slimJetPtVec_().size();i++){
+		  std::cout << evt->slimJetPtVec_().at(i) << " ";
+		  }
+		  std::cout << std::endl;
+		  for(int i=0;i<evt->JetsPtVec_().size();i++){
+		  std::cout << evt->JetsPtVec_().at(i) << " ";
+		  }
+		  std::cout << std::endl;
+		  for(int i=0;i<evt->Jets_HTMask_()->size();i++){
+		  std::cout << evt->Jets_HTMask_()->at(i) << " ";
+		  }
+		  std::cout << std::endl;
+		  for(int i=0;i<evt->Jets_HTMask_mod_(slimJetIdx)->size();i++){
+		  std::cout << evt->Jets_HTMask_mod_(slimJetIdx)->at(i) << " ";
+		  }
+		  std::cout << std::endl;
+		  for(int iii=0;iii< btagProb.size();iii++){
+		  std::cout << btagProb[iii] << std::endl;
+		  }
+		*/
+	      }
+ 
               weightEffAcc = totWeight;
 
               // if bootstrap is on weigh the events such that 
@@ -2300,13 +2318,12 @@ using namespace std;
 		    if (evt->nJets()>=7 && evt->nJets()<=8)searchH_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
 		    if (evt->nJets()>=9)searchH_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
 		  }
-                  if(fastsim){
-                    for(int iii=0;iii< prob.size();iii++){
-                      searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*prob[iii]);
-                      // Fill QCD histograms
-                      QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*prob[iii]);
-                    }
-                  }
+		  if(fastsim || (!evt->DataBool_() && utils2::btagSF)){
+		    for(int iii=0;iii< btagProb.size();iii++){
+		      searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,m+iii,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
+		      QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,m+iii,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
+		    }
+		  }
                   else{
 		    //if(searchWeight==0)
 		    //std::cout<<"search region "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;  
@@ -2423,13 +2440,13 @@ using namespace std;
 		  }
                   // Fill QCD histograms
                   if(fastsim){
-                    for(int iii=0;iii< prob.size();iii++){
-		      QCD_Low_evt->Fill(binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*prob[0]);
-                    }
+		    for(int iii=0;iii< btagProb.size();iii++){
+		      QCD_Low_evt->Fill(binMap_QCD[utils2::findBin_QCD(newNJet,m+iii,newHT,newMHT).c_str()],searchWeight*btagProb[0]);
+		    }
                   }
                   else QCD_Low_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*factor_Low_NjNb);
                 }
-
+		
               }
 
 

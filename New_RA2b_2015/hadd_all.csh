@@ -1,5 +1,6 @@
 #! /bin/tcsh
-
+# tcsh hadd_all.csh : normal
+# tcsh hadd_all.csh 1: when we also need Probability_Tau_mu and TauBtaggedRate. any argument is fine.
 #
 # for prediction
 #-----------------
