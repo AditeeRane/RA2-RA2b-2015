@@ -1608,15 +1608,21 @@ using namespace std;
               // if muon jet is dropped and muon is btagged, #original b shoud reduce by 1
               // if muon jet is dropped but muon is not btagged, #b shoud stay the same as original one(no increase).
               // if muon jet is not dropped but is btagged, #b shoud stay the same as original one(no increase).
+	      int NbOffset=m;
               JetIdx=-1;
               utils->findMatchedObject(JetIdx,muEta,muPhi,evt->JetsPtVec_(),evt->JetsEtaVec_(), evt->JetsPhiVec_(),deltaRMax,verbose);  
+	      if (JetIdx!=slimJetIdx && JetIdx!=-1){
+		printf("JetIdx and slimJetIdx are inconsistent? JetIdx & slimJetIdx = %3d %3d\n",JetIdx,slimJetIdx);
+	      }
               if( (int) HT3JetVec.size() < (int) evt->nJets() ){
-                if(JetIdx!=-1 && evt->csvVec()[JetIdx]>evt->csv_())NewNB=evt->nBtags()-1;
+		NbOffset=0;                
+		if(JetIdx!=-1 && evt->csvVec()[JetIdx]>evt->csv_())NewNB=evt->nBtags()-1;
                 else NewNB=evt->nBtags(); 
 	      }
 	      //              else if(JetIdx!=-1 && evt->csvVec()[JetIdx]>evt->csv_())NewNB=evt->nBtags();
-	      else if((JetIdx!=-1 && absbRate>0 && evt->csvVec()[JetIdx]>evt->csv_()) || (JetIdx!=-1 && absbRate<0 && evt->csvVec()[JetIdx]<evt->csv_()))NewNB=evt->nBtags();
-
+	      //	      else if((JetIdx!=-1 && absbRate>0 && evt->csvVec()[JetIdx]>evt->csv_()) || (JetIdx!=-1 && absbRate<0 && evt->csvVec()[JetIdx]<evt->csv_()))NewNB=evt->nBtags();
+	      else if((JetIdx!=-1 && absbRate>0 && evt->csvVec()[JetIdx]>evt->csv_()) || (JetIdx!=-1 && absbRate<0 && evt->csvVec()[JetIdx]<evt->csv_())){ NewNB=evt->nBtags(); NbOffset=1;}
+ 
               // New dphi1, dphi2, and dphi3
               double newDphi1=-99.,newDphi2=-99.,newDphi3=-99.,newDphi4=-99.;
               //first order the jets based on their pT
@@ -2019,7 +2025,7 @@ using namespace std;
 			 puWeight,isrWeight,evt->NVtx_(),evt->TrueNumInteractions_(),evt->NumInteractions_());
 		}
               } // fastsim ends
-	      if (!evt->DataBool_()){
+	      if (!evt->DataBool_() && utils2::btagSF){
 		btagProb = btagcorr.GetCorrections(evt->JetsLorVec_(),evt->Jets_partonFlavor_(),evt->Jets_HTMask_mod_(slimJetIdx));
 		/*
 		  for(int i=0;i<evt->slimJetPtVec_().size();i++){
@@ -2320,11 +2326,17 @@ using namespace std;
 		  }
 		  if(fastsim || (!evt->DataBool_() && utils2::btagSF)){
 		    for(int iii=0;iii< btagProb.size();iii++){
-		      searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,m+iii,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
-		      QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,m+iii,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
-		    }
-		  }
-                  else{
+		      int newNbSF = NbOffset+iii; // updated number of b's when using btagProb
+		      if (newNbSF<=newNJet){      
+			if (binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()]>0 && binMap_b[utils2::findBin(newNJet,newNbSF,newHT,newMHT).c_str()]==0){
+			  std::cout << "binning warning!" << std::endl;
+			}
+			searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,newNbSF,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
+			QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,newNbSF,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
+		      } // newNbSF<=newNJet
+		    }   // for(int iii=0;iii< btagProb.size();iii++){
+		  }     // fastsim or (notdata and btagSF mode on)		
+		  else{
 		    //if(searchWeight==0)
 		    //std::cout<<"search region "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;  
 		      
@@ -2439,9 +2451,10 @@ using namespace std;
 			    << std::endl;
 		  }
                   // Fill QCD histograms
-                  if(fastsim){
+                  if(fastsim || (!evt->DataBool_() && utils2::btagSF)){
 		    for(int iii=0;iii< btagProb.size();iii++){
-		      QCD_Low_evt->Fill(binMap_QCD[utils2::findBin_QCD(newNJet,m+iii,newHT,newMHT).c_str()],searchWeight*btagProb[0]);
+		      int newNbSF = NbOffset+iii; // updated number of b's when using btagProb
+		      QCD_Low_evt->Fill(binMap_QCD[utils2::findBin_QCD(newNJet,newNbSF,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
 		    }
                   }
                   else QCD_Low_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*factor_Low_NjNb);
@@ -2678,7 +2691,8 @@ using namespace std;
         bootstrapUtils::HistogramFillForEventTH1(searchH_lowDphi, searchH_evt_lowDphi);
         bootstrapUtils::HistogramFillForEventTH1(QCD_Up, QCD_Up_evt);
         bootstrapUtils::HistogramFillForEventTH1(QCD_Low, QCD_Low_evt);
-        bootstrapUtils::HistogramFillForEventTH1(searchH_b, searchH_b_noWeight, searchH_b_evt, searchH_b_noWeight_evt);
+        bootstrapUtils::HistogramFillForEventTH1(searchH_b, searchH_b_evt);
+	bootstrapUtils::HistogramFillForEventTH1(searchH_b_noWeight, searchH_b_noWeight_evt);
         bootstrapUtils::HistogramFillForEventTH1(hPredHTMHT0b, hPredHTMHT0b_evt);
         bootstrapUtils::HistogramFillForEventTH1(hPredHTMHTwb, hPredHTMHTwb_evt);
         bootstrapUtils::HistogramFillForEventTH1(hPredNJetBins, hPredNJetBins_evt);
@@ -2692,12 +2706,16 @@ using namespace std;
   //KH-Feb2016-ends
 
   // for correlation studies
-        bootstrapUtils::HistogramFillForEventTH2(hCorSearch_b, hCorSearch_b_noW, hCorSearch_b_evt, hCorSearch_b_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorHT,    hCorHT_noW,    hCorHT_evt,    hCorHT_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorMHT,   hCorMHT_noW,   hCorMHT_evt,   hCorMHT_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorNJet,  hCorNJet_noW,  hCorNJet_evt,  hCorNJet_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorNBtag, hCorNBtag_noW, hCorNBtag_evt, hCorNBtag_noW_evt);
-
+	bootstrapUtils::HistogramFillForEventTH2(hCorSearch_b,     hCorSearch_b_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorSearch_b_noW, hCorSearch_b_noW_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorHT,           hCorHT_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorHT_noW,       hCorHT_noW_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorMHT,          hCorMHT_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorMHT_noW,      hCorMHT_noW_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorNJet,         hCorNJet_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorNJet_noW,     hCorNJet_noW_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorNBtag,        hCorNBtag_evt);
+	bootstrapUtils::HistogramFillForEventTH2(hCorNBtag_noW,    hCorNBtag_noW_evt);
         // Correct the uncertainties
         // Loop over differnt event types
         for(map<string, map<string , vector<TH1D> > >::iterator itt=map_map.begin(); itt!=map_map.end();itt++){
