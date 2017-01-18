@@ -122,7 +122,7 @@ for TTbarStr in Tbar_SingleLep; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/btag/CSVv2_ichep.csv,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 		echo Transfer_Output_Files = HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root','MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}
 		#echo Transfer_Output_Files = MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 		echo transfer_output_remaps = '"'HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHad2Multiple/MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}

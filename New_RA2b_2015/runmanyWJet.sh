@@ -6,7 +6,7 @@ outStr=$2
 export SUBMIT_DIR=`pwd -P`
 
 #for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
-for WJetStr in 600_800 800_1200 1200_2500 2500_Inf; do
+for WJetStr in 100_200; do
 
     export SubmitFile=submitScriptWJet_${WJetStr}.jdl
     if [ -e ${SubmitFile} ]; then

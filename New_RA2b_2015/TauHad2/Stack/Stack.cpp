@@ -92,7 +92,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     else{cout << " Error!! There are only 6 single top sample " << endl;}
     file = new TFile(tempname, "R");
     sprintf(tempname,"cutflow_preselection");
-    std::cout << luminosity << " " << T_xs_vec[i-1] << (* (TH1D* ) file->Get(tempname)).GetBinContent(1) << std::endl;
+    //std::cout << luminosity << " " << T_xs_vec[i-1] << (* (TH1D* ) file->Get(tempname)).GetBinContent(1) << std::endl;
     tempvalue = (luminosity*T_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetBinContent(1));
     T_scalevec.push_back(tempvalue);
   }//end of loop over HTbins 
@@ -174,7 +174,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     tempstack = new THStack("stack","Binned Sample Stack");
 
   }
-  std::cout<<".........Seg Vio........."<<endl;
+  //std::cout<<".........Seg Vio........."<<endl;
 
 
   for(map<int , string >::iterator itt=Ttype.begin(); itt!=Ttype.end();itt++){        // loop over different event types
@@ -217,7 +217,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   file->Close();
   printf("T main histograms stacked \n ");
 
-
+  /*
 //..........................................//
 // Probability mu from nonW sources
 //..........................................//
@@ -531,7 +531,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   printf("T dilepton rate calculated. \n ");
 
 
-
+*/
 
 
 // .....................................................................................................................................................//
@@ -709,7 +709,7 @@ cout << " flag \n " ;
   file->Close();
   printf("WJet main histograms stacked \n ");
 
-
+  /*
 
 //..........................................//
 // Probability mu from nonW sources
@@ -1202,7 +1202,7 @@ cout << " flag \n " ;
   file->Close();
   printf("WJet dilepton rate calculated. \n ");
 
-
+*/
 
 // .....................................................................................................................................................//
 // TTbar Section
@@ -1330,9 +1330,9 @@ cout << " flag \n " ;
           //cout << "================================" << endl;
           //cout << "HT#: " <<i << ", TTbartype: " << itt->second << ", cutname: " << it->second << ", hist#: " << j << endl;  
           sprintf(tempname,"%s/%s/%s_%s_%s",(itt->second).c_str(),(it->second).c_str(),(histname[j]).c_str(),(it->second).c_str(),(itt->second).c_str());
-	  std::cout<<" tempname "<<tempname<<endl;
+	  //std::cout<<" tempname "<<tempname<<endl;
           temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
-	  std::cout<<"........Seg Vio........"<<endl;
+	  //std::cout<<"........Seg Vio........"<<endl;
           if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
           else if (luminosity>0&&!doScale) temphist->Scale(3000);
           temphist->SetFillColor(i+2);
@@ -1353,7 +1353,7 @@ cout << " flag \n " ;
 
   file->Close();
   printf("TTbar main histograms stacked \n ");
-
+  /*
 
 //..........................................//
 // Probability mu from nonW sources
@@ -1825,7 +1825,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
 
 
 
-
+*/
 
 
 // ..................................................................................................................................................... //
@@ -1950,7 +1950,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   printf("All samples main histograms stacked \n ");
 
 
-
+  /*
 // ........................................... //
 //  Probability mu from nonW sources
 // ........................................... //
@@ -2240,7 +2240,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
 
   file->Close();
   file2->Close();
-
+*/
 
 
 } // End of the constructor 

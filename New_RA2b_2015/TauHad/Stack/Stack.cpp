@@ -489,8 +489,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -524,8 +523,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -559,8 +557,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -594,8 +591,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -631,8 +627,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -666,8 +661,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -702,8 +696,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -738,8 +731,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -774,8 +766,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -809,8 +800,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -844,8 +834,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
@@ -879,8 +868,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     for(int i=0; i<tnHT ; i++){ // loop over different HT bins
 
       temphist = (TH1D *) T_inputfilevec.at(i)->Get(tempname)->Clone();
-      if (luminosity>0&&doScale) temphist->Scale(T_scalevec[i]);
-      else if (luminosity>0&&!doScale) temphist->Scale(scalefactor);
+      temphist->Scale(scalefactor);
       temphist->SetFillColor(i+2);
       tempstack->Add(temphist);
 
