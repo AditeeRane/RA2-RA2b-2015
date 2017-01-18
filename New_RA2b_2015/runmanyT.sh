@@ -18,8 +18,21 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
     njobs=`expr $Njobs - $a`
     echo number of jobs: $njobs
     mkdir -p qsub
+    export skimPath=/eos/uscms/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_SLm
+    if [ "$TStr" == "tW_top" ]; then
+	export skimName=tree_ST_tW_top.root
+    elif [ "$TStr" == "tW_antitop" ]; then
+	export skimName=tree_ST_tW_antitop.root
+    elif [ "$TStr" == "t_top" ]; then
+	    export skimName=tree_ST_t-channel_top.root
+    elif [ "$TStr" == "t_antitop" ]; then
+	export skimName=tree_ST_t-channel_antitop.root
+    else
+	export skimName=tree_ST_s-channel.root
+    fi	
     
     for i in `seq 0 $njobs`; do
+    
 	
 	export filenum=$i
 	export outStr=$outStr
@@ -43,7 +56,6 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 	export Error=qsub/condor_${Suffix}.err
 	export Log=qsub/condor_${Suffix}.log
 	export Proxy=\$ENV\(X509_USER_PROXY\)
-	
 	source /cvmfs/cms.cern.ch/cmsset_default.sh
 
 	cd $SUBMIT_DIR
@@ -85,7 +97,7 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 		    echo notification = never>> ${SubmitFile}
 		    echo should_transfer_files = YES>> ${SubmitFile}
 		    echo WhenToTransferOutput = ON_EXIT>> ${SubmitFile}
-		 
+		    echo Transfer_Input_Files = ${skimPath}/${skimName}>> ${SubmitFile}
 		fi
 		
 		echo "">> ${SubmitFile}
@@ -139,6 +151,8 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 		    echo notification = never>> ${SubmitFile}
 		    echo should_transfer_files = YES>> ${SubmitFile}
 		    echo WhenToTransferOutput = ON_EXIT>> ${SubmitFile}
+		    echo Transfer_Input_Files = ${skimPath}/${skimName}>> ${SubmitFile}		 
+
 		fi
 		
 		echo "">> ${SubmitFile}
@@ -146,7 +160,7 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 
 	#	echo Transfer_Output_Files = GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 

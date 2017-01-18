@@ -5,8 +5,8 @@ outStr=$2
 
 export SUBMIT_DIR=`pwd -P`
 
-for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
-#for WJetStr in 2500_Inf; do
+#for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
+for WJetStr in 600_800 800_1200 1200_2500 2500_Inf; do
 
     export SubmitFile=submitScriptWJet_${WJetStr}.jdl
     if [ -e ${SubmitFile} ]; then
@@ -17,8 +17,25 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
     njobs=`expr $Njobs - $a`
     echo number of jobs: $njobs
     mkdir -p qsub
+    export skimPath=/eos/uscms/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_SLm
+    if [ "$WJetStr" == "100_200" ]; then
+	export skimName=tree_WJetsToLNu_HT-100to200.root
+    elif [ "$WJetStr" == "200_400" ]; then
+	export skimName=tree_WJetsToLNu_HT-200to400.root
+    elif [ "$WJetStr" == "400_600" ]; then
+	export skimName=tree_WJetsToLNu_HT-400to600.root
+    elif [ "$WJetStr" == "600_800" ]; then
+	export skimName=tree_WJetsToLNu_HT-600to800.root
+    elif [ "$WJetStr" == "800_1200" ]; then
+	export skimName=tree_WJetsToLNu_HT-800to1200.root
+    elif [ "$WJetStr" == "1200_2500" ]; then
+	export skimName=tree_WJetsToLNu_HT-1200to2500.root
+    else
+	export skimName=tree_WJetsToLNu_HT-2500toInf.root
+    fi
     
     for i in `seq 0 $njobs`; do
+  #  for i in 28; do
 	
 	export filenum=$i
 	export outStr=$outStr
@@ -88,7 +105,7 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 		    echo notification = never>> ${SubmitFile}
 		    echo should_transfer_files = YES>> ${SubmitFile}
 		    echo WhenToTransferOutput = ON_EXIT>> ${SubmitFile}
-		
+		    echo Transfer_Input_Files = ${skimPath}/${skimName}>> ${SubmitFile}		
     
 		fi
 		
@@ -143,6 +160,7 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 		    echo notification = never>> ${SubmitFile}
 		    echo should_transfer_files = YES>> ${SubmitFile}
 		    echo WhenToTransferOutput = ON_EXIT>> ${SubmitFile}
+		    echo Transfer_Input_Files = ${skimPath}/${skimName}>> ${SubmitFile}
 		fi
 		
 		echo "">> ${SubmitFile}
@@ -150,7 +168,7 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 		echo Transfer_Output_Files = GenInfo_HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_WJet_${WJetStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_WJet_${WJetStr}_${outStr}_${i}_00.root','IsoEfficiencies_WJet_${WJetStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromWJet_${WJetStr}_${outStr}_${i}_00.root','Probability_Tau_mu_WJet_${WJetStr}_${outStr}_${i}_00.root','TauBtaggedRate_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 
 #		echo Transfer_Output_Files = GenInfo_HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_WJet_${WJetStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_WJet_${WJetStr}_${outStr}_${i}_00.root','IsoEfficiencies_WJet_${WJetStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromWJet_${WJetStr}_${outStr}_${i}_00.root','Probability_Tau_mu_WJet_${WJetStr}_${outStr}_${i}_00.root','TauBtaggedRate_WJet_${WJetStr}_${outStr}_${i}_00.root','TriggerEff_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}        

@@ -936,7 +936,7 @@ using namespace std;
       eventWeight = evt->weight();
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>10000)break;
+      //if(eventN>50000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -2329,7 +2329,7 @@ using namespace std;
 		      int newNbSF = NbOffset+iii; // updated number of b's when using btagProb
 		      if (newNbSF<=newNJet){      
 			if (binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()]>0 && binMap_b[utils2::findBin(newNJet,newNbSF,newHT,newMHT).c_str()]==0){
-			  std::cout << "binning warning!" << std::endl;
+			  std::cout << " absbRate "<<absbRate<<" newNJet "<<newNJet<<" newNbSF "<<newNbSF<<" newHT "<<newHT<<" newMHT "<<newMHT<<" noB "<<binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()]<<" withB "<<binMap_b[utils2::findBin(newNJet,newNbSF,newHT,newMHT).c_str()]<<"binning warning!" << std::endl;
 			}
 			searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,newNbSF,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);
 			QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,newNbSF,newHT,newMHT).c_str()],searchWeight*btagProb[iii]);

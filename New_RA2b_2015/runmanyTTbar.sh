@@ -5,8 +5,8 @@ outStr=$2
 
 export SUBMIT_DIR=`pwd -P`
 
-for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive T_SingleLep Tbar_SingleLep; do
-#for TTbarStr in HT_2500_Inf; do
+#for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive T_SingleLep Tbar_SingleLep; do
+for TTbarStr in Tbar_SingleLep; do
 #for TTbarStr in T_SingleLep Tbar_SingleLep; do
 #for TTbarStr in Tbar_SingleLep; do
 
@@ -21,6 +21,24 @@ for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive
 
     echo number of jobs: $njobs
     mkdir -p qsub
+    export skimPath=/eos/uscms/store/user/lpcsusyhad/SusyRA2Analysis2015/Skims/Run2ProductionV11/tree_SLm
+    if [ "$TTbarStr" == "HT_1200_2500" ]; then
+	export skimName=tree_TTJets_HT-1200to2500.root
+    elif [ "$TTbarStr" == "HT_600_800" ]; then
+	export skimName=tree_TTJets_HT-600to800.root
+    elif [ "$TTbarStr" == "HT_800_1200" ]; then
+	export skimName=tree_TTJets_HT-800to1200.root
+    elif [ "$TTbarStr" == "HT_2500_Inf" ]; then
+	    export skimName=tree_TTJets_HT-2500toInf.root
+    elif [ "$TTbarStr" == "DiLept" ]; then
+	export skimName=tree_TTJets_DiLept.root
+    elif [ "$TTbarStr" == "Inclusive" ]; then
+	export skimName=tree_TTJets.root
+    elif [ "$TTbarStr" == "T_SingleLep" ]; then
+	export skimName=tree_TTJets_SingleLeptFromT.root
+    else
+	export skimName=tree_TTJets_SingleLeptFromTbar.root
+    fi
     
     for i in `seq 0 $njobs`; do
 	
@@ -50,6 +68,7 @@ for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive
 	export Error=qsub/condor_${Suffix}.err
 	export Log=qsub/condor_${Suffix}.log
 	export Proxy=\$ENV\(X509_USER_PROXY\)
+
 	
 	source /cvmfs/cms.cern.ch/cmsset_default.sh
 
@@ -95,6 +114,7 @@ for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive
 		    echo notification = never>> ${SubmitFile}
 		    echo should_transfer_files = YES>> ${SubmitFile}
 		    echo WhenToTransferOutput = ON_EXIT>> ${SubmitFile}
+		    echo Transfer_Input_Files = ${skimPath}/${skimName}>> ${SubmitFile}
 		fi
 		
 		echo "">> ${SubmitFile}
@@ -102,7 +122,7 @@ for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad2,${SUBMIT_DIR}/btag/CSVv2_ichep.csv,${SUBMIT_DIR}/Inputs,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 		echo Transfer_Output_Files = HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root','MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}
 		#echo Transfer_Output_Files = MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 		echo transfer_output_remaps = '"'HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHad2Multiple/HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHad2Multiple/MuJetMatchRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
@@ -151,6 +171,7 @@ for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive
 		    echo notification = never>> ${SubmitFile}
 		    echo should_transfer_files = YES>> ${SubmitFile}
 		    echo WhenToTransferOutput = ON_EXIT>> ${SubmitFile}
+		    echo Transfer_Input_Files = ${skimPath}/${skimName}>> ${SubmitFile}
 		fi
 		
 		echo "">> ${SubmitFile}
@@ -158,7 +179,7 @@ for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept Inclusive
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/btag,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
 		echo Transfer_Output_Files = GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root','IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root','Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root','TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 		#echo Transfer_Output_Files = GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root','IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root','Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root','TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root','TriggerEff_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 		echo transfer_output_remaps = '"'GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root';'Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
