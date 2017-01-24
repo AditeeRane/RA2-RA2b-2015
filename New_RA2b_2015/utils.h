@@ -24,6 +24,7 @@ public:
 
     TString TauResponse_name(unsigned int ptBin);
     TString TauPt_name(unsigned int ptBin);
+    TString RecoMuPt_name(unsigned int ptBin);
     TString TauPtEta_name(unsigned int ptBin);
 
     double deltaPhi(double phi1, double phi2);
@@ -47,6 +48,11 @@ public:
     void getRandom2(double muPt_,vector<TH2*> vec_resp_xy,Double_t & scale_x,Double_t & scale_y);
     
     double GetBinValue(double muPt_,vector<TH1*> vec_resp, int l );
+
+    TH1D * GetBinxProj(TH2D * h2tau_phi, int binx);   
+    double GetTotProjArea(TH1D * ProjY);
+
+    double GetBinProjArea(TH1D * ProjY, int p);
 
     double GetBinContent(double muPt_,vector<TH1*> vec_resp, int l );
     
