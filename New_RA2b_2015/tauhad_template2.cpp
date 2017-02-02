@@ -106,7 +106,7 @@ using namespace std;
     double simTauJetPt,simTauJetPt_x,simTauJetPt_y,simTauJetPt_xy;
     double simTauJetEta;
     double simTauJetPhi,simTauJetPhi_xy;
-   
+
     Double_t ht_bins[15] = { 0., 100.,200.,300.,400.,500.,600.,700.,800.,900.,
 			     1000.,1200.,1500.,2000.,5000.};
     Double_t mht_bins[13] = {0., 50.,100.,150.,200.,250.,300.,350.,400.,500.,
@@ -441,28 +441,7 @@ using namespace std;
 
     // The tau response templates
     Utils * utils = new Utils();
-    double genXmin=0.;
-    double genXmax=0.;
-    int genBins=0;
-    
-    std::vector<TH1*> hRecoMuPt(utils->TauResponse_nBins_());
-    for(unsigned int i = 0; i < utils->TauResponse_nBins_(); ++i){  
-      if(i==0){
-	genXmin=20.;genXmax=30.;genBins=10;
-      }
-      if(i==1){
-	genXmin=30.;genXmax=50.;genBins=20;
-      }
-      if(i==2){
-	genXmin=50.;genXmax=100.;genBins=50;
-      }
-      if(i==3){
-	genXmin=100.;genXmax=400.;genBins=300;
-      }
-      hRecoMuPt.at(i) = new TH1D(utils->RecoMuPt_name(i),";p_{T}(reco-#mu);Probability",genBins,genXmin,genXmax);
-    }
-    TH1D * mu_RecoPt = new TH1D("hRecoMuPt","reco mu pt distribution",400,0,400);
-  
+
     bool fastsim=false;
     TFile * signalPileUp, *IsrFile,*skimfile;
     TH1* puhist, *h_isr, *h_genpt, *h_njetsisr; 
@@ -860,8 +839,6 @@ using namespace std;
     trig_pass->Sumw2();
     //*AR,Oct4,2016-Using taugun templates instead of MC templates
     TFile * resp_file_taugun = new TFile("Inputs/hist_taugun_aditee_Reweighted.root","R");
-    TFile * jec_templatefile = new TFile("Inputs/JECtemplatefile.root","R");
-    TH2D * jec_template=(TH2D*) jec_templatefile->Get("AvetauJetJECtemplate")->Clone();
     // Use Ahmad's tau template
     TFile * resp_file_temp = new TFile("Inputs/Elog371_HadTau_TauResponseTemplates_stacked.root","R");
     TFile * resp_file = new TFile("Inputs/Elog433_HadTau_TauResponseTemplates_stacked.root","R");
@@ -881,6 +858,7 @@ using namespace std;
       vec_resp_xy.push_back( (TH2D*) resp_file->Get( histname )->Clone() );
 
     }
+
     //TH2D * h2tau_phi = (TH2D*) resp_file_temp->Get("tau_GenJetPhi")->Clone();
     //*AR,Oct12,2016-Using Wgun template to get dPhi distribution
     TH2D * h2tau_phi = (TH2D*) resp_file_taugun->Get("tau_GenJetPhi")->Clone();
@@ -972,7 +950,7 @@ using namespace std;
       eventWeight = evt->weight();
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>10000)break;
+      if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1265,9 +1243,7 @@ using namespace std;
             }
             
           }
-	  const unsigned int MuptBin = utils->TauResponse_ptBin(muPt);
-	  hRecoMuPt.at(MuptBin)->Fill( muPt ,eventWeight);
-	  mu_RecoPt->Fill( muPt ,eventWeight);
+
           // start of bootstrapping ( if is on ) 
           for(int l=1; l<=nLoops;l++){
             
@@ -1310,7 +1286,6 @@ using namespace std;
               }
               simTauJetPhi_xy=simTauJetPhi + phi_genTau_tauJet ;
               simTauJetPt_xy=simTauJetPt; 
-
             }
 
 
@@ -1396,17 +1371,8 @@ using namespace std;
                 temp3Vec.SetPtEtaPhi(evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i]);
 		double jecCorr = evt->slimJetjecFactor_()[slimJetIdx];
 		if (jecCorr==0.) jecCorr=1.;
-		temp3Vec *= 1./jecCorr; temp3Vec -= Muon3Vec; 
-		//temp3Vec += SimTauJet3Vec;
-		double temp_pt=temp3Vec.Pt();
-		double temp_eta=temp3Vec.Eta();
-		int nx=jec_template->GetXaxis()->FindBin(temp_pt);
-		int ny=jec_template->GetYaxis()->FindBin(temp_eta);
-		//		std::cout<<" pt "<<temp_pt<<" eta "<<temp_eta<<" nx "<<nx<<" ny "<<ny<<" jec "<<jec_template->GetBinContent(nx,ny)<<endl;
-		if(jec_template->GetBinContent(nx,ny)!=0)
-		  NewTauJet3Vec=(temp3Vec*jec_template->GetBinContent(nx,ny))+SimTauJet3Vec;
-		else
-		  NewTauJet3Vec=(temp3Vec*jecCorr)+SimTauJet3Vec;
+		temp3Vec *= 1./jecCorr; temp3Vec -= Muon3Vec; temp3Vec *= jecCorr;
+                NewTauJet3Vec=temp3Vec+SimTauJet3Vec;
                 NewTauJetPt = NewTauJet3Vec.Pt();
 		NewTauJetEta = NewTauJet3Vec.Eta();
 		if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)HT3JetVec.push_back(NewTauJet3Vec);
@@ -2962,23 +2928,10 @@ using namespace std;
     MuJet_fail->Write();
     MuJet_all->Write();
     MuJetfile.Close();
-    for(unsigned int i = 0; i < utils->TauResponse_nBins_(); ++i){
-      if( hRecoMuPt.at(i)->Integral("width") > 0. ) {
-	// if option "width" is specified, the integral is the sum of the bin contents multiplied by the bin width in x.
-	hRecoMuPt.at(i)->Scale(1./hRecoMuPt.at(i)->Integral("width"));
-      }
-    }
-    if( mu_RecoPt->Integral("width") > 0. ) 
-      mu_RecoPt->Scale(1./mu_RecoPt->Integral("width"));
-
 
     // open a file to write the histograms
     sprintf(tempname,"%s/HadTauEstimation_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
     TFile *resFile = new TFile(tempname, "RECREATE");
-    mu_RecoPt->Write();
-    for(unsigned int i = 0; i < TauResponse_nBins; ++i) {
-      hRecoMuPt.at(i)->Write();
-    }
     muMtWHist->Write();
     cutflow_preselection->Write();
     searchH->Write();

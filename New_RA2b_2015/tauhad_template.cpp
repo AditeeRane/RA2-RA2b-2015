@@ -1253,6 +1253,7 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
       tauJetJECtemplate->SetBinContent(nx,ny,FillTemplate);
       tauJetJECtemplateStat->SetBinContent(nx,ny,FillTemplateStat);      
     }
+    //*AR, Jan31,2017-Earlier we were saving all jets from slimJets after jec correction applied. So that slimJetJECup and slimJetJECdown had same size as slimJets.So the same jetIdx was used to get tauJetPtUp and tauJetPtDown.But in V11 ntuples,slimJetJECup and slimJetJECdown did not have same size as slimJets. So it was desirable to construct slimJetupPtVec and slimJetdownPtVec using jec uncertainty saved in trees.Here it is just a placeholder as we are using templates derived from Wgun. So in the same way we have to construct slimJetupPtVec and slimJetdownPtVec in case of Wgun recipe.
   //std::cout<<" tauJetPt "<<tauJetPt<<endl; 
     //	  const double tauJetPtUp = evt->slimJetJECup_.at(jetIdx).Pt();
     //std::cout<<" tauJetPtUp "<<tauJetPtUp<<endl;
