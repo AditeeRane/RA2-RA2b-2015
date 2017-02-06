@@ -838,7 +838,7 @@ using namespace std;
     TH1D * trig_pass = new TH1D("trig_pass"," trigger pass -- search bin",totNbins,1,totNbins+1);
     trig_pass->Sumw2();
     //*AR,Oct4,2016-Using taugun templates instead of MC templates
-    TFile * resp_file_taugun = new TFile("Inputs/hist_taugun_aditee_Reweighted.root","R");
+    TFile * resp_file_taugun = new TFile("Inputs/hist_taugun_aditee.root","R");
     // Use Ahmad's tau template
     TFile * resp_file_temp = new TFile("Inputs/Elog371_HadTau_TauResponseTemplates_stacked.root","R");
     TFile * resp_file = new TFile("Inputs/Elog433_HadTau_TauResponseTemplates_stacked.root","R");
@@ -950,7 +950,7 @@ using namespace std;
       eventWeight = evt->weight();
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>10000)break;
+      if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
