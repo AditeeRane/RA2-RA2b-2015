@@ -52,7 +52,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   WJettype[0]="allEvents";
   TTbartype[0]="allEvents";
   Ttype[0]="allEvents";
-
+  /*
 // .....................................................................................................................................................//
 // Single Top Section
 // .....................................................................................................................................................//
@@ -82,7 +82,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
     file = new TFile(tempname, "R");
     sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
     tempvalue = (luminosity*T_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
-*/
+
     if(i==1)sprintf(tempname,"../HadTauEstimation_t_top_.root");
     else if(i==2)sprintf(tempname,"../HadTauEstimation_t_antitop_.root");
     else if(i==3)sprintf(tempname,"../HadTauEstimation_tW_top_.root");
@@ -533,7 +533,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
 
 
 
-
+*/
 // .....................................................................................................................................................//
 // WJet Section
 // .....................................................................................................................................................//
@@ -552,8 +552,8 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   WJet_xs_vec.push_back(59.5);  // HT 400-600
   WJet_xs_vec.push_back(22.8);  // HT 600-800
   WJet_xs_vec.push_back(1);  // HT 800-1200
-  WJet_xs_vec.push_back(1);  // HT 1200_2500
-  WJet_xs_vec.push_back(1);  // HT 2500-Inf
+  //  WJet_xs_vec.push_back(1);  // HT 1200_2500
+  //WJet_xs_vec.push_back(1);  // HT 2500-Inf
 
   const int wjnHT = (int) WJet_xs_vec.size();   // Total number of HT bin samples
 
@@ -928,7 +928,7 @@ cout << " flag \n " ;
 
 
 
-
+  /*
 
 //..........................................//
 // Mistag rate 
@@ -1040,14 +1040,14 @@ cout << " flag \n " ;
   printf("Mu mistag rate from WJet calculated. \n ");
  
   file->Close();
-  
+*/  
 //..........................................//
 // Trigger Efficiency 
 //..........................................//
 
   // Load the files to a vector
   // These are tau template files
-
+  /*
   WJet_inputfilevec.clear();
 
   for(int i=1; i<=wjnHT ; i++){
@@ -1202,7 +1202,7 @@ cout << " flag \n " ;
   file->Close();
   printf("WJet dilepton rate calculated. \n ");
 
-
+*/
 
 // .....................................................................................................................................................//
 // TTbar Section
@@ -1560,7 +1560,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
 
   file->Close();
   printf("TTbar Mu from nonW calculated. \n ");
-
+  /*
 
 //..........................................//
 // Mistag rate 
@@ -1665,8 +1665,8 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   printf("Mu mistag rate from TTbar calculated. \n ");
 
   file->Close();
-
-
+*/
+  /*
 
 //..........................................//
 // Trigger Efficiency 
@@ -1825,7 +1825,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
 
 
 
-
+*/
 
 
 // ..................................................................................................................................................... //
@@ -1833,7 +1833,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
 // ..................................................................................................................................................... //
 
   // There are two contributors 1-TTbar and 2-WJet 3-T
-  int NSamples=3;
+  int NSamples=2;
 
   // A vector that contains all the samples
   vector<TFile*> sample_inputfilevec;
@@ -1961,7 +1961,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   sprintf(tempname,"Probability_Tau_mu_WJet_stacked.root");
   file2 = new TFile(tempname,"R");
   sprintf(tempname,"Probability_Tau_mu_T_stacked.root");
-  file30 = new TFile(tempname,"R");
+  //file30 = new TFile(tempname,"R");
 
   // Open a file to write
   sprintf(tempname,"Probability_Tau_mu_stacked.root");
@@ -1988,10 +1988,10 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -2017,16 +2017,16 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
     
   }
 
-  file30->Close();
+  //  file30->Close();
   file3->Close();
   file2->Close();
   file->Close();
@@ -2151,7 +2151,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   file2->Close();
 
 
-
+  /*
 
 // ........................................... //
 //  dilepton rate
@@ -2241,7 +2241,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   file->Close();
   file2->Close();
 
-
+*/
 
 } // End of the constructor 
 

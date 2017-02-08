@@ -2,11 +2,12 @@
 
 type=$1 # 0 prediction, 1 expectation
 outStr=$2
-
+#export path=`pwd -P`
+#export SUBMIT_DIR=`tar -cf Dir.tar ${path}`
 export SUBMIT_DIR=`pwd -P`
 
-for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
-#for WJetStr in 2500_Inf; do
+#for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
+for WJetStr in 100_200; do
 
     export SubmitFile=submitScriptWJet_${WJetStr}.jdl
     if [ -e ${SubmitFile} ]; then

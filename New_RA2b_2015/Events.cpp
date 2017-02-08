@@ -944,7 +944,7 @@ vector<int>     Events::GenTauHadVec_() const {
   return temp;
 }
 
-  double Events::csv_() const {return 0.80;} 
+  double Events::csv_() const {return 0.8484;} 
 
 //int Events::GoodVtx_() const {return GoodVtx;}
   int Events::CSCTightHaloFilter_() const {return CSCTightHaloFilter;}

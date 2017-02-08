@@ -46,11 +46,11 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   WJettype[0]="allEvents";
   TTbartype[0]="allEvents";
   Ttype[0]="allEvents";
-
+  
 // .....................................................................................................................................................//
 // Single Top Section
 // .....................................................................................................................................................//
-
+/*
   //build a vector of scale factors
   //first load the cross sections into a vector
   vector<double> T_xs_vec;
@@ -81,7 +81,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     file = new TFile(tempname, "R");
     sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
     tempvalue = (luminosity*T_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
-    */
+    
     if     (i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_t_top_.root");
     else if(i==2)sprintf(tempname,"../GenInfo_HadTauEstimation_t_antitop_.root");
     else if(i==3)sprintf(tempname,"../GenInfo_HadTauEstimation_tW_top_.root");
@@ -96,14 +96,14 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     T_scalevec.push_back(tempvalue);
   }//end of loop over HTbins 
   std::cout << "T normalization scale factor determination done \n " << std::endl;
-
+*/
   //..........................................//
   // main histograms like HT, MHT, ...
   //..........................................//
 
   // Load the files to a vector 
   // These are the HT, MHT, .. variables
-  for(int i=1; i<=tnHT ; i++){
+  /*  for(int i=1; i<=tnHT ; i++){
     if     (i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_t_top_.root");
     else if(i==2)sprintf(tempname,"../GenInfo_HadTauEstimation_t_antitop_.root");
     else if(i==3)sprintf(tempname,"../GenInfo_HadTauEstimation_tW_top_.root");
@@ -964,7 +964,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("T acceptance calculated. \n ");
-
+*/
 // .....................................................................................................................................................//
 // WJet Section
 // .....................................................................................................................................................//
@@ -983,8 +983,8 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   WJet_xs_vec.push_back(59.5);  // HT 400-600
   WJet_xs_vec.push_back(22.8);  // HT 600-800
   WJet_xs_vec.push_back(1);  // HT 800_1200
-  WJet_xs_vec.push_back(1);  // HT 1200_2500
-  WJet_xs_vec.push_back(1);  // HT 2500_Inf
+  //WJet_xs_vec.push_back(1);  // HT 1200_2500
+  //WJet_xs_vec.push_back(1);  // HT 2500_Inf
 
   const int wjnHT = (int) WJet_xs_vec.size();   // Total number of HT bin samples
 
@@ -2486,7 +2486,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[0]="hAcc_nb_njet2";
   histname[1]="hAccPass_nb_njet2";
   histname[2]="hAccAll_nb_njet2";
-  //std::cout<<"****Seg vio****"<<endl;
+  
   for(int j=0; j<histname.size(); j++){
 
     if(j==0)continue; // Stacking probability histograms has no meaning.
@@ -2729,7 +2729,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphistIII->SetName("hAcc_non0b_");
   temphistIII->SetTitle("hAcc_non0b_");
   temphistIII->Write();
-
 
 
   histname.clear();
@@ -3236,7 +3235,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 // ..................................................................................................................................................... //
 
   // There are three contributors 1-TTbar and 2-WJet 3-T
-  int NSamples=3;
+  int NSamples=2;
 
   // A vector that contains all the samples
   vector<TFile*> sample_inputfilevec;
@@ -3281,8 +3280,8 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   Hname[7]="hPredHTMHTwb";
   Hname[8]="hPredNJetBins";
   Hname[9]="hPredNbBins";
-
-  for(int j=0; j< Hname.size(); j++){
+ 
+    for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<NSamples ; i++){                                                  // loop over different HT bins
 
@@ -3530,6 +3529,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   file->Close();
   file2->Close();
 
+  
 
 
 
@@ -3542,8 +3542,8 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   file = new TFile(tempname,"R");
   sprintf(tempname,"LostLepton2_MuonEfficienciesFromWJet_stacked.root");
   file2 = new TFile(tempname,"R");
-  sprintf(tempname,"LostLepton2_MuonEfficienciesFromT_stacked.root");
-  file30 = new TFile(tempname,"R");
+  //  sprintf(tempname,"LostLepton2_MuonEfficienciesFromT_stacked.root");
+  //file30 = new TFile(tempname,"R");
 
   // Open a file to write
   sprintf(tempname,"LostLepton2_MuonEfficienciesFromstacked.root");
@@ -3560,10 +3560,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3580,10 +3580,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3600,10 +3600,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3619,10 +3619,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3639,10 +3639,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3658,10 +3658,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3678,10 +3678,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3692,16 +3692,17 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[0]="hAcc_non0b_Pass";
   histname[1]="hAcc_non0b_All";
 
+  std::cout<<"***SegVio******"<<endl;
 
   for(int j=0; j<histname.size(); j++){
 
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3719,10 +3720,119 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet2_lowDphi";
+  histname[1]="hAccAll_nb_njet2_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet78";
+  histname[1]="hAccAll_nb_njet78";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet9";
+  histname[1]="hAccAll_nb_njet9";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAcc_0b_Pass";
+  histname[1]="hAcc_0b_All";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAcc_non0b_Pass";
+  histname[1]="hAcc_non0b_All";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+
+  histname.clear();
+  histname[0]="hAccPass_lowDphi";
+  histname[1]="hAccAll_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3738,15 +3848,262 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
   }
 
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet78";
+  histname[1]="hAccAll_nb_njet78";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet9";
+  histname[1]="hAccAll_nb_njet9";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAcc_0b_Pass";
+  histname[1]="hAcc_0b_All";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAcc_non0b_Pass";
+  histname[1]="hAcc_non0b_All";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+
+  histname.clear();
+  histname[0]="hAccPass_lowDphi";
+  histname[1]="hAccAll_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet2_lowDphi";
+  histname[1]="hAccAll_nb_njet2_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet78";
+  histname[1]="hAccAll_nb_njet78";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet9";
+  histname[1]="hAccAll_nb_njet9";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAcc_0b_Pass";
+  histname[1]="hAcc_0b_All";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+  histname.clear();
+  histname[0]="hAcc_non0b_Pass";
+  histname[1]="hAcc_non0b_All";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+
+
+  histname.clear();
+  histname[0]="hAccPass_lowDphi";
+  histname[1]="hAccAll_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+  histname.clear();
+  histname[0]="hAccPass_nb_njet2_lowDphi";
+  histname[1]="hAccAll_nb_njet2_lowDphi";
+
+
+  for(int j=0; j<histname.size(); j++){
+
+    sprintf(tempname,"%s",(histname[j]).c_str());
+    temphist = (TH1D *) file->Get(tempname)->Clone();
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
+
+    temphist2 = (TH1D *) file2->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+
+    temphist->Add(temphist,temphist2,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
+
+  temphist->Write();
+
+  }
 
   histname.clear();
   histname[0]="hAccPass_nb_njet34_lowDphi";
@@ -3758,10 +4115,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3777,10 +4134,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3797,10 +4154,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3816,10 +4173,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    // temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
@@ -3833,7 +4190,6 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   sprintf(tempname,"LostLepton2_MuonEfficienciesFromstacked.root");
   file2 = new TFile(tempname,"R");
   file = new TFile(tempname,"UPDATE");
-  
   sprintf(tempname,"hAccPass");
   temphist = (TH1D *) file->Get(tempname)->Clone();
   sprintf(tempname,"hAccAll");
@@ -3987,8 +4343,8 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   file = new TFile(tempname,"R");
   sprintf(tempname,"IsoEfficiencies_WJet_stacked.root");
   file2 = new TFile(tempname,"R");
-  sprintf(tempname,"IsoEfficiencies_T_stacked.root");
-  file30 = new TFile(tempname,"R");
+  //sprintf(tempname,"IsoEfficiencies_T_stacked.root");
+  //file30 = new TFile(tempname,"R");
 
   // Open a file to write
   sprintf(tempname,"IsoEfficiencies_stacked.root");
@@ -4014,10 +4370,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //    temphist->Add(temphist,temphist30,1,1);
 
     temphist->Write();
 
@@ -4032,10 +4388,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
     
     temphist->Write();
 
@@ -4060,10 +4416,10 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"%s",(histname[j]).c_str());
     temphist = (TH1D *) file->Get(tempname)->Clone();
     temphist2 = (TH1D *) file2->Get(tempname)->Clone();
-    temphist30 = (TH1D *) file30->Get(tempname)->Clone();
+    //temphist30 = (TH1D *) file30->Get(tempname)->Clone();
 
     temphist->Add(temphist,temphist2,1,1);
-    temphist->Add(temphist,temphist30,1,1);
+    //temphist->Add(temphist,temphist30,1,1);
 
   temphist->Write();
 
