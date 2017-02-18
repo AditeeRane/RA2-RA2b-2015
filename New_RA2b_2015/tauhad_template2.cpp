@@ -651,7 +651,7 @@ using namespace std;
     // Open some files and get the histograms ........................................//
 
     // Rate of bTagged tau jet
-    TFile * bRateFile = new TFile("Inputs/ARElog114_TauBtaggedRate_WJet_stacked.root","R");
+    TFile * bRateFile = new TFile("Inputs/ARElog115_TauBtaggedRate_WJet_stacked.root","R");
     //*AR,Oct14,2016-Instead of getting b mistag rate of tau directly we will take the difference between tau and mu mistag rates from WJet for reassignment of Nb bins
     //    TFile * bRateFile = new TFile("Inputs/hist_bRateDiff_TauVsMu_08Dec.root","R");
     //TFile * bRateFile = new TFile("Inputs/hist_AvebRateDiff_TauVsMu.root","R");
@@ -663,7 +663,7 @@ using namespace std;
     TH1D * bRateHist = (TH1D * ) bRateFile->Get(histname)->Clone();
 
     // Probability of muon coming from Tau
-    TFile * Prob_Tau_mu_file = new TFile("Inputs/ARElog114_Probability_Tau_mu_stacked.root","R");
+    TFile * Prob_Tau_mu_file = new TFile("Inputs/ARElog116_Probability_Tau_mu_stacked.root","R");
     sprintf(histname,"hProb_Tau_mu");
     TH1D * hProb_Tau_mu =(TH1D *) Prob_Tau_mu_file->Get(histname)->Clone();
     sprintf(histname,"hProb_Tau_mu_nb_njet2");
@@ -693,7 +693,7 @@ using namespace std;
 
     // Acceptance and efficiencies
     //    TFile * MuAcc_file = new TFile("Inputs/ARElog63_LostLepton2_MuonEfficienciesFromstacked.root","R");
-    TFile * MuAcc_file = new TFile("Inputs/ARElog114_LostLepton2_MuonEfficienciesFromstacked.root","R");
+    TFile * MuAcc_file = new TFile("Inputs/ARElog115_LostLepton2_MuonEfficienciesFromstacked.root","R");
     sprintf(histname,"hAcc");
     TH1D * hAcc =(TH1D *) MuAcc_file->Get(histname)->Clone();
     
@@ -740,7 +740,7 @@ using namespace std;
     TH2F *hMuIsoSF = (TH2F*)MediumIso_SF->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0_&_Medium2016_pass");
 
     // Get IsoTrk (veto) efficiencies
-    TFile * IsoEffFile = new TFile("Inputs/ARElog114_IsoEfficiencies_stacked.root","R");
+    TFile * IsoEffFile = new TFile("Inputs/ARElog115_IsoEfficiencies_stacked.root","R");
     //    TFile * IsoEffFile = new TFile("Inputs/KHElog420_modifiedIsoEfficiencies_stacked.root","R");
     TH1D * hIsoEff =(TH1D *) IsoEffFile->Get("IsoEff")->Clone();
     TH1D * hIsoEff_lowDphi =(TH1D *) IsoEffFile->Get("IsoEff_lowDphi")->Clone();
@@ -767,7 +767,7 @@ using namespace std;
     //std::cout<<" MTFile is read "<<std::endl;
     //    TFile * MtFile = new TFile("Inputs/Elog433_MtEff.root","R");
 
-    TFile * MtFile = new TFile("Inputs/ARElog114_MtEff.root","R");
+    TFile * MtFile = new TFile("Inputs/ARElog116_MtEff.root","R");
     TH1D * hMT = (TH1D *) MtFile->Get("MtCutEff")->Clone();
     //TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
     TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
@@ -949,7 +949,7 @@ using namespace std;
       eventWeight = evt->weight();
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>20000)break;
+      //if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
