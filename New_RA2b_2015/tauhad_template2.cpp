@@ -724,20 +724,21 @@ using namespace std;
   
     //
     // Reco and ISO MC efficiencies
-    TFile * MuIsoEff_Arne = new TFile("Inputs/Efficiencies_Simon_LatestbyV11.root","R");
+    TFile * MuIsoEff_Arne = new TFile("Inputs/Efficiencies_Simon_v12.root","R");
     TH2F *hMuRecoPTEta_Arne = (TH2F*)MuIsoEff_Arne->Get("Efficiencies/MuRecoPTEta/MuRecoPTEta");
     TH2F *hMuIsoPTActivity_Arne = (TH2F*)MuIsoEff_Arne->Get("Efficiencies/MuIsoActivityPT/MuIsoActivityPT");
 
     // Data/MC scale factors
-    TFile * MediumID_SF = new TFile("Inputs/TnP_MuonID_NUM_MediumID_DENOM_generalTracks_VAR_map_pt_eta.root","R");
-    TH2F *hMuIDSF = (TH2F*)MediumID_SF->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0");
+    //*AR,Feb21,2017-Moved to Moriond scale factor
+    TFile * MediumID_SF = new TFile("Inputs/TnP_NUM_MediumID_DENOM_generalTracks_VAR_map_pt_eta.root","R");
+    TH2F *hMuIDSF = (TH2F*)MediumID_SF->Get("SF");
 
     TFile * GenTrack_SF = new TFile("Inputs/general_tracks_and_early_general_tracks_corr_ratio.root","R");
     TH1F *hMuTrkHighPtSF = (TH1F*)GenTrack_SF->Get("mutrksfptg10");
     TH1F *hMuTrkLowPtSF = (TH1F*)GenTrack_SF->Get("mutrksfptl10");
 
-    TFile * MediumIso_SF = new TFile("Inputs/TnP_MuonID_NUM_MiniIsoTight_DENOM_MediumID_VAR_map_pt_eta.root","R");
-    TH2F *hMuIsoSF = (TH2F*)MediumIso_SF->Get("pt_abseta_PLOT_pair_probeMultiplicity_bin0_&_Medium2016_pass");
+    TFile * MediumIso_SF = new TFile("Inputs/TnP_NUM_MiniIsoTight_DENOM_MediumID_VAR_map_pt_eta.root","R");
+    TH2F *hMuIsoSF = (TH2F*)MediumIso_SF->Get("SF");
 
     // Get IsoTrk (veto) efficiencies
     TFile * IsoEffFile = new TFile("Inputs/ARElog115_IsoEfficiencies_stacked.root","R");
@@ -1819,17 +1820,17 @@ using namespace std;
 		}
 
 		// from V9 MC
-		double NjNbCorrArray[19]={1.18356,1.21073,1.11848,1.03658,1.0453,1.04509,1.22348,0.996722,1.02037,1.01847,1.05701,0.971252,0.981075,0.95545,1.0266,0.913243,0.935931,0.979777,0.929925};
+		double NjNbCorrArray[19]={1.17399,1.20094,1.10832,1.02584,1.03485,1.0356,1.21258,0.98518,1.00936,1.00807,1.04635,0.959842,0.970069,0.945353,1.01596,0.90192,0.925152,0.970212,0.919978};
 		NjNbCorr = NjNbCorrArray[utils2::findBin_NJetNBtag(newNJet,NewNB)];
 		
 		double QCD_UpNjNbCorrArray[19]=
-		   {1.12023,1.1729,1.00742,1.01858,1.04563,1.05766,1.13417,0.988494,0.991231,1.00573,1.03316,0.955032,0.961362,0.962876,1.00731,0.975043,0.94905,0.966663,0.974729};
+		   {1.11067,1.16299,0.998984,1.00782,1.035,1.04784,1.12393,0.976999,0.980355,0.995285,1.02251,0.943574,0.950614,0.95249,0.996299,0.963399,0.937785,0.956104,0.96402};
 
 		QCD_UpNjNbCorr=QCD_UpNjNbCorrArray[utils2::findBin_NJetNBtag(newNJet,NewNB)]; 
 		factor_Up_NjNb=QCD_UpNjNbCorr/NjNbCorr;
 
 		double QCD_LowNjNbCorrArray[19]=
-		  {1.01514,1.01652,1.02714,1.00426,0.993001,1.03627,1.10786,0.968031,0.946187,0.972133,1.01418,0.924986,0.926577,0.937102,1.02168,0.915867,0.890126,0.921551,0.940109};
+		  {1.00357,1.00596,1.01692,0.993508,0.982486,1.02538,1.09642,0.957791,0.936144,0.961578,1.00259,0.915095,0.916172,0.92677,1.01113,0.904738,0.880713,0.911209,0.928022};
 
 
 		QCD_LowNjNbCorr=QCD_LowNjNbCorrArray[utils2::findBin_NJetNBtag(newNJet,NewNB)]; 
@@ -1843,8 +1844,8 @@ using namespace std;
 
 	      //
               // Here Eff is not a good naming. What this really mean is efficiency and also isolation together
-	      Eff_Arne = hMuRecoPTEta_Arne->GetBinContent(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(fabs(muEta)));
-	      Reco_error_Arne = hMuRecoPTEta_Arne->GetBinError(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(fabs(muEta)));
+	      Eff_Arne = hMuRecoPTEta_Arne->GetBinContent(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(muEta));
+	      Reco_error_Arne = hMuRecoPTEta_Arne->GetBinError(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(muEta));
 	      Eff_Arne*=hMuIsoPTActivity_Arne->GetBinContent(hMuIsoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuIsoPTActivity_Arne->GetYaxis()->FindBin(muPt));
               Iso_error_Arne = hMuIsoPTActivity_Arne->GetBinError(hMuIsoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuIsoPTActivity_Arne->GetYaxis()->FindBin(muPt));
 
@@ -1857,10 +1858,11 @@ using namespace std;
 		  Eff_Arne *=utils2::GetSF(hMuTrkLowPtSF,muEta);
 		
 		// Updating for IDSF 
-		Eff_Arne *=utils2::GetSF(hMuIDSF,muPt,muEta);
+		Eff_Arne *=utils2::GetSF(hMuIDSF,muPt,fabs(muEta));
 		
 		// Updating for IsoSF 
-		//Eff_Arne *=utils2::GetSF(hMuIsoSF,muPt,muEta);
+		//*AR, Feb21,2017, hMuIsoSF was commented before
+		Eff_Arne *=utils2::GetSF(hMuIsoSF,muPt,fabs(muEta));
 		
 		/*
 		std::cout << muPt << " " 
@@ -1921,16 +1923,16 @@ using namespace std;
               if(StudyErrorPropag){
 
 		IdSFUp= 1. 
-		  + utils2::GetSFUnc(hMuIDSF, muPt, muEta, true)
+		  + utils2::GetSFUnc(hMuIDSF, muPt, fabs(muEta), true)
 		  + utils2::GetSFUnc(hMuTrkHighPtSF, muEta, true);
 		IdSFDw= 1. 
-		  - utils2::GetSFUnc(hMuIDSF, muPt, muEta, true)
+		  - utils2::GetSFUnc(hMuIDSF, muPt, fabs(muEta), true)
 		  - utils2::GetSFUnc(hMuTrkHighPtSF, muEta, true);
 	
 		IsoSFUp= 1. 
-		  + utils2::GetSFUnc(hMuIsoSF, muPt, muEta, true);
+		  + utils2::GetSFUnc(hMuIsoSF, muPt, fabs(muEta), true);
 		IsoSFDw= 1. 
-		  - utils2::GetSFUnc(hMuIsoSF, muPt, muEta, true);
+		  - utils2::GetSFUnc(hMuIsoSF, muPt, fabs(muEta), true);
 
 		/*
 		std::cout << utils2::GetSFUnc(hMuIDSF, muPt, muEta, true)  << " " 

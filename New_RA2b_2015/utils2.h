@@ -672,8 +672,8 @@ namespace utils2{
 
     double SF = 0.;
 
-    if(addSys) SF = std::max(std::abs(1-SFandUnc.first), std::sqrt(SFandUnc.second*SFandUnc.second + 0.01*SFandUnc.first*0.01*SFandUnc.first));
-    else SF = std::max(std::abs(1-SFandUnc.first), SFandUnc.second);
+    if(addSys) SF = std::sqrt(SFandUnc.second*SFandUnc.second + 0.01*0.01);
+    else SF = SFandUnc.second;
 
     return SF;
   }
@@ -687,8 +687,8 @@ namespace utils2{
 
     double SF = 0.;
 
-    if(addSys) SF = std::max(std::abs(1-SFandUnc.first), std::sqrt(SFandUnc.second*SFandUnc.second + 0.01*SFandUnc.first*0.01*SFandUnc.first));
-    else SF = std::max(std::abs(1-SFandUnc.first), SFandUnc.second);
+    if(addSys) SF = std::sqrt(SFandUnc.second*SFandUnc.second + 0.014*0.014);
+    else SF = SFandUnc.second;
 
     //std::cout << std::abs(1-hist->GetBinContent(nxBin, nyBin)) << " " << std::sqrt(hist->GetBinError(nxBin, nyBin)*hist->GetBinError(nxBin, nyBin) + 0.01*hist->GetBinContent(nxBin, nyBin)*0.01*hist->GetBinContent(nxBin, nyBin)) << " " << hist->GetBinError(nxBin, nyBin)<<std::endl;
 
