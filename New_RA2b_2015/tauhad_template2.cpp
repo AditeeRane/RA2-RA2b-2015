@@ -27,6 +27,7 @@
 #include "TFile.h"
 #include "TChain.h"
 #include "TH1.h"
+#include "TGraphAsymmErrors.h"
 #include "TProfile.h"
 #include "TVector2.h"
 #include "TVector3.h"
@@ -733,9 +734,9 @@ using namespace std;
     TFile * MediumID_SF = new TFile("Inputs/TnP_NUM_MediumID_DENOM_generalTracks_VAR_map_pt_eta.root","R");
     TH2F *hMuIDSF = (TH2F*)MediumID_SF->Get("SF");
 
-    TFile * GenTrack_SF = new TFile("Inputs/general_tracks_and_early_general_tracks_corr_ratio.root","R");
-    TH1F *hMuTrkHighPtSF = (TH1F*)GenTrack_SF->Get("mutrksfptg10");
-    TH1F *hMuTrkLowPtSF = (TH1F*)GenTrack_SF->Get("mutrksfptl10");
+    TFile * GenTrack_SF = new TFile("Inputs/Tracking_EfficienciesAndSF_BCDEFGH.root","R");
+    TGraphAsymmErrors *hMuTrkHighPtSF = (TGraphAsymmErrors*)GenTrack_SF->Get("ratio_eff_eta3_dr030e030_corr");
+    TGraphAsymmErrors *hMuTrkLowPtSF = (TGraphAsymmErrors*)GenTrack_SF->Get("ratio_eff_eta3_tk0_dr030e030_corr");
 
     TFile * MediumIso_SF = new TFile("Inputs/TnP_NUM_MiniIsoTight_DENOM_MediumID_VAR_map_pt_eta.root","R");
     TH2F *hMuIsoSF = (TH2F*)MediumIso_SF->Get("SF");
@@ -1303,11 +1304,15 @@ using namespace std;
 
             // New ht and mht 
             vector<TVector3> HT3JetVec,MHT3JetVec,GenHT3JetVec,GenMHT3JetVec;
+	    vector<TVector3> HT3Within2Pt4Vec,HT3Within5Vec;
+	    double HT_2Pt4=0;
+	    double HT_5=0;
             HT3JetVec.clear();
             MHT3JetVec.clear();
 	    GenHT3JetVec.clear();
 	    GenMHT3JetVec.clear();
-	    
+	    HT3Within2Pt4Vec.clear();
+	    HT3Within5Vec.clear();
             TVector3 temp3Vec;
             int slimJetIdx=-1;
 	    int GenJetIdx=-1;
@@ -1362,6 +1367,9 @@ using namespace std;
               if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)MHT3JetVec.push_back(NewTauJet3Vec);
             }
 	    for(int i=0;i<evt->slimJetPtVec_().size();i++){
+	      temp3Vec.SetPtEtaPhi(evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i]);
+	      if(fabs(evt->slimJetEtaVec_()[i])<2.4)HT3Within2Pt4Vec.push_back(temp3Vec);
+	      if(fabs(evt->slimJetEtaVec_()[i])<5.0)HT3Within5Vec.push_back(temp3Vec);
               if(i!=slimJetIdx){
                 temp3Vec.SetPtEtaPhi(evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i]);
                 if(evt->slimJetPtVec_()[i]>30. && fabs(evt->slimJetEtaVec_()[i])<2.4)HT3JetVec.push_back(temp3Vec);
@@ -1379,7 +1387,12 @@ using namespace std;
                 if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)MHT3JetVec.push_back(NewTauJet3Vec);
               }              
             }
-      
+	    for(int i=0;i<HT3Within2Pt4Vec.size();i++){
+              HT_2Pt4+=HT3Within2Pt4Vec[i].Pt();
+            }
+	    for(int i=0;i<HT3Within5Vec.size();i++){
+              HT_5+=HT3Within5Vec[i].Pt();
+            }
 
 	    // for fastsim	    
 	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
@@ -1786,11 +1799,12 @@ using namespace std;
 	      double MuonPtMinCorr=1.;
 	      double QCD_UpNjNbCorr=1.;
 	      double QCD_LowNjNbCorr=1.;
-
+	      double HTRatiocut=HT_5/HT_2Pt4;
 	      double factor_Up_NjNb=1;
 	      double factor_Low_NjNb=1;
 	      //std::cout<<" eventN "<<eventN<<endl;
 	      if (isData){
+		
 		//if(eventN<50) std::cout<<" eventN "<<eventN<< " Make sure you are using the updated NjNb correction factors "<<endl;
 		if (newHT<500.){
 
@@ -2310,7 +2324,12 @@ using namespace std;
                   else{
 		    //if(searchWeight==0)
 		    //std::cout<<"search region "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;  
-		      
+		    
+		      if(isData && HTRatiocut>2.0){
+			//std::cout<<"eventN "<<eventN<<"HT ratiocut satisfied"<<endl;
+			continue;
+		      }
+
 		      searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight);
 		    
 		      //for (int i=1;i<=174;i++){

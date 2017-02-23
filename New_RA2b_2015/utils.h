@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <iostream>
 #include "TString.h"
+#include "TGraphAsymmErrors.h"
 #include <cmath>
 #include <string>
 #include <vector>
