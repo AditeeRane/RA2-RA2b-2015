@@ -1837,8 +1837,8 @@ void makeNjNbCorr_QCDBin_HiDphi(TH1* hist){
     if(ibin<=143)
       index=int((ibin-1)/13);
     else
-      index=int(13+(ibin-144)/13);
-    //std::cout << index << std::endl;
+      index=int(11+(ibin-144)/10);
+    //std::cout <<" QCDBin_HiDphi "<<" ibin "<<ibin<<" index "<< index << std::endl;
     double corr = NjNbCorr_QCDHDP[index];
     //std::cout << corr << std::endl;
     hist->SetBinContent(ibin,corr*hist->GetBinContent(ibin));
@@ -1853,7 +1853,8 @@ void makeNjNbCorr_QCDBin_LowDphi(TH1* hist){
     if(ibin<=143)
       index=int((ibin-1)/13);
     else
-      index=int(13+(ibin-144)/13);
+      index=int(11+(ibin-144)/10);
+    //std::cout <<" QCDBin_LowDphi "<<" ibin "<<ibin<<" index "<< index << std::endl;
 
     
     //std::cout << index << std::endl;
