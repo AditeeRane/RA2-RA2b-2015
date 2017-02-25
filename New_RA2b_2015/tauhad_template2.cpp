@@ -2326,7 +2326,7 @@ using namespace std;
 		    //std::cout<<"search region "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;  
 		    
 		      if(isData && HTRatiocut>2.0){
-			//std::cout<<"eventN "<<eventN<<"HT ratiocut satisfied"<<endl;
+			std::cout<<"eventN "<<eventN<<" HTRatiocut "<<HTRatiocut<<"HT ratiocut satisfied"<<endl;
 			continue;
 		      }
 

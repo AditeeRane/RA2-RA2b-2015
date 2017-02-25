@@ -39,7 +39,7 @@ void reLabel(TH1* output);
 //double NjNbCorr[16]={1.10302,1.05589,1.11467,1.15494,1.02888,1.00077,1.04321,0.921019,1.00569,0.993849,1.01237,1.02326,0.906839,0.815019,0.990902,0.988837};
 //double NjNbCorr[16]={1.09554,1.07391,1.12317,1.25163,1.0102,1.00845,1.05714,1.02093,0.996454,1.01738,0.990167,1.04041,0.833852,0.818807,0.96625,0.95135};
 double NjNbCorr[19]=
-		  {1.11998,1.02071,0.899496,1.00848,1.03618,1.03088,1.21098,0.960755,0.993052,1.02152,1.02597,0.952303,0.984147,0.975219,1.06904,0.788829,0.863781,0.973593,1.02607};
+		  {1.17399,1.20094,1.10832,1.02584,1.03485,1.0356,1.21258,0.98518,1.00936,1.00807,1.04635,0.959842,0.970069,0.945353,1.01596,0.90192,0.925152,0.970212,0.919978};
 //double NjNbCorr_QCDHDP[16]={
 //  1.06067,1.15766,1.21137,1.38428,
 //  0.988007,1.02257,1.05086,1.17749,
@@ -54,7 +54,7 @@ double NjNbCorr[19]=
 //
 //double NjNbCorr_QCDHDP[16]={1.07954,1.05912,1.11673,1.13352,1.02719,1.00215,1.00608,0.932549,0.986,0.983652,0.977785,0.979731,0.891571,0.879714,0.96842,0.992207};
 //double NjNbCorr_QCDHDP[16]={1.0727,1.07053,1.12063,1.17505,1.0059,1.00026,1.02861,0.998668,0.977091,0.989521,0.966759,1.01327,0.891883,0.843374,0.962022,1.00473};                
-double NjNbCorr_QCDHDP[19]={1.07153,1.06493,0.869503,1.00324,1.04166,1.04036,1.15162,0.960976,0.989814,1.00306,1.01672,0.943009,0.969703,0.958433,1.04288,0.815166,0.863716,0.93869,1.04426};
+double NjNbCorr_QCDHDP[19]={1.11067,1.16299,0.998984,1.00782,1.035,1.04784,1.12393,0.976999,0.980355,0.995285,1.02251,0.943574,0.950614,0.95249,0.996299,0.963399,0.937785,0.956104,0.96402};
 
 //double NjNbCorr_QCDLDP[16]={
 //  0.864283,1.04062,1.10166,1.31812,
@@ -70,14 +70,15 @@ double NjNbCorr_QCDHDP[19]={1.07153,1.06493,0.869503,1.00324,1.04166,1.04036,1.1
 //
 //double NjNbCorr_QCDLDP[16]={0.969584,0.960883,1.02801,0.958625,0.938399,0.939326,0.944426,0.913042,0.937141,0.91543,0.945902,0.915756,0.863937,0.856496,0.910216,0.872439};
 //double NjNbCorr_QCDLDP[16]={0.953996,0.968867,1.05964,1.03167,0.915907,0.947684,0.950087,0.988761,0.918411,0.903336,0.968701,0.958839,0.914316,0.877071,0.883752,0.891303};
-double NjNbCorr_QCDLDP[19]={0.990872,0.969698,1.19945,0.977282,0.982156,1.00339,0.983693,0.937747,0.952808,0.934517,0.972829,0.925238,0.916922,0.960452,1.00121,0.896845,0.867203,0.899828,0.916347};
+double NjNbCorr_QCDLDP[19]={1.00357,1.00596,1.01692,0.993508,0.982486,1.02538,1.09642,0.957791,0.936144,0.961578,1.00259,0.915095,0.916172,0.92677,1.01113,0.904738,0.880713,0.911209,0.928022};
 
 void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // Data
 				    //string elogForData="ARElog40_4fb_",
 				    //string elogForData="ARElog41_2.6fb_",
 				    //string elogForData="ARElog46_7.6ifb_",
 				    //string elogForData="ARElog49_7.6ifb_",
-				    string elogForData="ARElog94_36.35ifb_",
+				    //string elogForData="ARElog94_36.35ifb_",
+				    string elogForData="ARElog116_35.9ifb_",
 				    //string elogForData="ARElog42_4fb_",
 				    string elogForData2="KHElog424_",      // Data 
 				    //string elogForMCExp="KHElog420_",      // MC expectation
@@ -85,26 +86,26 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 				    //string elogForMCExp="ARElog41_",
 				    //string elogForMCPre="ARElog41_",
 				    //
-				    string elogForMCExp="ARElog90_",
-				    string elogForMCPre="ARElog91_",
-				    string elogForSys="ARElog98_",          // MC-based systematics evaluation for Btag mistag uncertainties and muon efficiency stat uncertainties
-				    string elogForMuSys="ARElog98_",        // MC-based systematics evaluation for muon ID&Iso systematic efficiencies
+				    string elogForMCExp="ARElog115_",
+				    string elogForMCPre="ARElog116_",
+				    string elogForSys="ARElog116_",          // MC-based systematics evaluation for Btag mistag uncertainties and muon efficiency stat uncertainties
+				    string elogForMuSys="ARElog116_",        // MC-based systematics evaluation for muon ID&Iso systematic efficiencies
 				    //string elogForJECSysUp="Elog426_",     // JEC Up systematics
 				    //string elogForJECSysDn="Elog426_",     // JEC Down systematics
 				    //string elogForJECSysRef="Elog426_",    // JEC uncertainty reference
 
 
-				    string elogForJECSysUp="ARElog84_",     // JEC Up systematics
-				    string elogForJECSysDn="ARElog84_",     // JEC Down systematics
-				    string elogForJECSysRef="ARElog84_",    // JEC uncertainty reference
+				    string elogForJECSysUp="ARElog116_",     // JEC Up systematics
+				    string elogForJECSysDn="ARElog116_",     // JEC Down systematics
+				    string elogForJECSysRef="ARElog116_",    // JEC uncertainty reference
 				    
-				    string elogForAccPDF="ARElog84_",      // Acceptance uncertainty due to PDF
-				    string elogForAccScale="ARElog84_",    // Acceptance uncertainty due to scale
+				    string elogForAccPDF="ARElog115_",      // Acceptance uncertainty due to PDF
+				    string elogForAccScale="ARElog115_",    // Acceptance uncertainty due to scale
 				    //
-				    string elogForIsoTrkVeto="ARElog63_",   // Isotrack veto efficiency stat uncertainty
-				    string elogForMuFromTau="ARElog63_",    // Muon from tau stat uncertainty
-				    string elogForAccStat="ARElog63_",      // Acceptance stat uncertainty
-				    string elogForMTStat="ARElog63_",       // MT cut efficiency
+				    string elogForIsoTrkVeto="ARElog115_",   // Isotrack veto efficiency stat uncertainty
+				    string elogForMuFromTau="ARElog116_",    // Muon from tau stat uncertainty
+				    string elogForAccStat="ARElog115_",      // Acceptance stat uncertainty
+				    string elogForMTStat="ARElog116_",       // MT cut efficiency
 				    //
 				    double trigEff=1.000,                  // Trigger efficiency for highHT selection (now corrected in the tauhad2_templace.cpp code)
 				    double trigEff2=1.000,                 //                    for lowHT  selection
@@ -116,7 +117,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 				    //double lumiTarget=2.584653,            // Luminosity of the search trigger sample 
 				    //double lumiControl=2.585297,           // Luminosity of the SingleMuon PD used for the control sample
 				    // lumi for V8
-				    double lumiTarget=36.35,				                               double lumiControl=36.35,
+				    double lumiTarget=35.9,				                               double lumiControl=35.9,
 				    int isys=0){
 
   char tempname[200];
@@ -131,7 +132,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   //  sprintf(tempname,"TauHad2/%sHadTauEstimation_data_SingleMuon_v17a_20160624v1_hadd.root",elogForData.c_str());
   //    sprintf(tempname,"TauHad2/%sHadTauEstimation_data_SingleMuon_v16b_.root",elogForData.c_str());
   //sprintf(tempname,"TauHad2/%sHadTauEstimation_data_SingleMuon_v17a_.root",elogForData.c_str());
-  sprintf(tempname,"TauHad2/%sHadTauEstimation_data_SingleMuon_V11_.root",elogForData.c_str());
+  sprintf(tempname,"TauHad2/%sHadTauEstimation_data_SingleMuon_V12_.root",elogForData.c_str());
   TFile *DataEstFile = TFile::Open(tempname,"R");
   printf("Opened %s\n",tempname);
   /*
@@ -142,7 +143,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 
   //
   // Convenient utility histogram
-  //
+  // *AR,Feb24,2017-searchBin_one a flat histogram with bincontent 1 and error 0
   TH1D* searchBin_one = (TH1D*)DataEstFile->Get("searchH_b")->Clone("searchBin_one");  
   searchBin_one->Reset();
   searchBin_one->SetLineColor(1);
@@ -150,11 +151,11 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
     searchBin_one->SetBinContent(ibin+1,1.);
     searchBin_one->SetBinError(ibin+1,0.);
   }
-
+  // *AR,Feb24,2017-searchBin_box is original searchH_b histogram 
   TH1D* searchBin_box = (TH1D*)DataEstFile->Get("searchH_b")->Clone("searchBin_box");
   searchBin_box->Reset();
   searchBin_box->SetLineColor(1);
-
+  // *AR,Feb24,2017-QCDBin_one a flat histogram with bincontent 1 (why error is not set to 0)
   TH1D* QCDBin_one = (TH1D*)DataEstFile->Get("QCD_Up")->Clone("QCDBin_one");
   QCDBin_one->Reset();
   QCDBin_one->SetLineColor(1);
@@ -162,12 +163,13 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
     QCDBin_one->SetBinContent(ibin+1,1.);
     //QCDBin_one->SetBinError(ibin+1,0.);
   }
-  
+  // *AR,Feb24,2017-QCDBin_box is original QCD_Up histogram
   TH1D* QCDBin_box = (TH1D*)DataEstFile->Get("QCD_Up")->Clone("QCDBin_box");
   QCDBin_box->Reset();
   QCDBin_box->SetLineColor(1);
 
   // reformat
+  //*AR,Feb24,2017-"reformat" makes histogram bin boundaries and bin labels of searchBin_one and QCDBin_one consistent
   TH1D* searchBin_one_input = static_cast<TH1D*>(searchBin_one->Clone("searchBin_one_input"));
   reformat(searchBin_one_input,searchBin_one);
   TH1D* searchBin_box_input = static_cast<TH1D*>(searchBin_box->Clone("searchBin_box_input"));
@@ -194,7 +196,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   printf("Opened %s\n",tempname);
 
   //
-  // Open MC file including systematics.
+  // Open all MC files including systematics.
   //
   //sprintf(tempname,"TauHad2/HadTauEstimation_%sContainigStatandSysErrors.root",elogForSys.c_str());
   sprintf(tempname,"TauHad2/%sHadTauEstimation_hadd_withSystematics.root",elogForSys.c_str());
@@ -578,7 +580,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 
   // Some additional variables
   const int NSearchBinArray=175;
-  const int NQCDBinArray=232;
+  const int NQCDBinArray=224;
   double searchBin_stat_uncertainty_fractional[NSearchBinArray];
   double searchBin_uncertainty_correction_stats_up[NSearchBinArray];
   double searchBin_uncertainty_correction_stats_dn[NSearchBinArray];
@@ -846,7 +848,11 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   TH1D * QCDBin_HiDphi_closureUncertainty_adhoc = static_cast<TH1D*>(GenHist->Clone("QCDBin_HiDphi_closureUncertainty_adhoc"));
   QCDBin_HiDphi_closureUncertainty_adhoc->Reset();
   for (int ibin=1;ibin<=QCDBin_HiDphi_closureUncertainty_adhoc->GetNbinsX();ibin++){
-    int index=int((ibin-1)/13);
+    int index=-1;
+    if(ibin<=143)
+      index=int((ibin-1)/13);
+    else
+      index=int((ibin-144)/10)+11;
     //std::cout << index << " " << ibin << std::endl;
     QCDBin_HiDphi_closureUncertainty_adhoc->SetBinContent(ibin,fabs(NjNbCorr_QCDHDP[index]-1.));
   }
@@ -868,9 +874,9 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   QCDBin_HiDphi_closureRatio->Divide(QCDBin_HiDphi_GenHist_Clone,QCDBin_HiDphi_EstHist_Clone,1,1,"");  
   // Expectation/Prediction-1 - Non closure
 
-  double QCDBin_HiDphi_closure_stat_uncertainty_fractional[231];
+  double QCDBin_HiDphi_closure_stat_uncertainty_fractional[223];
 
-  for (int ibin=1;ibin<=231;ibin++){
+  for (int ibin=1;ibin<=223;ibin++){
     // Stat uncertainty
     QCDBin_HiDphi_closure_stat_uncertainty_fractional[ibin]=0.;
     if (QCDBin_HiDphi_closureRatio->GetBinContent(ibin)!=0.){
@@ -909,13 +915,18 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   GenHist->SetLineColor(1);
 
   //std::cout<<" QCDBin_LowDphi_closureUncertainty_adhoc "<<endl; 
-  TH1D * QCDBin_LowDphi_closureUncertainty_adhoc = static_cast<TH1D*>(GenHist->Clone("QCDBin_LowDphi_closureUncertainty_adhoc"));
-  QCDBin_LowDphi_closureUncertainty_adhoc->Reset();
-  for (int ibin=1;ibin<=QCDBin_LowDphi_closureUncertainty_adhoc->GetNbinsX();ibin++){
-    int index=int((ibin-1)/13);
-    //std::cout << index << " " << ibin << std::endl;
-    QCDBin_LowDphi_closureUncertainty_adhoc->SetBinContent(ibin,fabs(NjNbCorr_QCDLDP[index]-1.));
-  }
+    TH1D * QCDBin_LowDphi_closureUncertainty_adhoc = static_cast<TH1D*>(GenHist->Clone("QCDBin_LowDphi_closureUncertainty_adhoc"));
+    QCDBin_LowDphi_closureUncertainty_adhoc->Reset();
+    for (int ibin=1;ibin<=QCDBin_LowDphi_closureUncertainty_adhoc->GetNbinsX();ibin++){
+      int index=-1;
+      if(ibin<=143)
+	index=int((ibin-1)/13);
+      else
+	index=int((ibin-144)/10)+11;
+        
+      //std::cout << index << " " << ibin << std::endl;
+      QCDBin_LowDphi_closureUncertainty_adhoc->SetBinContent(ibin,fabs(NjNbCorr_QCDLDP[index]-1.));
+    }
   //QCDBin_LowDphi_closureUncertainty_adhoc->Print("all");
 
   //
@@ -935,8 +946,8 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   QCDBin_LowDphi_closureRatio->Divide(QCDBin_LowDphi_GenHist_Clone,QCDBin_LowDphi_EstHist_Clone,1,1,"");  
   // Expectation/Prediction-1 - Non closure
   //std::cout<<" QCDBin_LowDphi_closure_stat_uncertainty_fractional "<<endl;
-  double QCDBin_LowDphi_closure_stat_uncertainty_fractional[231];
-  for (int ibin=1;ibin<=231;ibin++){
+  double QCDBin_LowDphi_closure_stat_uncertainty_fractional[223];
+  for (int ibin=1;ibin<=223;ibin++){
     // Stat uncertainty
     //std::cout<<" Inside for loop "<<" ibin "<<ibin<< endl;
     QCDBin_LowDphi_closure_stat_uncertainty_fractional[ibin]=0.;
@@ -1269,9 +1280,9 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   QCDBin_HiDphi_nominal->Write();
   QCDBin_HiDphi_nominal_fullstatuncertainty->Write();
   QCDBin_HiDphi_StatUncertainties->Write();
-  std::cout<<"*************CH5 *************"<<endl;
-  QCDBin_HiDphi_closureUncertainty->Add(QCDBin_one);       QCDBin_HiDphi_closureUncertainty->Write();
-  QCDBin_HiDphi_closureUncertainty_adhoc->Add(QCDBin_one); QCDBin_HiDphi_closureUncertainty_adhoc->Write();
+  std::cout<<"*************CH5 *************"<<endl;  
+    QCDBin_HiDphi_closureUncertainty->Add(QCDBin_one);       QCDBin_HiDphi_closureUncertainty->Write();
+    QCDBin_HiDphi_closureUncertainty_adhoc->Add(QCDBin_one); QCDBin_HiDphi_closureUncertainty_adhoc->Write();
   QCDBin_HiDphi_BMistagUp->Add(QCDBin_one);                QCDBin_HiDphi_BMistagUp->Write();
   QCDBin_HiDphi_BMistagDn->Add(QCDBin_one);                QCDBin_HiDphi_BMistagDn->Write("QCDBin_HiDphi_BMistagDn");
   QCDBin_HiDphi_MuRecoSysUp->Add(QCDBin_one);              QCDBin_HiDphi_MuRecoSysUp->Write();
@@ -1579,13 +1590,15 @@ void binMap_ICHEP2016(TH1* input, TH1* output){
       0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
       0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
       0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
+  //*AR,Feb24,2017-Lists denominators for averaging efficiencies needed to move from 72 bins to 60 bins
   double noB_ent[60]
     ={1,1,1,1,1,1,1,1,1,1,1,1,
       2,2,2,2,2,2,2,2,2,2,2,2,
       2,2,2,2,2,2,2,2,2,2,2,2,
       1,1,1,1,1,1,1,1,1,1,1,1,
       1,1,1,1,1,1,1,1,1,1,1,1};
-  int map_input[84] // which 48 bins this 72 efficiency binning corresponds to?
+  //*AR,Feb24,2017-Used to define index of output map while moved from 72 bins to 60 bins
+  int map_input[84] 
     ={ 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,  
        13,14,15,16,17,18,19,20,21,22,23,24,
        13,14,15,16,17,18,19,20,21,22,23,24,
@@ -1593,7 +1606,9 @@ void binMap_ICHEP2016(TH1* input, TH1* output){
        25,26,27,28,29,30,31,32,33,34,35,36,
        37,38,39,40,41,42,43,44,45,46,47,48,
        49,50,51,52,53,54,55,56,57,58,59,60};
-
+  //*AR,Feb24,2017-This map is used to pick up a bin of 60 binned averaged efficiency map to assign efficiency to 174 bin output histogram.
+  //*AR,Feb24,2017-We are using same efficiency value for all bjet bins corresponding to same [Njet,HT,MHT]
+  //*AR,Feb24,2017-Here note that numbers start from 4 as first 3 bins of efficiency map of given Njet corresponds to QCD control region bins.  
   int map_output[174]
     ={ 4, 5, 6, 7, 8, 9,10,11,12,12,
        4, 5, 6, 7, 8, 9,10,11,12,12,
@@ -1616,18 +1631,21 @@ void binMap_ICHEP2016(TH1* input, TH1* output){
        53,54,56,57,58,59,60,60       
   };
   
-  // 1: 72 binning to 9*4=48 bins
-  for (int ibin=1; ibin<=input->GetNbinsX(); ibin++){ 
-    //    std::cout<<" ibin "<<ibin<<" map_input[ibin-1] "<< map_input[ibin-1]<<" input_GetBinContent"<<input->GetBinContent(ibin)<< " noB_ent[map_input[ibin-1]-1] "<< noB_ent[map_input[ibin-1]-1]<<endl; 
+  // 1: 72 binning to 60 bins
+  //*AR,Feb24,2017-Actual averaging over efficiencies to move from 72 bins to 60 bins. For ex. Bincontent of 13 th bin in output map is average of 13th and 26th bins in input 74 bin map 
+ 
+ for (int ibin=1; ibin<=input->GetNbinsX(); ibin++){ 
     noB[map_input[ibin-1]-1] += input->GetBinContent(ibin)/noB_ent[map_input[ibin-1]-1];
     noBe[map_input[ibin-1]-1] += input->GetBinError(ibin)/noB_ent[map_input[ibin-1]-1];
+    std::cout<<" 72_binIndx "<<ibin<<" 72_binContent "<<input->GetBinContent(ibin)<<" newIndx "<< map_input[ibin-1]-1<<" denom to get average efficiency "<<noB_ent[map_input[ibin-1]-1]<<  " newBinContent "<< noB[map_input[ibin-1]-1]<<endl; 
+
   }
 
   for(int j=0;j<60;j++){
     //  std::cout<< " j "<< j<<" noB[j] "<<noB[j]<<endl;
   }
   
-  // 2: 48 bins to 40*4=160 bins
+  //*AR,Feb24,2017-Here we create 174 efficiency histogram from 60 binned averaged efficiency map
   for (int ibin=1; ibin<=output->GetNbinsX(); ibin++){    
     //std::cout<<" ibin "<<ibin<<" map_output[ibin-1] "<< map_output[ibin-1]<< " noB[map_output[ibin-1]-1] "<< noB[map_output[ibin-1]-1]<<endl;
     output->SetBinContent(ibin,noB[map_output[ibin-1]-1]);
@@ -1723,7 +1741,7 @@ void binMap_QCD_ICHEP2016(TH1* input, TH1* output){
       49,50,51,52,53,54,55,56,57,58,59,60
       };
 
-  int map_output[231]
+  int map_output[223]
     ={ 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,12,
        1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,12,
        1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,12,
@@ -1735,14 +1753,14 @@ void binMap_QCD_ICHEP2016(TH1* input, TH1* output){
        25,26,27,28,29,30,31,32,33,34,35,36,36,
        25,26,27,28,29,30,31,32,33,34,35,36,36,
        25,26,27,28,29,30,31,32,33,34,35,36,36,
-       37,38,39,41,42,44,45,46,47,48,48,
-       37,38,39,41,42,44,45,46,47,48,48,
-       37,38,39,41,42,44,45,46,47,48,48,
-       37,38,39,41,42,44,45,46,47,48,48,
-       49,50,51,53,54,56,57,58,59,60,61,
-       49,50,51,53,54,56,57,58,59,60,61,
-       49,50,51,53,54,56,57,58,59,60,61,
-       49,50,51,53,54,56,57,58,59,60,61
+       38,39,41,42,44,45,46,47,48,48,
+       38,39,41,42,44,45,46,47,48,48,
+       38,39,41,42,44,45,46,47,48,48,
+       38,39,41,42,44,45,46,47,48,48,
+       50,51,53,54,56,57,58,59,60,61,
+       50,51,53,54,56,57,58,59,60,61,
+       50,51,53,54,56,57,58,59,60,61,
+       50,51,53,54,56,57,58,59,60,61
   };
       
   // 1: 72 binning to 9*4=48 bins
@@ -1913,7 +1931,7 @@ void reformat(TH1* input, TH1* output){
   }
 
   // QCD Binning
-  if(output->GetNbinsX()==231){
+  if(output->GetNbinsX()==223){
     //std::cout<<"***********QCD labels"<<endl;
     int MaxNb=0;
     int MaxHTMHT=0;
@@ -1925,7 +1943,7 @@ void reformat(TH1* input, TH1* output){
       else
 	MaxNb=4;
       if(nji>2)
-	MaxHTMHT=11;
+	MaxHTMHT=10;
       else
 	MaxHTMHT=13;
       for(int nbi = 0; nbi<MaxNb; ++nbi){
@@ -1938,11 +1956,11 @@ void reformat(TH1* input, TH1* output){
 	    else if(hti >=9 && hti <=10) mhti = 2;
 	    else mhti = 3;
 	  }
-	  if(MaxHTMHT==11){
-	    if(hti >=0 && hti <=2) mhti = -1;
-	    else if(hti >=3 && hti <=4) mhti = 0;
-	    else if(hti >=5 && hti <=6) mhti = 1;
-	    else if(hti >=7 && hti <=8) mhti = 2;
+	  if(MaxHTMHT==10){
+	    if(hti >=0 && hti <=1) mhti = -1;
+	    else if(hti >=2 && hti <=3) mhti = 0;
+	    else if(hti >=4 && hti <=5) mhti = 1;
+	    else if(hti >=6 && hti <=7) mhti = 2;
 	    else mhti = 3;
 	  }
 	  
@@ -2132,7 +2150,7 @@ void reLabel(TH1* output){
   }
 
   // QCD Binning
-  if(output->GetNbinsX()==231){
+  if(output->GetNbinsX()==223){
     std::cout<<"***********QCD labels"<<endl;
     int MaxNb=0;
     int MaxHTMHT=0;
@@ -2144,7 +2162,7 @@ void reLabel(TH1* output){
       else
 	MaxNb=4;
       if(nji>2)
-	MaxHTMHT=11;
+	MaxHTMHT=10;
       else
 	MaxHTMHT=13;
       for(int nbi = 0; nbi<MaxNb; ++nbi){
@@ -2157,11 +2175,11 @@ void reLabel(TH1* output){
 	    else if(hti >=9 && hti <=10) mhti = 2;
 	    else mhti = 3;
 	  }
-	  if(MaxHTMHT==11){
-	    if(hti >=0 && hti <=2) mhti = -1;
-	    else if(hti >=3 && hti <=4) mhti = 0;
-	    else if(hti >=5 && hti <=6) mhti = 1;
-	    else if(hti >=7 && hti <=8) mhti = 2;
+	  if(MaxHTMHT==10){
+	    if(hti >=0 && hti <=1) mhti = -1;
+	    else if(hti >=2 && hti <=3) mhti = 0;
+	    else if(hti >=4 && hti <=5) mhti = 1;
+	    else if(hti >=6 && hti <=7) mhti = 2;
 	    else mhti = 3;
 	  }
 	  

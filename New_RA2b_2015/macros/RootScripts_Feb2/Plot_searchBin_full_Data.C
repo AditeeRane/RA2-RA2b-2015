@@ -131,8 +131,8 @@ void Plot_searchBin_full_Data(string sample="stacked",string histname="searchH_b
   //TFile * EstFile = new TFile("TauHad2/ARElog42_4fb_HadTauEstimation_data_SingleMuon_v16b_.root","R");
   //  TFile * EstFile = new TFile("TauHad2/ARElog49_7.6ifb_HadTauEstimation_data_SingleMuon_V9bc_.root","R");
   //  TFile * EstFile = new TFile("TauHad2/ARElog56_12.9ifb_HadTauEstimation_data_SingleMuon_V9bcd_.root","R");
-  TFile * EstFile = new TFile("ARElog94_36.35ifb_HadTauEstimation_data_SingleMuon_V11_.root","R");
-  sprintf(tempname,"ARElog94_GenInfo_HadTauEstimation_%s.root",sample.c_str());
+  TFile * EstFile = new TFile("ARElog116_35.9ifb_HadTauEstimation_data_SingleMuon_V12_.root","R");
+  sprintf(tempname,"ARElog115_GenInfo_HadTauEstimation_%s.root",sample.c_str());
   //cout << "warning:\n Warning \n \n  using elog195 for pre and  exp \n \n ";
   TFile * GenFile = new TFile(tempname,"R");
   printf("Opened %s\n",tempname);
@@ -649,7 +649,7 @@ void Plot_searchBin_full_Data(string sample="stacked",string histname="searchH_b
   //
   // Specific to each bottom plot
   //
-  numerator->GetXaxis()->SetLabelSize(0.18*1.1);
+  numerator->GetXaxis()->SetLabelSize(0.18*0.045/0.06);
   numerator->GetXaxis()->SetTitleSize(0.18);
   numerator->GetXaxis()->SetTitleOffset(0.9);
   numerator->GetXaxis()->SetTitleFont(42);
@@ -671,7 +671,7 @@ void Plot_searchBin_full_Data(string sample="stacked",string histname="searchH_b
 
   //
   // Plotting
-  
+  /*
   char binlab[100];
   numerator->GetXaxis()->LabelsOption("h");
   numerator->GetXaxis()->SetLabelOffset(0.03);
@@ -686,14 +686,14 @@ void Plot_searchBin_full_Data(string sample="stacked",string histname="searchH_b
     }
   }
   
-
+*/
   numerator->DrawCopy();
-
+  /*
   for(int i=1;i<=denominator->GetNbinsX();i++){
     sprintf(binlab, " ");
     denominator->GetXaxis()->SetBinLabel(i,binlab);
   }
-
+*/
   denominator->DrawCopy("e2same");
   denominator->DrawCopy("same");
 
