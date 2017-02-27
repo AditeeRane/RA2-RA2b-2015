@@ -231,7 +231,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   TFile * JECSysRefFile = new TFile(tempname,"R");
   printf("Opened %s\n",tempname);
 
-  //
+  //*AR,Feb27,2016-84 bin efficiency histograms are mapped to 174/223 bin histogram to apply correction to searchbin/QCD histograms.
   // Isotrack veto efficiency
   //
   sprintf(tempname,"Inputs/%sIsoEfficiencies_stacked.root",elogForIsoTrkVeto.c_str());
@@ -253,10 +253,12 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   QCDBin_LowDphi_IsoTrkVetoEff->Reset();
   binMap_QCD_ICHEP2016(IsoTrkVetoEff_LowDphi,QCDBin_LowDphi_IsoTrkVetoEff);
 
+  //*AR,Feb 27,2016-These are 174 bin histograms
   TH1D* searchBin_IsoTrkVetoEffUncertaintyTot  = (TH1D*)searchBin_IsoTrkVetoEff->Clone("searchBin_IsoTrkVetoEffUncertaintyTot");
   TH1D* searchBin_IsoTrkVetoEffUncertaintyStat = (TH1D*)searchBin_IsoTrkVetoEff->Clone("searchBin_IsoTrkVetoEffUncertaintyStat");
   TH1D* searchBin_IsoTrkVetoEffUncertaintySys  = (TH1D*)searchBin_IsoTrkVetoEff->Clone("searchBin_IsoTrkVetoEffUncertaintySys");
 
+  //*AR,Feb 27,2016-These are 223 bin histograms
   TH1D* QCDBin_HiDphi_IsoTrkVetoEffUncertaintyTot  = (TH1D*)QCDBin_HiDphi_IsoTrkVetoEff->Clone("QCDBin_HiDphi_IsoTrkVetoEffUncertaintyTot");
   TH1D* QCDBin_HiDphi_IsoTrkVetoEffUncertaintyStat = (TH1D*)QCDBin_HiDphi_IsoTrkVetoEff->Clone("QCDBin_HiDphi_IsoTrkVetoEffUncertaintyStat");
   TH1D* QCDBin_HiDphi_IsoTrkVetoEffUncertaintySys  = (TH1D*)QCDBin_HiDphi_IsoTrkVetoEff->Clone("QCDBin_HiDphi_IsoTrkVetoEffUncertaintySys");
@@ -267,6 +269,11 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 
   //
   // --- Final propagation of isotrack veto efficiency uncertainty
+  //*AR,Feb27,2017-IsoTrkVetoFlat=10%
+  //For isotrack veto we consider both stat and syst uncertainties
+  //output_sys:(1-eff)*0.1/eff
+  //output_stat:sigma(eff)/eff
+  //output_tot:sqrt(output_sys^2 + output_stat^2)
   isoTrkVetoErrPropagation(searchBin_IsoTrkVetoEff, IsoTrkVetoFlat, searchBin_one,
 			   searchBin_IsoTrkVetoEffUncertaintyTot, searchBin_IsoTrkVetoEffUncertaintyStat, searchBin_IsoTrkVetoEffUncertaintySys);
   isoTrkVetoErrPropagation(QCDBin_HiDphi_IsoTrkVetoEff, IsoTrkVetoFlat, QCDBin_one,
@@ -278,6 +285,8 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   //
   // Mu from tau
   // -----------
+  //*AR, Feb 27,2017-For Mu from Tau we consider only statistical uncertainty, why so?
+  //output_stat:sigma(eff)/(1-eff), why so?
   sprintf(tempname,"Inputs/%sProbability_Tau_mu_stacked.root",elogForMuFromTau.c_str());
   TFile * Prob_Tau_mu_file = new TFile(tempname,"R");
   printf("Opened %s\n",tempname);

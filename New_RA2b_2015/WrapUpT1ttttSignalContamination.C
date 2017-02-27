@@ -63,11 +63,11 @@ void WrapUpT1ttttSignalContamination(string type="T1bbbb",string outStr="Jul"){
   struct stat t_stat; 
   stat(tempname, &t_stat);
   tm  timeinfo = *localtime(&t_stat.st_ctime); // or gmtime() depending on what you want
-  printf(" File's date: year: %g month: %g day: %g \n",1900+timeinfo.tm_year,1+timeinfo.tm_mon,timeinfo.tm_mday );
+  printf(" File's date: year: %d month: %d day: %d \n",1900+timeinfo.tm_year,1+timeinfo.tm_mon,timeinfo.tm_mday );
   // Today's date
   time_t now = time(0);
   tm ltm = *localtime(&now);
-  printf(" Today: year: %g month: %g day: %g \n",1900+ltm.tm_year,1+ltm.tm_mon,ltm.tm_mday );
+  printf(" Today: year: %d month: %d day: %d \n",1900+ltm.tm_year,1+ltm.tm_mon,ltm.tm_mday );
   // the real check
   if( (timeinfo.tm_year != ltm.tm_year) || (timeinfo.tm_mon != ltm.tm_mon) || (timeinfo.tm_mday != ltm.tm_mday) ){
         cout << " Warning: file is not updated today. Make sure you are using the correct file.\n";
