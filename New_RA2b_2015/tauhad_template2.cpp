@@ -538,7 +538,7 @@ using namespace std;
       SampleXS = 1.; // Let's use the weight (XS) stored in ntuples
       fastsimWeight = (3000. * SampleXS)/TotNEve;
       //fastsimWeight = (3000. * SampleXS)/TotNEve;
-      printf(" Luminosity 3000/pb fastsimWeight: %g \n",fastsimWeight);
+      printf(" Luminosity 3000/pb TotNEve: %d fastsimWeight: %g \n",TotNEve,fastsimWeight);
     }
     /*  
   else if (!evt->DataBool_()){  // fullsim
@@ -873,7 +873,7 @@ using namespace std;
     }
 
     // Use Aditee's muon pt cut correction
-    TFile *fileMuonPtMinCorr  = new TFile("Inputs/ARElog93_Ratio_HadTauEstimation_stacked_MinMuPt.root","R");
+    TFile *fileMuonPtMinCorr  = new TFile("Inputs/ARElog116_Ratio_HadTauEstimation_stacked_MinMuPt.root","R");
     TH1D * histMuonPtMinCorr = (TH1D*) fileMuonPtMinCorr->Get("searchH_b")->Clone();
 
     // muMtW Histogram
@@ -949,9 +949,10 @@ using namespace std;
       eventN++;
 
       eventWeight = evt->weight();
+      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //      if(eventN>10000)break;
+      if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1426,7 +1427,7 @@ using namespace std;
 	      else if(i==GenJetIdx){
 		temp3Vec.SetPtEtaPhi(evt->GenJetPtVec_()[i],evt->GenJetEtaVec_()[i],evt->GenJetPhiVec_()[i]);
 		//*AR,Dec28,2016-Should not this be: NewTauJet3Vec=temp3Vec-Muon3Vec+SimTauJet3Vec?
-		NewTauJet3Vec=temp3Vec+SimTauJet3Vec;
+		NewTauJet3Vec=temp3Vec-Muon3Vec+SimTauJet3Vec;
 		NewTauJetPt = NewTauJet3Vec.Pt();
 		NewTauJetEta = NewTauJet3Vec.Eta();
 		if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)GenHT3JetVec.push_back(NewTauJet3Vec);
@@ -2023,21 +2024,22 @@ using namespace std;
               vector<double> prob;
               if(fastsim){
                 totWeight *= fastsimWeight*0.99; // 0.99 is the jet id efficiency correction. 
-                double puWeight = 
-		  puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
+                //double puWeight = 
+		//puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
 		//puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->NVtx_(),(int)puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
-                totWeight*= puWeight ;
+		//                totWeight*= puWeight ;
                 //
                 //double isrWeight = isrcorr.GetCorrection(evt->genParticles_(),evt->genParticles_PDGid_());
 		double isrWeight = isrcorr.GetCorrection(evt->NJetsISR_());
                 totWeight*=isrWeight;
                 //
                 prob = btagcorr.GetCorrections(evt->JetsLorVec_(),evt->Jets_partonFlavor_(),evt->HTJetsMask_());
-		//
+		/*
 		if (totWeight>1. && l==1 && m==0) {
 		  printf("puWeight=%8.1f, isrWeight=%8.1f, nvtx=%8d, trueNint=%5.1f, Nint=%5d\n",
 			 puWeight,isrWeight,evt->NVtx_(),evt->TrueNumInteractions_(),evt->NumInteractions_());
 		}
+*/
               } // fastsim ends
 
               weightEffAcc = totWeight;

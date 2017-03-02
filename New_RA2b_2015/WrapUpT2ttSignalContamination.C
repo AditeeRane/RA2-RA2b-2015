@@ -111,11 +111,11 @@ using namespace std;
     //cout << " name: " <<  filesVec.at(in) << endl;
     //*AR-Dec24,2016-Reads histograms from prediction file,scale to proper lumi and write into the directories inside output root file
     temphist = (TH1D*) infile->Get("searchH_b")->Clone();
-    
+    /*  
     for (int i=1;i<=174;i++){
       temphist->GetXaxis()->SetBinLabel(i,RenameBins(i));
     }
-
+*/
     temphist->Scale(ScaleLumiTo/ScaleLumiFrom);
     temphist->SetName(tempname);
     temphist->SetTitle(tempname);

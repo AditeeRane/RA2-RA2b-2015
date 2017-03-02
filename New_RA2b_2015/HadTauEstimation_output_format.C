@@ -320,6 +320,9 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   //
   // Acceptance
   // ----------
+  //*AR, Feb 27,2017-For nominal acceptance also we consider only statistical uncertainty, why so?
+  //output_stat:sigma(eff)/(eff)
+
   sprintf(tempname,"Inputs/%sLostLepton2_MuonEfficienciesFromstacked.root",elogForAccStat.c_str());
   TFile * MuAcc_file = new TFile(tempname,"R");  
   printf("Opened %s\n",tempname);
@@ -346,14 +349,13 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   TH1D* QCDBin_LowDphi_AccStat = (TH1D*)QCDBin_LowDphi_Acc->Clone("QCDBin_LowDphi_AccStat");
 
   //
-  // --- Propagation of stat uncertainties for acceptance corrections
   effMapStatErrPropagation(searchBin_Acc,searchBin_AccStat);
   effMapStatErrPropagation(QCDBin_HiDphi_Acc, QCDBin_HiDphi_AccStat);
   effMapStatErrPropagation(QCDBin_LowDphi_Acc,QCDBin_LowDphi_AccStat);
 
   // Due to PDF
   //----------
-
+  //*AR,Feb27,2017-Gets hAccSysMax,hAccSysMin hists from acceptance systematics. Mapped from 84 bins to 174/223 bins.
   sprintf(tempname,"TauHad/%sAcceptanceSystematicsFromPDF_AllSamples.root",elogForAccPDF.c_str());
   TFile * AccSysFromPDFFile = new TFile(tempname,"R");
   printf("Opened %s\n",tempname);
@@ -365,6 +367,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   TH1D* searchBin_AccSysPDFUp = (TH1D*)DataEstFile->Get("searchH_b")->Clone("searchBin_AccSysPDFUp");
   searchBin_AccSysPDFUp->Reset();
   binMap_ICHEP2016(hAccSysPDFUp,searchBin_AccSysPDFUp);
+  //*AR, Feb27,2017-Here first histogram is 174 bin histogram after mapping PDF uncertainties.Second histogram is 174 bin histogram after mapping nominal acceptance efficiencies. In output histogram bin content of first histogram is changed to nominal efficiency as a fraction of (nominal+PDF) uncertainty. Why? 
   accErrPropagation(searchBin_AccSysPDFUp,searchBin_Acc);
   TH1D* searchBin_AccSysPDFDn = (TH1D*)DataEstFile->Get("searchH_b")->Clone("searchBin_AccSysPDFDn");
   searchBin_AccSysPDFDn->Reset();
@@ -429,6 +432,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   //
   // MT cut efficiency
   // -----------------
+  //*AR, creates 174/223 bin mT efficiency histograms
   sprintf(tempname,"Inputs/%sMtEff.root",elogForMTStat.c_str());
   TFile * MtFile = new TFile(tempname,"R");
   printf("Opened %s\n",tempname);
@@ -453,6 +457,9 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   TH1D* searchBin_MtEffStat  = (TH1D*)searchBin_MtEff->Clone("searchBin_MtEffStat");
   TH1D* QCDBin_HiDphi_MtEffStat  = (TH1D*)QCDBin_HiDphi_MtEff->Clone("QCDBin_HiDphi_MtEffStat");
   TH1D* QCDBin_LowDphi_MtEffStat = (TH1D*)QCDBin_LowDphi_MtEff->Clone("QCDBin_LowDphi_MtEffStat");
+  // *AR, Feb 27,2017--- Propagation of stat uncertainties for mT efficiency
+  //output_stat:sigma(eff)/(eff)
+
 
   effMapStatErrPropagation(searchBin_MtEff,searchBin_MtEffStat);
   effMapStatErrPropagation(QCDBin_HiDphi_MtEff, QCDBin_HiDphi_MtEffStat);
@@ -470,6 +477,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   TH1D * QCDBin_LowDphi_MTSysDn  = (TH1D*)QCDBin_one->Clone("QCDBin_LowDphi_MTSysDn");  // Template for MTSysDn
   TH1D * QCDBin_LowDphi_MTSysRef = (TH1D*)QCDBin_one->Clone("QCDBin_LowDphi_MTSysRef");
 
+  //*AR, Feb27,2017-effMapConstErrPropagation is different from what we did for isotrk veto
   effMapConstErrPropagation(searchBin_MTSysRef,-MtSysFlat,searchBin_MTSysUp); // MT cut efficiency reduces -> prediction goes up (i.e. plus)  
   effMapConstErrPropagation(searchBin_MTSysRef,+MtSysFlat,searchBin_MTSysDn);
   effMapConstErrPropagation(QCDBin_HiDphi_MTSysRef,-MtSysFlat,QCDBin_HiDphi_MTSysUp);
@@ -481,6 +489,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   // Const uncertainty
   //
   // dileptonic subtraction
+  //*AR, Feb27,2017-creates flat histogram of value 2% and error zero 
   TH1D *searchBin_DileptonUncertainty = (TH1D*) searchBin_one->Clone("searchBin_DileptonUncertainty");
   searchBin_DileptonUncertainty->Scale(dilep);
 
@@ -494,6 +503,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   // Const uncertainty
   //
   // trigger efficiency
+  //*AR, Feb27,2017-creates flat histogram of value 2% and error zero 
   TH1D *searchBin_TrigEffUncertainty = (TH1D*) searchBin_one->Clone("searchBin_TrigEffUncertainty");
   searchBin_TrigEffUncertainty->Scale(trigEffErr/trigEff);
 
@@ -510,14 +520,16 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   //
   // ----- Normal search bin predicitons -----
   //
-
+  //*AR,Feb27,2017-Gets histogram from data estimation file
   TH1D* searchBin_nominal = (TH1D*)DataEstFile->Get("searchH_b")->Clone("searchBin_nominal");  
   TH1D* searchBin_nominal_input = static_cast<TH1D*>(searchBin_nominal->Clone("searchBin_nominal_input"));
   reformat(searchBin_nominal_input,searchBin_nominal);
   //searchBin_nominal->Print();
+  //*AR, Feb27, 2017-Corrects data prediction for trigEff but is set to 1.
   searchBin_nominal->Scale(1/trigEff*lumiTarget/lumiControl); 
   //searchBin_nominal->Print();
   TH1D* searchBin_nominal_fullstatuncertainty = (TH1D*)searchBin_nominal->Clone("searchBin_nominal_fullstatuncertainty");
+  //*AR, Feb 27,2017-From where this 0.460255 uncertainty came? Why is it called full statistical uncertainty?
   for (int ibin=0; ibin<searchBin_nominal->GetNbinsX(); ibin++){
     searchBin_nominal_fullstatuncertainty->SetBinError(ibin+1,pow(pow(searchBin_nominal->GetBinError(ibin+1),2)+pow(0.460255,2),0.5));
   }
@@ -649,7 +661,9 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 	     searchBin_nominal->GetBinError(ibin)/searchBin_nominal->GetBinContent(ibin) 
 	     );
       */
-      searchBin_StatUncertainties->SetBinContent(ibin,searchBin_nominal->GetBinError(ibin));
+      //*AR, Feb27,2017-searchBin_StatUncertaintiesFractional=error/mean value
+      //searchBin_StatUncertainties=1+(error/mean value)
+       searchBin_StatUncertainties->SetBinContent(ibin,searchBin_nominal->GetBinError(ibin));
       searchBin_stat_uncertainty_fractional[ibin] = searchBin_nominal_fullstatuncertainty->GetBinError(ibin)/searchBin_nominal->GetBinContent(ibin);
       searchBin_StatUncertaintiesFractional->SetBinContent(ibin,searchBin_stat_uncertainty_fractional[ibin]);
     } else {
@@ -755,16 +769,20 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   reformat(EstHist_input,EstHist);
   GenHist_input = static_cast<TH1D*>(GenHist->Clone("GenHist_input"));
   reformat(GenHist_input,GenHist);
-
+  //*AR,Feb27,2017-Corrects MC prediction with NjNb correction. Both bin content and bin error are multiplied by a same correction factor.
   makeNjNbCorr_searchBin(EstHist);
   
   GenHist->SetFillColor(0);
   GenHist->SetLineColor(1);
-  
+  //*AR,Feb27,2017-closureUncertainty_adhoc gives deviation of NjNb corr from 1 as an absolute value   
   TH1D * searchBin_closureUncertainty_adhoc = static_cast<TH1D*>(GenHist->Clone("searchBin_closureUncertainty_adhoc"));
   searchBin_closureUncertainty_adhoc->Reset();
   for (int ibin=1;ibin<=searchBin_closureUncertainty_adhoc->GetNbinsX();ibin++){
-    int index=int((ibin-1)/10);
+    int index=-1;
+    if(ibin<=110)
+      index=int((ibin-1)/10);
+    else
+      index=int((ibin-111)/8)+11;
     //std::cout << index << " " << ibin << std::endl;
     searchBin_closureUncertainty_adhoc->SetBinContent(ibin,fabs(NjNbCorr[index]-1.));
   }
@@ -797,6 +815,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   double avenj2;
   double avenj3;
   //-----
+  //*AR,Feb27,2017-For searchBin_closureUncertainty , the value set is the maximum of deviation of Exp/Pre from 1 and fractional error on closure[stat_err(closure)/(closure)]
   for (int ibin=1;ibin<=closureRatio->GetNbinsX();ibin++){
     // Stat uncertainty
     searchBin_closure_stat_uncertainty_fractional[ibin]=0.;
@@ -984,7 +1003,8 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   //
   //  histname="searchH_b_";
   //string cutname="delphi";
-  sprintf(tempname,"allEvents/%s/%s","delphi","searchH_b_");
+  //* AR, Feb27,2017-Gets original histogram under "allEvents" and those after applying systematics. 
+ sprintf(tempname,"allEvents/%s/%s","delphi","searchH_b_");
   TH1D * searchBin_default = (TH1D*)MCSysFile->Get(tempname)->Clone();
   TH1D * searchBin_default2 = (TH1D*)MuSysFile->Get(tempname)->Clone();
   //searchBin_default->Print("all");
@@ -1113,7 +1133,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   //
   // search bin
   // ----------
-  
+  //*AR,Feb27,2017-Here bincontents of first histogram are set to (bincontent_first-bincontent_second)/bincontent_second
   takeDiffForSys(searchBin_BMistagUp,searchBin_default);
   takeDiffForSys(searchBin_BMistagDn,searchBin_default);
 
@@ -1185,7 +1205,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   TH1D* searchBin_JECSysUp_input = static_cast<TH1D*>(searchBin_JECSysUp->Clone("searchBin_JECSysUp_input")); reformat(searchBin_JECSysUp_input,searchBin_JECSysUp);
   TH1D* searchBin_JECSysDn_input = static_cast<TH1D*>(searchBin_JECSysDn->Clone("searchBin_JECSysDn_input")); reformat(searchBin_JECSysDn_input,searchBin_JECSysDn);
   TH1D* searchBin_JECSysRef_input = static_cast<TH1D*>(searchBin_JECSysRef->Clone("searchBin_JECSysRef_input")); reformat(searchBin_JECSysRef_input,searchBin_JECSysRef);
-  
+  //*AR,Feb27,2017-Same method used as in case of muon Iso/Reco/BMistag sys
   takeDiffForSys(searchBin_JECSysUp,searchBin_JECSysRef);
   takeDiffForSys(searchBin_JECSysDn,searchBin_JECSysRef);
 
@@ -1211,6 +1231,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
   takeDiffForSys(QCDBin_HiDphi_JECSysUp,QCDBin_HiDphi_JECSysRef);
   takeDiffForSys(QCDBin_HiDphi_JECSysDn,QCDBin_HiDphi_JECSysRef);
 
+  //*AR-Feb27, 2017-All bins are set to average over all bin values. Hence get flat histogram.
   takeAverage(QCDBin_HiDphi_JECSysUp);
   takeAverage(QCDBin_HiDphi_JECSysDn);
 
@@ -1235,7 +1256,7 @@ void HadTauEstimation_output_format(//string elogForData="KHElog425_",       // 
 
   takeDiffForSys(QCDBin_LowDphi_JECSysUp,QCDBin_LowDphi_JECSysRef);
   takeDiffForSys(QCDBin_LowDphi_JECSysDn,QCDBin_LowDphi_JECSysRef);
-
+  //*AR, Feb27, 2017-All bins are set to average over all bin values. Hence get flat histogram.
   takeAverage(QCDBin_LowDphi_JECSysUp);
   takeAverage(QCDBin_LowDphi_JECSysDn);
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1420,6 +1441,7 @@ void takeDiffForSys(TH1* sys, TH1* input_nominal){
 }
 
 // ----------
+//*AR, Feb27,2017-Used for modulating PDF and scale uncertainties
 void accErrPropagation(TH1* sys, TH1* input_nominal){
 
   TH1* input_sys = (TH1*)sys->Clone("input_sys");
