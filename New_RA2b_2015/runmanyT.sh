@@ -146,7 +146,7 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB},${SUBMIT_DIR}/Inputs>> ${SubmitFile}
 
 	#	echo Transfer_Output_Files = GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 

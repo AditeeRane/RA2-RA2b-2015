@@ -460,9 +460,9 @@ int main(int argc, char *argv[]){
     TH1D * hFailRate_GenTau_Jet =(TH1D *) FailRateGenTau_Jet_file->Get(histname)->Clone();
   */
 
-  // get pileup for MC
-  //TFile * pileupFile = new TFile("TauHad2/pu_weights_7_4_25ns_v2.root","R");
-  //TH1D * hPURatio = (TH1D*)pileupFile->Get("ratio");
+  // *AR, Mar3,2017-Objective is to check impact of PU reweighting on efficiencies.
+  TFile * pileupFile = new TFile("Inputs/PileupHistograms_0121_69p2mb_pm4p6.root","R");
+  TH1D * puhist = (TH1D*)pileupFile->Get("pu_weights_down");
 
   ///read the file names from the .txt files and load them to a vector.
   while(fin.getline(filenames, 500) ){filesVec.push_back(filenames);}
@@ -601,11 +601,15 @@ int main(int argc, char *argv[]){
       CalcAccSys = false;
     }
     
-    //    if(eventN>10000)break;
+    //if(eventN>10000)break;
     //if(eventN>5000)break;
      
     eventWeight = evt->weight();
-    //std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
+    double puWeight = 
+      puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
+    //std::cout<<" interactions "<<evt->TrueNumInteractions_()<<" findbin "<<puhist->GetXaxis()->FindBin(evt->TrueNumInteractions_())<<" lastbin "<<puhist->GetBinLowEdge(puhist->GetNbinsX()+1)<<" puweight "<<puWeight<<endl;    
+    eventWeight*=puWeight;
+  //std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
     //eventWeight = evt->weight()/evt->puweight();
     //if(subSampleKey.find("TTbar_Tbar_SingleLep")!=string::npos)eventWeight = 2.984e-06;
     //if(subSampleKey.find("TTbar_DiLept")!=string::npos)eventWeight = 2.84141e-06;

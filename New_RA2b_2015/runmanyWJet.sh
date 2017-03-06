@@ -150,7 +150,7 @@ for WJetStr in 100_200 200_400 400_600 600_800 800_1200 1200_2500 2500_Inf; do
 		echo Output = ${Output}>> ${SubmitFile}
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
-		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB}>> ${SubmitFile}
+		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB},${SUBMIT_DIR}/Inputs>> ${SubmitFile}
 		echo Transfer_Output_Files = GenInfo_HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_WJet_${WJetStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_WJet_${WJetStr}_${outStr}_${i}_00.root','IsoEfficiencies_WJet_${WJetStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromWJet_${WJetStr}_${outStr}_${i}_00.root','Probability_Tau_mu_WJet_${WJetStr}_${outStr}_${i}_00.root','TauBtaggedRate_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 
 #		echo Transfer_Output_Files = GenInfo_HadTauEstimation_WJet_${WJetStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_WJet_${WJetStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_WJet_${WJetStr}_${outStr}_${i}_00.root','IsoEfficiencies_WJet_${WJetStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromWJet_${WJetStr}_${outStr}_${i}_00.root','Probability_Tau_mu_WJet_${WJetStr}_${outStr}_${i}_00.root','TauBtaggedRate_WJet_${WJetStr}_${outStr}_${i}_00.root','TriggerEff_WJet_${WJetStr}_${outStr}_${i}_00.root>> ${SubmitFile}        

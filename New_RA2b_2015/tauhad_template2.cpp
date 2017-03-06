@@ -438,21 +438,24 @@ using namespace std;
     TH1* MuEta_NJ56 = new TH1D("MuEta_NJ56","MuEtaDistribution_HTMHT=[350,500]",50,-2.5,2.5);
     TH1* MuPhi_NJ56 = new TH1D("MuPhi_NJ56","MuPhiDistribution_HTMHT=[350,500]",80,-4.,4.);
 
+    // *AR, Mar3,2017-Objective is to check impact of PU reweighting on efficiencies.
+    TFile * pileupFile = new TFile("Inputs/PileupHistograms_0121_69p2mb_pm4p6.root","R");
+    TH1D * puhist = (TH1D*)pileupFile->Get("pu_weights_down");
 
 
     // The tau response templates
     Utils * utils = new Utils();
 
     bool fastsim=false;
-    TFile * signalPileUp, *IsrFile,*skimfile;
-    TH1* puhist, *h_isr, *h_genpt, *h_njetsisr; 
+    TFile *IsrFile,*skimfile;
+    TH1 *h_isr, *h_genpt, *h_njetsisr; 
     ISRCorrector isrcorr;
     BTagCorrector btagcorr;
     if(subSampleKey.find("fast")!=string::npos){
       cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n fastsim Monte Carlo \n "; 
       fastsim=true;
-      signalPileUp = new TFile("Inputs/PileupHistograms_0721_63mb_pm5.root","R");
-      puhist=(TH1*)signalPileUp->Get("pu_weights_central");
+      //signalPileUp = new TFile("Inputs/PileupHistograms_0121_69p2mb_pm4p6.root","R");
+      //puhist=(TH1*)signalPileUp->Get("pu_weights_down");
 
       IsrFile = new TFile("Inputs/ISRWeights.root","R");
       h_isr = (TH1*)IsrFile->Get("isr_weights_central");
@@ -949,10 +952,15 @@ using namespace std;
       eventN++;
 
       eventWeight = evt->weight();
-      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
+      double puWeight = 
+	puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
+      //std::cout<<" interactions "<<evt->TrueNumInteractions_()<<" findbin "<<puhist->GetXaxis()->FindBin(evt->TrueNumInteractions_())<<" lastbin "<<puhist->GetBinLowEdge(puhist->GetNbinsX()+1)<<" puweight "<<puWeight<<endl;    
+      eventWeight*=puWeight;
+      
+      //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      if(eventN>10000)break;
+      //if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -2024,7 +2032,8 @@ using namespace std;
               vector<double> prob;
               if(fastsim){
                 totWeight *= fastsimWeight*0.99; // 0.99 is the jet id efficiency correction. 
-                //double puWeight = 
+		//*AR, Mar4,2017--Applying PUweight for signal was commented for Moriond results as Kevin said we are not applying PU weighting to signal since ICHEP.
+		//double puWeight = 
 		//puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
 		//puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->NVtx_(),(int)puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
 		//                totWeight*= puWeight ;
