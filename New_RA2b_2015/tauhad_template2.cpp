@@ -233,7 +233,17 @@ using namespace std;
     searchH_nb_njet78->Sumw2();    
     searchH_nb_njet9->Sumw2();
 
+    TH1* MuonCS_Njets= new TH1D("MuonCS_Njets","Njet distribution for muon CS event",10,2,12);
+    TH1* MuonCS_Nbjets= new TH1D("MuonCS_Nbjets","Nbjet distribution for muon CS event",5,0,5);
+    TH1* MuonCS_HT= new TH1D("MuonCS_HT","HT distribution for muon CS event",20,0,2500);
+    TH1* MuonCS_MHT= new TH1D("MuonCS_MHT","MHT distribution for muon CS event",20,0,1000);
+    TH1* MuonCS_MuonPt= new TH1D("MuonCS_MuonPt","MuonPt distribution for muon CS event",20,0,400);
 
+    MuonCS_Njets->Sumw2();
+    MuonCS_Nbjets->Sumw2();
+    MuonCS_HT->Sumw2();
+    MuonCS_MHT->Sumw2();
+    MuonCS_MuonPt->Sumw2();
 // Make another hist to be filled during bootstrapping
     TH1 * searchH_evt = static_cast<TH1D*>(searchH->Clone("searchH_evt")); 
     TH1* searchH_lowDphi = new TH1D("searchH_lowDphi","search bin histogram",totNbins,1,totNbins+1);
@@ -960,7 +970,7 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>10000)break;
+      //      if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1049,10 +1059,10 @@ using namespace std;
 	  }
 	  //	  std::cout << "i "<<i <<evt->TriggerNames_().at(i) << endl;
           string trigStr;
-          sprintf(tempname, "HLT_Mu15_IsoVVVL_PFHT400_v");
-          sprintf(tempname2,"HLT_Mu15_IsoVVVL_PFHT350_v");
-          sprintf(tempname3,"HLT_IsoMu24_v");
-          sprintf(tempname4,"HLT_IsoTkMu24_v");
+          sprintf(tempname, "HLT_Mu50_v");
+          sprintf(tempname2,"HLT_Mu50_v");
+          sprintf(tempname3,"HLT_Mu50_v");
+          sprintf(tempname4,"HLT_Mu50_v");
 	  sprintf(tempname5,"HLT_Mu50_v");
 	  /*
 	  if (lowHTSelection){
@@ -1060,28 +1070,30 @@ using namespace std;
 	    sprintf(tempname2,"");
 	  }
 	  */
-          if( evt->TriggerNames_().at(i).find(tempname)  != string::npos || 
-	      evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
-	      evt->TriggerNames_().at(i).find(tempname3) != string::npos ||
-	      evt->TriggerNames_().at(i).find(tempname4) != string::npos ||
-	      evt->TriggerNames_().at(i).find(tempname5) != string::npos) {
+          if( evt->TriggerNames_().at(i).find(tempname)  != string::npos  
+	      // evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
+	      //	      evt->TriggerNames_().at(i).find(tempname3) != string::npos
+	      //evt->TriggerNames_().at(i).find(tempname4) != string::npos ||
+	      //evt->TriggerNames_().at(i).find(tempname5) != string::npos
+	      ) {
 
             trigfound=true;
             if(evt->PassTrigger_().at(i)==1)trigPass=true;
 	    
 	    // HighHT selection
-	    if( evt->TriggerNames_().at(i).find(tempname)  != string::npos || 
-		evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
-		evt->TriggerNames_().at(i).find(tempname3) != string::npos ||
-		evt->TriggerNames_().at(i).find(tempname4) != string::npos ||
-		evt->TriggerNames_().at(i).find(tempname5) != string::npos 
+	    if( evt->TriggerNames_().at(i).find(tempname)  != string::npos  
+		//evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
+		//		evt->TriggerNames_().at(i).find(tempname3) != string::npos
+		//evt->TriggerNames_().at(i).find(tempname4) != string::npos ||
+		//evt->TriggerNames_().at(i).find(tempname5) != string::npos 
 		){
 	      if(evt->PassTrigger_().at(i)==1)trigPassHighHT=true;
 	    }
 	    // LowHT selection
-	    if( evt->TriggerNames_().at(i).find(tempname3) != string::npos ||
-		evt->TriggerNames_().at(i).find(tempname4) != string::npos ||
-		evt->TriggerNames_().at(i).find(tempname5) != string::npos){
+	    if( evt->TriggerNames_().at(i).find(tempname3) != string::npos 
+		//evt->TriggerNames_().at(i).find(tempname4) != string::npos ||
+		//evt->TriggerNames_().at(i).find(tempname5) != string::npos
+		){
 	      if(evt->PassTrigger_().at(i)==1)trigPassLowHT=true;
 	    }
 	    
@@ -1253,6 +1265,37 @@ using namespace std;
             }
             
           }
+	  //std::cout<<" HT "<<evt->ht()<<" MHT "<<evt->mht()<<" njets "<<evt->nJets()<<endl;
+	  double trigEffCorr_CS=1.;
+	  /*
+	  if (isData){
+	    if (evt->ht()<500.){
+	      if (muPt<LeptonAcceptance::muonPtMinLowHT()) trigEffCorr_CS=0.;
+	      else {
+		//if (trigPassLowHT) trigEffCorr_CS=1./0.824;
+		// updated on July 12, 2016, Eff provided by Manuel
+		if (trigPassLowHT) {
+		  if(muPt>25.0 && muPt<=30) trigEffCorr_CS=1./0.787;
+		  else if(muPt>30.0 && muPt<=50)trigEffCorr_CS=1./0.843;
+		  else trigEffCorr_CS=1./0.908;
+		  
+		}
+		else trigEffCorr_CS=0.;
+	      }
+	    } else {
+	      if (trigPassHighHT) trigEffCorr_CS=1./0.949;
+	      else                trigEffCorr_CS=0.;
+	    }
+	  }
+*/
+	  if(sel->ht_500(evt->ht()) && sel->mht_200(evt->mht()) && sel->dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4()) && sel->Njet_4(evt->nJets())){
+	    double corr_eventWeight=eventWeight*trigEffCorr_CS;
+	    MuonCS_Njets->Fill(evt->nJets(),eventWeight);
+	    MuonCS_Nbjets->Fill(evt->nBtags(),eventWeight);
+	    MuonCS_HT->Fill(evt->ht(),eventWeight);
+	    MuonCS_MHT->Fill(evt->mht(),eventWeight);
+	    MuonCS_MuonPt->Fill(muPt,eventWeight);
+	  }
 
           // start of bootstrapping ( if is on ) 
           for(int l=1; l<=nLoops;l++){
@@ -2964,6 +3007,11 @@ using namespace std;
     TFile *resFile = new TFile(tempname, "RECREATE");
     muMtWHist->Write();
     cutflow_preselection->Write();
+    MuonCS_Njets->Write();
+    MuonCS_Nbjets->Write();
+    MuonCS_HT->Write();
+    MuonCS_MHT->Write();
+    MuonCS_MuonPt->Write();
     searchH->Write();
     searchH_nb_njet2->Write();
     searchH_nb_njet34->Write();

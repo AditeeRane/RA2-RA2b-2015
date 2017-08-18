@@ -28,13 +28,9 @@ for i in `seq 0 $njobs`; do
     export Suffix=SingleMuon_${sample}_${outStr}_$filenum
     if [ $filenum -lt 10 ]
     then
-	export ArgTwo=filelist_data_SingleMuon_${sample}_000$filenum
-	export ArgTwoB=InputFiles_Data/${ArgTwo}
-    elif [ $filenum -lt 100 ]
-    then
 	export ArgTwo=filelist_data_SingleMuon_${sample}_00$filenum
 	export ArgTwoB=InputFiles_Data/${ArgTwo}
-    elif [ $filenum -lt 1000 ]
+    elif [ $filenum -lt 100 ]
     then
 	export ArgTwo=filelist_data_SingleMuon_${sample}_0$filenum
 	export ArgTwoB=InputFiles_Data/${ArgTwo}

@@ -33,9 +33,9 @@ Input arguments:
 
  */
 
-void Plot_Commissioning(string histname="NJet", string cutname="delphi", 
+void Plot_Commissioning_ForCS(string histname="Njets", 
 		   //double lumi=2.26198, double lumiControl=2.24572,
-		   double lumi=2.584653, double lumiControl=2.585297,
+		   double lumi=1.77, double lumiControl=2.585297,
 		   string PDname="SingleMuon",
 		   bool normalize=false, int rebin=0,
 		   double lowPredictionCutOff=0.15,
@@ -113,11 +113,11 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
   //  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_v16b_.root",PDname.c_str());
   //  sprintf(tempname,"TauHad2/ARElog49_7.6ifb_HadTauEstimation_data_%s_V9bc_.root",PDname.c_str()); 
   //* AR, 170815- Reads data prediction and MC expectation files
-  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Bv2C_Aug16_.root",PDname.c_str());
+  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Bv2C_Aug17_.root",PDname.c_str());
   TFile * PreData = new TFile(tempname,"R");
-  TFile * ExpTT = new TFile("TauHad/Stack/ARElog115_GenInfo_HadTauEstimation_TTbar_stacked.root","R");
-  TFile * ExpWJ = new TFile("TauHad/Stack/ARElog115_GenInfo_HadTauEstimation_WJet_stacked.root","R");
-  TFile * ExpT  = new TFile("TauHad/Stack/ARElog115_GenInfo_HadTauEstimation_T_stacked.root","R");
+  TFile * ExpTT = new TFile("TauHad2/Stack/HadTauEstimation_TTbar_stacked.root","R");
+  TFile * ExpWJ = new TFile("TauHad2/Stack/HadTauEstimation_WJet_stacked.root","R");
+  TFile * ExpT  = new TFile("TauHad2/Stack/HadTauEstimation_T_stacked.root","R");
   TFile * ExpRare;
   //* AR, 170815-skipRare=true, hence we do not need to care for next sentence.
   if (!skipRare) ExpRare = new TFile("TauHad/GenInfo_HadTauEstimation_Rare_Elog410.root","R");
@@ -205,10 +205,10 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
   double search_x_max=19.;
   double search_x_min=1.;
 
-  sprintf(tempname,"allEvents/%s/StatError_%s_allEvents",cutname.c_str(),cutname.c_str());
+  //  sprintf(tempname,"allEvents/%s/StatError_%s_allEvents",cutname.c_str(),cutname.c_str());
   //* AR, 170815-hPreData_StatError only used for printing purpose
-  hPreData_StatError  =(TH1D*) PreData->Get(tempname)->Clone("hPreData_StatError");
-  sprintf(tempname,"allEvents/%s/%s_%s_allEvents",cutname.c_str(),histname.c_str(),cutname.c_str());
+  //  hPreData_StatError  =(TH1D*) PreData->Get(tempname)->Clone("hPreData_StatError");
+  sprintf(tempname,"MuonCS_%s",histname.c_str());
   //* AR, 170815-Picks histogram of distribution to be plotted (obviously after DelPhi cut) both from data file and MC expectation file(last from the stacks)
   hPreData  =(TH1D*) PreData->Get(tempname)->Clone("hPreData");
   stackTT=(THStack*)ExpTT->Get(tempname)->Clone("ExpTT");
@@ -219,11 +219,10 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
   hExpT=(TH1D*) stackT->GetStack()->Last();
   //* AR, 170815-skipRare=true, hence we do not need to care for next sentence.
   if (!skipRare) hExpRare=(TH1D*)ExpRare->Get(tempname)->Clone("EXpRare");
-
   /////TH1D * hPre = static_cast<TH1D*>(hPreTT->Clone("hPre"));
-  //* AR, 170815-Scales data file if required
+  //* AR, 170815-Scales data file if required. lumiControl is used only at this point.
   TH1 * hPre = static_cast<TH1*>(hPreData->Clone("hPre"));
-  hPre->Scale(lumi/lumiControl);
+//  hPre->Scale(lumi/lumiControl);
 
   ////* AR, 170815-hExp_forScale is only used to derive "scale" which is not used in case of normalize=false which is our case, hence we do not need to care about this/use of this histogram. 
   TH1D * hExp_forScale = static_cast<TH1D*>(hExpTT->Clone("hExp_forScale"));
@@ -236,16 +235,18 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
 
   double scale = hPre->GetSumOfWeights()/trigEff/hExp_forScale->GetSumOfWeights();
   printf("data prediction: %8.2f\n",hPre->GetSumOfWeights()/trigEff);
-  printf("Bin content: %g Stat error: %g \n ",hPreData_StatError->GetBinContent(1)/trigEff,hPreData_StatError->GetBinError(1));
-  printf("MC expectation:  %8.2f\n",hExp_forScale->GetSumOfWeights()*lumi/3.);
-  printf("scale to match exp to pre = %10.5f, and %10.5f from lumi info\n",
-	 scale,lumi/(3.));
+//printf("Bin content: %g Stat error: %g \n ",hPreData_StatError->GetBinContent(1)/trigEff,hPreData_StatError->GetBinError(1));
+//  printf("MC expectation:  %8.2f\n",hExp_forScale->GetSumOfWeights()*lumi/3.);
+//printf("scale to match exp to pre = %10.5f, and %10.5f from lumi info\n",
+//	 scale,lumi/(3.));
   //* AR, 170815-For us trigEff=1, as in prediction code itself we are correcting for trigger efficiency
   if (trigEff!=1.) hPre->Scale(1/trigEff);
-  
-  if (normalize) hExpTT->Scale(scale);
+  std::cout<<"scale factor "<<lumi/3.<<endl;
+std::cout<< " Before scaling "<< " ttbar "<<hExpTT->GetBinContent(1)<<" wjet "<<hExpWJ->GetBinContent(1)<<" st "<<hExpT->GetBinContent(1)<<endl;
+if (normalize) {hExpTT->Scale(scale); std::cout<<" normalize false "<<endl;}
   else           hExpTT->Scale(lumi/(3.)); //AR, 170815-Relevent for us as normalize=false
   hExpTT->SetFillColor(kBlue-6);
+  std::cout<<"****SegVio****"<<endl;
 
   //* AR, 170815-skipRare=true, hence we do not need to care for this if loop.
   if (!skipRare){
@@ -263,12 +264,14 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     else           hExpT->Scale(lumi/(3.)); //AR, 170815-Relevent for us as normalize=false
     hExpT->SetFillColor(kRed);
   }
+std::cout<< " After scaling "<< " ttbar "<<hExpTT->GetBinContent(1)<<" wjet "<<hExpWJ->GetBinContent(1)<<" st "<<hExpT->GetBinContent(1)<<endl;
   
   //AR, 170815-hExp=ttbar+wjet+ST
   TH1 * hExp = static_cast<TH1*>(hExpTT->Clone("hExp"));
   if(!skipRare)hExp->Add(hExpRare);
   hExp->Add(hExpWJ);
   if (!skipSingleTop) hExp->Add(hExpT);
+std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   //AR, 170815-rebin=0, not relevent for us
   if (rebin==1 && histname=="MHT"){
     Double_t mht_bins[13] = {
@@ -302,7 +305,8 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     hExpWJ = hExpWJ_Rebin;
   } //end of rebin==1
   //AR, 170815-Defines bin boundaries for HT
-  if (histname=="HT"){
+  /* 
+ if (histname=="HT"){
     Double_t HT_bins[14]={0.,100.,300.,500.,700.,900.,1100.,1300.,1500.,1700.,1900.,2100.,2300.,2500.};
     TH1 *hExpTT_Rebin = hExpTT->Rebin(13,"hExpTT_Rebin",HT_bins);
     TH1 *hExpWJ_Rebin = hExpWJ->Rebin(13,"hExpWJ_Rebin",HT_bins);
@@ -310,7 +314,8 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     TH1 *hExp_Rebin   = hExp->Rebin(13,"hExp_Rebin",HT_bins);
     hPre_Rebin->Print("all");
     hExp_Rebin->Print("all");
-    /*
+  */
+  /*
     hExp_Rebin->SetBinContent(11,hExp->GetBinContent(11)+hExp->GetBinContent(12));
     hExp_Rebin->SetBinError(11,hExp->GetBinError(11)+hExp->GetBinError(12));
     hExp_Rebin->SetBinContent(12,hExp->GetBinContent(13)+hExp->GetBinContent(14)
@@ -323,8 +328,9 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
 				+hPre->GetBinContent(15)+hPre->GetBinContent(16));
     hPre_Rebin->SetBinError(12,hPre->GetBinError(13)+hPre->GetBinError(14)
 				+hPre->GetBinError(15)+hPre->GetBinError(16));
-    */
+  */
     //* AR, 170815-TTbar,Wjet, TTbar+Wjet+ST, data prediction are rebinned as given below.
+  /*
     hPre_Rebin->Print("all");
     hExp_Rebin->Print("all");
     hPre   = hPre_Rebin;
@@ -332,6 +338,7 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     hExpTT = hExpTT_Rebin;
     hExpWJ = hExpWJ_Rebin;
   }
+*/
   if (!skipRare)hExpRare->Print("all");  //* AR, 170815-Not relevent for us
   if (!skipRare)ExpStack->Add(hExpRare); //* AR, 170815-Not relevent for us
   //* AR, 170815-ExpStack was empty stack into which ST,Wjet,TTbar are added as that is the sequence we want
@@ -340,6 +347,21 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
   ExpStack->Add(hExpTT);
   //* AR, 170815-Defines canvas properties for HT,MHT,Njet and Nbjet distributions.
   double xlatex, ylatex;
+  if(histname=="MuonPt"){
+    xtext_top = 1800.;
+    //y_legend  = 2000.;
+    ymax_top = 30000.;
+    ymin_top = 0.15;
+    xmax = 400.;
+    //if (cutname=="delphi") xmax = 700.;
+    xmin = 0;
+	xlatex=686.927;ylatex=13.61134;
+    //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
+    sprintf(xtitlename,"MuonPt[GeV/c]");
+    sprintf(ytitlename,"Events /(20 GeV/c)");
+    gPad->SetLogy();
+  }
+
   if(histname=="MHT"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
@@ -347,7 +369,7 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     ymin_top = 0.15;
     xmax = 1000.;
     //if (cutname=="delphi") xmax = 700.;
-    xmin = 200;
+    xmin = 0;
 	xlatex=686.927;ylatex=13.61134;
     //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
     sprintf(xtitlename,"H_{T}^{miss} [GeV]");
@@ -377,10 +399,10 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     ymin_top = 0.15;
     xmax = 2500.;
     //if (cutname=="delphi") xmax = 1500.;
-    xmin = 100;
+    xmin = 0;
 	xlatex=1466.973;ylatex=14.62075;
     sprintf(xtitlename,"H_{T} [GeV]");
-    sprintf(ytitlename,"Events / 200 GeV");
+    sprintf(ytitlename,"Events / 100 GeV");
     gPad->SetLogy();
   }
   if(histname=="HT2"){
@@ -396,7 +418,7 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     sprintf(ytitlename,"Events / bin");
     gPad->SetLogy();
   }
-  if(histname=="NBtag"){
+  if(histname=="Nbjets"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
     ymax_top = 100000.;
@@ -408,7 +430,7 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
     sprintf(ytitlename,"Events");
     gPad->SetLogy();
   }
-  if(histname=="NJet"){
+  if(histname=="Njets"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
     ymax_top = 100000.;
@@ -463,7 +485,7 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
 
   hPre->DrawCopy("e same");
 
-  sprintf(tempname,"Data: #tau_{h} BG prediction");
+  sprintf(tempname,"Data: 2017 data");
   catLeg1->AddEntry(hPre,tempname);
   //sprintf(tempname,"#tau_{h} MC expectation from t#bar{t}");
   sprintf(tempname,"MC: t#bar{t}");
@@ -514,7 +536,7 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
   //KH -- flip the numerator and denominator
   //* AR, 170815-hPreOverExp is initially same as data prediction
   TH1D * hPreOverExp = (TH1D*) hPre->Clone();
-
+  //* AR, 170815-lowPredictionCutOff is setting up minimum non-zero value the ratio can have.
   for (int ibin=0;ibin<hPreOverExp->GetNbinsX();ibin++){
     if (hPreOverExp->GetBinContent(ibin+1)<lowPredictionCutOff){
       hPreOverExp->SetBinContent(ibin+1,0.);
@@ -581,13 +603,13 @@ void Plot_Commissioning(string histname="NJet", string cutname="delphi",
   hPreOverExp->Print("all");
   
   //* AR, 170815-normalize=false
-  if (normalize) sprintf(tempname,"DataPreVsMCExp_hadtau_%s_%s_%s_normalize_Plot.png",histname.c_str(),cutname.c_str(),PDname.c_str());
+  if (normalize) sprintf(tempname,"DataPreVsMCExp_%s_%s_normalize_Plot.png",histname.c_str(),PDname.c_str());
   //* AR, 170815-Relevent for us
-  else           sprintf(tempname,"DataPreVsMCExp_hadtau_%s_%s_%s_Plot.png",histname.c_str(),cutname.c_str(),PDname.c_str());
+  else           sprintf(tempname,"DataPreVsMCExp_%s_%s_Plot.png",histname.c_str(),PDname.c_str());
   canvas->Print(tempname);
-  if (normalize) sprintf(tempname,"DataPreVsMCExp_hadtau_%s_%s_%s_normalize_Plot.pdf",histname.c_str(),cutname.c_str(),PDname.c_str());
+  if (normalize) sprintf(tempname,"DataPreVsMCExp_%s_%s_normalize_Plot.pdf",histname.c_str(),PDname.c_str());
   //* AR, 170815-Relevent for us
-  else           sprintf(tempname,"DataPreVsMCExp_hadtau_%s_%s_%s_Plot.pdf",histname.c_str(),cutname.c_str(),PDname.c_str());
+  else           sprintf(tempname,"DataPreVsMCExp_%s_%s_Plot.pdf",histname.c_str(),PDname.c_str());
   canvas->Print(tempname);
   
 }

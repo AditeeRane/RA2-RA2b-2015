@@ -154,7 +154,11 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   Hname[13]="searchH_nb_njet56_lowDphi";
   Hname[14]="searchH_nb_njet78_lowDphi";
   Hname[15]="searchH_nb_njet9_lowDphi";
- 
+  Hname[16]="MuonCS_Njets";
+  Hname[17]="MuonCS_Nbjets";
+  Hname[18]="MuonCS_HT";
+  Hname[19]="MuonCS_MHT";
+  Hname[20]="MuonCS_MuonPt";
   for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<tnHT ; i++){                                                  // loop over different HT bins
@@ -217,7 +221,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   file->Close();
   printf("T main histograms stacked \n ");
 
-
+  /*
 //..........................................//
 // Probability mu from nonW sources
 //..........................................//
@@ -429,7 +433,7 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
 
   file->Close();
   printf("T Mu from nonW calculated. \n ");
-  /*
+  
 
 //..........................................//
 // dilepton rate
@@ -645,7 +649,11 @@ cout << " flag \n " ;
   Hname[13]="searchH_nb_njet56_lowDphi";
   Hname[14]="searchH_nb_njet78_lowDphi";
   Hname[15]="searchH_nb_njet9_lowDphi";
- 
+  Hname[16]="MuonCS_Njets";
+  Hname[17]="MuonCS_Nbjets";
+  Hname[18]="MuonCS_HT";
+  Hname[19]="MuonCS_MHT";
+  Hname[20]="MuonCS_MuonPt";
 
   for(int j=0; j< Hname.size(); j++){
 
@@ -709,7 +717,7 @@ cout << " flag \n " ;
   file->Close();
   printf("WJet main histograms stacked \n ");
 
-
+  /*
 
 //..........................................//
 // Probability mu from nonW sources
@@ -926,7 +934,7 @@ cout << " flag \n " ;
   printf("WJet Mu from nonW calculated. \n ");
 
 
-  /*
+  
 
 
 
@@ -1289,11 +1297,15 @@ cout << " flag \n " ;
   Hname[13]="searchH_nb_njet56_lowDphi";
   Hname[14]="searchH_nb_njet78_lowDphi";
   Hname[15]="searchH_nb_njet9_lowDphi";
- 
+  Hname[16]="MuonCS_Njets";
+  Hname[17]="MuonCS_Nbjets";
+  Hname[18]="MuonCS_HT";
+  Hname[19]="MuonCS_MHT";
+  Hname[20]="MuonCS_MuonPt";
+
   for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<ttbarnHT ; i++){                                                  // loop over different HT bins
-
       sprintf(tempname,"%s",(Hname[j]).c_str());
       temphist = (TH1D *) TTbar_inputfilevec.at(i)->Get(tempname)->Clone();
       if (luminosity>0&&doScale) temphist->Scale(TTbar_scalevec[i]);
@@ -1353,7 +1365,7 @@ cout << " flag \n " ;
 
   file->Close();
   printf("TTbar main histograms stacked \n ");
-
+  /*
 
 //..........................................//
 // Probability mu from nonW sources
@@ -1561,7 +1573,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   file->Close();
   printf("TTbar Mu from nonW calculated. \n ");
 
-  /*
+  
 //..........................................//
 // Mistag rate 
 //..........................................//
@@ -1884,7 +1896,12 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   Hname[13]="searchH_nb_njet56_lowDphi";
   Hname[14]="searchH_nb_njet78_lowDphi";
   Hname[15]="searchH_nb_njet9_lowDphi";
- 
+  Hname[16]="MuonCS_Njets";
+  Hname[17]="MuonCS_Nbjets";
+  Hname[18]="MuonCS_HT";
+  Hname[19]="MuonCS_MHT";
+  Hname[20]="MuonCS_MuonPt";
+
   for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<NSamples ; i++){                                                  // loop over different HT bins
@@ -1949,7 +1966,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   file->Close();
   printf("All samples main histograms stacked \n ");
 
-
+  /*
 
 // ........................................... //
 //  Probability mu from nonW sources
@@ -2151,7 +2168,7 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   file2->Close();
 
 
-  /*
+  
 
 // ........................................... //
 //  dilepton rate
