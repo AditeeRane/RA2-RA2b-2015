@@ -907,7 +907,9 @@ using namespace std;
     int GenRecMu_all=0,GenRecMu_fail=0;
 
     // see how often there are two leptons in the the event
-    int nCleanEve=0;
+    int nCleanEve=0,nClean_BadCharged=0,nClean_BadPFMuon=0,nClean_globalTight=0,nClean_PFCaloMET=0,nClean_noMuonJet=0,nClean_noFakeJet=0,nClean_JetId=0;
+    int nPassOR=0,nPass_HBHEIsoNoise=0,nPass_HBHENoise=0,nPass_eeBadSc=0,nPass_EcalDeadCell=0,nPass_BadCharged=0,nPass_BadPFMuon=0,nPass_globalTight=0,nPass_PFCaloMET=0,nPass_noMuonJet=0,nPass_noFakeJet=0,nPass_JetId=0;
+
     TH1D * dilepton_all = new TH1D("dilepton_all"," dilepton all -- search bin",totNbins,1,totNbins+1);
     dilepton_all->Sumw2();
     TH1D * dilepton_pass = new TH1D("dilepton_pass"," dilepton pass -- search bin",totNbins,1,totNbins+1);
@@ -955,9 +957,10 @@ using namespace std;
 
     //initialize a met filter for data
     EventListFilter filter("csc2015.txt");
-
+    int trigIndex=-1;
     double eventWeight = 1.0;
     int eventN=0;
+    int FailTrigMuons=0;
     while( evt->loadNext() ){
       eventN++;
 
@@ -970,9 +973,10 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //      if(eventN>10000)break;
+      //      if(eventN>100000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
+      
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
 
       // Meant to combine different ttbar samples exclusively
@@ -992,6 +996,23 @@ using namespace std;
         
       }
       
+
+
+      //*AR,170823- These were added to get efficiency of different filters in 2017 data.
+      if( !fastsim && evt->HBHEIsoNoiseFilter_()!=0)nPass_HBHEIsoNoise++;
+      if( !fastsim && evt->HBHENoiseFilter_()!=0)nPass_HBHENoise++;
+      if( !fastsim && evt->eeBadScFilter_()!=0)nPass_eeBadSc++;
+      if( !fastsim && evt->EcalDeadCellTriggerPrimitiveFilter_()!=0)nPass_EcalDeadCell++;
+      if( evt->DataBool_() && evt->BadChargedCandidateFilter_()!=0)nPass_BadCharged++;
+      if( evt->DataBool_() && evt->BadPFMuonFilter_()!=0)nPass_BadPFMuon++;
+      if( evt->DataBool_() && evt->globalTightHalo2016Filter_()!=0)nPass_globalTight++;
+      if( evt->PFCaloMETRatioFilter_()!=0) nPass_PFCaloMET++;
+      if( evt->noMuonJet_()!=0)nPass_noMuonJet++;
+      if( !fastsim && evt->JetId()!=0)nPass_JetId++;
+      if(evt->DataBool_() && (evt->HBHEIsoNoiseFilter_()!=0 || evt->HBHENoiseFilter_()!=0 || evt->eeBadScFilter_()!=0 || evt->EcalDeadCellTriggerPrimitiveFilter_()!=0 || evt->BadChargedCandidateFilter_()!=0 || evt->BadPFMuonFilter_()!=0 || evt->globalTightHalo2016Filter_()!=0 || evt->PFCaloMETRatioFilter_()!=0 || evt->noMuonJet_()!=0 || evt->JetId()!=0)) nPassOR++;
+
+      //	std::cout<<" eventN "<<eventN<<" nPass_HBHEIsoNoise "<<nPass_HBHEIsoNoise<<" nPass_HBHENoise "<<nPass_HBHENoise<<" nPass_eeBadSc "<<nPass_eeBadSc<<" nPass_EcalDeadCell "<<nPass_EcalDeadCell<<" nPass_BadCharged "<<nPass_BadCharged<<" nPass_BadPFMuon "<<nPass_BadPFMuon<<" nPass_globalTight "<<nPass_globalTight<<" nPass_PFCaloMET "<<nPass_PFCaloMET<<" nPass_noMuonJet "<<nPass_noMuonJet<<" nPass_JetId "<<nPass_JetId<<" nPassOR "<<nPassOR<<endl;
+      
       cutflow_preselection->Fill(1.,eventWeight);
       if( !fastsim && evt->HBHEIsoNoiseFilter_()==0)continue;
       if( !fastsim && evt->HBHENoiseFilter_()==0)continue;
@@ -1001,7 +1022,7 @@ using namespace std;
       //if(evt->DataBool_() && !fastsim && !filter.CheckEvent(evt->Runnum(),evt->LumiBlocknum(),evt->Evtnum()))continue;
       //if( !fastsim && evt->CSCTightHaloFilter_()==0)continue;
       if( !fastsim && evt->EcalDeadCellTriggerPrimitiveFilter_()==0)continue;
-
+      
       //added on July 12, 2016
       /*
       if( !fastsim && (evt->BadChargedCandidateFilter_()==0 || evt->BadPFMuonFilter_()==0 
@@ -1021,21 +1042,32 @@ using namespace std;
 	}
       }
       */
-      if( evt->DataBool_() && evt->BadChargedCandidateFilter_()==0) continue;
-      if( evt->DataBool_() && evt->BadPFMuonFilter_()==0) continue;
-      if( evt->DataBool_() && evt->globalTightHalo2016Filter_()==0) continue;
+      
+      if( evt->DataBool_() && evt->BadChargedCandidateFilter_()==0)continue;
+      nClean_BadCharged++;
+      if( evt->DataBool_() && evt->BadPFMuonFilter_()==0)continue;
+      nClean_BadPFMuon++;
+      if( evt->DataBool_() && evt->globalTightHalo2016Filter_()==0)continue;
+      nClean_globalTight++;
       if( evt->PFCaloMETRatioFilter_()==0) continue;
+      nClean_PFCaloMET++;
       if( evt->noMuonJet_()==0) continue;
+      nClean_noMuonJet++;
       if( !evt->DataBool_() && fastsim && evt->noFakeJet_()==0) continue;
-
+      nClean_noFakeJet++;
       cutflow_preselection->Fill(4.,eventWeight);
       if(!(evt->NVtx_() >0))continue;
       cutflow_preselection->Fill(5.,eventWeight); 
       // Through out an event that contains HTjets with bad id
       if( !fastsim && evt->JetId()==0)continue;
+      nClean_JetId++;
       cutflow_preselection->Fill(6.,eventWeight); // events passing JetID event cleaning
 
       nCleanEve++;
+      //std::cout<<" eventN "<<eventN<<" nClean_BadCharged "<<nClean_BadCharged<<" nClean_BadPFMuon "<<nClean_BadPFMuon<<" nClean_globalTight "<<nClean_globalTight<<" nClean_PFCaloMET "<<nClean_PFCaloMET<<" nClean_noMuonJet "<<nClean_noMuonJet<<" nClean_noFakeJet "<<nClean_noFakeJet<<" nClean_JetId "<<nClean_JetId<<" nCleanEve "<<nCleanEve<<endl;
+
+      
+
       //std::cout<<" ***CH2*** "<< " evtWeight "<<eventWeight<<endl;
       // Trigger check
       bool trigPass=false;
@@ -1049,7 +1081,7 @@ using namespace std;
         if (!evt->DataBool_()) triggerNameToBeUsed = "HLT_Mu15_IsoVVVL_PFHT400_v";
 	*/
         bool trigfound=false;
-        if(verbose!=0)
+	if(verbose!=0)
           cout << "############################\n "; 
 
         for(int i=0; i< evt->TriggerNames_().size(); i++){ 
@@ -1057,6 +1089,7 @@ using namespace std;
             cout << evt->TriggerNames_().at(i) << endl; 
             cout << " Pass: " << evt->PassTrigger_().at(i) << " \n+\n";
 	  }
+	 
 	  //	  std::cout << "i "<<i <<evt->TriggerNames_().at(i) << endl;
           string trigStr;
           sprintf(tempname, "HLT_Mu50_v");
@@ -1078,8 +1111,10 @@ using namespace std;
 	      ) {
 
             trigfound=true;
-            if(evt->PassTrigger_().at(i)==1)trigPass=true;
-	    
+            if(evt->PassTrigger_().at(i)==1){
+	      trigPass=true;
+	      trigIndex=i;
+	    }
 	    // HighHT selection
 	    if( evt->TriggerNames_().at(i).find(tempname)  != string::npos  
 		//evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
@@ -1109,7 +1144,18 @@ using namespace std;
         }
         //if(eventN < 100 )cout<< "A temporary selection is in effect \n\n\nA temporary selection is in effect \n\n\nA temporary selection is in effect ";
 	//std::cout<<" trigPass "<<trigPass<<endl;
-        if(!trigPass)continue;
+        if(!trigPass){
+	  for(int i=0; i< evt->MuPtVec_().size(); i++){
+	    double pt_FailTrigMuon=evt->MuPtVec_().at(i);
+	    /*
+	    if(pt_FailTrigMuon>60){
+	      std::cout<<" evt "<<eventN<<" muon pt "<<pt_FailTrigMuon<<" Muon above 60 GeV failed Mu50 trigger "<< " FailTrigMuons "<<FailTrigMuons<<endl;	  
+	      FailTrigMuons++;
+	    }
+*/
+	  }
+	  continue;
+	}
       }
  
       // to study some of the uncertainties we need to make some changes from
@@ -1295,6 +1341,8 @@ using namespace std;
 	    MuonCS_HT->Fill(evt->ht(),eventWeight);
 	    MuonCS_MHT->Fill(evt->mht(),eventWeight);
 	    MuonCS_MuonPt->Fill(muPt,eventWeight);
+	    //	    if(isData)
+	    //std::cout<<" trigIndex "<< trigIndex<<" name "<<evt->TriggerNames_().at(trigIndex)<<endl;
 	  }
 
           // start of bootstrapping ( if is on ) 

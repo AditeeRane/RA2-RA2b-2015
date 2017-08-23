@@ -35,7 +35,7 @@ Input arguments:
 
 void Plot_Commissioning_ForCS(string histname="Njets", 
 		   //double lumi=2.26198, double lumiControl=2.24572,
-		   double lumi=1.77, double lumiControl=2.585297,
+		   double lumi=3.9906, double lumiControl=2.585297,
 		   string PDname="SingleMuon",
 		   bool normalize=false, int rebin=0,
 		   double lowPredictionCutOff=0.15,
@@ -113,8 +113,12 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   //  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_v16b_.root",PDname.c_str());
   //  sprintf(tempname,"TauHad2/ARElog49_7.6ifb_HadTauEstimation_data_%s_V9bc_.root",PDname.c_str()); 
   //* AR, 170815- Reads data prediction and MC expectation files
-  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Bv2C_Aug17_.root",PDname.c_str());
+  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Bv2C_.root",PDname.c_str());
+  //sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Cv1v2_.root",PDname.c_str());
   TFile * PreData = new TFile(tempname,"R");
+  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_V12_.root",PDname.c_str());
+  TFile * PreData2016 = new TFile(tempname,"R");
+ 
   TFile * ExpTT = new TFile("TauHad2/Stack/HadTauEstimation_TTbar_stacked.root","R");
   TFile * ExpWJ = new TFile("TauHad2/Stack/HadTauEstimation_WJet_stacked.root","R");
   TFile * ExpT  = new TFile("TauHad2/Stack/HadTauEstimation_T_stacked.root","R");
@@ -166,7 +170,7 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   //
   TPad* canvas_up = (TPad*) canvas->GetListOfPrimitives()->FindObject("canvas_1");
   TPad* canvas_dw = (TPad*) canvas->GetListOfPrimitives()->FindObject("canvas_2");
- 
+  int col1 = kOrange;
   // define the size
   double up_height     = 0.8;  // please tune so that the upper figures size will meet your requirement
   double dw_correction = 1.30; // please tune so that the smaller canvas size will work in your environment
@@ -191,7 +195,7 @@ void Plot_Commissioning_ForCS(string histname="Njets",
 
   TH1 * hExpTT, * hExpWJ, * hPreTT, * hPreWJ12, * hPreWJ24, * hPreWJ46, * hPreWJ6I;
   TH1 * hExpRare;
-  TH1 * hPreData, * hPreData_StatError;
+  TH1 * hPreData,* hPreData2016, * hPreData_StatError;
   TH1 * histTemplate;
   THStack * stackTT, * stackWJ, * stackT, * ExpStack;
   ExpStack = new THStack("","");
@@ -211,6 +215,7 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   sprintf(tempname,"MuonCS_%s",histname.c_str());
   //* AR, 170815-Picks histogram of distribution to be plotted (obviously after DelPhi cut) both from data file and MC expectation file(last from the stacks)
   hPreData  =(TH1D*) PreData->Get(tempname)->Clone("hPreData");
+  hPreData2016  =(TH1D*) PreData2016->Get(tempname)->Clone("hPreData2016");
   stackTT=(THStack*)ExpTT->Get(tempname)->Clone("ExpTT");
   hExpTT=(TH1D*) stackTT->GetStack()->Last();
   stackWJ=(THStack*)ExpWJ->Get(tempname)->Clone("ExpWJ");   
@@ -222,7 +227,9 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   /////TH1D * hPre = static_cast<TH1D*>(hPreTT->Clone("hPre"));
   //* AR, 170815-Scales data file if required. lumiControl is used only at this point.
   TH1 * hPre = static_cast<TH1*>(hPreData->Clone("hPre"));
-//  hPre->Scale(lumi/lumiControl);
+  TH1 * hPre2016 = static_cast<TH1*>(hPreData2016->Clone("hPre2016"));
+  hPre2016->Scale(lumi/35.9);
+  hPre->Scale(lumi/lumiControl);
 
   ////* AR, 170815-hExp_forScale is only used to derive "scale" which is not used in case of normalize=false which is our case, hence we do not need to care about this/use of this histogram. 
   TH1D * hExp_forScale = static_cast<TH1D*>(hExpTT->Clone("hExp_forScale"));
@@ -230,9 +237,11 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   if (!skipSingleTop) hExp_forScale->Add(hExpT);
   if (!skipRare) hExp_forScale->Add(hExpRare);
 
-  hPre->SetMarkerSize(1.2);
+  hPre->SetMarkerSize(1.4);
   hPre->SetMarkerStyle(20);
-
+  hPre->SetMarkerColor(col1);
+  hPre2016->SetMarkerSize(1.2);
+  hPre2016->SetMarkerStyle(22);
   double scale = hPre->GetSumOfWeights()/trigEff/hExp_forScale->GetSumOfWeights();
   printf("data prediction: %8.2f\n",hPre->GetSumOfWeights()/trigEff);
 //printf("Bin content: %g Stat error: %g \n ",hPreData_StatError->GetBinContent(1)/trigEff,hPreData_StatError->GetBinError(1));
@@ -243,7 +252,7 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   if (trigEff!=1.) hPre->Scale(1/trigEff);
   std::cout<<"scale factor "<<lumi/3.<<endl;
 std::cout<< " Before scaling "<< " ttbar "<<hExpTT->GetBinContent(1)<<" wjet "<<hExpWJ->GetBinContent(1)<<" st "<<hExpT->GetBinContent(1)<<endl;
-if (normalize) {hExpTT->Scale(scale); std::cout<<" normalize false "<<endl;}
+if (normalize) hExpTT->Scale(scale); 
   else           hExpTT->Scale(lumi/(3.)); //AR, 170815-Relevent for us as normalize=false
   hExpTT->SetFillColor(kBlue-6);
   std::cout<<"****SegVio****"<<endl;
@@ -480,13 +489,41 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   hPre->GetXaxis()->SetRangeUser(xmin,xmax);
   hPre->SetTitle("");
   hPre->DrawCopy("e");
+
+  hPre2016->GetXaxis()->SetTitleSize(0.06);
+  hPre2016->GetXaxis()->SetTitleOffset(1.9);
+  hPre2016->GetXaxis()->SetTitleFont(42);
+  hPre2016->GetXaxis()->SetLabelSize(0.04);
+  hPre2016->GetXaxis()->SetLabelOffset(1.9);
+  //hPre2016->GetYaxis()->SetLabelFont(42);
+  //hPre2016->GetYaxis()->SetLabelOffset(0.007);
+  //hPre2016->GetYaxis()->SetLabelSize(0.04);
+  hPre2016->GetYaxis()->SetTitleSize(0.06);
+  hPre2016->GetYaxis()->SetTitleOffset(0.8);
+  hPre2016->GetYaxis()->SetTitleFont(42);
+  hPre2016->GetYaxis()->SetLabelSize(0.04);
+
+  hPre2016->GetXaxis()->SetTitle(xtitlename);
+  hPre2016->GetYaxis()->SetTitle(ytitlename);
+  hPre2016->SetLineColor(1);
+  hPre2016->SetMaximum(ymax_top);
+  hPre2016->SetMinimum(ymin_top);
+  hPre2016->GetXaxis()->SetRangeUser(xmin,xmax);
+  hPre2016->SetTitle("");
+  hPre2016->DrawCopy("e");
+
   //* AR, 170815-Draws MC expectation stack
   ExpStack->Draw("same hist");
 
   hPre->DrawCopy("e same");
+  hPre2016->DrawCopy("e same");
 
   sprintf(tempname,"Data: 2017 data");
   catLeg1->AddEntry(hPre,tempname);
+
+  sprintf(tempname,"Data: 2016 data");
+  catLeg1->AddEntry(hPre2016,tempname);
+
   //sprintf(tempname,"#tau_{h} MC expectation from t#bar{t}");
   sprintf(tempname,"MC: t#bar{t}");
   catLeg1->AddEntry(hExpTT,tempname,"f");
@@ -536,15 +573,27 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   //KH -- flip the numerator and denominator
   //* AR, 170815-hPreOverExp is initially same as data prediction
   TH1D * hPreOverExp = (TH1D*) hPre->Clone();
+  TH1D * hPre2016OverExp = (TH1D*) hPre2016->Clone();
+
   //* AR, 170815-lowPredictionCutOff is setting up minimum non-zero value the ratio can have.
+  
   for (int ibin=0;ibin<hPreOverExp->GetNbinsX();ibin++){
     if (hPreOverExp->GetBinContent(ibin+1)<lowPredictionCutOff){
       hPreOverExp->SetBinContent(ibin+1,0.);
       hPreOverExp->SetBinError(ibin+1,0.);
     }
   }
+
+  for (int ibin=0;ibin<hPre2016OverExp->GetNbinsX();ibin++){
+    if (hPre2016OverExp->GetBinContent(ibin+1)<lowPredictionCutOff){
+      hPre2016OverExp->SetBinContent(ibin+1,0.);
+      hPre2016OverExp->SetBinError(ibin+1,0.);
+    }
+  }
+
   //* AR, 170815-We divide hPreOverExp by expectation here
   hPreOverExp->Divide(hExp);
+  hPre2016OverExp->Divide(hExp);
   /*
     hPre->Print("all");
     hPreTT->Print("all");
@@ -597,6 +646,8 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
 
   hPreOverExp->SetTitle("");
   hPreOverExp->Draw();
+  hPre2016OverExp->SetTitle("");
+  hPre2016OverExp->Draw("same");
   tline->SetLineStyle(2);
   tline->Draw();
 
