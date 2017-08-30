@@ -36,8 +36,7 @@ Input arguments:
 void Plot_Commissioning_ForCS(string histname="Njets", 
 		   //double lumi=2.26198, double lumiControl=2.24572,
 		   double lumi=3.9906, double lumiControl=2.585297,
-		   string PDname="SingleMuon",
-		   bool normalize=false, int rebin=0,
+			      string PDname="SingleMuon",string elogData="ARElog155",bool normalize=false, int rebin=0,
 		   double lowPredictionCutOff=0.15,
 		   double trigEff=1.00
 		   ){
@@ -113,15 +112,17 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   //  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_v16b_.root",PDname.c_str());
   //  sprintf(tempname,"TauHad2/ARElog49_7.6ifb_HadTauEstimation_data_%s_V9bc_.root",PDname.c_str()); 
   //* AR, 170815- Reads data prediction and MC expectation files
-  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Bv2C_.root",PDname.c_str());
+  sprintf(tempname,"TauHad2/%s_HadTauEstimation_data_%s_Bv2C_.root",elogData.c_str(),PDname.c_str());
   //sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Cv1v2_.root",PDname.c_str());
   TFile * PreData = new TFile(tempname,"R");
-  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_V12_.root",PDname.c_str());
+  sprintf(tempname,"TauHad2/%s_HadTauEstimation_data_%s_V12_.root",elogData.c_str(),PDname.c_str());
   TFile * PreData2016 = new TFile(tempname,"R");
- 
-  TFile * ExpTT = new TFile("TauHad2/Stack/HadTauEstimation_TTbar_stacked.root","R");
-  TFile * ExpWJ = new TFile("TauHad2/Stack/HadTauEstimation_WJet_stacked.root","R");
-  TFile * ExpT  = new TFile("TauHad2/Stack/HadTauEstimation_T_stacked.root","R");
+  sprintf(tempname,"TauHad2/Stack/%s_HadTauEstimation_TTbar_stacked.root",elogData.c_str());
+  TFile * ExpTT = new TFile(tempname,"R");
+  sprintf(tempname,"TauHad2/Stack/%s_HadTauEstimation_WJet_stacked.root",elogData.c_str());
+  TFile * ExpWJ = new TFile(tempname,"R");
+  sprintf(tempname,"TauHad2/Stack/%s_HadTauEstimation_T_stacked.root",elogData.c_str());
+  TFile * ExpT  = new TFile(tempname,"R");
   TFile * ExpRare;
   //* AR, 170815-skipRare=true, hence we do not need to care for next sentence.
   if (!skipRare) ExpRare = new TFile("TauHad/GenInfo_HadTauEstimation_Rare_Elog410.root","R");
@@ -212,8 +213,10 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   //  sprintf(tempname,"allEvents/%s/StatError_%s_allEvents",cutname.c_str(),cutname.c_str());
   //* AR, 170815-hPreData_StatError only used for printing purpose
   //  hPreData_StatError  =(TH1D*) PreData->Get(tempname)->Clone("hPreData_StatError");
-  sprintf(tempname,"MuonCS_%s",histname.c_str());
-  //* AR, 170815-Picks histogram of distribution to be plotted (obviously after DelPhi cut) both from data file and MC expectation file(last from the stacks)
+  //   sprintf(tempname,"MuonCS_%s",histname.c_str());
+  sprintf(tempname,"%s",histname.c_str());
+  
+ //* AR, 170815-Picks histogram of distribution to be plotted (obviously after DelPhi cut) both from data file and MC expectation file(last from the stacks)
   hPreData  =(TH1D*) PreData->Get(tempname)->Clone("hPreData");
   hPreData2016  =(TH1D*) PreData2016->Get(tempname)->Clone("hPreData2016");
   stackTT=(THStack*)ExpTT->Get(tempname)->Clone("ExpTT");
@@ -255,8 +258,7 @@ std::cout<< " Before scaling "<< " ttbar "<<hExpTT->GetBinContent(1)<<" wjet "<<
 if (normalize) hExpTT->Scale(scale); 
   else           hExpTT->Scale(lumi/(3.)); //AR, 170815-Relevent for us as normalize=false
   hExpTT->SetFillColor(kBlue-6);
-  std::cout<<"****SegVio****"<<endl;
-
+ 
   //* AR, 170815-skipRare=true, hence we do not need to care for this if loop.
   if (!skipRare){
 	if (normalize) hExpRare->Scale(scale);
@@ -368,6 +370,76 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
     //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
     sprintf(xtitlename,"MuonPt[GeV/c]");
     sprintf(ytitlename,"Events /(20 GeV/c)");
+    gPad->SetLogy();
+  }
+  if(histname=="MuonEta"){
+    xtext_top = 1800.;
+    //y_legend  = 2000.;
+    ymax_top = 100000.;
+    ymin_top = 0.15;
+    xmax = 3.2;
+    //if (cutname=="delphi") xmax = 700.;
+    xmin = -3.2;
+	xlatex=686.927;ylatex=13.61134;
+    //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
+    sprintf(xtitlename,"MuonEta");
+    sprintf(ytitlename,"Events /0.2");
+    gPad->SetLogy();
+  }
+  if(histname=="MuonPhi"){
+    xtext_top = 1800.;
+    //y_legend  = 2000.;
+    ymax_top = 100000.;
+    ymin_top = 0.15;
+    xmax = 3.2;
+    //if (cutname=="delphi") xmax = 700.;
+    xmin = -3.2;
+	xlatex=686.927;ylatex=13.61134;
+    //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
+    sprintf(xtitlename,"MuonPhi");
+    sprintf(ytitlename,"Events /0.2");
+    gPad->SetLogy();
+  }
+  if(histname=="JetOne_Pt" || histname=="JetTwo_Pt" || histname=="JetThree_Pt"){
+    xtext_top = 1800.;
+    //y_legend  = 2000.;
+    ymax_top = 100000.;
+    ymin_top = 0.15;
+    xmax = 400.;
+    //if (cutname=="delphi") xmax = 700.;
+    xmin = 0;
+	xlatex=686.927;ylatex=13.61134;
+    //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
+    sprintf(xtitlename,"JetThreePt[GeV/c]");
+    sprintf(ytitlename,"Events /(20 GeV/c)");
+    gPad->SetLogy();
+  }
+  if(histname=="JetOne_Eta" || histname=="JetTwo_Eta" || histname=="JetThree_Eta"){
+    xtext_top = 1800.;
+    //y_legend  = 2000.;
+    ymax_top = 100000.;
+    ymin_top = 0.15;
+    xmax = 3.2;
+    //if (cutname=="delphi") xmax = 700.;
+    xmin = -3.2;
+	xlatex=686.927;ylatex=13.61134;
+    //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
+    sprintf(xtitlename,"JetThreeEta");
+    sprintf(ytitlename,"Events /0.2");
+    gPad->SetLogy();
+  }
+  if(histname=="JetOne_Phi" || histname=="JetTwo_Phi" || histname=="JetThree_Phi"){
+    xtext_top = 1800.;
+    //y_legend  = 2000.;
+    ymax_top = 100000.;
+    ymin_top = 0.15;
+    xmax = 3.2;
+    //if (cutname=="delphi") xmax = 700.;
+    xmin = -3.2;
+	xlatex=686.927;ylatex=13.61134;
+    //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
+    sprintf(xtitlename,"JetTwoPhi");
+    sprintf(ytitlename,"Events /0.2");
     gPad->SetLogy();
   }
 
@@ -553,7 +625,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   ttext->SetTextFont(42);
   ttext->SetTextSize(0.050);
   ttext->SetTextAlign(11);
-  //  ttext->Draw();
+  ttext->Draw();
 
   //TLatex *   tex = new TLatex(xlatex,ylatex,"arXiv:1602.06581");
   // tex->SetTextColor(4);
@@ -654,13 +726,13 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   hPreOverExp->Print("all");
   
   //* AR, 170815-normalize=false
-  if (normalize) sprintf(tempname,"DataPreVsMCExp_%s_%s_normalize_Plot.png",histname.c_str(),PDname.c_str());
+  if (normalize) sprintf(tempname,"DataPreVsMCExp_%s_%s_%s_normalize_Plot.png",histname.c_str(),PDname.c_str(),elogData.c_str());
   //* AR, 170815-Relevent for us
-  else           sprintf(tempname,"DataPreVsMCExp_%s_%s_Plot.png",histname.c_str(),PDname.c_str());
+  else           sprintf(tempname,"DataPreVsMCExp_%s_%s_%s_Plot.png",histname.c_str(),PDname.c_str(),elogData.c_str());
   canvas->Print(tempname);
-  if (normalize) sprintf(tempname,"DataPreVsMCExp_%s_%s_normalize_Plot.pdf",histname.c_str(),PDname.c_str());
+  if (normalize) sprintf(tempname,"DataPreVsMCExp_%s_%s_%s_normalize_Plot.pdf",histname.c_str(),PDname.c_str(),elogData.c_str());
   //* AR, 170815-Relevent for us
-  else           sprintf(tempname,"DataPreVsMCExp_%s_%s_Plot.pdf",histname.c_str(),PDname.c_str());
+  else           sprintf(tempname,"DataPreVsMCExp_%s_%s_%s_Plot.pdf",histname.c_str(),PDname.c_str(),elogData.c_str());
   canvas->Print(tempname);
   
 }

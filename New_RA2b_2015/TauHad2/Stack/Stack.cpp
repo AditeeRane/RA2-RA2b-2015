@@ -159,6 +159,18 @@ mainClass(int luminosity=5000){ // luminosity is in /pb unit
   Hname[18]="MuonCS_HT";
   Hname[19]="MuonCS_MHT";
   Hname[20]="MuonCS_MuonPt";
+  Hname[21]="MuonCS_MuonEta";
+  Hname[22]="MuonCS_MuonPhi";
+  Hname[23]="JetOne_Pt";
+  Hname[24]="JetOne_Eta";
+  Hname[25]="JetOne_Phi";
+  Hname[26]="JetTwo_Pt";
+  Hname[27]="JetTwo_Eta";
+  Hname[28]="JetTwo_Phi";
+  Hname[29]="JetThree_Pt";
+  Hname[30]="JetThree_Eta";
+  Hname[31]="JetThree_Phi";
+
   for(int j=0; j< Hname.size(); j++){
 
     for(int i=0; i<tnHT ; i++){                                                  // loop over different HT bins
@@ -654,6 +666,18 @@ cout << " flag \n " ;
   Hname[18]="MuonCS_HT";
   Hname[19]="MuonCS_MHT";
   Hname[20]="MuonCS_MuonPt";
+  Hname[21]="MuonCS_MuonEta";
+  Hname[22]="MuonCS_MuonPhi";
+  Hname[23]="JetOne_Pt";
+  Hname[24]="JetOne_Eta";
+  Hname[25]="JetOne_Phi";
+  Hname[26]="JetTwo_Pt";
+  Hname[27]="JetTwo_Eta";
+  Hname[28]="JetTwo_Phi";
+  Hname[29]="JetThree_Pt";
+  Hname[30]="JetThree_Eta";
+  Hname[31]="JetThree_Phi";
+
 
   for(int j=0; j< Hname.size(); j++){
 
@@ -1302,6 +1326,18 @@ cout << " flag \n " ;
   Hname[18]="MuonCS_HT";
   Hname[19]="MuonCS_MHT";
   Hname[20]="MuonCS_MuonPt";
+  Hname[21]="MuonCS_MuonEta";
+  Hname[22]="MuonCS_MuonPhi";
+  Hname[23]="JetOne_Pt";
+  Hname[24]="JetOne_Eta";
+  Hname[25]="JetOne_Phi";
+  Hname[26]="JetTwo_Pt";
+  Hname[27]="JetTwo_Eta";
+  Hname[28]="JetTwo_Phi";
+  Hname[29]="JetThree_Pt";
+  Hname[30]="JetThree_Eta";
+  Hname[31]="JetThree_Phi";
+
 
   for(int j=0; j< Hname.size(); j++){
 
@@ -1901,6 +1937,17 @@ temphistIIInj2 = static_cast<TH1D*>(temphistInj2->Clone("hProb_Tau_mu_nb_njet2")
   Hname[18]="MuonCS_HT";
   Hname[19]="MuonCS_MHT";
   Hname[20]="MuonCS_MuonPt";
+  Hname[21]="MuonCS_MuonEta";
+  Hname[22]="MuonCS_MuonPhi";
+  Hname[23]="JetOne_Pt";
+  Hname[24]="JetOne_Eta";
+  Hname[25]="JetOne_Phi";
+  Hname[26]="JetTwo_Pt";
+  Hname[27]="JetTwo_Eta";
+  Hname[28]="JetTwo_Phi";
+  Hname[29]="JetThree_Pt";
+  Hname[30]="JetThree_Eta";
+  Hname[31]="JetThree_Phi";
 
   for(int j=0; j< Hname.size(); j++){
 

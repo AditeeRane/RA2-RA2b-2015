@@ -238,12 +238,35 @@ using namespace std;
     TH1* MuonCS_HT= new TH1D("MuonCS_HT","HT distribution for muon CS event",20,0,2500);
     TH1* MuonCS_MHT= new TH1D("MuonCS_MHT","MHT distribution for muon CS event",20,0,1000);
     TH1* MuonCS_MuonPt= new TH1D("MuonCS_MuonPt","MuonPt distribution for muon CS event",20,0,400);
+    TH1* MuonCS_MuonEta= new TH1D("MuonCS_MuonEta","MuonEta distribution for muon CS event",32,-3.2,3.2);
+    TH1* MuonCS_MuonPhi= new TH1D("MuonCS_MuonPhi","MuonPhi distribution for muon CS event",32,-3.2,3.2);
+    TH1* JetOne_Pt= new TH1D("JetOne_Pt","Pt distribution for leading JetOne",20,0,400);
+    TH1* JetOne_Eta= new TH1D("JetOne_Eta","Eta distribution for leading JetOne",32,-3.2,3.2);
+    TH1* JetOne_Phi= new TH1D("JetOne_Phi","Phi distribution for leading JetOne",32,-3.2,3.2);
+    TH1* JetTwo_Pt= new TH1D("JetTwo_Pt","Pt distribution for leading JetTwo",20,0,400);
+    TH1* JetTwo_Eta= new TH1D("JetTwo_Eta","Eta distribution for leading JetTwo",32,-3.2,3.2);
+    TH1* JetTwo_Phi= new TH1D("JetTwo_Phi","Phi distribution for leading JetTwo",32,-3.2,3.2);
+    TH1* JetThree_Pt= new TH1D("JetThree_Pt","Pt distribution for leading JetThree",20,0,400);
+    TH1* JetThree_Eta= new TH1D("JetThree_Eta","Eta distribution for leading JetThree",32,-3.2,3.2);
+    TH1* JetThree_Phi= new TH1D("JetThree_Phi","Phi distribution for leading JetThree",32,-3.2,3.2);
 
     MuonCS_Njets->Sumw2();
     MuonCS_Nbjets->Sumw2();
     MuonCS_HT->Sumw2();
     MuonCS_MHT->Sumw2();
     MuonCS_MuonPt->Sumw2();
+    MuonCS_MuonEta->Sumw2();
+    MuonCS_MuonPhi->Sumw2();
+    JetOne_Pt->Sumw2();
+    JetOne_Eta->Sumw2();
+    JetOne_Phi->Sumw2();
+    JetTwo_Pt->Sumw2();
+    JetTwo_Eta->Sumw2();
+    JetTwo_Phi->Sumw2();
+    JetThree_Pt->Sumw2();
+    JetThree_Eta->Sumw2();
+    JetThree_Phi->Sumw2();
+
 // Make another hist to be filled during bootstrapping
     TH1 * searchH_evt = static_cast<TH1D*>(searchH->Clone("searchH_evt")); 
     TH1* searchH_lowDphi = new TH1D("searchH_lowDphi","search bin histogram",totNbins,1,totNbins+1);
@@ -961,6 +984,11 @@ using namespace std;
     double eventWeight = 1.0;
     int eventN=0;
     int FailTrigMuons=0;
+    int leadJ1Idx=-99,leadJ2Idx=-99,leadJ3Idx=-99;
+    double leadJ1Pt=-99.,leadJ2Pt=-99.,leadJ3Pt=-99.;
+    double leadJ1Eta=-9999.,leadJ2Eta=-9999.,leadJ3Eta=-9999.;
+    double leadJ1Phi=-9999.,leadJ2Phi=-9999.,leadJ3Phi=-9999.;
+    
     while( evt->loadNext() ){
       eventN++;
 
@@ -973,10 +1001,10 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //      if(eventN>100000)break;
+      //      if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
-      
+      /*    
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
 
       // Meant to combine different ttbar samples exclusively
@@ -1042,7 +1070,7 @@ using namespace std;
 	}
       }
       */
-      
+      /*
       if( evt->DataBool_() && evt->BadChargedCandidateFilter_()==0)continue;
       nClean_BadCharged++;
       if( evt->DataBool_() && evt->BadPFMuonFilter_()==0)continue;
@@ -1062,7 +1090,7 @@ using namespace std;
       if( !fastsim && evt->JetId()==0)continue;
       nClean_JetId++;
       cutflow_preselection->Fill(6.,eventWeight); // events passing JetID event cleaning
-
+*/
       nCleanEve++;
       //std::cout<<" eventN "<<eventN<<" nClean_BadCharged "<<nClean_BadCharged<<" nClean_BadPFMuon "<<nClean_BadPFMuon<<" nClean_globalTight "<<nClean_globalTight<<" nClean_PFCaloMET "<<nClean_PFCaloMET<<" nClean_noMuonJet "<<nClean_noMuonJet<<" nClean_noFakeJet "<<nClean_noFakeJet<<" nClean_JetId "<<nClean_JetId<<" nCleanEve "<<nCleanEve<<endl;
 
@@ -1092,11 +1120,11 @@ using namespace std;
 	 
 	  //	  std::cout << "i "<<i <<evt->TriggerNames_().at(i) << endl;
           string trigStr;
-          sprintf(tempname, "HLT_Mu50_v");
-          sprintf(tempname2,"HLT_Mu50_v");
-          sprintf(tempname3,"HLT_Mu50_v");
-          sprintf(tempname4,"HLT_Mu50_v");
-	  sprintf(tempname5,"HLT_Mu50_v");
+          sprintf(tempname, "HLT_Mu15_IsoVVVL_PFHT400_v");
+          sprintf(tempname2,"HLT_Mu15_IsoVVVL_PFHT350_v");
+          sprintf(tempname3,"HLT_Mu15_IsoVVVL_PFHT400_v");
+          sprintf(tempname4,"HLT_Mu15_IsoVVVL_PFHT400_v");
+	  sprintf(tempname5,"HLT_Mu15_IsoVVVL_PFHT400_v");
 	  /*
 	  if (lowHTSelection){
 	    sprintf(tempname,"HLT_IsoMu22_v");
@@ -1115,6 +1143,7 @@ using namespace std;
 	      trigPass=true;
 	      trigIndex=i;
 	    }
+	    //	    std::cout<<" i "<<i<<" trigname "<<evt->TriggerNames_().at(i)<<endl;
 	    // HighHT selection
 	    if( evt->TriggerNames_().at(i).find(tempname)  != string::npos  
 		//evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
@@ -1145,19 +1174,19 @@ using namespace std;
         //if(eventN < 100 )cout<< "A temporary selection is in effect \n\n\nA temporary selection is in effect \n\n\nA temporary selection is in effect ";
 	//std::cout<<" trigPass "<<trigPass<<endl;
         if(!trigPass){
+	  /*
 	  for(int i=0; i< evt->MuPtVec_().size(); i++){
-	    double pt_FailTrigMuon=evt->MuPtVec_().at(i);
-	    /*
-	    if(pt_FailTrigMuon>60){
-	      std::cout<<" evt "<<eventN<<" muon pt "<<pt_FailTrigMuon<<" Muon above 60 GeV failed Mu50 trigger "<< " FailTrigMuons "<<FailTrigMuons<<endl;	  
+	    double pt_FailTrigMuon=evt->MuPtVec_().at(i);	    
+	    if(pt_FailTrigMuon>20 && evt->ht()>600){
+	      std::cout<<" evt "<<eventN<<" muon pt "<<pt_FailTrigMuon<<" ht "<<evt->ht()<<" Muon above 20 GeV and evt_ht>600 failed trigger "<< " FailTrigMuons "<<FailTrigMuons<<endl;	  
 	      FailTrigMuons++;
 	    }
-*/
 	  }
+*/
 	  continue;
 	}
       }
- 
+      
       // to study some of the uncertainties we need to make some changes from
       // the very beginning and observe how that propagates
       
@@ -1341,9 +1370,29 @@ using namespace std;
 	    MuonCS_HT->Fill(evt->ht(),eventWeight);
 	    MuonCS_MHT->Fill(evt->mht(),eventWeight);
 	    MuonCS_MuonPt->Fill(muPt,eventWeight);
+	    MuonCS_MuonEta->Fill(muEta,eventWeight);
+	    MuonCS_MuonPhi->Fill(muPhi,eventWeight);
+	   
+	    if(evt->JetsPtVec_().size()>0){
+	      JetOne_Pt->Fill(evt->JetsPtVec_()[0],eventWeight);
+	      JetOne_Eta->Fill(evt->JetsEtaVec_()[0],eventWeight);
+	      JetOne_Phi->Fill(evt->JetsPhiVec_()[0],eventWeight);
+	    }
+	    if(evt->JetsPtVec_().size()>1){
+	      JetTwo_Pt->Fill(evt->JetsPtVec_()[1],eventWeight);
+	      JetTwo_Eta->Fill(evt->JetsEtaVec_()[1],eventWeight);
+	      JetTwo_Phi->Fill(evt->JetsPhiVec_()[1],eventWeight);
+	    }
+	    if(evt->JetsPtVec_().size()>2){
+	      JetThree_Pt->Fill(evt->JetsPtVec_()[2],eventWeight);
+	      JetThree_Eta->Fill(evt->JetsEtaVec_()[2],eventWeight);
+	      JetThree_Phi->Fill(evt->JetsPhiVec_()[2],eventWeight);
+	    }
+
+	  }
 	    //	    if(isData)
 	    //std::cout<<" trigIndex "<< trigIndex<<" name "<<evt->TriggerNames_().at(trigIndex)<<endl;
-	  }
+	  
 
           // start of bootstrapping ( if is on ) 
           for(int l=1; l<=nLoops;l++){
@@ -2428,7 +2477,7 @@ using namespace std;
 		    //std::cout<<"search region "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;  
 		    
 		      if(isData && HTRatiocut>2.0){
-			std::cout<<"eventN "<<eventN<<" HTRatiocut "<<HTRatiocut<<"HT ratiocut satisfied"<<endl;
+			//			std::cout<<"eventN "<<eventN<<" HTRatiocut "<<HTRatiocut<<"HT ratiocut satisfied"<<endl;
 			continue;
 		      }
 
@@ -3060,6 +3109,17 @@ using namespace std;
     MuonCS_HT->Write();
     MuonCS_MHT->Write();
     MuonCS_MuonPt->Write();
+    MuonCS_MuonEta->Write();
+    MuonCS_MuonPhi->Write();
+    JetOne_Pt->Write();
+    JetOne_Eta->Write();
+    JetOne_Phi->Write();
+    JetTwo_Pt->Write();
+    JetTwo_Eta->Write();
+    JetTwo_Phi->Write();
+    JetThree_Pt->Write();
+    JetThree_Eta->Write();
+    JetThree_Phi->Write();
     searchH->Write();
     searchH_nb_njet2->Write();
     searchH_nb_njet34->Write();
