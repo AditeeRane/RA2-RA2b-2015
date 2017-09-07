@@ -21,15 +21,15 @@ public:
   map<int, string> cutName() const;
 
   //define different cuts here
-  bool ht_base(double ht_){if(ht_>=600) return true; return false;}
-  bool ht_500(double ht_){if(ht_>=600) return true; return false;} // <== should get rid of this confusing one
+  bool ht_base(double ht_){if(ht_>=200) return true; return false;}
+  bool ht_500(double ht_){if(ht_>=200) return true; return false;} // <== should get rid of this confusing one
   bool ht_500_800(double ht_){if(ht_>=500 && ht_<800) return true; return false;}
   bool ht_500_1200(double ht_){if(ht_>=500 && ht_<1200)return true; return false;}
   bool ht_800_1200(double ht_){if(ht_>=800 && ht_<1200)return true; return false;}
   bool ht_800(double ht_){if(ht_>=800)return true; return false;}
   bool ht_1200(double ht_){if(ht_>=1200)return true; return false;}
-  bool mht_base(double mht_){if(mht_>=300)return true; return false;}  
-  bool mht_200(double mht_){if(mht_>=300)return true; return false;} // <== should get rid of this confusing one
+  bool mht_base(double mht_){if(mht_>=100)return true; return false;}  
+  bool mht_200(double mht_){if(mht_>=100)return true; return false;} // <== should get rid of this confusing one
   bool mht_500(double mht_){if(mht_>=500)return true; return false;}
   bool mht_350(double mht_){if(mht_>=350)return true; return false;}
   bool mht_200_500(double mht_){if(mht_>=200 && mht_<500)return true; return false;}

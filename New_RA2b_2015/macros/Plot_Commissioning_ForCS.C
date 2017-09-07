@@ -112,7 +112,7 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   //  sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_v16b_.root",PDname.c_str());
   //  sprintf(tempname,"TauHad2/ARElog49_7.6ifb_HadTauEstimation_data_%s_V9bc_.root",PDname.c_str()); 
   //* AR, 170815- Reads data prediction and MC expectation files
-  sprintf(tempname,"TauHad2/%s_HadTauEstimation_data_%s_Bv2C_.root",elogData.c_str(),PDname.c_str());
+  sprintf(tempname,"TauHad2/%s_HadTauEstimation_data_%s_Bv12Cv12_.root",elogData.c_str(),PDname.c_str());
   //sprintf(tempname,"TauHad2/HadTauEstimation_data_%s_Cv1v2_.root",PDname.c_str());
   TFile * PreData = new TFile(tempname,"R");
   sprintf(tempname,"TauHad2/%s_HadTauEstimation_data_%s_V12_.root",elogData.c_str(),PDname.c_str());
@@ -165,7 +165,6 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   canvas->Divide(1, 2);
   //canvas_1->SetTopMargin(0.1);
   //canvas_2->SetBottomMargin(1.8);
-  //  std::cout<<" ******Check SegVio***********"<<endl;
   //
   // Define pads
   //
@@ -213,7 +212,7 @@ void Plot_Commissioning_ForCS(string histname="Njets",
   //  sprintf(tempname,"allEvents/%s/StatError_%s_allEvents",cutname.c_str(),cutname.c_str());
   //* AR, 170815-hPreData_StatError only used for printing purpose
   //  hPreData_StatError  =(TH1D*) PreData->Get(tempname)->Clone("hPreData_StatError");
-  //   sprintf(tempname,"MuonCS_%s",histname.c_str());
+  //  sprintf(tempname,"MuonCS_%s",histname.c_str());
   sprintf(tempname,"%s",histname.c_str());
   
  //* AR, 170815-Picks histogram of distribution to be plotted (obviously after DelPhi cut) both from data file and MC expectation file(last from the stacks)
@@ -361,7 +360,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="MuonPt"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 30000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 400.;
     //if (cutname=="delphi") xmax = 700.;
@@ -375,7 +374,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="MuonEta"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 100000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 3.2;
     //if (cutname=="delphi") xmax = 700.;
@@ -389,7 +388,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="MuonPhi"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 100000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 3.2;
     //if (cutname=="delphi") xmax = 700.;
@@ -403,42 +402,42 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="JetOne_Pt" || histname=="JetTwo_Pt" || histname=="JetThree_Pt"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 100000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 400.;
     //if (cutname=="delphi") xmax = 700.;
     xmin = 0;
-	xlatex=686.927;ylatex=13.61134;
+    xlatex=686.927;ylatex=13.61134;
     //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
-    sprintf(xtitlename,"JetThreePt[GeV/c]");
+    sprintf(xtitlename,"JetThree_Pt");
     sprintf(ytitlename,"Events /(20 GeV/c)");
     gPad->SetLogy();
   }
   if(histname=="JetOne_Eta" || histname=="JetTwo_Eta" || histname=="JetThree_Eta"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 100000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 3.2;
     //if (cutname=="delphi") xmax = 700.;
     xmin = -3.2;
 	xlatex=686.927;ylatex=13.61134;
     //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
-    sprintf(xtitlename,"JetThreeEta");
+    sprintf(xtitlename,"JetThree_Eta");
     sprintf(ytitlename,"Events /0.2");
     gPad->SetLogy();
   }
   if(histname=="JetOne_Phi" || histname=="JetTwo_Phi" || histname=="JetThree_Phi"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 100000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 3.2;
     //if (cutname=="delphi") xmax = 700.;
     xmin = -3.2;
 	xlatex=686.927;ylatex=13.61134;
     //sprintf(xtitlename,"#slash{H}_{T} [GeV]");
-    sprintf(xtitlename,"JetTwoPhi");
+    sprintf(xtitlename,"JetThree_Phi");
     sprintf(ytitlename,"Events /0.2");
     gPad->SetLogy();
   }
@@ -446,7 +445,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="MHT"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 30000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 1000.;
     //if (cutname=="delphi") xmax = 700.;
@@ -476,7 +475,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="HT"){
     xtext_top = 2200.;
     //y_legend  = 2000.;
-    ymax_top = 30000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 2500.;
     //if (cutname=="delphi") xmax = 1500.;
@@ -502,7 +501,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="Nbjets"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 100000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 5.;
     xmin = 0;
@@ -514,7 +513,7 @@ std::cout<< " After scaling "<< " total "<<hExp->GetBinContent(1)<<endl;
   if(histname=="Njets"){
     xtext_top = 1800.;
     //y_legend  = 2000.;
-    ymax_top = 100000.;
+    ymax_top = 500000.;
     ymin_top = 0.15;
     xmax = 12.;
     xmin = 2;
