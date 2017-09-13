@@ -242,6 +242,9 @@ using namespace std;
     TH1* MuonCS_MuonPhi= new TH1D("MuonCS_MuonPhi","MuonPhi distribution for muon CS event",32,-3.2,3.2);
     TH1* Denom_MuonPt= new TH1D("Denom_MuonPt","MuonPt distribution for muons passing MET triggers",20,0,400);
     TH1* Num_MuonPt= new TH1D("Num_MuonPt","MuonPt distribution for muons passing MET+Mu50 triggers",20,0,400);
+    TH1* Denom_MET= new TH1D("Denom_MET","MET distribution for muons passing MET triggers",20,0,600);
+    TH1* Num_MET= new TH1D("Num_MET","MET distribution for muons passing MET+Mu50 triggers",20,0,600);
+    TH1* NumMuonsPerEvt= new TH1D("NumMuonsPerEvt","Number of muons per evt",5,0,5);
     TH1* JetOne_Pt= new TH1D("JetOne_Pt","Pt distribution for leading JetOne",20,0,400);
     TH1* JetOne_Eta= new TH1D("JetOne_Eta","Eta distribution for leading JetOne",32,-3.2,3.2);
     TH1* JetOne_Phi= new TH1D("JetOne_Phi","Phi distribution for leading JetOne",32,-3.2,3.2);
@@ -270,7 +273,9 @@ using namespace std;
     JetThree_Phi->Sumw2();
     Num_MuonPt->Sumw2();
     Denom_MuonPt->Sumw2();
-
+    Denom_MET->Sumw2();
+    Num_MET->Sumw2();
+    NumMuonsPerEvt->Sumw2();
 // Make another hist to be filled during bootstrapping
     TH1 * searchH_evt = static_cast<TH1D*>(searchH->Clone("searchH_evt")); 
     TH1* searchH_lowDphi = new TH1D("searchH_lowDphi","search bin histogram",totNbins,1,totNbins+1);
@@ -1005,7 +1010,7 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //      if(eventN>30000)break;
+      //      if(eventN>20000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       /*    
@@ -1131,11 +1136,15 @@ using namespace std;
           sprintf(tempname, "HLT_Mu50_v");
           sprintf(tempname2,"HLT_PFMET120_PFMHT120_IDTight_v");
           sprintf(tempname3,"HLT_PFMET120_PFMHT120_IDTight_v");
-          sprintf(tempname4,"HLT_PFMET130_PFMHT130_IDTight_v");
-	  sprintf(tempname5,"HLT_PFMET140_PFMHT140_IDTight_v");
+          sprintf(tempname4,"HLT_PFMET120_PFMHT120_IDTight_v");
+	  sprintf(tempname5,"HLT_PFMET120_PFMHT120_IDTight_v");
 
-	  //std::cout<<" eventN "<<eventN<<evt->TriggerNames_().at(i)<<endl;
-	  trigfoundNum=true;
+	  if(evt->TriggerNames_().at(i).find(tempname) != string::npos
+	     || evt->TriggerNames_().at(i).find(tempname2) != string::npos
+	     || evt->TriggerNames_().at(i).find(tempname3) != string::npos
+	     || evt->TriggerNames_().at(i).find(tempname4) != string::npos
+	     || evt->TriggerNames_().at(i).find(tempname5) != string::npos)
+	    trigfoundNum=true;
 	  if(evt->TriggerNames_().at(i).find(tempname2) != string::npos
 	     || evt->TriggerNames_().at(i).find(tempname3) != string::npos
 	     || evt->TriggerNames_().at(i).find(tempname4) != string::npos
@@ -1242,7 +1251,9 @@ using namespace std;
         }
         
         if(TauHadModel>=3){ // Use reco-level muon
-          for(int i=0; i< evt->MuPtVec_().size(); i++){ // Ahmad33
+	  if(evt->met()>200 && evt->nJets()>=1)
+	    NumMuonsPerEvt->Fill(evt->MuPtVec_().size(),eventWeight); 
+	  for(int i=0; i< evt->MuPtVec_().size(); i++){ // Ahmad33
             double pt=evt->MuPtVec_().at(i); // Ahmad33
             double eta=evt->MuEtaVec_().at(i); // Ahmad33
             double phi=evt->MuPhiVec_().at(i); // Ahmad33
@@ -1385,12 +1396,18 @@ using namespace std;
 	    }
 	  }
 */
-	  
-	  if(trigPassDen){
-	    //	      std::cout<<" eventN passed "<<eventN<<" pt "<<muPt<<" trigPassNum "<<trigPassNum<<endl;
-	    Denom_MuonPt->Fill(muPt,eventWeight);
-	    if(trigPassNum)
-	      Num_MuonPt->Fill(muPt,eventWeight);
+	  if(isData){
+	    if(evt->nJets()>=1){
+	      if(trigPassDen){
+		//	      std::cout<<" eventN passed "<<eventN<<" pt "<<muPt<<" trigPassNum "<<trigPassNum<<endl;
+		Denom_MuonPt->Fill(muPt,eventWeight);
+		Denom_MET->Fill(evt->met(),eventWeight);
+		if(trigPassNum){
+		  Num_MuonPt->Fill(muPt,eventWeight);
+		  Num_MET->Fill(evt->met(),eventWeight);
+		}
+	      }
+	    }
 	  }
 	  if(sel->ht_500(evt->ht()) && sel->mht_200(evt->mht()) && sel->dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4()) && sel->Njet_4(evt->nJets())){
 	    double corr_eventWeight=eventWeight*trigEffCorr_CS;
@@ -1748,8 +1765,11 @@ using namespace std;
     JetThree_Pt->Write();
     JetThree_Eta->Write();
     JetThree_Phi->Write();
+    NumMuonsPerEvt->Write();
     Num_MuonPt->Write();
     Denom_MuonPt->Write();
+    Num_MET->Write();
+    Denom_MET->Write();
     searchH->Write();
     searchH_nb_njet2->Write();
     searchH_nb_njet34->Write();
