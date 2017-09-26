@@ -244,6 +244,22 @@ using namespace std;
     TH1* Num_MuonPt= new TH1D("Num_MuonPt","MuonPt distribution for muons passing MET+Mu50 triggers",20,0,400);
     TH1* Denom_MET= new TH1D("Denom_MET","MET distribution for muons passing MET triggers",20,0,600);
     TH1* Num_MET= new TH1D("Num_MET","MET distribution for muons passing MET+Mu50 triggers",20,0,600);
+    TH2* NumFail_pTVsMET= new TH2D("NumFail_pTVsMET","muon pT vs MET for events passing MET but failing Mu_50 trigger",20,0,400,20,0,600);
+    TH2* NumFail_pTVsMHT= new TH2D("NumFail_pTVsMHT","muon pT vs MHT for events passing MET but failing Mu_50 trigger",20,0,400,20,0,600);
+    TH2* NumFail_METVsMHT= new TH2D("NumFail_METVsMHT","MET vs MHT for events passing MET but failing Mu_50 trigger",20,0,600,20,0,600);
+    TH2* NumPass_METVsMHT= new TH2D("NumPass_METVsMHT","MET vs MHT for events passing MET and Mu_50 trigger",20,0,600,20,0,600);
+    TH2* NumFail_NjetVsMET= new TH2D("NumFail_NjetVsMET","Njet vs MET for events passing MET but failing Mu_50 trigger",10,0,10,20,0,600);
+    TH2* NumPass_NjetVsMET= new TH2D("NumPass_NjetVsMET","Njet vs MET for events passing MET and Mu_50 trigger",10,0,10,20,0,600);
+    TH1* NumFail_DphiBetpTAndMET=new TH1D("NumFail_DphiBetpTAndMET","DeltaPhi between muon pT and MET for events passing MET but failing Mu_50 trigger",35,-3.5,3.5);
+    TH1* NumFail_DphiBetpTAndMHT=new TH1D("NumFail_DphiBetpTAndMHT","DeltaPhi between muon pT and MHT for events passing MET but failing Mu_50 trigger",35,-3.5,3.5);
+    TH1* NumFail_DphiBetpTAndMET_METMHTBelow100=new TH1D("NumFail_DphiBetpTAndMET_METMHTBelow100","DeltaPhi between muon pT and MET for events passing MET but failing Mu_50 trigger with METMHTBelow100",35,-3.5,3.5);
+    TH1* NumFail_DphiBetpTAndMHT_METMHTBelow100=new TH1D("NumFail_DphiBetpTAndMHT_METMHTBelow100","DeltaPhi between muon pT and MHT for events passing MET but failing Mu_50 trigger with METMHTBelow100",35,-3.5,3.5);
+    TH1* NumFail_MuonPt_METMHTBelow100=new TH1D("NumFail_MuonPt_METMHTBelow100","muon pT for events passing MET but failing Mu_50 trigger with METMHTBelow100",20,0,400);
+    TH1* NumFail_MuonEta_METMHTBelow100=new TH1D("NumFail_MuonEta_METMHTBelow100","muon Eta for events passing MET but failing Mu_50 trigger with METMHTBelow100",60,-3.0,3.0);
+    TH1* NumFail_MuonPhi_METMHTBelow100=new TH1D("NumFail_MuonPhi_METMHTBelow100","muon Phi for events passing MET but failing Mu_50 trigger with METMHTBelow100",35,-3.5,3.5);
+    TH1* NumFail_Njet_METMHTBelow100=new TH1D("NumFail_Njet_METMHTBelow100","Njet distribution for events passing MET but failing Mu_50 trigger with METMHTBelow100",10,0,10);
+    TH1* NumPass_DphiBetpTAndMET=new TH1D("NumPass_DphiBetpTAndMET","DeltaPhi between muon pT and MET for events passing MET and Mu_50 trigger",35,-3.5,3.5);
+    TH1* NumPass_DphiBetpTAndMHT=new TH1D("NumPass_DphiBetpTAndMHT","DeltaPhi between muon pT and MHT for events passing MET and Mu_50 trigger",35,-3.5,3.5);
     TH1* NumMuonsPerEvt= new TH1D("NumMuonsPerEvt","Number of muons per evt",5,0,5);
     TH1* JetOne_Pt= new TH1D("JetOne_Pt","Pt distribution for leading JetOne",20,0,400);
     TH1* JetOne_Eta= new TH1D("JetOne_Eta","Eta distribution for leading JetOne",32,-3.2,3.2);
@@ -276,6 +292,18 @@ using namespace std;
     Denom_MET->Sumw2();
     Num_MET->Sumw2();
     NumMuonsPerEvt->Sumw2();
+    NumFail_DphiBetpTAndMET->Sumw2();
+    NumFail_DphiBetpTAndMHT->Sumw2();
+    NumPass_DphiBetpTAndMET->Sumw2();
+    NumPass_DphiBetpTAndMHT->Sumw2();
+    NumFail_DphiBetpTAndMET_METMHTBelow100->Sumw2();
+    NumFail_DphiBetpTAndMHT_METMHTBelow100->Sumw2();
+    NumFail_MuonPt_METMHTBelow100->Sumw2();
+    NumFail_MuonEta_METMHTBelow100->Sumw2();
+    NumFail_MuonPhi_METMHTBelow100->Sumw2();
+    NumFail_Njet_METMHTBelow100->Sumw2();
+    //    NumFail_pTVsMET->Sumw2();
+    //    NumFail_pTVsMHT->Sumw2();
 // Make another hist to be filled during bootstrapping
     TH1 * searchH_evt = static_cast<TH1D*>(searchH->Clone("searchH_evt")); 
     TH1* searchH_lowDphi = new TH1D("searchH_lowDphi","search bin histogram",totNbins,1,totNbins+1);
@@ -1397,6 +1425,7 @@ using namespace std;
 	  }
 */
 	  if(isData){
+	    int JetIdx=-1;
 	    if(evt->nJets()>=1){
 	      if(trigPassDen){
 		//	      std::cout<<" eventN passed "<<eventN<<" pt "<<muPt<<" trigPassNum "<<trigPassNum<<endl;
@@ -1405,6 +1434,26 @@ using namespace std;
 		if(trigPassNum){
 		  Num_MuonPt->Fill(muPt,eventWeight);
 		  Num_MET->Fill(evt->met(),eventWeight);
+		  NumPass_DphiBetpTAndMET->Fill(TVector2::Phi_mpi_pi(muPhi-evt->metphi()),eventWeight);
+		  NumPass_DphiBetpTAndMHT->Fill(TVector2::Phi_mpi_pi(muPhi-evt->mhtphi()),eventWeight);
+		  NumPass_NjetVsMET->Fill(evt->nJets(),evt->met(),eventWeight);
+		  NumPass_METVsMHT->Fill(evt->met(),evt->mht(),eventWeight);
+		}
+		else{
+		  NumFail_pTVsMET->Fill(muPt,evt->met(),eventWeight);
+		  NumFail_pTVsMHT->Fill(muPt,evt->mht(),eventWeight);
+		  NumFail_METVsMHT->Fill(evt->met(),evt->mht(),eventWeight);
+		  NumFail_DphiBetpTAndMET->Fill(TVector2::Phi_mpi_pi(muPhi-evt->metphi()),eventWeight);
+		  NumFail_DphiBetpTAndMHT->Fill(TVector2::Phi_mpi_pi(muPhi-evt->mhtphi()),eventWeight);
+		  NumFail_NjetVsMET->Fill(evt->nJets(),evt->met(),eventWeight);
+		  if(evt->met()<100 && evt->mht()<100){
+		    NumFail_DphiBetpTAndMET_METMHTBelow100->Fill(TVector2::Phi_mpi_pi(muPhi-evt->metphi()),eventWeight);
+		    NumFail_DphiBetpTAndMHT_METMHTBelow100->Fill(TVector2::Phi_mpi_pi(muPhi-evt->mhtphi()),eventWeight);
+		    NumFail_MuonPt_METMHTBelow100->Fill(muPt,eventWeight);
+		    NumFail_MuonEta_METMHTBelow100->Fill(muEta,eventWeight);
+		    NumFail_MuonPhi_METMHTBelow100->Fill(muPhi,eventWeight);
+		    NumFail_Njet_METMHTBelow100->Fill(evt->nJets(),eventWeight);
+		  }
 		}
 	      }
 	    }
@@ -1770,6 +1819,22 @@ using namespace std;
     Denom_MuonPt->Write();
     Num_MET->Write();
     Denom_MET->Write();
+    NumFail_pTVsMET->Write();
+    NumFail_pTVsMHT->Write();
+    NumFail_METVsMHT->Write();
+    NumPass_METVsMHT->Write();
+    NumFail_NjetVsMET->Write();
+    NumPass_NjetVsMET->Write();
+    NumFail_DphiBetpTAndMET->Write();
+    NumFail_DphiBetpTAndMHT->Write();
+    NumPass_DphiBetpTAndMET->Write();
+    NumPass_DphiBetpTAndMHT->Write();
+    NumFail_DphiBetpTAndMET_METMHTBelow100->Write();
+    NumFail_DphiBetpTAndMHT_METMHTBelow100->Write();
+    NumFail_MuonPt_METMHTBelow100->Write();
+    NumFail_MuonEta_METMHTBelow100->Write();
+    NumFail_MuonPhi_METMHTBelow100->Write();
+    NumFail_Njet_METMHTBelow100->Write();
     searchH->Write();
     searchH_nb_njet2->Write();
     searchH_nb_njet34->Write();
