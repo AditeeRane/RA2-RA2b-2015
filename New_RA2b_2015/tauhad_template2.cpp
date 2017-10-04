@@ -240,8 +240,8 @@ using namespace std;
     TH1* MuonCS_MuonPt= new TH1D("MuonCS_MuonPt","MuonPt distribution for muon CS event",20,0,400);
     TH1* MuonCS_MuonEta= new TH1D("MuonCS_MuonEta","MuonEta distribution for muon CS event",32,-3.2,3.2);
     TH1* MuonCS_MuonPhi= new TH1D("MuonCS_MuonPhi","MuonPhi distribution for muon CS event",32,-3.2,3.2);
-    TH1* Denom_HT= new TH1D("Denom_HT","HT distribution for events passing MET triggers",50,0,1000);
-    TH1* Num_HT= new TH1D("Num_HT","HT distribution for events passing MET+HT triggers",50,0,1000);
+    TH1* Denom_MuonPt= new TH1D("Denom_MuonPt","MuonPt distribution for events passing MET triggers",40,0,400);
+    TH1* Num_MuonPt= new TH1D("Num_MuonPt","MuonPt distribution for events passing MET+Mu24 triggers",40,0,400);
     TH1* NumMuonsPerEvt= new TH1D("NumMuonsPerEvt","Number of muons per evt",5,0,5);
     TH1* JetOne_Pt= new TH1D("JetOne_Pt","Pt distribution for leading JetOne",20,0,400);
     TH1* JetOne_Eta= new TH1D("JetOne_Eta","Eta distribution for leading JetOne",32,-3.2,3.2);
@@ -269,8 +269,8 @@ using namespace std;
     JetThree_Pt->Sumw2();
     JetThree_Eta->Sumw2();
     JetThree_Phi->Sumw2();
-    Num_HT->Sumw2();
-    Denom_HT->Sumw2();
+    Num_MuonPt->Sumw2();
+    Denom_MuonPt->Sumw2();
     NumMuonsPerEvt->Sumw2();
 // Make another hist to be filled during bootstrapping
     TH1 * searchH_evt = static_cast<TH1D*>(searchH->Clone("searchH_evt")); 
@@ -1127,9 +1127,8 @@ using namespace std;
             cout << " Pass: " << evt->PassTrigger_().at(i) << " \n+\n";
 	  }
 	 
-	  //	  std::cout << "i "<<i <<evt->TriggerNames_().at(i) << endl;
           string trigStr;
-          sprintf(tempname, "HLT_Mu15_IsoVVVL_PFHT450_v");
+          sprintf(tempname, "HLT_IsoMu24_eta2p1_v");
           sprintf(tempname2,"HLT_PFMET120_PFMHT120_IDTight_v");
           sprintf(tempname3,"HLT_PFMET120_PFMHT120_IDTight_v");
           sprintf(tempname4,"HLT_PFMET120_PFMHT120_IDTight_v");
@@ -1198,7 +1197,7 @@ using namespace std;
             cout << evt->TriggerNames_().at(i) << " Pass: " << evt->PassTrigger_().at(i) << endl;
 	  }
 	  
-        }
+	}
 	if(!trigfoundNum)	  
 	  std::cout<<" eventN "<<eventN<<" Event did not find either of the triggers "<<endl;
 	
@@ -1393,12 +1392,12 @@ using namespace std;
 	  }
 */
 	  if(isData){
-	    if(evt->met()>200 && evt->nJets()>=2){
+	    if(evt->met()>200 && evt->nJets()>=1){
 	      if(trigPassDen){
 		//	      std::cout<<" eventN passed "<<eventN<<" pt "<<muPt<<" trigPassNum "<<trigPassNum<<endl;
-		Denom_HT->Fill(evt->ht(),eventWeight);
+		Denom_MuonPt->Fill(muPt,eventWeight);
 		if(trigPassNum)
-		  Num_HT->Fill(evt->ht(),eventWeight);
+		  Num_MuonPt->Fill(muPt,eventWeight);
 	      }
 	    }
 	  }
@@ -1759,8 +1758,8 @@ using namespace std;
     JetThree_Eta->Write();
     JetThree_Phi->Write();
     NumMuonsPerEvt->Write();
-    Num_HT->Write();
-    Denom_HT->Write();
+    Num_MuonPt->Write();
+    Denom_MuonPt->Write();
     searchH->Write();
     searchH_nb_njet2->Write();
     searchH_nb_njet34->Write();
