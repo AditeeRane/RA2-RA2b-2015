@@ -19,6 +19,12 @@ TString Utils::TauResponse_name(unsigned int ptBin) {
   name += ptBin;
   return name;
 }
+TString Utils::NJetVsPt_name(unsigned int ptBin) {
+  TauResponse_checkPtBin(ptBin);
+  TString name = "hNJetVsPt_";
+  name += ptBin;
+  return name;
+}
 TString Utils::TauPt_name(unsigned int ptBin) {
   TauResponse_checkPtBin(ptBin);
   TString name = "hGenPt_";
@@ -28,6 +34,12 @@ TString Utils::TauPt_name(unsigned int ptBin) {
 TString Utils::RecoMuPt_name(unsigned int ptBin) {
   TauResponse_checkPtBin(ptBin);
   TString name = "hRecoMuPt_";
+  name += ptBin;
+  return name;
+}
+TString Utils::GenMuPt_name(unsigned int ptBin) {
+  TauResponse_checkPtBin(ptBin);
+  TString name = "hGenMuPt_";
   name += ptBin;
   return name;
 }

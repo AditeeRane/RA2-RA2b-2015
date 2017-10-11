@@ -24,8 +24,11 @@ public:
     void TauResponse_checkPtBin(unsigned int ptBin);
 
     TString TauResponse_name(unsigned int ptBin);
+    TString NJetVsPt_name(unsigned int ptBin);
     TString TauPt_name(unsigned int ptBin);
     TString RecoMuPt_name(unsigned int ptBin);
+    TString GenMuPt_name(unsigned int ptBin);
+
     TString TauPtEta_name(unsigned int ptBin);
 
     double deltaPhi(double phi1, double phi2);

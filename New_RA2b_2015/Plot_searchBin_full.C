@@ -254,7 +254,7 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
   //std::cout<<" test_2 "<<endl;
 
   // Calculate average njnb corrections for QCD Prediction
-  bool AdhocQCD_NjetNbjet=true;
+  bool AdhocQCD_NjetNbjet=false;
   if(AdhocQCD_NjetNbjet && histname.find("QCD")!=string::npos){
     std::cout<<"For QCD: hist name "<<histname<<std::endl;
     double GenHistHtMht=0.;
@@ -357,7 +357,7 @@ void Plot_searchBin_full(string sample="stacked",string histname="searchH_b",str
   } // end QCD corrections
 
   // Caclulate NjNb corrections for search reasons
-  bool Adhoc_NjetNbjet=true;
+  bool Adhoc_NjetNbjet=false;
   if(Adhoc_NjetNbjet && histname.find("searchH_b")!=string::npos){
     
     //std::cout<<"Nbins Gen: "<< GenHist->GetXaxis()->GetNbins() << " Est " << EstHist->GetXaxis()->GetNbins()<<std::endl;

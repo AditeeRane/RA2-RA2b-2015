@@ -438,6 +438,31 @@ int main(int argc, char *argv[]){
   }
 
   TH1D * tau_GenPt = new TH1D("hGenPt","gen tau pt distribution",400,0,400);
+  TH1D * tau_GenPt_Njet2 = new TH1D("hGenPt_Njet2","gen tau pt distribution for Njet=2",400,0,400);
+  TH1D * tau_GenPt_Njet34 = new TH1D("hGenPt_Njet34","gen tau pt distribution for Njet=34",400,0,400);
+  TH1D * tau_GenPt_Njet56 = new TH1D("hGenPt_Njet56","gen tau pt distribution for Njet=56",400,0,400);
+  TH1D * tau_GenPt_Njet78 = new TH1D("hGenPt_Njet78","gen tau pt distribution for Njet=78",400,0,400);
+  TH1D * tau_GenPt_Njet9 = new TH1D("hGenPt_Njet9","gen tau pt distribution for Njet=9",400,0,400);
+  TH1D * tau_GenPt_Njet234 = new TH1D("hGenPt_Njet234","gen tau pt distribution for Njet<=4",400,0,400);
+  TH1D * tau_GenPt_Njet567 = new TH1D("hGenPt_Njet567","gen tau pt distribution for Njet>4 and Njet<=7",400,0,400);
+  TH1D * tau_GenPt_Njet89 = new TH1D("hGenPt_Njet89","gen tau pt distribution for Njet>=8",400,0,400);
+  TH1D * tau_GenPt_Nbjet0 = new TH1D("hGenPt_Nbjet0","gen tau pt distribution for Nbjet=0",400,0,400);
+  TH1D * tau_GenPt_Nbjet1 = new TH1D("hGenPt_Nbjet1","gen tau pt distribution for Nbjet=1",400,0,400);
+  TH1D * tau_GenPt_Nbjet2 = new TH1D("hGenPt_Nbjet2","gen tau pt distribution for Nbjet=2",400,0,400);
+  TH1D * tau_GenPt_Nbjet3 = new TH1D("hGenPt_Nbjet3","gen tau pt distribution for Nbjet>=3",400,0,400);
+  tau_GenPt->Sumw2();
+  tau_GenPt_Njet2->Sumw2();
+  tau_GenPt_Njet34->Sumw2();
+  tau_GenPt_Njet56->Sumw2();
+  tau_GenPt_Njet78->Sumw2();
+  tau_GenPt_Njet9->Sumw2();
+  tau_GenPt_Njet234->Sumw2();
+  tau_GenPt_Njet567->Sumw2();
+  tau_GenPt_Njet89->Sumw2();
+  tau_GenPt_Nbjet0->Sumw2();
+  tau_GenPt_Nbjet1->Sumw2();
+  tau_GenPt_Nbjet2->Sumw2();
+  tau_GenPt_Nbjet3->Sumw2(); 
   TH2D * tau_GenPtEta = new TH2D("hGenPtEta","gen tau pt vs eta distribution",400,0,400,24,0,2.4);
   // a template for phi of the tau jets
   TH2D * tau_GenJetPhi = new TH2D("tau_GenJetPhi","DPhi between gen and jet tau vs. their energy ratio",utils->tau_Phi_nbinX(),utils->tau_Phi_lowX(),utils->tau_Phi_upX(),utils->tau_Phi_nbinY(),utils->tau_Phi_lowY(),utils->tau_Phi_upY());
@@ -601,14 +626,16 @@ int main(int argc, char *argv[]){
       CalcAccSys = false;
     }
     
-    //if(eventN>10000)break;
+    //    if(eventN>10000)break;
     //if(eventN>5000)break;
      
     eventWeight = evt->weight();
+    //std::cout<<" totneve "<<evt->TotNEve()<<" evtweight "<<eventWeight<<endl;
+
     double puWeight = 
       puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
     //std::cout<<" interactions "<<evt->TrueNumInteractions_()<<" findbin "<<puhist->GetXaxis()->FindBin(evt->TrueNumInteractions_())<<" lastbin "<<puhist->GetBinLowEdge(puhist->GetNbinsX()+1)<<" puweight "<<puWeight<<endl;    
-    eventWeight*=puWeight;
+    //eventWeight*=puWeight;
   //std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
     //eventWeight = evt->weight()/evt->puweight();
     //if(subSampleKey.find("TTbar_Tbar_SingleLep")!=string::npos)eventWeight = 2.984e-06;
@@ -1165,6 +1192,41 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
       printf("Visible3Vec: pt: %g eta: %g phi: %g \n ",Visible3Vec.Pt(),Visible3Vec.Eta(),Visible3Vec.Phi());
     }
 
+    //    const unsigned int ptBin = 0;
+    if(genTauPt>=20 && std::abs(genTauEta) <= LeptonAcceptance::muonEtaMax()){
+      const unsigned int ptBin = utils->TauResponse_ptBin(genTauPt);
+      hGenPt.at(ptBin)->Fill( genTauPt ,eventWeight);
+      hGenPtEta.at(ptBin)->Fill( genTauPt,fabs(genTauEta),eventWeight);
+      
+      tau_GenPt->Fill( genTauPt ,eventWeight);
+      tau_GenPtEta->Fill( genTauPt,fabs(genTauEta) ,eventWeight);
+      if(evt->nJets()>=2){
+	if(evt->nJets()==2)
+	  tau_GenPt_Njet2->Fill( genTauPt ,eventWeight);
+	if(evt->nJets()>2 && evt->nJets()<5)
+	  tau_GenPt_Njet34->Fill( genTauPt ,eventWeight);
+	if(evt->nJets()>4&& evt->nJets()<7)
+	  tau_GenPt_Njet56->Fill( genTauPt ,eventWeight);
+	if(evt->nJets()>6&& evt->nJets()<9)
+	  tau_GenPt_Njet78->Fill( genTauPt ,eventWeight);
+	if(evt->nJets()>=9)
+	  tau_GenPt_Njet9->Fill( genTauPt ,eventWeight);
+	if(evt->nJets()<5)
+	  tau_GenPt_Njet234->Fill( genTauPt ,eventWeight);
+	if(evt->nJets()>=5 && evt->nJets()<8)
+	  tau_GenPt_Njet567->Fill( genTauPt ,eventWeight);
+	if(evt->nJets()>=8)
+	  tau_GenPt_Njet89->Fill( genTauPt ,eventWeight);
+	if(evt->nBtags()==0)
+	  tau_GenPt_Nbjet0->Fill( genTauPt ,eventWeight);
+	if(evt->nBtags()==1)
+	  tau_GenPt_Nbjet1->Fill( genTauPt ,eventWeight);
+	if(evt->nBtags()==2)
+	  tau_GenPt_Nbjet2->Fill( genTauPt ,eventWeight);
+	if(evt->nBtags()>=3)
+	  tau_GenPt_Nbjet3->Fill( genTauPt ,eventWeight);
+      }
+    }
     if( !utils->findMatchedObject(tauJetIdx,Visible3Vec.Eta(),Visible3Vec.Phi(), evt->slimJetPtVec_(), evt->slimJetEtaVec_(), evt->slimJetPhiVec_(),deltaRMax,verbose) ){
       if(genTauPt >= 20. && std::fabs(genTauEta) <= 2.1 && evt->nJets() >2 )GenTau_Jet_fail->Fill(genTauPt,eventWeight);
       continue;
@@ -1272,18 +1334,13 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
     //std::cout<<" eventN "<<eventN<<"*****************************Check Seg Violation************************"<<endl;
     
     
-	  
     const unsigned int ptBin = utils->TauResponse_ptBin(genTauPt);
+      	  
     // Fill the corresponding response template
     hTauResp.at(ptBin)->Fill( tauJetPt / genTauPt ,eventWeight);
     hTauRespUp.at(ptBin)->Fill( tauJetPtUp / genTauPt ,eventWeight);
 
     hTauRespDown.at(ptBin)->Fill( tauJetPtDown / genTauPt ,eventWeight);
-    hGenPt.at(ptBin)->Fill( genTauPt ,eventWeight);
-    hGenPtEta.at(ptBin)->Fill( genTauPt,fabs(genTauEta),eventWeight);
-        
-    tau_GenPt->Fill( genTauPt ,eventWeight);
-    tau_GenPtEta->Fill( genTauPt,fabs(genTauEta) ,eventWeight);
 
     double tauJetPhi = evt->slimJetPhiVec_().at(tauJetIdx);
     const double tauJetPt_x = tauJetPt * cos( TVector2::Phi_mpi_pi( genTauPhi - tauJetPhi) );
@@ -1767,8 +1824,20 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
       hGenPtEta.at(i)->Scale(1./hGenPtEta.at(i)->Integral("width"));
     }
   }
+  /*
   if( tau_GenPt->Integral("width") > 0. ) 
     tau_GenPt->Scale(1./tau_GenPt->Integral("width"));
+  if( tau_GenPt_Njet2->Integral("width") > 0. ) 
+    tau_GenPt_Njet2->Scale(1./tau_GenPt_Njet2->Integral("width"));
+  if( tau_GenPt_Njet34->Integral("width") > 0. ) 
+    tau_GenPt_Njet34->Scale(1./tau_GenPt_Njet34->Integral("width"));
+  if( tau_GenPt_Njet56->Integral("width") > 0. ) 
+    tau_GenPt_Njet56->Scale(1./tau_GenPt_Njet56->Integral("width"));
+  if( tau_GenPt_Njet78->Integral("width") > 0. ) 
+    tau_GenPt_Njet78->Scale(1./tau_GenPt_Njet78->Integral("width"));
+  if( tau_GenPt_Njet9->Integral("width") > 0. ) 
+    tau_GenPt_Njet9->Scale(1./tau_GenPt_Njet9->Integral("width"));
+*/
   if( tau_GenPtEta->Integral("width") > 0. ) 
     tau_GenPtEta->Scale(1./tau_GenPtEta->Integral("width"));
 
@@ -1797,6 +1866,19 @@ if(evt->nBtags()==0)hAcc_0b_All->Fill( binMap_ForAcc[utils2::findBin_ForAcc(evt-
     hGenPtEta.at(i)->SetLineColor(i);
   }
   tau_GenPt->Write();
+  tau_GenPt_Njet2->Write();
+  tau_GenPt_Njet34->Write();
+  tau_GenPt_Njet56->Write();
+  tau_GenPt_Njet78->Write();
+  tau_GenPt_Njet9->Write();
+  tau_GenPt_Njet234->Write();
+  tau_GenPt_Njet567->Write();
+  tau_GenPt_Njet89->Write();
+  tau_GenPt_Nbjet0->Write();
+  tau_GenPt_Nbjet1->Write();
+  tau_GenPt_Nbjet2->Write();
+  tau_GenPt_Nbjet3->Write();
+
   tau_GenPtEta->Write();
   tauJetPtHist->Write();
   tau_GenJetPhi->Write();

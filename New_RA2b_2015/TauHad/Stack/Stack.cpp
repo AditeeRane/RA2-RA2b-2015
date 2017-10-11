@@ -68,7 +68,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   //T_xs_vec.push_back(3.34);  // s
 
   const int tnHT = (int) T_xs_vec.size();   // Total number of HT bin samples
-
+  
   for(int i=1; i<=tnHT ; i++){
     /*
     if(i==1)sprintf(tempname,"../../Results/results_T_s_.root");
@@ -82,6 +82,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
     tempvalue = (luminosity*T_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
     */
+  
     if     (i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_t_top_.root");
     else if(i==2)sprintf(tempname,"../GenInfo_HadTauEstimation_t_antitop_.root");
     else if(i==3)sprintf(tempname,"../GenInfo_HadTauEstimation_tW_top_.root");
@@ -207,7 +208,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   file->Close();
   printf("T main histograms stacked \n ");
 
-
+  
   //..........................................//
   // IsoTrk  
   //..........................................//
@@ -445,7 +446,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   
   // Load the files to a vector
   // These are tau template files
-
+  /*
   T_inputfilevec.clear();
 
   for(int i=1; i<=tnHT ; i++){
@@ -964,7 +965,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("T acceptance calculated. \n ");
-
+  */
 // .....................................................................................................................................................//
 // WJet Section
 // .....................................................................................................................................................//
@@ -987,7 +988,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   WJet_xs_vec.push_back(1);  // HT 2500_Inf
 
   const int wjnHT = (int) WJet_xs_vec.size();   // Total number of HT bin samples
-
+  
   for(int i=1; i<=wjnHT ; i++){
     /*
     if(i==1)sprintf(tempname,"../../Results/results_WJet_100_200_.root");
@@ -999,6 +1000,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
     tempvalue = (luminosity*WJet_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
     */
+  
     if(i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_100_200_.root");
     else if(i==2)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_200_400_.root");
     else if(i==3)sprintf(tempname,"../GenInfo_HadTauEstimation_WJet_400_600_.root");
@@ -1134,7 +1136,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector 
   // These are tau template files
-
+  
   WJet_inputfilevec.clear();
 
   for(int i=1; i<=wjnHT ; i++){
@@ -1218,7 +1220,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector
   // These are tau template files
-
+  /*
   WJet_inputfilevec.clear();
 
   for(int i=1; i<=wjnHT ; i++){
@@ -1807,7 +1809,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("WJet acceptance calculated. \n ");
-
+  */
   //..........................................//
   // IsoTrk  
   //..........................................//
@@ -2114,7 +2116,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   TTbar_xs_vec.push_back(815.96); // 
 
   const int ttbarnHT = (int) TTbar_xs_vec.size();   // Total number of HT bin samples
-
+  
   for(int i=1; i<=ttbarnHT ; i++){
     /*
     if(i==1)sprintf(tempname,"../../Results/results_TTbar_.root");
@@ -2123,6 +2125,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
     sprintf(tempname,"allEvents/PreSel/MHT_PreSel_allEvents");
     tempvalue = (luminosity*TTbar_xs_vec[i-1])/((* (TH1D* ) file->Get(tempname)).GetEntries());
     */
+  
     if(i==1)sprintf(tempname,"../GenInfo_HadTauEstimation_TTbar_.root");
     else{cout << " Error!! There are only 1 inclusive TTbar sample " << endl;}
     file = new TFile(tempname, "R");
@@ -2246,7 +2249,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector 
   // These are tau template files
-
+  
   TTbar_inputfilevec.clear();
 
   for(int i=1; i<=ttbarnHT ; i++){
@@ -2374,7 +2377,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector
   // These are tau template files
-
+  /*
   TTbar_inputfilevec.clear();
 
   for(int i=1; i<=ttbarnHT ; i++){
@@ -2954,7 +2957,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("TTbar acceptance calculated. \n ");
-
+  */
   //..........................................//
   // IsoTrk  
   //..........................................//
@@ -3240,9 +3243,9 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // A vector that contains all the samples
   vector<TFile*> sample_inputfilevec;
-
+  
   THStack * tempstack2 = new THStack("stack","Binned Sample Stack");
-
+  
   // Load the files to a vector 
   // These are the HT, MHT, .. variables
   for(int i=1; i<=NSamples ; i++){
@@ -3480,7 +3483,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 // ........................................... //
 // Calcualte TauBtaggedRate
 // ........................................... //
-
+/*
   // Open the files to read
   sprintf(tempname,"TauBtaggedRate_TTbar_stacked.root");
   file = new TFile(tempname,"R");
@@ -3977,7 +3980,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   file2->Close();
-
+*/
 // ........................................... //
 // Calcualte IsoTrk
 // ........................................... //
