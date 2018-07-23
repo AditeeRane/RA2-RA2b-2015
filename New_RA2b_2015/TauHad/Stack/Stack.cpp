@@ -121,7 +121,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   sprintf(tempname,"GenInfo_HadTauEstimation_T_stacked.root");
   file = new TFile(tempname,"RECREATE");
   histname.clear();
-  histname[0]="weight";
+  /*  histname[0]="weight";
   histname[1]="HT";
   histname[2]="MHT";
   histname[3]="NJet";
@@ -133,7 +133,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[9]="MHT2";
   histname[10]="DelPhi4";
   histname[11]="TauJet_MHT_delPhi";
-
+*/
   Hname.clear();
   Hname[0]="searchH";
   Hname[1]="searchH_b";
@@ -208,7 +208,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   file->Close();
   printf("T main histograms stacked \n ");
 
-  
+  /*
   //..........................................//
   // IsoTrk  
   //..........................................//
@@ -439,7 +439,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   std::cout<<" Before file closing"<<std::endl;
   file->Close();
   printf("T IsoTrks calculated. \n ");
-
+*/
   //..........................................//
   // Acceptance  
   //..........................................//
@@ -1040,7 +1040,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   sprintf(tempname,"GenInfo_HadTauEstimation_WJet_stacked.root");
   file = new TFile(tempname,"RECREATE");
   histname.clear();
-  histname[0]="weight";
+  /*  histname[0]="weight";
   histname[1]="HT";
   histname[2]="MHT";
   histname[3]="NJet";
@@ -1052,7 +1052,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[9]="MHT2";
   histname[10]="DelPhi4";
   histname[11]="TauJet_MHT_delPhi";
-
+*/
   Hname.clear();
   Hname[0]="searchH";
   Hname[1]="searchH_b";
@@ -1136,7 +1136,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector 
   // These are tau template files
-  
+  /*
   WJet_inputfilevec.clear();
 
   for(int i=1; i<=wjnHT ; i++){
@@ -1213,7 +1213,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("WJet tau response ready. \n ");
-
+*/
   //..........................................//
   // Mistag rate 
   //..........................................//
@@ -1816,7 +1816,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector
   // These are tau template files
-
+  /*
   WJet_inputfilevec.clear();
 
   for(int i=1; i<=wjnHT ; i++){
@@ -2034,7 +2034,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   file->Close();
   printf("WJet IsoTrks calculated. \n ");
 
-
+*/
   //..........................................//
   // Trigger Efficiency 
   //..........................................//
@@ -2155,7 +2155,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   sprintf(tempname,"GenInfo_HadTauEstimation_TTbar_stacked.root");
   file = new TFile(tempname,"RECREATE");
   histname.clear();
-  histname[0]="weight";
+  /*  histname[0]="weight";
   histname[1]="HT";
   histname[2]="MHT";
   histname[3]="NJet";
@@ -2167,7 +2167,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[9]="MHT2";
   histname[10]="DelPhi4";
   histname[11]="TauJet_MHT_delPhi";
-
+*/
   Hname.clear();
   Hname[0]="searchH";
   Hname[1]="searchH_b";
@@ -2249,7 +2249,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector 
   // These are tau template files
-  
+  /*
   TTbar_inputfilevec.clear();
 
   for(int i=1; i<=ttbarnHT ; i++){
@@ -2318,7 +2318,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("TTbar tau response ready. \n ");
-
+*/
 //..........................................//
 // Muon From Tau 
 //..........................................//
@@ -2964,7 +2964,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   // Load the files to a vector
   // These are tau template files
-
+  /*
   TTbar_inputfilevec.clear();
 
   for(int i=1; i<=ttbarnHT ; i++){
@@ -3172,7 +3172,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   printf("TTbar IsoTrks calculated. \n ");
-
+*/
 //..........................................//
 // Trigger Efficiency 
 //..........................................//
@@ -3262,7 +3262,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   sprintf(tempname,"GenInfo_HadTauEstimation_stacked.root");
   file = new TFile(tempname,"RECREATE");
   histname.clear();
-  histname[0]="weight";
+  /* histname[0]="weight";
   histname[1]="HT";
   histname[2]="MHT";
   histname[3]="NJet";
@@ -3272,7 +3272,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   histname[7]="DelPhi3";
   histname[8]="DelPhi4";
   histname[9]="TauJet_MHT_delPhi";
-
+*/
   Hname.clear();
   Hname[0]="searchH";
   Hname[1]="searchH_b";
@@ -3350,7 +3350,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   printf("All samples main histograms stacked \n ");
 
 
-
+  /*
 
 
 // ..................................................................................................................................................... //
@@ -3423,7 +3423,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
 
 
-
+*/
 
 
 // ..................................................................................................................................................... //
@@ -3984,7 +3984,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 // ........................................... //
 // Calcualte IsoTrk
 // ........................................... //
-
+/*
   // Open the files to read
   sprintf(tempname,"IsoEfficiencies_TTbar_stacked.root");
   file = new TFile(tempname,"R");
@@ -4114,7 +4114,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphist = (TH1D *) file->Get(tempname)->Clone();  temphist2 = (TH1D *) file2->Get(tempname2)->Clone();
   temphist->Divide(temphist,temphist2,temphist2->GetSumOfWeights(),temphist->GetSumOfWeights(),"B");
   temphist->SetName("IsoEff_NbNjet2");  temphist->SetTitle("IsoEff_NbNjet2"); temphist->Write();
-
+*/
   /*
   sprintf(tempname,"Iso_pass_temp");
   temphist = (TH1D *) file->Get(tempname)->Clone();
@@ -4125,7 +4125,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
   temphist->SetTitle("IsoEff_temp");
   temphist->Write();
   */
-
+  /*
   sprintf(tempname,"Iso_pass_lowDphi");
   temphist = (TH1D *) file->Get(tempname)->Clone();
   sprintf(tempname,"Iso_all_lowDphi");
@@ -4163,7 +4163,7 @@ mainClass(int luminosity=10000){ // luminosity is in /pb unit
 
   file->Close();
   file2->Close();
-
+  */
 } // End of the constructor 
 
 }; // End of the class 

@@ -28,10 +28,12 @@ using namespace std;
    
    // See if working with Data or MC
    bool DataBool;
-   
+   bool JECSys;
+   bool SysUp;
+   bool SysDn;   
    // Study Tau ID
    bool StudyTauId;
-
+   double csvForBtag;
    //fastsim
    bool fastsim;
    
@@ -94,6 +96,7 @@ using namespace std;
    vector<double>  *ScaleWeights;
    //vector<TLorentzVector> *Jets;
    vector<int>     *Jets_partonFlavor;
+   vector<int>     *Jets_hadronFlavor;
    vector<bool>    *HTJetsMask;
    vector<double>  *Jets_bDiscriminatorCSV;
    vector<double>  *Jets_chargedEmEnergyFraction;
@@ -227,6 +230,8 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<int>                 *genParticles_PDGid_() const;
    vector<double> * PDFweights_() const;
    vector<double> * ScaleWeights_() const;
+   vector<TLorentzVector>      *jets_() const;
+   vector<int>  JetsHadronFlavor() const;  
    vector<double>  JetsPtVec_() const;
    vector<double>  JetsEtaVec_() const;
    vector<double>  JetsPhiVec_() const;
@@ -261,13 +266,13 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<double>  GenJetPhiVec_() const;
 
    vector<int>    * Jets_partonFlavor_() const;
+   vector<int>    * Jets_hadronFlavor_() const;
    vector<bool>   * HTJetsMask_() const;
-
 
    vector<int>     slimJetID_() const;
    vector<double>  slimJetjecFactor_() const;
    vector<double>  Jets_jecFactor_() const; 
-
+   vector<double>  Jets_jecUnc_() const;
    vector<TLorentzVector> slimJetJECdown_() const;
    vector<TLorentzVector> slimJetJECup_() const;
    vector<double>  slimmedMuPtVec_() const;

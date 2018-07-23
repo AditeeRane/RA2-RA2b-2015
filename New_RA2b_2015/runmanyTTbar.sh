@@ -5,8 +5,8 @@ outStr=$2
 
 export SUBMIT_DIR=`pwd -P`
 
-for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept T_SingleLep Tbar_SingleLep; do
-#for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf; do
+#for TTbarStr in HT_2500_Inf; do
+for TTbarStr in HT_2500_Inf HT_1200_2500 HT_800_1200 HT_600_800 DiLept T_SingleLep Tbar_SingleLep; do
 #for TTbarStr in HT_2500_Inf; do
 #for TTbarStr in T_SingleLep Tbar_SingleLep; do
 #for TTbarStr in Tbar_SingleLep; do
@@ -160,9 +160,9 @@ for TTbarStr in HT_1200_2500 HT_600_800 HT_800_1200 HT_2500_Inf DiLept T_SingleL
 		echo Error = ${Error}>> ${SubmitFile}
 		echo Log = ${Log}>> ${SubmitFile}
 		echo Transfer_Input_Files = ${SUBMIT_DIR}/run_tauHad,${SUBMIT_DIR}/${ArgTwoB},${SUBMIT_DIR}/Inputs>> ${SubmitFile}
-		echo Transfer_Output_Files = GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root','IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root','Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root','TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
+		echo Transfer_Output_Files = GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 		#echo Transfer_Output_Files = GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root','IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root','Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root','TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root','TriggerEff_TTbar_${TTbarStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
-		echo transfer_output_remaps = '"'GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root';'Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
+		echo transfer_output_remaps = '"'GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
 
 #		echo transfer_output_remaps = '"'GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/GenInfo_HadTauEstimation_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/FailRate_GenTau_jet_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/HadTau_TauResponseTemplates_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/IsoEfficiencies_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/LostLepton2_MuonEfficienciesFromTTbar_${TTbarStr}_${outStr}_${i}_00.root';'Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/Probability_Tau_mu_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/TauBtaggedRate_TTbar_${TTbarStr}_${outStr}_${i}_00.root';'TriggerEff_TTbar_${TTbarStr}_${outStr}_${i}_00.root = TauHadMultiple/TriggerEff_TTbar_${TTbarStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
 		echo queue>> ${SubmitFile}	

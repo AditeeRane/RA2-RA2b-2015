@@ -14,7 +14,10 @@
 
     // fastsim
     fastsim=false;
-    
+    JECSys=false;
+    SysUp=false;
+    SysDn=false;    
+    csvForBtag=0.8484;
     //Initialize some varaibles
      RunNum=-1;
      LumiBlockNum=-1;
@@ -55,6 +58,7 @@
      ScaleWeights = 0;
      Jets = 0;
      Jets_partonFlavor = 0;
+     Jets_hadronFlavor = 0;     
      HTJetsMask = 0;
      Jets_bDiscriminatorCSV = 0;
      Jets_chargedEmEnergyFraction = 0;
@@ -176,6 +180,7 @@
      fChain->SetBranchAddress("ScaleWeights", &ScaleWeights);
      fChain->SetBranchAddress("Jets", &Jets);
      fChain->SetBranchAddress("Jets_partonFlavor", &Jets_partonFlavor);
+     fChain->SetBranchAddress("Jets_hadronFlavor", &Jets_hadronFlavor);
      fChain->SetBranchAddress("Jets_HTMask", &HTJetsMask);
 
      fChain->SetBranchAddress("Jets_bDiscriminatorCSV", &Jets_bDiscriminatorCSV);
@@ -444,10 +449,12 @@
    }
 
    vector<TLorentzVector>     *Events::genParticles_() const {return GenParticles;}
+vector<TLorentzVector>     *Events::jets_() const {return Jets;}
    vector<int>                *Events::genParticles_PDGid_() const {return GenParticles_PdgId;}
 
    vector<double> * Events::PDFweights_() const {return PDFweights;}
    vector<double> * Events::ScaleWeights_() const {return ScaleWeights;}
+
    vector<double>  Events::JetsPtVec_() const { 
      vector<double> vec;
      for(int i=0;i < Jets->size();i++){
@@ -479,7 +486,7 @@
    vector<TLorentzVector>  *Events::JetsLorVec_() const{return Jets;}
    vector<int> *Events::Jets_partonFlavor_() const { return Jets_partonFlavor;}
    vector<bool> *Events::HTJetsMask_() const { return HTJetsMask;}
-
+vector<int> *Events::Jets_hadronFlavor_() const { return Jets_hadronFlavor;}
 
    vector<double>  Events::csvVec() const { return *Jets_bDiscriminatorCSV;}
    vector<double>  Events::Jets_chargedEmEnergyFraction_() const { return *Jets_chargedEmEnergyFraction;}
@@ -489,6 +496,7 @@
 
 //   vector<double>  Events::Jets_jetArea_() const { return *Jets_jetArea;}
    vector<double>  Events::Jets_jecFactor_() const {return *Jets_jecFactor;}
+vector<double>  Events::Jets_jecUnc_() const {return *Jets_jecUnc;}
    vector<double>  Events::Jets_muonEnergyFraction_() const {return *Jets_muonEnergyFraction;}
    vector<int>  Events::Jets_muonMultiplicity_() const {return *Jets_muonMultiplicity;}
    vector<double>  Events::Jets_neutralEmEnergyFraction_() const {return *Jets_neutralEmEnergyFraction;}

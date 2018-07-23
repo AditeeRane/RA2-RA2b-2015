@@ -114,9 +114,25 @@ using namespace std;
                              700.,1000.,5000.};
 
     sprintf(prefix,"root://cmseos.fnal.gov/");
-    //sprintf(prefix,"/data3/");
 
-    
+    TH2 * hAcc_All=new TH2D("hAcc_All","hAcc_All",400,0,400,50,-2.5,2.5);
+    TH2 * hAcc_Pass=new TH2D("hAcc_Pass","hAcc_Pass",400,0,400,50,-2.5,2.5);
+    hAcc_All->Sumw2();
+    hAcc_Pass->Sumw2();
+
+    //sprintf(prefix,"/data3/");
+    int GetMuSize=0;
+    TH2 * hMT_All=new TH2D("hMT_All","hMT_All",400,0,400,50,-2.5,2.5);
+    TH2 * hMT_Pass=new TH2D("hMT_Pass","hMT_Pass",400,0,400,50,-2.5,2.5);
+    hMT_All->Sumw2();
+    hMT_Pass->Sumw2();
+
+    TH2 * hMu_All=new TH2D("hMu_All","hMu_All",400,0,400,50,-2.5,2.5);
+    TH2 * hMu_NonW=new TH2D("hMu_NonW","hMu_NonW",400,0,400,50,-2.5,2.5);
+
+    hMu_All->Sumw2(); 
+    hMu_NonW->Sumw2();
+
     //build a vector of histograms
     TH1D weight_hist = TH1D("weight", "Weight Distribution", 5,0,5);
     vec.push_back(weight_hist);
@@ -653,8 +669,7 @@ using namespace std;
     }
 
     // Open some files and get the histograms ........................................//
-    //*AR, Mar12,2017-Ratio of GenTau and Reco Muon pt distributions as a function of Njet
-    TFile * TauVsMuPtDistFile = new TFile("Inputs/hist_Pt_GenTauVsRecoMu_VsNbjet.root","R");
+
     // Rate of bTagged tau jet
     TFile * bRateFile = new TFile("Inputs/ARElog115_TauBtaggedRate_WJet_stacked.root","R");
     //*AR,Oct14,2016-Instead of getting b mistag rate of tau directly we will take the difference between tau and mu mistag rates from WJet for reassignment of Nb bins
@@ -773,7 +788,7 @@ using namespace std;
     //std::cout<<" MTFile is read "<<std::endl;
     //    TFile * MtFile = new TFile("Inputs/Elog433_MtEff.root","R");
 
-    TFile * MtFile = new TFile("Inputs/ARElog116_MtEff.root","R");
+    TFile * MtFile = new TFile("Inputs/ARElog169_MtEff.root","R");
     TH1D * hMT = (TH1D *) MtFile->Get("MtCutEff")->Clone();
     //TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
     TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
@@ -949,9 +964,6 @@ using namespace std;
 
     double eventWeight = 1.0;
     int eventN=0;
-    int TauVsMuPtBin=-1;
-    double TauVsMuPtweight=1;
-	 
     while( evt->loadNext() ){
       eventN++;
 
@@ -959,12 +971,12 @@ using namespace std;
       double puWeight = 
 	puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
       //std::cout<<" interactions "<<evt->TrueNumInteractions_()<<" findbin "<<puhist->GetXaxis()->FindBin(evt->TrueNumInteractions_())<<" lastbin "<<puhist->GetBinLowEdge(puhist->GetNbinsX()+1)<<" puweight "<<puWeight<<endl;    
-      //      eventWeight*=puWeight;
+      eventWeight*=puWeight;
       
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>10000)break;
+      //      if(eventN>10000)break;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1137,7 +1149,8 @@ using namespace std;
         }
         
         if(TauHadModel>=3){ // Use reco-level muon
-          for(int i=0; i< evt->MuPtVec_().size(); i++){ // Ahmad33
+	  GetMuSize=evt->MuPtVec_().size();
+	  for(int i=0; i< evt->MuPtVec_().size(); i++){ // Ahmad33
             double pt=evt->MuPtVec_().at(i); // Ahmad33
             double eta=evt->MuEtaVec_().at(i); // Ahmad33
             double phi=evt->MuPhiVec_().at(i); // Ahmad33
@@ -1146,11 +1159,20 @@ using namespace std;
             double mu_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
             if(UncerLoop[iuncer]=="MTSelPlus")mu_mt_w =utils->calcMT(pt,phi,evt->met()*1.3,evt->metphi());
             if(UncerLoop[iuncer]=="MTSelMinus")mu_mt_w =utils->calcMT(pt,phi,evt->met()*0.7,evt->metphi());
-            if( pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	    if(GetMuSize==1)
+	      hAcc_All->Fill(pt,eta,eventWeight);
+	    if( pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	      if(GetMuSize==1){
+		hAcc_Pass->Fill(pt,eta,eventWeight);
+		hMT_All->Fill(pt,eta,eventWeight);
+	      }
               if(verbose==2)printf(" \n Muons: \n pt: %g eta: %g phi: %g \n ",pt,eta,phi);
               temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
               if(utils2::applyMT){
-                if(mu_mt_w < 100. ){vec_recoMuon4vec.push_back(temp4vec);vec_MTActivity.push_back(activity_);}
+                if(mu_mt_w < 100. ){vec_recoMuon4vec.push_back(temp4vec);vec_MTActivity.push_back(activity_);
+		  if(GetMuSize==1)
+		    hMT_Pass->Fill(pt,eta,eventWeight);  
+		}
               }
               else {vec_recoMuon4vec.push_back(temp4vec);vec_MTActivity.push_back(activity_);}
               vec_recoMuMTW.push_back(mu_mt_w); 
@@ -1257,24 +1279,13 @@ using namespace std;
             }
             
           }
-	  if(evt->nJets()>=2){
-	    if(evt->nBtags()==0)
-	      sprintf(histname,"GenTauPtvsRecoMuPt_Nbjet0");
-	    if(evt->nBtags()==1)
-	      sprintf(histname,"GenTauPtvsRecoMuPt_Nbjet1");
-	    if(evt->nBtags()==2)
-	      sprintf(histname,"GenTauPtvsRecoMuPt_Nbjet2");
-	    if(evt->nBtags()>=3)
-	      sprintf(histname,"GenTauPtvsRecoMuPt_Nbjet3");
-	    TH1D * RatioPtHist = (TH1D * ) TauVsMuPtDistFile->Get(histname)->Clone();
-	    //std::cout<<" ***seg vio*** "<<endl;
-	    TauVsMuPtBin = int(muPt/4)+1;
-	    if(RatioPtHist->GetBinContent(TauVsMuPtBin)!=0)	
-	      TauVsMuPtweight=1/RatioPtHist->GetBinContent(TauVsMuPtBin);
-	  }
-	  
-	  //std::cout<<" eventN "<<eventN<<" njets "<<evt->nJets()<<" histname "<<histname<< " pt "<<muPt<<" pt bin  "<<TauVsMuPtBin<<" TauVsMuPtweight "<<TauVsMuPtweight<<endl;
-	  
+	  hMu_All->Fill(muPt,muEta,eventWeight);
+	  if(GenMuIdx<0)
+	    hMu_NonW->Fill(muPt,muEta,eventWeight);
+	  else if(evt->GenMuFromTauVec_()[GenMuIdx]==1)
+	    hMu_NonW->Fill(muPt,muEta,eventWeight);
+
+
           // start of bootstrapping ( if is on ) 
           for(int l=1; l<=nLoops;l++){
             
@@ -2032,10 +2043,10 @@ using namespace std;
 	      if(Prob_Tau_mu_lowDelphi==1)Prob_Tau_mu_lowDelphi=0.1;
 
 
-              double totWeight=( eventWeight )*1*0.696*(1/(Acc*Eff_Arne))*(1-Prob_Tau_mu);//the 0.64 is because only 64% of tau's decay hadronically. 
+              double totWeight=( eventWeight )*1*0.64*(1/(Acc*Eff_Arne))*(1-Prob_Tau_mu);//the 0.64 is because only 64% of tau's decay hadronically. 
 	                                                                                 // Here 0.9 is acceptance and 0.75 is efficiencies of both reconstruction and isolation.
 	      //std::cout<<" ***CH4*** "<< " totWeight "<<totWeight<<endl;
-              double totWeight_lowDphi=eventWeight*1*0.696*(1/(Acc_lowDphi*Eff_Arne))*(1-Prob_Tau_mu_lowDelphi);
+              double totWeight_lowDphi=eventWeight*1*0.64*(1/(Acc_lowDphi*Eff_Arne))*(1-Prob_Tau_mu_lowDelphi);
 
               // dilepton contamination
               if(TauHadModel>=3){
@@ -2074,23 +2085,22 @@ using namespace std;
 
               weightEffAcc = totWeight;
 
-
               // if bootstrap is on weigh the events such that 
               // the total number of events remains the same.
               // That means the sum over bootstrapWeights = 1
               // Our templates are made such that area under them = 1
-                
-	      if(utils2::bootstrap){
+
+              if(utils2::bootstrap){
                 double bootstrapWeight = utils->GetBinContent(muPt,vec_resp,l) * utils->GetBinWidth(muPt,vec_resp,l);
-		if(UncerLoop[iuncer]=="templatePlus"){
+                if(UncerLoop[iuncer]=="templatePlus"){
                   bootstrapWeight = utils->GetBinContent(muPt,vec_respUp,l) * utils->GetBinWidth(muPt,vec_respUp,l);
                 }
                 else if(UncerLoop[iuncer]=="templateMinus"){
                   bootstrapWeight = utils->GetBinContent(muPt,vec_respDown,l) * utils->GetBinWidth(muPt,vec_respDown,l);
                 }
-	        totWeight*=bootstrapWeight*TauVsMuPtweight;
+                totWeight*=bootstrapWeight;
                 totWeight*=Prob_Btag;
-                totWeight_lowDphi*=bootstrapWeight*TauVsMuPtweight;
+                totWeight_lowDphi*=bootstrapWeight;
                 totWeight_lowDphi*=Prob_Btag;
               }
 
@@ -2440,8 +2450,8 @@ using namespace std;
                   searchWeight = totWeight/(1-Prob_Tau_mu)*(1-Prob_Tau_mu_lowDelphi)*IsoTrkWeight_lowDphi*mtWeight/mtWeight_lowDphi*Acc/Acc_lowDphi;
                 }
                 else searchWeight = totWeight/(1-Prob_Tau_mu)*(1-Prob_Tau_mu_lowDelphi)*mtWeight/mtWeight_lowDphi*Acc/Acc_lowDphi;
-		
-		
+
+
                 if(PassIso2){
 
                   // to see the dileptonic contamination
@@ -2559,10 +2569,10 @@ using namespace std;
 		  totWeightMap_lowDphi["BMistag_statMinus"]*=Prob_Btag_Minus_stat;
 		}
 		// Tau branching ratio
-		totWeightMap["Tau_BrRatio_Plus"]=totWeight/0.696*0.65;
-		totWeightMap["Tau_BrRatio_Minus"]=totWeight/0.696*0.63;   
-		totWeightMap_lowDphi["Tau_BrRatio_Plus"]=totWeight_lowDphi/0.696*0.65;
-		totWeightMap_lowDphi["Tau_BrRatio_Minus"]=totWeight_lowDphi/0.696*0.63;
+		totWeightMap["Tau_BrRatio_Plus"]=totWeight/0.64*0.65;
+		totWeightMap["Tau_BrRatio_Minus"]=totWeight/0.64*0.63;   
+		totWeightMap_lowDphi["Tau_BrRatio_Plus"]=totWeight_lowDphi/0.64*0.65;
+		totWeightMap_lowDphi["Tau_BrRatio_Minus"]=totWeight_lowDphi/0.64*0.63;
 		// Dileptonic
 		if(utils2::IsoTrkModel==0){
 		  totWeightMap["DileptonPlus"]=  totWeight* 1.02/1.04;
@@ -2980,6 +2990,16 @@ using namespace std;
     MuJet_fail->Write();
     MuJet_all->Write();
     MuJetfile.Close();
+    TH2D * hAcc_Efficiency=(TH2D*) hAcc_Pass->Clone("hAcc_Efficiency");
+    //hAcc_Efficiency->Reset();
+    hAcc_Efficiency->Divide(hAcc_All);
+
+    TH2D * hMT_Efficiency=(TH2D*) hMT_Pass->Clone("hMT_Efficiency");
+    //hMT_Efficiency->Reset();
+    hMT_Efficiency->Divide(hMT_All);
+
+    TH2D * hMu_ProbNonW=(TH2D*) hMu_NonW->Clone("hMu_ProbNonW");
+    hMu_ProbNonW->Divide(hMu_All);
 
     // open a file to write the histograms
     sprintf(tempname,"%s/HadTauEstimation_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
@@ -2998,7 +3018,15 @@ using namespace std;
     searchH_nb_njet56_lowDphi->Write();
     searchH_nb_njet78_lowDphi->Write();
     searchH_nb_njet9_lowDphi->Write();
-
+    hAcc_All->Write();
+    hAcc_Pass->Write();
+    hAcc_Efficiency->Write();
+    hMT_All->Write();
+    hMT_Pass->Write();
+    hMT_Efficiency->Write();
+    hMu_All->Write();
+    hMu_NonW->Write();
+    hMu_ProbNonW->Write();
     QCD_Up->Write();
     QCD_Low->Write();
     searchH_b->Write();

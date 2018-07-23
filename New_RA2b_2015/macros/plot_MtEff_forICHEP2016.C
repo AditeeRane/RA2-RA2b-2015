@@ -6,14 +6,14 @@ void plot_MtEff_forICHEP2016(std::string elogForPlot=""){
   ///////////////////////////////////////////////////////////////////////////////////////////
   ////Some cosmetic work for official documents. 
   gROOT->LoadMacro("tdrstyle.C");
-  setTDRStyle();
+  //  setTDRStyle();
   gROOT->LoadMacro("CMS_lumi.C");
   
-  writeExtraText = true;
-  extraText   = "       Supplementary (Simulation)";  // default extra text is "Preliminary"
-  lumi_8TeV  = "19.1 fb^{-1}"; // default is "19.7 fb^{-1}"
-  lumi_7TeV  = "4.9 fb^{-1}";  // default is "5.1 fb^{-1}"
-  lumi_sqrtS = "13 TeV";       // used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+  bool writeExtraText = true;
+  string extraText   = "       Supplementary (Simulation)";  // default extra text is "Preliminary"
+  string lumi_8TeV  = "19.1 fb^{-1}"; // default is "19.7 fb^{-1}"
+  string lumi_7TeV  = "4.9 fb^{-1}";  // default is "5.1 fb^{-1}"
+  string lumi_sqrtS = "13 TeV";       // used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
   //cmsTextSize  = 0.60;
   //lumiTextSize = 0.52;
 
@@ -94,9 +94,9 @@ void plot_MtEff_forICHEP2016(std::string elogForPlot=""){
 
 
   
-    thist = (TH1D*)file->Get(tempname)->Clone();
-    histNum = (TH1D*)file->Get(tempNum)->Clone();
-    histDen = (TH1D*)file->Get(tempDen)->Clone();
+    TH1D* thist = (TH1D*)file->Get(tempname)->Clone();
+    TH1D* histNum = (TH1D*)file->Get(tempNum)->Clone();
+    TH1D* histDen = (TH1D*)file->Get(tempDen)->Clone();
 
     int nbins=histNum->GetNbinsX();
     std::cout<<"nbins "<<nbins<<endl;
@@ -108,7 +108,7 @@ void plot_MtEff_forICHEP2016(std::string elogForPlot=""){
 	double newN=0;
 	double newD=0;
 	//std::cout<<"Bin "<< j<< "thist_j"<<ratio<<endl;
-	if(j==73 || j==76 || j==79){
+	if(j==55 || j==76){
 	  newN=histNum->GetBinContent(j)+histNum->GetBinContent(j+1);
 	  newD=histDen->GetBinContent(j)+histDen->GetBinContent(j+1);      
 	  ratio=newN/newD;
@@ -133,7 +133,7 @@ void plot_MtEff_forICHEP2016(std::string elogForPlot=""){
 	double newN=0;
 	double newD=0;
 	//std::cout<<"Bin "<< j<< "thist_j"<<ratio<<endl;
-	if(j==73 || j==76 || j==79){
+	if(j==64 || j==67 || j==79 || j==82){
 	  newN=histNum->GetBinContent(j)+histNum->GetBinContent(j+1);
 	  newD=histDen->GetBinContent(j)+histDen->GetBinContent(j+1);      
 	  ratio=newN/newD;

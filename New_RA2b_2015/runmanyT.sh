@@ -150,10 +150,10 @@ for TStr in t_top t_antitop tW_top tW_antitop s_channel; do
 
 	#	echo Transfer_Output_Files = GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 
-		echo Transfer_Output_Files = GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root','FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root','HadTau_TauResponseTemplates_${TStr}_${outStr}_${i}_00.root','IsoEfficiencies_${TStr}_${outStr}_${i}_00.root','LostLepton2_MuonEfficienciesFrom${TStr}_${outStr}_${i}_00.root','Probability_Tau_mu_${TStr}_${outStr}_${i}_00.root','TauBtaggedRate_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
+		echo Transfer_Output_Files = GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root>> ${SubmitFile}        
 #		echo transfer_output_remaps = '"'GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root';'FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
 
-		echo transfer_output_remaps = '"'GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root';'FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/FailRate_GenTau_jet_${TStr}_${outStr}_${i}_00.root';'HadTau_TauResponseTemplates_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/HadTau_TauResponseTemplates_${TStr}_${outStr}_${i}_00.root';'IsoEfficiencies_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/IsoEfficiencies_${TStr}_${outStr}_${i}_00.root';'LostLepton2_MuonEfficienciesFrom${TStr}_${outStr}_${i}_00.root = TauHadMultiple/LostLepton2_MuonEfficienciesFrom${TStr}_${outStr}_${i}_00.root';'Probability_Tau_mu_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/Probability_Tau_mu_${TStr}_${outStr}_${i}_00.root';'TauBtaggedRate_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/TauBtaggedRate_${TStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
+		echo transfer_output_remaps = '"'GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root = TauHadMultiple/GenInfo_HadTauEstimation_${TStr}_${outStr}_${i}_00.root'"'>> ${SubmitFile}
 
 		echo queue>> ${SubmitFile}	
 	    fi
