@@ -64,6 +64,8 @@ using namespace std;
    Int_t           isoMuonTracks;
    Int_t           isoPionTracks;
    //   Int_t           Leptons;
+   Int_t           NElectrons;
+   Int_t          NMuons;
    Int_t           NJets;
    Int_t           BTags;
    Double_t         Weight;
@@ -186,6 +188,8 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
   int nBtags() const;
   //int nBtagBin() const;
   int nLeptons() const;
+  int nElectrons() const;
+  int nMuons() const;
   //  int nIso() const;
   int nIsoElec() const ;
   int nIsoMu() const ;
@@ -295,7 +299,7 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<double>  ElecPtVec_() const;
    vector<double>  ElecEtaVec_() const;
    vector<double>  ElecPhiVec_() const;
-
+   vector<double>  ElecEVec_() const;
    vector<int>     GenMuFromTauVec_() const;   
    vector<int>     GenElecFromTauVec_() const;   
    vector<int>     GenTauHadVec_() const;   

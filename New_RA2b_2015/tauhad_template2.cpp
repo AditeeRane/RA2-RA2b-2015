@@ -81,6 +81,7 @@ using namespace std;
     char tempname3[200];
     char tempname4[200];
     char tempname5[200];
+    char tempname6[200];
     char histname[200];
     char prefix[200];
     vector<TH1D > vec, vec_search;
@@ -96,6 +97,9 @@ using namespace std;
     vector<double> vec_recoMuMTW;
     vector<double> vec_MTActivity;
     vector<TLorentzVector> vec_recoMuon4vec;
+    vector<double> vec_recoEleMTW;
+    vector<TLorentzVector> vec_recoElectron4vec;
+
     vector<TVector3> vec_recoElec3vec;
     TVector3 temp3vec;
     TLorentzVector temp4vec;
@@ -122,6 +126,7 @@ using namespace std;
 
     //sprintf(prefix,"/data3/");
     int GetMuSize=0;
+    int GetEleSize=0;
     TH2 * hMT_All=new TH2D("hMT_All","hMT_All",400,0,400,50,-2.5,2.5);
     TH2 * hMT_Pass=new TH2D("hMT_Pass","hMT_Pass",400,0,400,50,-2.5,2.5);
     hMT_All->Sumw2();
@@ -287,7 +292,61 @@ using namespace std;
     //map<string,string> binMap_b = utils2::BinMap();
     int totNbins_b=binMap_b.size();
     TH1* searchH_b = new TH1D("searchH_b","search bin histogram",totNbins_b,1,totNbins_b+1);
-    searchH_b->Sumw2();  
+    searchH_b->Sumw2();
+    TH1 * h_HT_SearchStat = new TH1D("h_HT_SearchStat","h_HT_SearchStat",50, 0, 10000);
+    h_HT_SearchStat->Sumw2();
+    TH1 * h_MHT_SearchStat = new TH1D("h_MHT_SearchStat","h_MHT_SearchStat",60, 0, 3000);
+    h_MHT_SearchStat->Sumw2(); 
+    TH1 * h_MET_SearchStat = new TH1D("h_MET_SearchStat","h_MET_SearchStat",60, 0, 3000);
+    h_MET_SearchStat->Sumw2(); 
+    TH1 * h_NJet_SearchStat = new TH1D("h_NJet_SearchStat","h_NJet_SearchStat",20,0,20);
+    h_NJet_SearchStat->Sumw2();
+    TH1 * h_NBTag_SearchStat = new TH1D("h_NBTag_SearchStat","h_NBTag_SearchStat",10,0,10);
+    h_NBTag_SearchStat->Sumw2();
+
+    TH1 * j1_eta=new TH1D("j1_eta","j1_eta",100,-5.0,5.0);
+    TH1 * j2_eta=new TH1D("j2_eta","j2_eta",100,-5.0,5.0);
+    TH1 * j3_eta=new TH1D("j3_eta","j3_eta",100,-5.0,5.0);
+    TH1 * j4_eta=new TH1D("j4_eta","j4_eta",100,-5.0,5.0);
+    TH1 * j_eta_inclusive=new TH1D("j_eta_inclusive","j_eta_inclusive",100,-5.0,5.0);
+
+    j1_eta->Sumw2(); 
+    j2_eta->Sumw2();
+    j3_eta->Sumw2();
+    j4_eta->Sumw2();
+    j_eta_inclusive->Sumw2();
+    TH1 * j1_phi=new TH1D("j1_phi","j1_phi",70,-3.5,3.5);
+    TH1 * j2_phi=new TH1D("j2_phi","j2_phi",70,-3.5,3.5);
+    TH1 * j3_phi=new TH1D("j3_phi","j3_phi",70,-3.5,3.5);
+    TH1 * j4_phi=new TH1D("j4_phi","j4_phi",70,-3.5,3.5);
+    TH1 * j_phi_inclusive=new TH1D("j_phi_inclusive","j_phi_inclusive",70,-3.5,3.5);
+    j_phi_inclusive->Sumw2();
+    j1_phi->Sumw2(); 
+    j2_phi->Sumw2();
+    j3_phi->Sumw2();
+    j4_phi->Sumw2();
+
+
+    TH1 * DeltaPhi_j1MHT_SearchStat =  new TH1D("DeltaPhi_j1MHT_SearchStat","DeltaPhi_j1MHT_SearchStat",50,0,5);
+    TH1 * DeltaPhi_j2MHT_SearchStat =  new TH1D("DeltaPhi_j2MHT_SearchStat","DeltaPhi_j2MHT_SearchStat",50,0,5);
+    TH1 * DeltaPhi_j3MHT_SearchStat =  new TH1D("DeltaPhi_j3MHT_SearchStat","DeltaPhi_j3MHT_SearchStat",50,0,5);
+    TH1 * DeltaPhi_j4MHT_SearchStat =  new TH1D("DeltaPhi_j4MHT_SearchStat","DeltaPhi_j4MHT_SearchStat",50,0,5);
+    DeltaPhi_j1MHT_SearchStat->Sumw2();
+    DeltaPhi_j2MHT_SearchStat->Sumw2();
+    DeltaPhi_j3MHT_SearchStat->Sumw2();
+    DeltaPhi_j4MHT_SearchStat->Sumw2();
+
+
+    TH1 * DeltaPhi_j1MET_SearchStat =  new TH1D("DeltaPhi_j1MET_SearchStat","DeltaPhi_j1MET_SearchStat",50,0,5);
+    TH1 * DeltaPhi_j2MET_SearchStat =  new TH1D("DeltaPhi_j2MET_SearchStat","DeltaPhi_j2MET_SearchStat",50,0,5);
+    TH1 * DeltaPhi_j3MET_SearchStat =  new TH1D("DeltaPhi_j3MET_SearchStat","DeltaPhi_j3MET_SearchStat",50,0,5);
+    TH1 * DeltaPhi_j4MET_SearchStat =  new TH1D("DeltaPhi_j4MET_SearchStat","DeltaPhi_j4MET_SearchStat",50,0,5);
+    DeltaPhi_j1MET_SearchStat->Sumw2();
+    DeltaPhi_j2MET_SearchStat->Sumw2();
+    DeltaPhi_j3MET_SearchStat->Sumw2();
+    DeltaPhi_j4MET_SearchStat->Sumw2();
+
+
     TH1 * searchH_b_evt = static_cast<TH1D*>(searchH_b->Clone("searchH_b_evt"));
 
     TH1* searchH_b_noWeight = new TH1D("searchH_b_noWeight","search bin histogram",totNbins_b,1,totNbins_b+1);
@@ -788,7 +847,7 @@ using namespace std;
     //std::cout<<" MTFile is read "<<std::endl;
     //    TFile * MtFile = new TFile("Inputs/Elog433_MtEff.root","R");
 
-    TFile * MtFile = new TFile("Inputs/ARElog169_MtEff.root","R");
+    TFile * MtFile = new TFile("Inputs/ARElog116_MtEff.root","R");
     TH1D * hMT = (TH1D *) MtFile->Get("MtCutEff")->Clone();
     //TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
     TH1D * hMT_lowDphi = (TH1D *) MtFile->Get("MtCutEff_lowDphi")->Clone();
@@ -966,7 +1025,7 @@ using namespace std;
     int eventN=0;
     while( evt->loadNext() ){
       eventN++;
-
+      //      std::cout<<" new event "<<endl;
       eventWeight = evt->weight();
       double puWeight = 
 	puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
@@ -976,7 +1035,9 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //      if(eventN>10000)break;
+      if(eventN>10000)break;
+      if(eventN%2000==0)
+	std::cout<<" eventN "<<eventN<<endl;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
@@ -1042,6 +1103,7 @@ using namespace std;
       cutflow_preselection->Fill(6.,eventWeight); // events passing JetID event cleaning
 
       nCleanEve++;
+      //      std::cout<<" nCleanEve "<<nCleanEve<<endl;
       //std::cout<<" ***CH2*** "<< " evtWeight "<<eventWeight<<endl;
       // Trigger check
       bool trigPass=false;
@@ -1054,6 +1116,7 @@ using namespace std;
         string triggerNameToBeUsed = "HLT_Mu15_IsoVVVL_PFHT350_v";
         if (!evt->DataBool_()) triggerNameToBeUsed = "HLT_Mu15_IsoVVVL_PFHT400_v";
 	*/
+	
         bool trigfound=false;
         if(verbose!=0)
           cout << "############################\n "; 
@@ -1065,11 +1128,12 @@ using namespace std;
 	  }
 	  //	  std::cout << "i "<<i <<evt->TriggerNames_().at(i) << endl;
           string trigStr;
-          sprintf(tempname, "HLT_Mu15_IsoVVVL_PFHT400_v");
-          sprintf(tempname2,"HLT_Mu15_IsoVVVL_PFHT350_v");
-          sprintf(tempname3,"HLT_IsoMu24_v");
-          sprintf(tempname4,"HLT_IsoTkMu24_v");
-	  sprintf(tempname5,"HLT_Mu50_v");
+          sprintf(tempname, "HLT_PFMET100_PFMHT100_IDTight_v");
+          sprintf(tempname2,"HLT_PFMET110_PFMHT110_IDTight_v");
+          sprintf(tempname3,"HLT_PFMET120_PFMHT120_IDTight_v");
+          sprintf(tempname4,"HLT_PFMETNoMu100_PFMHTNoMu100_IDTight_v");
+	  sprintf(tempname5,"HLT_PFMETNoMu110_PFMHTNoMu110_IDTight_v");
+	  sprintf(tempname6,"HLT_PFMETNoMu120_PFMHTNoMu120_IDTight_v");
 	  /*
 	  if (lowHTSelection){
 	    sprintf(tempname,"HLT_IsoMu22_v");
@@ -1080,11 +1144,13 @@ using namespace std;
 	      evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
 	      evt->TriggerNames_().at(i).find(tempname3) != string::npos ||
 	      evt->TriggerNames_().at(i).find(tempname4) != string::npos ||
-	      evt->TriggerNames_().at(i).find(tempname5) != string::npos) {
+	      evt->TriggerNames_().at(i).find(tempname5) != string::npos ||
+	      evt->TriggerNames_().at(i).find(tempname6) != string::npos) {
 
             trigfound=true;
             if(evt->PassTrigger_().at(i)==1)trigPass=true;
-	    
+	    //	    std::cout<<" eventN "<<eventN<<" trigger is passed "<<endl;
+	    /*
 	    // HighHT selection
 	    if( evt->TriggerNames_().at(i).find(tempname)  != string::npos || 
 		evt->TriggerNames_().at(i).find(tempname2) != string::npos ||
@@ -1100,7 +1166,7 @@ using namespace std;
 		evt->TriggerNames_().at(i).find(tempname5) != string::npos){
 	      if(evt->PassTrigger_().at(i)==1)trigPassLowHT=true;
 	    }
-	    
+	    */
 	  } // if for both highHT and lowHT triggers
         }   // looping over trigger information
 	
@@ -1115,7 +1181,7 @@ using namespace std;
 	//std::cout<<" trigPass "<<trigPass<<endl;
         if(!trigPass)continue;
       }
- 
+      
       // to study some of the uncertainties we need to make some changes from
       // the very beginning and observe how that propagates
       
@@ -1139,6 +1205,8 @@ using namespace std;
         vec_recoMuon4vec.clear();
         vec_MTActivity.clear();  
 
+	vec_recoEleMTW.clear();
+	vec_recoElectron4vec.clear();
 	vector<int> MuFromTauVec;//Ahmad33
 	MuFromTauVec.clear();//Ahmad33
 
@@ -1147,59 +1215,76 @@ using namespace std;
           cout << "Only TauHadModel>=3 is valid for Data \n ";
           return 2;
         }
-        
+	if(evt->nMuons() !=evt->MuPtVec_().size())
+	  std::cout<<" nMuons "<< evt->nMuons() <<" size "<<evt->MuPtVec_().size()<<endl;
         if(TauHadModel>=3){ // Use reco-level muon
 	  GetMuSize=evt->MuPtVec_().size();
+	  //	  std::cout<<" GetMuSize "<<GetMuSize<<endl;
 	  for(int i=0; i< evt->MuPtVec_().size(); i++){ // Ahmad33
             double pt=evt->MuPtVec_().at(i); // Ahmad33
+	    //std::cout<<" pt "<<pt<<endl;
             double eta=evt->MuEtaVec_().at(i); // Ahmad33
+	    //std::cout<<" eta "<<eta<<endl;
             double phi=evt->MuPhiVec_().at(i); // Ahmad33
+	    //std::cout<<" phi "<<phi<<endl;
             double energy=evt->MuEVec_().at(i); // Ahmad33
-            double activity_ = evt->MTActivityVec_().at(i);
+	    std::cout<<" eventN "<<eventN<<" mu_pt "<<pt<<" mu_eta "<<eta<<endl;
+	    if(pt<10 || fabs(eta)>2.4)
+	      std::cout<< " muon beyond range "<<endl;
+
+	    //std::cout<<" energy "<<energy<<endl; 
+	    //            double activity_ = evt->MTActivityVec_().at(i);
+	    //std::cout<<" activity_ "<<activity_<<endl;
             double mu_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
-            if(UncerLoop[iuncer]=="MTSelPlus")mu_mt_w =utils->calcMT(pt,phi,evt->met()*1.3,evt->metphi());
-            if(UncerLoop[iuncer]=="MTSelMinus")mu_mt_w =utils->calcMT(pt,phi,evt->met()*0.7,evt->metphi());
-	    if(GetMuSize==1)
-	      hAcc_All->Fill(pt,eta,eventWeight);
+	    //std::cout<<" mu_mt_w "<<mu_mt_w<<endl;
 	    if( pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
-	      if(GetMuSize==1){
-		hAcc_Pass->Fill(pt,eta,eventWeight);
-		hMT_All->Fill(pt,eta,eventWeight);
-	      }
-              if(verbose==2)printf(" \n Muons: \n pt: %g eta: %g phi: %g \n ",pt,eta,phi);
-              temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
+	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
               if(utils2::applyMT){
-                if(mu_mt_w < 100. ){vec_recoMuon4vec.push_back(temp4vec);vec_MTActivity.push_back(activity_);
-		  if(GetMuSize==1)
-		    hMT_Pass->Fill(pt,eta,eventWeight);  
+                if(mu_mt_w < 100. ){vec_recoMuon4vec.push_back(temp4vec);
+		  //vec_MTActivity.push_back(activity_);
 		}
               }
-              else {vec_recoMuon4vec.push_back(temp4vec);vec_MTActivity.push_back(activity_);}
+              else {vec_recoMuon4vec.push_back(temp4vec);
+		//vec_MTActivity.push_back(activity_);
+	      }
               vec_recoMuMTW.push_back(mu_mt_w); 
             }
           }
+	 
 
-        }
-        else{ // Use gen-level muon
-          for(int i=0; i< evt->GenMuPtVec_().size(); i++){ // Ahmad33
-            double pt=evt->GenMuPtVec_().at(i); // Ahmad33
-            double eta=evt->GenMuEtaVec_().at(i); // Ahmad33
-            double phi=evt->GenMuPhiVec_().at(i); // Ahmad33
-            double energy=evt->GenMuEVec_().at(i); // Ahmad33
-            double activity_ = evt->GenMTActivityVec_().at(i);
-            double mu_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());
-            if( pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
-              if(verbose==2)printf(" \n Muons: \n pt: %g eta: %g phi: %g \n ",pt,eta,phi);
-              temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
+	  GetEleSize=evt->ElecPtVec_().size();
+	  if(evt->nElectrons() !=evt->ElecPtVec_().size())
+	    std::cout<<" nEles "<< evt->nElectrons() <<" size "<<evt->ElecPtVec_().size()<<endl;
+
+	  //std::cout<<" GetEleSize "<<GetEleSize<<endl; 
+	  for(int i=0; i< evt->ElecPtVec_().size(); i++){ // Ahmad33
+            double pt=evt->ElecPtVec_().at(i); // Ahmad33
+            double eta=evt->ElecEtaVec_().at(i); // Ahmad33
+            double phi=evt->ElecPhiVec_().at(i); // Ahmad33
+            double energy=evt->ElecEVec_().at(i); // Ahmad33
+	    //            double activity_ = evt->MTActivityVec_().at(i);
+            double ele_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
+	    std::cout<<" eventN "<<eventN<<" ele_pt "<<pt<<" ele_eta "<<eta<<endl;
+	    if(pt<10 || fabs(eta)>2.4)
+	      std::cout<< " electron beyond range "<<endl;
+	    if( pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
               if(utils2::applyMT){
-                if(mu_mt_w < 100. ){vec_recoMuon4vec.push_back(temp4vec);vec_MTActivity.push_back(activity_);}
+                if(ele_mt_w < 100. ){vec_recoElectron4vec.push_back(temp4vec);
+		  //vec_MTActivity.push_back(activity_);
+		}
               }
-              else {vec_recoMuon4vec.push_back(temp4vec);vec_MTActivity.push_back(activity_);}
-              MuFromTauVec.push_back(evt->GenMuFromTauVec_()[i]);//Ahmad33
-              vec_recoMuMTW.push_back(mu_mt_w); 
+              else {vec_recoElectron4vec.push_back(temp4vec);
+		//	vec_MTActivity.push_back(activity_);
+	      }
+              vec_recoEleMTW.push_back(ele_mt_w); 
             }
           }
+	 
+ 
         }
+	//std::cout<<" vec_recoMuMTW "<<vec_recoMuMTW.size()<<" vec_recoEleMTW "<<vec_recoEleMTW.size()<<endl;
+
 	
         ///select electrons with pt>10. eta<2.5 relIso<.2
         vec_recoElec3vec.clear();
@@ -1214,63 +1299,71 @@ using namespace std;
 	   // we suppose to use supercluster eta. While here for the cut, we are using gsf. 
 	   Ahmad33 */
 
-        if(TauHadModel < 2){ // Use gen-level electron
-          for(int i=0; i< evt->GenElecPtVec_().size(); i++){// Ahmad33
-            double pt=evt->GenElecPtVec_().at(i); // Ahmad33
-            double eta=evt->GenElecEtaVec_().at(i); // Ahmad33 
-            double phi=evt->GenElecPhiVec_().at(i); // Ahmad33
-
-              if(verbose==2)printf(" \n Electrons: \n pt: %g eta: %g phi: %g \n ",pt,eta,phi);
-              temp3vec.SetPtEtaPhi(pt,eta,phi);
-              vec_recoElec3vec.push_back(temp3vec);
-          }
-        }
 
         if(vec_recoMuMTW.size()>0)muMtW = vec_recoMuMTW[0]; 
         muMtWHist->Fill(muMtW,eventWeight);
-
-        if(verbose==1)printf(" \n **************************************** \n #Muons: %d #Electrons: %d \n ****************************** \n ",vec_recoMuon4vec.size(),vec_recoElec3vec.size());
-
+	
         //if( template_nMuons == 1 && template_nElectrons == 0 ) {
         bool pass1=false;
-        if(TauHadModel>=2){if( vec_recoMuon4vec.size() == 1)pass1=true;} // Number of reco-level muon=1
-        else {if( vec_recoMuon4vec.size() == 1 && vec_recoElec3vec.size() == 0 )pass1=true;} // recoElec is realy GenElec here
+	bool MuEvt=false;
+	bool EleEvt=false;
+        if(TauHadModel>=2){
 
-        if(pass1){ // pass muon selection
-
+	  if(vec_recoMuon4vec.size() == 1 && vec_recoElectron4vec.size() ==0){
+	    MuEvt=true;
+	    //	    std::cout<<" eventN "<<eventN<<" this is muon event "<<endl;
+	  }
+	  if(vec_recoElectron4vec.size() == 1 && vec_recoMuon4vec.size() ==0){
+	    EleEvt=true;
+	    //std::cout<<" eventN "<<eventN<<" this is electron event "<<endl;
+	  }
+	  if(MuEvt || EleEvt){
+	    pass1=true;
+	    //std::cout<<" eventN "<<eventN<<" pass1 "<<pass1<<endl;
+	  }
+	} // Number of reco-level muon=1
+	//std::cout<<" eventN "<<eventN<<endl;
+	if(pass1){ // pass muon selection
+	  //std::cout<<" eventN "<<eventN<<" ****** seg vio****** "<<endl;
+	
+  /*
           muPt = vec_recoMuon4vec[0].Pt();
           muEta = vec_recoMuon4vec[0].Eta();
           muPhi = vec_recoMuon4vec[0].Phi();
           muE  = vec_recoMuon4vec[0].E();
-
+*/
 	  //double activity= utils->MuActivity(muEta,muPhi,evt->JetsPtVec_(),evt->JetsEtaVec_(),evt->JetsPhiVec_(),evt->Jets_chargedEmEnergyFraction_(),evt->Jets_chargedHadronEnergyFraction_());
-          double activity=vec_MTActivity[0]; 
-          if(verbose!=0)cout << " activity: " << activity << endl;
+	  
+	  //          double activity=vec_MTActivity[0]; 
 
-          cutflow_preselection->Fill(7.,eventWeight); // 1-mu selection
+	  //          if(verbose!=0)cout << " activity: " << activity << endl;
+        
+	  //    cutflow_preselection->Fill(7.,eventWeight); // 1-mu selection
    
 	  bool pass1_1=false;
+
 	  // for veto we have a lepton collection with softer requirements. pT > 10 not 20 and eta < 2.4 not 2.1 and also there is no 
 	  // mT cut applied. 
-	  if(TauHadModel>=2){if(evt->MuPtVec_().size()>1    || evt->ElecPtVec_().size()>0)pass1_1=true;}    // N(reco-muon)<=1, N(reco-ele)=0, 
-	  else{              if(evt->GenMuPtVec_().size()>1 || evt->GenElecPtVec_().size()>0)pass1_1=true;}
-	  if(pass1_1)continue;
-
-	  cutflow_preselection->Fill(8.,eventWeight); // Lepton vetos
+	  if(TauHadModel>=2){if(evt->MuPtVec_().size()>1    || evt->ElecPtVec_().size()>1)pass1_1=true;}    // N(reco-muon)<=1, N(reco-ele)=0, 
+	  if(pass1_1){
+	    //	    std::cout<<" e/ mu > 1, skip evt "<<endl;
+	    continue;
+	  }
+  
+	  //cutflow_preselection->Fill(8.,eventWeight); // Lepton vetos
 
           // The muon we are using is already part of a jet. (Note: the muon is isolated by 0.2 but jet is much wider.) And,
           // its momentum is used in HT and MHT calculation. We need to subtract this momentum and add the contribution from the simulated tau jet.
 
           //Identify the jet containing the muon
           const double deltaRMax = 0.4; // 0.4 is delR of jet
-          int JetIdx=-1;
-          if(verbose!=0 && utils->findMatchedObject(JetIdx,muEta,muPhi,evt->JetsPtVec_(), evt->JetsEtaVec_(), evt->JetsPhiVec_(),deltaRMax,verbose) ){
-            printf(" \n **************************************** \n JetIdx: %d \n ",JetIdx);
-          }
 
+          int JetIdx=-1;
           GenRecMu_all++;
+
           // If muon does not match a GenMuon, drop the event. We do this by applying some corrections 
           int GenMuIdx=-1;
+	  /*
           if(!isData && !utils->findMatchedObject(GenMuIdx,muEta,muPhi,evt->GenMuPtVec_(),evt->GenMuEtaVec_(),evt->GenMuPhiVec_(),deltaRMax,verbose)){
             GenRecMu_fail++;
             if(evt->DataBool_()==false && eventN < 100){
@@ -1279,506 +1372,70 @@ using namespace std;
             }
             
           }
-	  hMu_All->Fill(muPt,muEta,eventWeight);
-	  if(GenMuIdx<0)
-	    hMu_NonW->Fill(muPt,muEta,eventWeight);
-	  else if(evt->GenMuFromTauVec_()[GenMuIdx]==1)
-	    hMu_NonW->Fill(muPt,muEta,eventWeight);
-
-
+*/
           // start of bootstrapping ( if is on ) 
           for(int l=1; l<=nLoops;l++){
-            
-            // Get random number from tau-response template,
-            // or if bootstrap is on, read the whole template.
-            // The template is chosen according to the muon pt
-            double scale, scaleUp, scaleDown;
-            if(utils2::bootstrap){
-              scale = utils->GetBinValue(muPt,vec_resp,l );
-              if(subSampleKey.find("template")!=string::npos){
-                scaleUp = utils->GetBinValue(muPt,vec_respUp,l );
-                scaleDown = utils->GetBinValue(muPt,vec_respDown,l );
-              }
-              if(UncerLoop[iuncer]=="templatePlus")scale=scaleUp;       
-              else if(UncerLoop[iuncer]=="templateMinus")scale=scaleDown;
-            }
-            else scale = utils->getRandom(muPt,vec_resp );
-            Double_t scale_x=0,scale_y=0;
-            utils->getRandom2(muPt,vec_resp_xy,scale_x,scale_y );
-      
-            simTauJetPt = scale * muPt;
-            simTauJetEta = muEta;
-            simTauJetPhi = muPhi;
-            double simTauJetPt_x = scale_x * muPt;  
-            double simTauJetPt_y = scale_y * muPt;
-            simTauJetPhi_xy = muPhi + TMath::ATan2(simTauJetPt_y,simTauJetPt_x);
-            simTauJetPt_xy = sqrt( pow(simTauJetPt_x,2)+pow(simTauJetPt_y,2) ); 
-            if(subSampleKey.find("templatePlus")!=string::npos && scale > 2.5)binx = utils->tau_phi_GetBinX(2.49); 
-            else binx = utils->tau_phi_GetBinX(scale);
-	    //	    std::cout<<" scale "<<scale<<" binx "<<binx<<endl;
-            // when bootstapping we work with 1D template. 
-            // It was good if we could use 2D ( we are short in time now ) 
-            if(utils2::bootstrap){
-              double phi_genTau_tauJet=0.;
-              if(binx!=0){
-                if(verbose!=0)cout << "deltaPhi: " << h2tau_phi->ProjectionY("angularTemplate",binx,binx,"")->GetRandom() << endl;
-		phi_genTau_tauJet=h2tau_phi->ProjectionY("angularTemplate",binx,binx,"")->GetRandom();
-		//phi_genTau_tauJet=h2tau_phivseta->ProjectionY("angularTemplate",muEta,muEta,"")->GetRandom();
-		//std::cout<<" phi_genTau_tauJet "<<phi_genTau_tauJet<<endl; 
-              }
-              simTauJetPhi_xy=simTauJetPhi + phi_genTau_tauJet ;
-              simTauJetPt_xy=simTauJetPt; 
-            }
-
-
-            if(verbose!=0)printf(" \n ######### \n scale_x: %g scale_y: %g \n simTauJetPt_x: %g simTauJetPt_y: %g \n simTauJetPt_xy: %g simTauJetPt: %g \n simTauJetPhi_xy: %g simTauJetPhi: %g \n",
-				 scale_x,scale_y,simTauJetPt_x,simTauJetPt_y,simTauJetPt_xy,simTauJetPt,simTauJetPhi_xy,simTauJetPhi);
-
-	    //######################################################################
-
-            // 3Vec of muon and scaledMu 
-            TVector3 SimTauJet3Vec,NewTauJet3Vec,Muon3Vec;
-            double NewTauJetPt=0.0;
-	    double NewTauJetEta=0.0;
-            SimTauJet3Vec.SetPtEtaPhi(simTauJetPt_xy,simTauJetEta,simTauJetPhi_xy);
-            Muon3Vec.SetPtEtaPhi(muPt,muEta,muPhi);
-
-            // New ht and mht 
-            vector<TVector3> HT3JetVec,MHT3JetVec,GenHT3JetVec,GenMHT3JetVec;
-	    vector<TVector3> HT3Within2Pt4Vec,HT3Within5Vec;
-	    double HT_2Pt4=0;
-	    double HT_5=0;
-            HT3JetVec.clear();
-            MHT3JetVec.clear();
-	    GenHT3JetVec.clear();
-	    GenMHT3JetVec.clear();
-	    HT3Within2Pt4Vec.clear();
-	    HT3Within5Vec.clear();
-            TVector3 temp3Vec;
-            int slimJetIdx=-1;
-	    int GenJetIdx=-1;
-            MuJet_all->Fill(muPt,eventWeight);
-            utils->findMatchedObject(slimJetIdx,muEta,muPhi,evt->slimJetPtVec_(),evt->slimJetEtaVec_(), evt->slimJetPhiVec_(),deltaRMax,verbose);
-	    // for fastsim	    
-	    //*AR, Dec28,2016-If genHTMHT is true, looks for a jet matching to muon from GenJet collection
-	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT)
-	    utils->findMatchedObject(GenJetIdx,muEta,muPhi,evt->GenJetPtVec_(),evt->GenJetEtaVec_(), evt->GenJetPhiVec_(),deltaRMax,verbose);
-
-	    if (slimJetIdx==-1){
-	      std::cout << "slimJetIdx: " << slimJetIdx << std::endl;
-	      std::cout << muPt << " " << muEta << " " << muPhi << std::endl;
-	    }
-
-	    if(slimJetIdx!=-1)
-	      { double jecCorr = evt->slimJetjecFactor_()[slimJetIdx];
-		//KH adhoc correction
-		/*
-		if (jecCorr<1.05) jecCorr=1.05;
-		double muPtModified = jecCorr*muPt;
-		Muon3Vec.SetPtEtaPhi(muPtModified,muEta,muPhi);
-		if(muPtModified/muPt > 2.)std::cout<<"something is wrong"<<std::endl;
-		*/
-		Muon3Vec.SetPtEtaPhi(muPt,muEta,muPhi);
-		/*
-		std::cout << jecCorr << " " 
-			  << evt->JetsPtVec_()[slimJetIdx] << " "
-			  << evt->JetsEtaVec_()[slimJetIdx] << std::endl;
-		*/
-	      }
-
-            // If there is no match, add the tau jet as a new one
-            if(slimJetIdx==-1){
-
-              printf("############# \n mu ==> pT: %g eta: %g phi: %g \n ",muPt,muEta,muPhi);
-              for(int ij=0; ij< evt->JetsPtVec_().size(); ij++){
-                double dphi = utils->deltaPhi(muPhi,evt->JetsPhiVec_()[ij]);
-                double deta = muEta - evt->JetsEtaVec_()[ij];
-                int mumult = evt->Jets_muonMultiplicity_()[ij];
-                if(ij+1 <= evt->JetsPtVec_().size())
-                printf(" indx: %d pT: %g eta: %g phi: %g delR: %g muMultiplicity: %d \n "
-                        ,ij,evt->JetsPtVec_()[ij],evt->JetsEtaVec_()[ij],evt->JetsPhiVec_()[ij],sqrt( deta*deta + dphi*dphi ), mumult);
-                
-              }
-	      //std::cout<<" ***CH3*** "<< " evtWeight "<<eventWeight<<endl;
-              MuJet_fail->Fill(muPt,eventWeight);
-              NewTauJet3Vec=SimTauJet3Vec;
-              NewTauJetPt = NewTauJet3Vec.Pt();
-	      NewTauJetEta = NewTauJet3Vec.Eta();
-              if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)HT3JetVec.push_back(NewTauJet3Vec);
-              if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)MHT3JetVec.push_back(NewTauJet3Vec);
-            }
-	    for(int i=0;i<evt->slimJetPtVec_().size();i++){
-	      temp3Vec.SetPtEtaPhi(evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i]);
-	      if(fabs(evt->slimJetEtaVec_()[i])<2.4)HT3Within2Pt4Vec.push_back(temp3Vec);
-	      if(fabs(evt->slimJetEtaVec_()[i])<5.0)HT3Within5Vec.push_back(temp3Vec);
-              if(i!=slimJetIdx){
-                temp3Vec.SetPtEtaPhi(evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i]);
-                if(evt->slimJetPtVec_()[i]>30. && fabs(evt->slimJetEtaVec_()[i])<2.4)HT3JetVec.push_back(temp3Vec);
-                if(evt->slimJetPtVec_()[i]>30. && fabs(evt->slimJetEtaVec_()[i])<5.)MHT3JetVec.push_back(temp3Vec);
-              }
-              else if(i==slimJetIdx){
-                temp3Vec.SetPtEtaPhi(evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i]);
-		double jecCorr = evt->slimJetjecFactor_()[slimJetIdx];
-		if (jecCorr==0.) jecCorr=1.;
-		temp3Vec *= 1./jecCorr; temp3Vec -= Muon3Vec; temp3Vec *= jecCorr;
-                NewTauJet3Vec=temp3Vec+SimTauJet3Vec;
-                NewTauJetPt = NewTauJet3Vec.Pt();
-		NewTauJetEta = NewTauJet3Vec.Eta();
-		if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)HT3JetVec.push_back(NewTauJet3Vec);
-                if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)MHT3JetVec.push_back(NewTauJet3Vec);
-              }              
-            }
-	    for(int i=0;i<HT3Within2Pt4Vec.size();i++){
-              HT_2Pt4+=HT3Within2Pt4Vec[i].Pt();
-            }
-	    for(int i=0;i<HT3Within5Vec.size();i++){
-              HT_5+=HT3Within5Vec[i].Pt();
-            }
-
-	    // for fastsim	    
-	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
-	    if(GenJetIdx==-1){
-	      printf("############# \n mu ==> pT: %g eta: %g phi: %g \n ",muPt,muEta,muPhi);
-	      for(int ij=0; ij< evt->JetsPtVec_().size(); ij++){
-		double dphi = utils->deltaPhi(muPhi,evt->JetsPhiVec_()[ij]);
-		double deta = muEta - evt->JetsEtaVec_()[ij];
-		int mumult = evt->Jets_muonMultiplicity_()[ij];
-		if(ij+1 <= evt->JetsPtVec_().size())
-		  printf(" indx: %d pT: %g eta: %g phi: %g delR: %g muMultiplicity: %d \n "
-                         ,ij,evt->JetsPtVec_()[ij],evt->JetsEtaVec_()[ij],evt->JetsPhiVec_()[ij],sqrt( deta*deta + dphi*dphi ), mumult);
-		
-	      }
-	      MuJet_fail->Fill(muPt,eventWeight);
-	      NewTauJet3Vec=SimTauJet3Vec;   //SimTauJet3Vec=(muPt*scale,muEta,muPhi+phi_genTau_tauJet)
-	      NewTauJetPt = NewTauJet3Vec.Pt();
-	      NewTauJetEta = NewTauJet3Vec.Eta();
-	      //*AR,Dec28,2016-Start constructing GenHT3JetVec and GenMHT3JetVec of jets
-	      //*AR,Dec28,2016-This implies first element of GenHT3JetVec/GenMHT3JetVec or HT3JetVec/MHT3JetVec are same.
-	      if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)GenHT3JetVec.push_back(NewTauJet3Vec);
-	      if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)GenMHT3JetVec.push_back(NewTauJet3Vec);
-            }
-	    for(int i=0;i<evt->GenJetPtVec_().size();i++){
-              if(i!=GenJetIdx){
-		//*AR,Dec28,2016-Other elements of GenHT3JetVec/GenMHT3JetVec are from GenJet collection
-		temp3Vec.SetPtEtaPhi(evt->GenJetPtVec_()[i],evt->GenJetEtaVec_()[i],evt->GenJetPhiVec_()[i]);
-		if(evt->GenJetPtVec_()[i]>30. && fabs(evt->GenJetEtaVec_()[i])<2.4)GenHT3JetVec.push_back(temp3Vec);
-		if(evt->GenJetPtVec_()[i]>30. && fabs(evt->GenJetEtaVec_()[i])<5.)GenMHT3JetVec.push_back(temp3Vec);
-	      }
-	      else if(i==GenJetIdx){
-		temp3Vec.SetPtEtaPhi(evt->GenJetPtVec_()[i],evt->GenJetEtaVec_()[i],evt->GenJetPhiVec_()[i]);
-		//*AR,Dec28,2016-Should not this be: NewTauJet3Vec=temp3Vec-Muon3Vec+SimTauJet3Vec?
-		NewTauJet3Vec=temp3Vec-Muon3Vec+SimTauJet3Vec;
-		NewTauJetPt = NewTauJet3Vec.Pt();
-		NewTauJetEta = NewTauJet3Vec.Eta();
-		if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<2.4)GenHT3JetVec.push_back(NewTauJet3Vec);
-		if(NewTauJet3Vec.Pt()>30. && fabs(NewTauJet3Vec.Eta())<5.)GenMHT3JetVec.push_back(NewTauJet3Vec);
-	      }
-	    }
-	    }
-	    //std::cout<<" HT_size "<<HT3JetVec.size()<<endl;
-
-            // Order the HT3JetVec and MHT3JetVec based on their pT
-            HT3JetVec = utils->Order_the_Vec(HT3JetVec); 
-            MHT3JetVec = utils->Order_the_Vec(MHT3JetVec);
-	    //*AR,Dec28,2016-Similar to HT3JetVec/MHT3JetVec,GenHT3JetVec and GenMHT3JetVec are ordered based on pT.
-	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
-            GenHT3JetVec = utils->Order_the_Vec(GenHT3JetVec); 
-            GenMHT3JetVec = utils->Order_the_Vec(GenMHT3JetVec);
-	    }
-
-            double newHT=0,newMHT=0,newMHTPhi=-1;
-            TVector3 newMHT3Vec;
-            for(int i=0;i<HT3JetVec.size();i++){
-              newHT+=HT3JetVec[i].Pt();
-            }        
-            for(int i=0;i<MHT3JetVec.size();i++){
-              newMHT3Vec-=MHT3JetVec[i];
-            }        
-            newMHT=newMHT3Vec.Pt();
-            newMHTPhi=newMHT3Vec.Phi();
-	    //std::cout<<"Just after newHT calculation "<<" newHT "<<newHT<<" newMHT "<<newMHT<<endl;
-	    // for fastsim	    
-            double newGenHT=0,newGenMHT=0,newGenMHTPhi=-1;
-            TVector3 newGenMHT3Vec;
-	    //*AR,Dec28,2016-newGenHT and newGenMHT are calculated from GenHT3JetVec/GenMHT3JetVec
-	    // and they are assigned to variables newHT and newMHT respectively.
-	    if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
-	    for(int i=0;i<GenHT3JetVec.size();i++){
-	      newGenHT+=GenHT3JetVec[i].Pt();
-	    }        
-	    for(int i=0;i<GenMHT3JetVec.size();i++){
-	      newGenMHT3Vec-=GenMHT3JetVec[i];
-	    }        
-	    newGenMHT=newGenMHT3Vec.Pt();
-	    newGenMHTPhi=newGenMHT3Vec.Phi();
-	    newHT  = newGenHT;
-	    newMHT = newGenMHT;
-	    //KH newMHTPhi = newGenMHTPhi;
-	    }
-	    
-            if(verbose==1)printf("newHT: %g newMHT: %g newMHTPhi: %g \n ",newHT,newMHT,newMHTPhi);
-
-	    //######################################################################
-
-            // Calculate muon's btag rate 
-            if(!utils2::bootstrap){
-              JetIdx=-1;
-              utils->findMatchedObject(JetIdx,muEta,muPhi,evt->JetsPtVec_(),evt->JetsEtaVec_(), evt->JetsPhiVec_(),deltaRMax,verbose);  
-              B_rate_all->Fill(NewTauJetPt,eventWeight);
-	      if(JetIdx!=-1)
-		B_Mu_rate_all->Fill(evt->JetsPtVec_()[JetIdx],eventWeight);
-              if(JetIdx!=-1 && evt->csvVec()[JetIdx]>evt->csv_()){
-                B_rate_tagged->Fill(NewTauJetPt,eventWeight);
-		B_Mu_rate_tagged->Fill(evt->JetsPtVec_()[JetIdx],eventWeight);
-              }
-            }
 
             // start of btag on/off for had tau jets ( if is on ) 
             for(int m=0; m<nBtagsForHadTau;m++){
-              
-              // New #b
-              int NewNB=evt->nBtags();
-	      //std::cout<<"Number of b tags "<<NewNB<<std::endl;
-              // get the rate of tau jet mistagging as a function of pT.
-              double bRateError_stat, bRatePlus_stat, bRateMinus_stat;
-	      //              double bRate =bRateHist->GetBinContent(bRateHist->GetXaxis()->FindBin(NewTauJet3Vec.Pt()));
-	      //*AR,Oct14,2016-For three bins diff between tau and mu mistag is negative
-	      double absbRate=bRateHist->GetBinContent(bRateHist->GetXaxis()->FindBin(NewTauJet3Vec.Pt()));
-              double bRate =abs(absbRate);
-	      bRateError_stat = bRateHist->GetBinError(bRateHist->GetXaxis()->FindBin(NewTauJet3Vec.Pt()));
-              if(bRate==0)bRate=0.0000000000000000001;
-              bRatePlus_stat=bRate+bRateError_stat;
-              bRateMinus_stat=bRate-bRateError_stat;
-
-              //KH20150617
-              double Prob_Btag = 1.;
-              double Prob_Btag_Plus = 1., Prob_Btag_Plus_stat = 1.;
-              double Prob_Btag_Minus = 1., Prob_Btag_Minus_stat = 1.;
-              if(utils2::bootstrap){
-                double bRate_Plus = bRate + bRate * .5;
-                double bRate_Minus = bRate - bRate * .5;
-                if (m==0){
-                   Prob_Btag=(1.-bRate); // had tau not b-tagged
-                   Prob_Btag_Plus=(1. - bRate_Plus);
-                   Prob_Btag_Minus=(1. - bRate_Minus);
-
-                   Prob_Btag_Plus_stat=(1. - bRatePlus_stat);
-                   Prob_Btag_Minus_stat=(1. - bRateMinus_stat);
-                }
-                else if (m==1){ 
-		  if(absbRate>0)
-		    NewNB++;
-		  else if(absbRate<0)
-		    NewNB--;
-                  Prob_Btag=bRate; // had tau b-tagged
-                  Prob_Btag_Plus=bRate_Plus;
-                  Prob_Btag_Minus=bRate_Minus;
-
-                  Prob_Btag_Plus_stat=bRatePlus_stat;
-                  Prob_Btag_Minus_stat=bRateMinus_stat;
-                }               
-                //std::cout << m << " " << bRate << " " << Prob_Btag << std::endl;
-              }
-              else {
-                // get a random number between 0 and 1
-                TRandom3 * ran = new TRandom3(0);
-                double rn = ran->Rndm();
-                // If statistics is high enough, in bRate*100 % of cases the random number is smaller than bRate. 
-                if(rn < bRate )NewNB++; 
-                delete ran;
-              }
-
-
-              if(verbose==2){
-                double directHT=0,directMHTX=0,directMHTY=0,directMHT=0;
-                printf(" ========\n Jets section: \n ");
-                for(int i=0;i<evt->slimJetPtVec_().size();i++){
-                  printf(" jet#: %d pt: %g eta: %g phi: %g JetID: %d \n ",i+1,evt->slimJetPtVec_()[i],evt->slimJetEtaVec_()[i],evt->slimJetPhiVec_()[i],evt->slimJetID_()[i]);
-                  if(evt->slimJetPtVec_()[i]>30. && fabs(evt->slimJetEtaVec_()[i]) < 5.){
-                    directMHTX-=evt->slimJetPtVec_()[i]*cos(evt->slimJetPhiVec_()[i]);
-                    directMHTY-=evt->slimJetPtVec_()[i]*sin(evt->slimJetPhiVec_()[i]);
-                  }
-                  if(evt->slimJetPtVec_()[i]>30. && fabs(evt->slimJetEtaVec_()[i]) < 2.4){
-                    directHT+=evt->slimJetPtVec_()[i];
-                  }
-
-                }
-                printf("========== \n");
-                for(int i=0;i<evt->JetsPtVec_().size();i++){
-                  printf(" jet#: %d pt: %g eta: %g phi: %g \n ",i+1,evt->JetsPtVec_()[i],evt->JetsEtaVec_()[i],evt->JetsPhiVec_()[i]);
-                }
-                printf("========== \n");
-                directMHT = pow( (directMHTX*directMHTX+directMHTY*directMHTY) ,.5);
-                printf("directHT: %g directMHT: %g \n",directHT,directMHT);
-                if((int) directHT != (int) evt->ht() )cout << " Warning in HT calc. \n " ;
-                if((int) directMHT != (int) evt->mht())cout << " Warning in MHT calc. \n " ;
-              }
-
-                   
-                  
-              //New MET
-              double metX = evt->met()*cos(evt->metphi())-simTauJetPt_xy*cos(simTauJetPhi_xy)+muPt*cos(muPhi);///the minus sign is because of Mht definition.
-              double metY = evt->met()*sin(evt->metphi())-simTauJetPt_xy*cos(simTauJetPhi_xy)+muPt*sin(muPhi);
-
-              if(verbose==1)printf("############ \n metX: %g, metY: %g \n",metX,metY);
-              if(verbose==1)printf("evt->met: %g, evt->metphi: %g,muPt: %g simTauJetPt: %g, simTauJetPhi_xy: %g \n",evt->met(),evt->metphi(),muPt,simTauJetPt,simTauJetPhi_xy);
-
-              double newMet = sqrt(pow(metX,2)+pow(metY,2));
-              double newMetphi=-99.;
-              newMetphi=TMath::ATan2(metY,metX);
-
-              if(verbose==1)printf("\n evt->ht(): %g evt->mht(): %g, evt->mhtphi(): %g \n ",evt->ht(),evt->mht(),evt->mhtphi());
-              if(verbose==1)printf("\n newMet: %g, newMetphi: %g \n ", newMet,newMetphi);
-
-              // New minDelPhi_N
-              double dpnhat[3]; 
-              unsigned int goodcount=0;
-              for(unsigned int i=0; i< HT3JetVec.size();i++){
-                if(goodcount<3 && HT3JetVec[i].Pt() > 30. && fabs( HT3JetVec[i].Eta() ) < 5. ){ 
-                  float dphi=std::abs(TVector2::Phi_mpi_pi(HT3JetVec[i].Phi() - newMetphi));
-                  float dT=DeltaT(i,HT3JetVec);
-                  if(dT/newMet>=1.0)dpnhat[goodcount]=dphi/(TMath::Pi()/2.0);
-                  else dpnhat[goodcount]=dphi/asin(dT/newMet);
-                  ++goodcount;
-                }
-              }// end loop over jets
-              float mindpn=9999;
-              for(int i=0; i<3; ++i){
-                if(mindpn>fabs(dpnhat[i]))mindpn=fabs(dpnhat[i]);
-              } 
-
-	      //#############################################################
-              //New #Jet
-
-              int newNJet = HT3JetVec.size();
-              if(verbose==1)printf("newNJet: %d \n ",newNJet);
-	      // for fastsim	      
-	      int newGenNJet;
-	      if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
-		int newGenNJet = GenHT3JetVec.size();
-		//KH newNJet = newGenNJet;
-	      }
-
-	      //#############################################################
-
-              // If the jet is dropped, Nbtag should stay the same. Since the muon jet is not btagged, dropping it should not change #b. 
-              if( (int) HT3JetVec.size() < (int) evt->nJets() )NewNB=evt->nBtags(); 
-	      
-              // if muon jet is dropped and muon is btagged, #original b shoud reduce by 1
-              // if muon jet is dropped but muon is not btagged, #b shoud stay the same as original one(no increase).
-              // if muon jet is not dropped but is btagged, #b shoud stay the same as original one(no increase).
-              JetIdx=-1;
-              utils->findMatchedObject(JetIdx,muEta,muPhi,evt->JetsPtVec_(),evt->JetsEtaVec_(), evt->JetsPhiVec_(),deltaRMax,verbose);  
-              if( (int) HT3JetVec.size() < (int) evt->nJets() ){
-                if(JetIdx!=-1 && evt->csvVec()[JetIdx]>evt->csv_())NewNB=evt->nBtags()-1;
-                else NewNB=evt->nBtags(); 
-	      }
-	      //              else if(JetIdx!=-1 && evt->csvVec()[JetIdx]>evt->csv_())NewNB=evt->nBtags();
-	      else if((JetIdx!=-1 && absbRate>0 && evt->csvVec()[JetIdx]>evt->csv_()) || (JetIdx!=-1 && absbRate<0 && evt->csvVec()[JetIdx]<evt->csv_()))NewNB=evt->nBtags();
-
-              // New dphi1, dphi2, and dphi3
-              double newDphi1=-99.,newDphi2=-99.,newDphi3=-99.,newDphi4=-99.;
-              //first order the jets based on their pT
-              double p1=0,p2=0,p3=0,p4=0;
-              int i1=-1,i2=-1,i3=-1,i4=-1;
-              for(int i=0; i < HT3JetVec.size(); i++ ){
-                if(HT3JetVec[i].Pt()>p1){
-                  p1=HT3JetVec[i].Pt();
-                  i1=i;
-                }
-              }
-              for(int i=0; i < HT3JetVec.size(); i++ ){
-                if(i==i1)continue;
-                if(HT3JetVec[i].Pt()>p2){
-                  p2=HT3JetVec[i].Pt();
-                  i2=i;
-                }
-              }
-              for(int i=0; i < HT3JetVec.size(); i++ ){
-                if(i==i1 || i==i2)continue;
-                if(HT3JetVec[i].Pt()>p3){
-                  p3=HT3JetVec[i].Pt();
-                  i3=i;
-                }
-              }
-              for(int i=0; i < HT3JetVec.size(); i++ ){
-                if(i==i1 || i==i2 || i==i3)continue;
-                if(HT3JetVec[i].Pt()>p4){
-                  p4=HT3JetVec[i].Pt();
-                  i4=i;
-                }
-              }
-
-              if(i1!=-1)newDphi1=fabs(TVector2::Phi_mpi_pi(HT3JetVec[i1].Phi() - newMHTPhi ));
-              if(i2!=-1)newDphi2=fabs(TVector2::Phi_mpi_pi(HT3JetVec[i2].Phi() - newMHTPhi ));
-              if(i3!=-1)newDphi3=fabs(TVector2::Phi_mpi_pi(HT3JetVec[i3].Phi() - newMHTPhi ));
-              if(i4!=-1)newDphi4=fabs(TVector2::Phi_mpi_pi(HT3JetVec[i4].Phi() - newMHTPhi ));
-
-	      // for fastsim -- GenHT,GenMHT,GenNjets,GenDphi[1-4]
-              // New dphi1, dphi2, and dphi3
-              double newGenDphi1=-99.,newGenDphi2=-99.,newGenDphi3=-99.,newGenDphi4=-99.;
-
-	      // if (!evt->DataBool_() && fastsim && utils2::genHTMHT){
-              // //first order the jets based on their pT
-              // p1=0,p2=0,p3=0,p4=0;
-              // i1=-1,i2=-1,i3=-1,i4=-1;
-              // for(int i=0; i < HT3JetVec.size(); i++ ){
-              //   if(GenHT3JetVec[i].Pt()>p1){
-              //     p1=GenHT3JetVec[i].Pt();
-              //     i1=i;
-              //   }
-              // }
-              // for(int i=0; i < GenHT3JetVec.size(); i++ ){
-              //   if(i==i1)continue;
-              //   if(GenHT3JetVec[i].Pt()>p2){
-              //     p2=GenHT3JetVec[i].Pt();
-              //     i2=i;
-              //   }
-              // }
-              // for(int i=0; i < GenHT3JetVec.size(); i++ ){
-              //   if(i==i1 || i==i2)continue;
-              //   if(GenHT3JetVec[i].Pt()>p3){
-              //     p3=GenHT3JetVec[i].Pt();
-              //     i3=i;
-              //   }
-              // }
-              // for(int i=0; i < GenHT3JetVec.size(); i++ ){
-              //   if(i==i1 || i==i2 || i==i3)continue;
-              //   if(GenHT3JetVec[i].Pt()>p4){
-              //     p4=GenHT3JetVec[i].Pt();
-              //     i4=i;
-              //   }
-              // }
-
-              // if(i1!=-1)newGenDphi1=fabs(TVector2::Phi_mpi_pi(GenHT3JetVec[i1].Phi() - newGenMHTPhi ));
-              // if(i2!=-1)newGenDphi2=fabs(TVector2::Phi_mpi_pi(GenHT3JetVec[i2].Phi() - newGenMHTPhi ));
-              // if(i3!=-1)newGenDphi3=fabs(TVector2::Phi_mpi_pi(GenHT3JetVec[i3].Phi() - newGenMHTPhi ));
-              // if(i4!=-1)newGenDphi4=fabs(TVector2::Phi_mpi_pi(GenHT3JetVec[i4].Phi() - newGenMHTPhi ));
-	      // newDphi1 = newGenDphi1;
-	      // newDphi2 = newGenDphi2;
-	      // newDphi3 = newGenDphi3;
-	      // newDphi4 = newGenDphi4;
-	      // }
-	      // // for fastsim ends
-	      
-              double simTauJetPhi_ForPlotting=-99.0;
-              double tauJet_mht_dlePhi_forPlotting=-99.0;
-              if( NewTauJetPt > 30.&& fabs(NewTauJetEta) < 2.4){
-                simTauJetPhi_ForPlotting = simTauJetPhi_xy; 
-                tauJet_mht_dlePhi_forPlotting = fabs(TVector2::Phi_mpi_pi( simTauJetPhi_ForPlotting - newMHTPhi ));
-                //printf("phi(tau,mht): %g tauJetPt: %g GenTauPt: %g \n ",tauJet_mht_dlePhi_forPlotting,simTauJetPt_xy,muPt);
-
-              }
-
- 
-              if(verbose!=0){
-                printf("newDphi1: %g newDphi2: %g newDphi3: %g newDphi4: %g\n ",newDphi1,newDphi2,newDphi3,newDphi4);
-                printf("i1: %d p1: %g i2: %d p2: %g i3: %d p3: %g i4: %d p4: %g \n ",i1,p1,i2,p2,i3,p3,i4,p4);
-                for(int i=0; i < HT3JetVec.size(); i++){
-                  printf("i: %d HT3JetVec[i].Pt(): %g \n ",i,HT3JetVec[i].Pt());
-                }
-              }
 	     
+	      //	      if( sel->ht_base(evt->ht()) && sel->mht_base(evt->mht()) && sel->Njet_base(evt->nJets()) ){
+
+	      h_HT_SearchStat->Fill(evt->ht(),eventWeight);
+	      h_MHT_SearchStat->Fill(evt->mht(),eventWeight);
+	      h_NJet_SearchStat->Fill(evt->nJets(),eventWeight); 
+	      h_NBTag_SearchStat->Fill(evt->nBtags(),eventWeight); 
+	      h_MET_SearchStat->Fill(evt->met(),eventWeight);
+	      
+	      DeltaPhi_j1MHT_SearchStat->Fill(evt->deltaPhi1(),eventWeight);
+	      DeltaPhi_j2MHT_SearchStat->Fill(evt->deltaPhi2(),eventWeight);
+	      DeltaPhi_j3MHT_SearchStat->Fill(evt->deltaPhi3(),eventWeight);
+	      DeltaPhi_j4MHT_SearchStat->Fill(evt->deltaPhi4(),eventWeight);
+	      /*
+	      DeltaPhi_j1MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[0],evt->metphi())),eventWeight);
+	      DeltaPhi_j2MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[1],evt->metphi())),eventWeight);
+	      DeltaPhi_j3MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[2],evt->metphi())),eventWeight);
+	      DeltaPhi_j4MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[3],evt->metphi())),eventWeight);
+
+	      */
+
+
+	      //	      std::cout<<" j1 "<<evt->JetsPtVec_()[0]<<" j2 "<<evt->JetsPtVec_()[1]<<" j3 "<<evt->JetsPtVec_()[2]<<" j4 "<<evt->JetsPtVec_()[3]<<endl;
+	      
+	      if(evt->JetsEtaVec_().size()>0)
+		j1_eta->Fill(evt->JetsEtaVec_()[0],eventWeight);
+	      if(evt->JetsEtaVec_().size()>1)
+		j2_eta->Fill(evt->JetsEtaVec_()[1],eventWeight);
+	      if(evt->JetsEtaVec_().size()>2)
+		j3_eta->Fill(evt->JetsEtaVec_()[2],eventWeight);
+	      if(evt->JetsEtaVec_().size()>3)
+	      j4_eta->Fill(evt->JetsEtaVec_()[3],eventWeight);
+	      if(evt->JetsEtaVec_().size()>0)
+		j1_phi->Fill(evt->JetsPhiVec_()[0],eventWeight);
+	      if(evt->JetsEtaVec_().size()>1)
+		j2_phi->Fill(evt->JetsPhiVec_()[1],eventWeight);
+	      if(evt->JetsEtaVec_().size()>2)
+		j3_phi->Fill(evt->JetsPhiVec_()[2],eventWeight);
+	      if(evt->JetsEtaVec_().size()>3)
+		j4_phi->Fill(evt->JetsPhiVec_()[3],eventWeight);
+
+	      for(unsigned j = 0; j < evt->JetsPtVec_().size(); ++j){
+		if(evt->JetsPtVec_()[j] > 30. && fabs(evt->JetsEtaVec_()[j]) < 5.0){
+		  j_eta_inclusive->Fill(evt->JetsEtaVec_()[j],eventWeight);
+		  j_phi_inclusive->Fill(evt->JetsPhiVec_()[j],eventWeight);
+		}
+	      }
+
+	      //	      std::cout<<" eventN "<<eventN<<" ht "<<evt->ht()<<" mht "<<evt->mht()<<" njet "<<evt->nJets()<<" btag "<<evt->nBtags()<<" met "<<evt->met()<<endl;
+	      
+	      //	      }
+	      
+	      
+	      
+ //#############################################################
+              //New #Jet
+	      //              else if(JetIdx!=-1 && evt->csvVec()[JetIdx]>evt->csv_())NewNB=evt->nBtags();
+             
 	      /*
 	      if(newNJet>=5 && newNJet<=6 && newHT >= 500 && newHT <1000 && newMHT>=350 && newMHT<500 && m==0){
 		
@@ -1818,1189 +1475,28 @@ using namespace std;
 	      // 
 	      // newNJet,newHT,newMHT,newNB fully ready
 	      // 
-	     
-
-	      //AR------In reality(while collecting data) search region uses MET triggers-HLT PFMET100 PFMHT100 IDTight/HLT PFMETNoMu100 PFMHTNoMu100 IDTight which has MHT dependant efficiency. But in data prediction we just use Single muon trigger and correct for it's efficiency. In addition data prediction should be scaled down by MET trigger efficiency to make it consistent with observed data.
-  
-	      bool ApplyMETEff=false;
-	      //*AR, Dec28,2016-MET Eff corrections not applied for genHTMHT=true
-	      if(( isData || fastsim ) && !utils2::genHTMHT) ApplyMETEff=true;
-	      int METstatUnc=0;
-	      int METsystUnc=0;
-	      
-	      //	      double METtrigEffCorr=utils2::GetTriggerEffCorr(ApplyMETEff,newHT, newMHT, METstatUnc,METsystUnc);
-	      double METtrigEffCorr=utils2::GetTriggerEffCorr(ApplyMETEff, newHT, newMHT, METstatUnc,METsystUnc);
-	     
-
-
-	      //AR--------Single muon trigger efficiencies for control region.
-
-	      double trigEffCorr=1.;
-	      double NjNbCorr=1.;
-	      double MuonPtMinCorr=1.;
-	      double QCD_UpNjNbCorr=1.;
-	      double QCD_LowNjNbCorr=1.;
-	      double HTRatiocut=HT_5/HT_2Pt4;
-	      double factor_Up_NjNb=1;
-	      double factor_Low_NjNb=1;
-	      //std::cout<<" eventN "<<eventN<<endl;
-	      if (isData){
-		
-		//if(eventN<50) std::cout<<" eventN "<<eventN<< " Make sure you are using the updated NjNb correction factors "<<endl;
-		if (newHT<500.){
-
-		  if (muPt<LeptonAcceptance::muonPtMinLowHT()) trigEffCorr=0.;
-		  else {
-		    //if (trigPassLowHT) trigEffCorr=1./0.824;
-		    // updated on July 12, 2016, Eff provided by Manuel
-		    if (trigPassLowHT) {
-		      if(muPt>25.0 && muPt<=30) trigEffCorr=1./0.787;
-		      else if(muPt>30.0 && muPt<=50)trigEffCorr=1./0.843;
-		      else trigEffCorr=1./0.908;
-		      
-		    }
-		    else trigEffCorr=0.;
-		  }
-
-
-		  int index_MuonPtMinSelectionEfficiency = binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()];
-		  double MuonPtMinSelectionEfficiency = 0.9;
-		  if (index_MuonPtMinSelectionEfficiency!=0) MuonPtMinSelectionEfficiency = histMuonPtMinCorr->GetBinContent(index_MuonPtMinSelectionEfficiency); // not underflow bin
-		  if (MuonPtMinSelectionEfficiency<0.5) {std::cout << "warning!" << std::endl;MuonPtMinSelectionEfficiency=0.9;} 
-		  MuonPtMinCorr=1./MuonPtMinSelectionEfficiency;
-
-		} else {
-		  if (trigPassHighHT) trigEffCorr=1./0.949;
-		  else                trigEffCorr=0.;
-		}
-
-		// from V9 MC
-		double NjNbCorrArray[19]={1.17399,1.20094,1.10832,1.02584,1.03485,1.0356,1.21258,0.98518,1.00936,1.00807,1.04635,0.959842,0.970069,0.945353,1.01596,0.90192,0.925152,0.970212,0.919978};
-		NjNbCorr = NjNbCorrArray[utils2::findBin_NJetNBtag(newNJet,NewNB)];
-		
-		double QCD_UpNjNbCorrArray[19]=
-		   {1.11067,1.16299,0.998984,1.00782,1.035,1.04784,1.12393,0.976999,0.980355,0.995285,1.02251,0.943574,0.950614,0.95249,0.996299,0.963399,0.937785,0.956104,0.96402};
-
-		QCD_UpNjNbCorr=QCD_UpNjNbCorrArray[utils2::findBin_NJetNBtag(newNJet,NewNB)]; 
-		factor_Up_NjNb=QCD_UpNjNbCorr/NjNbCorr;
-
-		double QCD_LowNjNbCorrArray[19]=
-		  {1.00357,1.00596,1.01692,0.993508,0.982486,1.02538,1.09642,0.957791,0.936144,0.961578,1.00259,0.915095,0.916172,0.92677,1.01113,0.904738,0.880713,0.911209,0.928022};
-
-
-		QCD_LowNjNbCorr=QCD_LowNjNbCorrArray[utils2::findBin_NJetNBtag(newNJet,NewNB)]; 
-		factor_Low_NjNb=QCD_LowNjNbCorr/NjNbCorr;
-		
-	      } // isData ends
-
-              // get the effieciencies and acceptance
-              // if baseline cuts on the main variables are passed then calculate the efficiencies otherwise simply take 0.75 as the efficiency.
-              double Eff,Eff_Arne,Reco_error_Arne, Iso_error_Arne, Eff_ArnePlus, Eff_ArneMinus;
-
-	      //
-              // Here Eff is not a good naming. What this really mean is efficiency and also isolation together
-	      Eff_Arne = hMuRecoPTEta_Arne->GetBinContent(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(muEta));
-	      Reco_error_Arne = hMuRecoPTEta_Arne->GetBinError(hMuRecoPTEta_Arne->GetXaxis()->FindBin(muPt),hMuRecoPTEta_Arne->GetYaxis()->FindBin(muEta));
-	      Eff_Arne*=hMuIsoPTActivity_Arne->GetBinContent(hMuIsoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuIsoPTActivity_Arne->GetYaxis()->FindBin(muPt));
-              Iso_error_Arne = hMuIsoPTActivity_Arne->GetBinError(hMuIsoPTActivity_Arne->GetXaxis()->FindBin(activity),hMuIsoPTActivity_Arne->GetYaxis()->FindBin(muPt));
-
-	      // Data/MC scale factor
-	      if(evt->DataBool_()){
-		// Updating for TrackSF
-		if(muPt>10.0)
-		  Eff_Arne *=utils2::GetSF(hMuTrkHighPtSF,muEta);
-		else
-		  Eff_Arne *=utils2::GetSF(hMuTrkLowPtSF,muEta);
-		
-		// Updating for IDSF 
-		Eff_Arne *=utils2::GetSF(hMuIDSF,muPt,fabs(muEta));
-		
-		// Updating for IsoSF 
-		//*AR, Feb21,2017, hMuIsoSF was commented before
-		Eff_Arne *=utils2::GetSF(hMuIsoSF,muPt,fabs(muEta));
-		
-		/*
-		std::cout << muPt << " " 
-			  << utils2::GetSF(hMuTrkHighPtSF,muEta)   << " " 
-			  << utils2::GetSF(hMuTrkLowPtSF,muEta)    << " " 
-			  << utils2::GetSF(hMuIDSF,muPt,muEta)  << " " 
-			  << utils2::GetSF(hMuIsoSF,muPt,muEta) << std::endl;
-		*/
-
-	      }
-
-              // if baseline cuts on the main variables are passed then calculate the acceptance otherwise simply take 0.9 as the acceptance.
-              double Acc, AccError, AccPlus, AccMinus, Acc_lowDphi, Acc_lowDphiError, AccPlus_lowDphi, AccMinus_lowDphi;
-              double AccSysPlus, AccSysMinus, AccSysPlus_lowDphi, AccSysMinus_lowDphi, ScaleAccSysPlus, ScaleAccSysMinus, ScaleAccSysPlus_lowDphi, ScaleAccSysMinus_lowDphi;
-              double IsoSFUp, IsoSFDw, IdSFUp,IdSFDw;
-	      double Acc_Nb;
-	      double Acc_Nb_lowDphi;
-
-              if(sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->Njet_4(newNJet)){
-                Acc = hAcc->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
-		if (evt->nJets()==2) Acc_Nb = hAcc_NbNjet2->GetBinContent( hAcc_NbNjet2->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=3 && evt->nJets()<=4) Acc_Nb = hAcc_NbNjet34->GetBinContent( hAcc_NbNjet34->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=5 && evt->nJets()<=6) Acc_Nb = hAcc_NbNjet56->GetBinContent( hAcc_NbNjet56->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=7 && evt->nJets()<=8) Acc_Nb = hAcc_NbNjet78->GetBinContent( hAcc_NbNjet78->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=9) Acc_Nb = hAcc_NbNjet9->GetBinContent( hAcc_NbNjet9->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		Acc *=Acc_Nb;
-                AccError = hAcc->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
-                Acc_lowDphi = hAcc_lowDphi->GetBinContent(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]); 
-		if (evt->nJets()==2) Acc_Nb_lowDphi = hAcc_NbNjet2_lowDphi->GetBinContent( hAcc_NbNjet2_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=3 && evt->nJets()<=4) Acc_Nb_lowDphi = hAcc_NbNjet34_lowDphi->GetBinContent( hAcc_NbNjet34_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=5 && evt->nJets()<=6) Acc_Nb_lowDphi = hAcc_NbNjet56_lowDphi->GetBinContent( hAcc_NbNjet56_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=7 && evt->nJets()<=8) Acc_Nb_lowDphi = hAcc_NbNjet78_lowDphi->GetBinContent( hAcc_NbNjet78_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=9) Acc_Nb_lowDphi = hAcc_NbNjet9_lowDphi->GetBinContent( hAcc_NbNjet9_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	        Acc_lowDphi *=Acc_Nb_lowDphi;
-		Acc_lowDphiError = hAcc_lowDphi->GetBinError(binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
-              }else{
-                Acc=0.9;
-                Acc_lowDphi=0.9;
-              }
-
-              if(verbose==2 && sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->Njet_4(newNJet))
-		printf("Eff: %g Acc: %g njet: %d nbtag: %d ht: %g mht: %g binN: %d \n ",
-		       Eff,Acc, newNJet,evt->nBtags(),newHT,newMHT, binMap_ForAcc[utils2::findBin_ForAcc(newNJet,newHT,newMHT)]);
-              if(verbose==2 && sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->Njet_4(newNJet))printf("Eff_Arne: %g \n" ,Eff_Arne);
-
-              if(Acc==0){Acc=0.9;cout << " Warning! Acc==0 \n ";}
-              if(Acc_lowDphi==0)Acc_lowDphi=0.9;
-              if(Eff==0)Eff=0.75;
-              if(Eff_Arne==0){
-		Eff_Arne=0.75;
-		std::cout << " Warning! Eff_Arne==0 "<<" "<<" eventN "<<eventN<<" muPt "<<muPt<<" muEta "<<muEta<<endl;
-	      }
-
-              AccPlus = Acc+AccError;
-              AccMinus = Acc-AccError;
-              AccPlus_lowDphi = Acc_lowDphi+Acc_lowDphiError;
-              AccMinus_lowDphi= Acc_lowDphi-Acc_lowDphiError;
-              if(StudyErrorPropag){
-
-		IdSFUp= 1. 
-		  + utils2::GetSFUnc(hMuIDSF, muPt, fabs(muEta), true)
-		  + utils2::GetSFUnc(hMuTrkHighPtSF, muEta, true);
-		IdSFDw= 1. 
-		  - utils2::GetSFUnc(hMuIDSF, muPt, fabs(muEta), true)
-		  - utils2::GetSFUnc(hMuTrkHighPtSF, muEta, true);
-	
-		IsoSFUp= 1. 
-		  + utils2::GetSFUnc(hMuIsoSF, muPt, fabs(muEta), true);
-		IsoSFDw= 1. 
-		  - utils2::GetSFUnc(hMuIsoSF, muPt, fabs(muEta), true);
-
-		/*
-		std::cout << utils2::GetSFUnc(hMuIDSF, muPt, muEta, true)  << " " 
-			  << utils2::GetSFUnc(hMuTrkHighPtSF, muEta, false) << " "
-			  << utils2::GetSFUnc(hMuIsoSF, muPt, muEta, true) << std::endl;
-		*/
-
-              }
-              Eff_ArnePlus = Eff_Arne + (Reco_error_Arne + Iso_error_Arne); 
-              Eff_ArneMinus = Eff_Arne - (Reco_error_Arne + Iso_error_Arne);
-
-              // Not all the muons are coming from W. Some of them are coming from Tau which should not be considered in our estimation.
-              double Prob_Tau_muError, Prob_Tau_muPlus, Prob_Tau_muMinus, Prob_Tau_muError_lowDelphi, Prob_Tau_muPlus_lowDelphi, Prob_Tau_muMinus_lowDelphi;
-	      double Prob_Tau_mu_Nb;double Prob_Tau_mu_Nb_lowDelphi;
-	      double Prob_Tau_mu = hProb_Tau_mu->GetBinContent(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
-	      if (evt->nJets()==2) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet2->GetBinContent( hProb_Tau_mu_nb_njet2->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=3 && evt->nJets()<=4) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet34->GetBinContent( hProb_Tau_mu_nb_njet34->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=5 && evt->nJets()<=6) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet56->GetBinContent( hProb_Tau_mu_nb_njet56->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=7 && evt->nJets()<=8) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet78->GetBinContent( hProb_Tau_mu_nb_njet78->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=9) Prob_Tau_mu_Nb = hProb_Tau_mu_nb_njet9->GetBinContent( hProb_Tau_mu_nb_njet9->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      //Prob_Tau_mu *=Prob_Tau_mu_Nb;
-	      
-	      Prob_Tau_muError = hProb_Tau_mu->GetBinError(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
-              double Prob_Tau_mu_lowDelphi = hProb_Tau_mu_lowDelphi->GetBinContent(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
-	      if (evt->nJets()==2) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet2_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet2_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=3 && evt->nJets()<=4) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet34_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet34_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=5 && evt->nJets()<=6) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet56_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet56_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=7 && evt->nJets()<=8) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet78_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet78_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      if (evt->nJets()>=9) Prob_Tau_mu_Nb_lowDelphi = hProb_Tau_mu_nb_njet9_lowDelphi->GetBinContent( hProb_Tau_mu_nb_njet9_lowDelphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-	      //Prob_Tau_mu_lowDelphi *=Prob_Tau_mu_Nb_lowDelphi;
-
-
-              Prob_Tau_muError_lowDelphi = hProb_Tau_mu_lowDelphi->GetBinError(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT)]);
-	      	      	      
-              Prob_Tau_muPlus=Prob_Tau_mu+Prob_Tau_muError;
-              Prob_Tau_muMinus=Prob_Tau_mu-Prob_Tau_muError;
-              Prob_Tau_muPlus_lowDelphi=Prob_Tau_mu_lowDelphi+Prob_Tau_muError_lowDelphi;
-              Prob_Tau_muMinus_lowDelphi=Prob_Tau_mu_lowDelphi-Prob_Tau_muError_lowDelphi;
-	      //Ahmad33
-              if(TauHadModel<4){Acc=1.;Acc_lowDphi=1.; }
-	      //Ahmad33
-              if(TauHadModel<3)Eff_Arne=1.; 
-	      //Ahmad33
-              if(TauHadModel < 1)Prob_Tau_mu=0; 
-
-
-              int binNum_ProbTauMu = binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()];
-	      if(binNum_ProbTauMu==0){ // protection in case the bin is not defined.
-		Prob_Tau_mu=0.1; Prob_Tau_muError=0.0; 
-		Prob_Tau_mu_lowDelphi=0.1; Prob_Tau_muError_lowDelphi=0.0; 
-	      }
-	      if(Prob_Tau_mu==1){Prob_Tau_mu=0.1;cout << " Warning! Prob_Tau_mu==1 \n ";}
-	      if(Prob_Tau_mu_lowDelphi==1)Prob_Tau_mu_lowDelphi=0.1;
-
-
-              double totWeight=( eventWeight )*1*0.64*(1/(Acc*Eff_Arne))*(1-Prob_Tau_mu);//the 0.64 is because only 64% of tau's decay hadronically. 
-	                                                                                 // Here 0.9 is acceptance and 0.75 is efficiencies of both reconstruction and isolation.
-	      //std::cout<<" ***CH4*** "<< " totWeight "<<totWeight<<endl;
-              double totWeight_lowDphi=eventWeight*1*0.64*(1/(Acc_lowDphi*Eff_Arne))*(1-Prob_Tau_mu_lowDelphi);
-
-              // dilepton contamination
-              if(TauHadModel>=3){
-                if(utils2::IsoTrkModel==0){totWeight*= 1./1.02;totWeight_lowDphi*= 1./1.02;}
-              }
-	      //std::cout<<" METtrigEffCorr "<<METtrigEffCorr<<endl;
-	      //std::cout<<" trigEffCorr "<<trigEffCorr<<endl;
-	      //std::cout<<" NjNbCorr "<<NjNbCorr<<endl;
-	      //std::cout<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;
-	      // trigger efficiency. also lowHT vs highHT selection
-	      //totWeight *= trigEffCorr*NjNbCorr*MuonPtMinCorr;
-	      totWeight *= METtrigEffCorr*trigEffCorr*NjNbCorr*MuonPtMinCorr;	      
-	      //std::cout<<" ***CH5*** "<< " totWeight "<<totWeight<<endl;
-              // if fastsim
-              vector<double> prob;
-              if(fastsim){
-                totWeight *= fastsimWeight*0.99; // 0.99 is the jet id efficiency correction. 
-		//*AR, Mar4,2017--Applying PUweight for signal was commented for Moriond results as Kevin said we are not applying PU weighting to signal since ICHEP.
-		//double puWeight = 
-		//puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
-		//puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->NVtx_(),(int)puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));
-		//                totWeight*= puWeight ;
-                //
-                //double isrWeight = isrcorr.GetCorrection(evt->genParticles_(),evt->genParticles_PDGid_());
-		double isrWeight = isrcorr.GetCorrection(evt->NJetsISR_());
-                totWeight*=isrWeight;
-                //
-                prob = btagcorr.GetCorrections(evt->JetsLorVec_(),evt->Jets_partonFlavor_(),evt->HTJetsMask_());
-		/*
-		if (totWeight>1. && l==1 && m==0) {
-		  printf("puWeight=%8.1f, isrWeight=%8.1f, nvtx=%8d, trueNint=%5.1f, Nint=%5d\n",
-			 puWeight,isrWeight,evt->NVtx_(),evt->TrueNumInteractions_(),evt->NumInteractions_());
-		}
-*/
-              } // fastsim ends
-
-              weightEffAcc = totWeight;
-
-              // if bootstrap is on weigh the events such that 
-              // the total number of events remains the same.
-              // That means the sum over bootstrapWeights = 1
-              // Our templates are made such that area under them = 1
-
-              if(utils2::bootstrap){
-                double bootstrapWeight = utils->GetBinContent(muPt,vec_resp,l) * utils->GetBinWidth(muPt,vec_resp,l);
-                if(UncerLoop[iuncer]=="templatePlus"){
-                  bootstrapWeight = utils->GetBinContent(muPt,vec_respUp,l) * utils->GetBinWidth(muPt,vec_respUp,l);
-                }
-                else if(UncerLoop[iuncer]=="templateMinus"){
-                  bootstrapWeight = utils->GetBinContent(muPt,vec_respDown,l) * utils->GetBinWidth(muPt,vec_respDown,l);
-                }
-                totWeight*=bootstrapWeight;
-                totWeight*=Prob_Btag;
-                totWeight_lowDphi*=bootstrapWeight;
-                totWeight_lowDphi*=Prob_Btag;
-              }
-
-              int binNum_MT = binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()];
-	      //if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
-              double mtWeightError, mtWeightPlus, mtWeightMinus, mtWeightError_lowDphi, mtWeightPlus_lowDphi, mtWeightMinus_lowDphi;
-              double mtWeight = hMT->GetBinContent(binNum_MT);
-              mtWeightError = hMT->GetBinError(binNum_MT);
-              double mtWeight_lowDphi = hMT_lowDphi->GetBinContent(binNum_MT);
-              mtWeightError_lowDphi = hMT_lowDphi->GetBinError(binNum_MT);
-	      if(binNum_MT==0){mtWeight_lowDphi=0.;mtWeightError_lowDphi=0.;}
-
-	      if(binNum_MT==0){ // protection in case the bin is not defined.
-		mtWeight        =0.9;mtWeightError=0.;
-		mtWeight_lowDphi=0.9;mtWeightError_lowDphi=0.;
-	      }
-	      if(mtWeight==0){mtWeight=0.9;cout << " Warning! mtWeight==0 \n ";}
-	      if(mtWeight_lowDphi==0)mtWeight_lowDphi=0.9;
-              if(utils2::CalcMT){
-		mtWeight = 1.;mtWeightError=0.;
-		mtWeight_lowDphi = 1.;mtWeightError_lowDphi=0.;	
-	      }	      
-
+	      bool PassIso2=false;
               // Apply MT efficiency
-              if(utils2::applyMT){
-
-                mtWeightPlus=mtWeight+mtWeightError;
-                mtWeightMinus=mtWeight-mtWeightError;
-                mtWeightPlus_lowDphi=mtWeight_lowDphi+mtWeightError_lowDphi;
-                mtWeightMinus_lowDphi=mtWeight_lowDphi-mtWeightError_lowDphi;
-
-                if(!utils2::CalcMT){totWeight/= mtWeight;totWeight_lowDphi/= mtWeight_lowDphi;weightEffAcc/= mtWeight;}
-                else if(eventN < 100 ) cout<< "warning! MT is not being applied. Turn off CalcMT in utils2\n";
-
-              }
-
-              if (l==1 && m==0){                 // Fill this only once per event l=[1,nLoops] m=[0,1]
-                cutflow_preselection->Fill(9.,eventWeight); // All preselection
-              }
-              cutflow_preselection->Fill(10.,totWeight); // All preselection
-
-              double IsoTrkWeight,IsoTrkWeightError,IsoTrkWeightPlus,IsoTrkWeightMinus, IsoTrkWeight_lowDphi,IsoTrkWeightError_lowDphi,IsoTrkWeightPlus_lowDphi,IsoTrkWeightMinus_lowDphi;
-              bool PassIso2=false;
-              double searchWeight = totWeight;
-	      //std::cout<<" ***CH6*** "<< " searchWeight "<<searchWeight<<endl;
               // applyIsoTrk here 
               if(utils2::applyIsoTrk){
 
                 // Determine which Iso model is chosen
                 // and apply the neccessary cuts 
                 if(utils2::IsoTrkModel==0)PassIso2=true;
-                else if(utils2::IsoTrkModel==1){
-                  int nIsoElec=0, nIsoMu=0, nIsoPion=0;
-                  int IsoElecIdx=-1,IsoMuIdx=-1,IsoPionIdx=-1;
-                  for(int k=0;k<evt->IsoElecPtVec_().size();k++){
-                    if(utils->findMatchedObject(IsoElecIdx,muEta,muPhi,evt->IsoElecPtVec_(),evt->IsoElecEtaVec_(),evt->IsoElecPhiVec_(),0.1,verbose))
-                      continue;
-                    nIsoElec++;
-                  }
-                  for(int k=0;k<evt->IsoMuPtVec_().size();k++){
-                    if(utils->findMatchedObject(IsoMuIdx,muEta,muPhi,evt->IsoMuPtVec_(),evt->IsoMuEtaVec_(),evt->IsoMuPhiVec_(),0.1,verbose))
-                      continue;
-                    nIsoMu++;
-                  }
-                  for(int k=0;k<evt->IsoPionPtVec_().size();k++){
-                    if(utils->findMatchedObject(IsoPionIdx,muEta,muPhi,evt->IsoPionPtVec_(),evt->IsoPionEtaVec_(),evt->IsoPionPhiVec_(),0.1,verbose))
-                      continue;
-                    nIsoPion++;
-                  }
-                  if(nIsoElec==0&&nIsoMu==0&&nIsoPion==0)PassIso2=true; 
-                }
-
-                int binNum = binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()];
-                if(utils2::IsoTrkModel==0){
-                  IsoTrkWeight = hIsoEff->GetBinContent(binNum);
-                  IsoTrkWeightError= hIsoEff->GetBinError(binNum);
-
-		  //KH
-		  double IsoTrkVetoEff_Nb;
-		  double IsoTrkVetoEff_Nb_Error;
-		  if (evt->nJets()==2) IsoTrkVetoEff_Nb = hIsoEff_NbNjet2->GetBinContent( hIsoEff_NbNjet2->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		  if (evt->nJets()>=3 && evt->nJets()<=4) IsoTrkVetoEff_Nb = hIsoEff_NbNjet34->GetBinContent( hIsoEff_NbNjet34->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		  if (evt->nJets()>=5 && evt->nJets()<=6) IsoTrkVetoEff_Nb = hIsoEff_NbNjet56->GetBinContent( hIsoEff_NbNjet56->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		  if (evt->nJets()>=7 && evt->nJets()<=8) IsoTrkVetoEff_Nb = hIsoEff_NbNjet78->GetBinContent( hIsoEff_NbNjet78->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		  if (evt->nJets()>=9                   ) IsoTrkVetoEff_Nb = hIsoEff_NbNjet9->GetBinContent(  hIsoEff_NbNjet9->FindBin(  utils2::findBin_NBtag(NewNB) ) );
-		  IsoTrkWeight *= IsoTrkVetoEff_Nb;
-		  //std::cout<<" ***CH7*** "<< " IsoTrkeight "<<IsoTrkWeight<<endl;
-		  /*
-		  std::cout << "hIsoEff_Nb: " << newNJet << " "  
-			    << NewNB << " " 
-			    << utils2::findBin_NBtag(NewNB) << " "
-		            << IsoTrkVetoEff_Nb << std::endl;
-		  */
-
-                  if(IsoTrkWeight==0){
-		    IsoTrkWeight=0.6; 
-		    //cout << "Warning! IsoTrkWeight==0 \n ";
-		    //std::cout << newNJet  << " " << NewNB << " " << newHT << " " << newMHT << std::endl; 
-		  }
-                }
-                else if(utils2::IsoTrkModel==1){
-                  IsoTrkWeight = hIsoEff2->GetBinContent(binNum);
-                  if(IsoTrkWeight==0)IsoTrkWeight=0.95;
-                }
-                else{
-                  cout << "unknown IsoTrkModel \n ";
-                  return 2;
-                }
-                IsoTrkWeightPlus = IsoTrkWeight + IsoTrkWeightError;
-                IsoTrkWeightMinus = IsoTrkWeight - IsoTrkWeightError;
-
-                IsoTrkWeight_lowDphi = hIsoEff_lowDphi->GetBinContent(binNum);
-                IsoTrkWeightError_lowDphi = hIsoEff_lowDphi->GetBinError(binNum);
-
-                if(IsoTrkWeight_lowDphi==0)IsoTrkWeight_lowDphi=0.6;
-                IsoTrkWeightPlus_lowDphi = IsoTrkWeight_lowDphi + IsoTrkWeightError_lowDphi;
-                IsoTrkWeightMinus_lowDphi = IsoTrkWeight_lowDphi - IsoTrkWeightError_lowDphi;
-
-		double IsoTrkVetoEff_Nb;
-		double IsoTrkVetoEff_Nb_Error;
-
-		if (evt->nJets()==2) IsoTrkVetoEff_Nb = hIsoEff_NbNjet2_lowDphi->GetBinContent( hIsoEff_NbNjet2_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=3 && evt->nJets()<=4) IsoTrkVetoEff_Nb = hIsoEff_NbNjet34_lowDphi->GetBinContent( hIsoEff_NbNjet34_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=5 && evt->nJets()<=6) IsoTrkVetoEff_Nb = hIsoEff_NbNjet56_lowDphi->GetBinContent( hIsoEff_NbNjet56_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=7 && evt->nJets()<=8) IsoTrkVetoEff_Nb = hIsoEff_NbNjet78_lowDphi->GetBinContent( hIsoEff_NbNjet78_lowDphi->FindBin( utils2::findBin_NBtag(NewNB) ) );
-		if (evt->nJets()>=9                   ) IsoTrkVetoEff_Nb = hIsoEff_NbNjet9_lowDphi->GetBinContent(  hIsoEff_NbNjet9_lowDphi->FindBin(  utils2::findBin_NBtag(NewNB) ) );
-		IsoTrkWeight_lowDphi *= IsoTrkVetoEff_Nb;
-
-		/*
-		std::cout << "hIsoEff_Nb(lowDphi): " << newNJet << " "  
-			  << NewNB << " " 
-			  << utils2::findBin_NBtag(NewNB) << " "
-			  << IsoTrkVetoEff_Nb << std::endl;
-		*/
-
-                searchWeight = totWeight*IsoTrkWeight;
-                weightEffAccForEvt = weightEffAcc*IsoTrkWeight;
-
-              }
-              else{  // utils2::applyIsoTrk
-                searchWeight = totWeight; 
-                PassIso2=true;
+	
               }
 
-
-              //We would like to know whether in low/delPhi region
-              //muon is from non-W sources? This info is especially
-              //needed when working out MT efficiency
-              bool isMuFromNonW = false;
-              if(GenMuIdx<0)isMuFromNonW=true;
-              else if(evt->GenMuFromTauVec_()[GenMuIdx]==1)isMuFromNonW=true; 
-              bool Pass_MuMomForMT = false;
-              if(utils2::CalcMT){
-                if(!isMuFromNonW)Pass_MuMomForMT=true;
-              }
-              else Pass_MuMomForMT=true;
-            
-
-              // Apply low delta phi region
-              if(sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->low_dphi(newNJet,newDphi1,newDphi2,newDphi3,newDphi4) && sel->Njet_4(newNJet)  ){
-                if(!utils2::bootstrap){
-                  // Non W muons calculation
-                  if(!isData){
-                    hAll_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-		    if (evt->nJets()==2) hAll_mu_nb_njet2_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=3 && evt->nJets()<=4) hAll_mu_nb_njet34_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=5 && evt->nJets()<=6) hAll_mu_nb_njet56_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=7 && evt->nJets()<=8) hAll_mu_nb_njet78_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=9) hAll_mu_nb_njet9_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-
-                    if(GenMuIdx<0){
-		      hNonW_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-		      if (evt->nJets()==2) hNonW_mu_nb_njet2_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=9) hNonW_mu_nb_njet9_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    }
-                    else if(evt->GenMuFromTauVec_()[GenMuIdx]==1){
-		      hNonW_mu_lowDelphi->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-		      if (evt->nJets()==2) hNonW_mu_nb_njet2_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=9) hNonW_mu_nb_njet9_lowDelphi->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    }
-                  }
-                }
-              }
-
-
-              // Apply baseline cuts
-              if(sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->dphi(newNJet,newDphi1,newDphi2,newDphi3,newDphi4) && sel->Njet_4(newNJet) ){
-
-                if(!utils2::bootstrap){
-                  // The followings doesn't make sense if bootstrap is on!
-                  IsoElec_all->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  if(evt->nIsoElec()==0)IsoElec_pass->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  IsoMu_all->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  if(evt->nIsoMu()==0)IsoMu_pass->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  IsoPion_all->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  if(evt->nIsoPion()==0)IsoPion_pass->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  
-                  // Non W muons calculation
-                  if(!isData){ 
-                    hAll_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-		    if (evt->nJets()==2) hAll_mu_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=3 && evt->nJets()<=4) hAll_mu_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=5 && evt->nJets()<=6) hAll_mu_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=7 && evt->nJets()<=8) hAll_mu_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    if (evt->nJets()>=9) hAll_mu_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-
-                    if(GenMuIdx<0){
-		      hNonW_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-		      if (evt->nJets()==2) hNonW_mu_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=9) hNonW_mu_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-                    }
-		    else if(evt->GenMuFromTauVec_()[GenMuIdx]==1){
-		      hNonW_mu->Fill(binMap_ForIso[utils2::findBin_ForIso(newNJet,newHT,newMHT).c_str()],eventWeight);
-		      if (evt->nJets()==2) hNonW_mu_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=3 && evt->nJets()<=4) hNonW_mu_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=5 && evt->nJets()<=6) hNonW_mu_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=7 && evt->nJets()<=8) hNonW_mu_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		      if (evt->nJets()>=9) hNonW_mu_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),eventWeight );
-		    }
-		  }
-                  // calculate trigger efficiency 
-                  trig_all->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  if(trigPass)trig_pass->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight); 
-                }//end of "No" bootstrap
-
-
-
-                if(PassIso2){
-
-                  // to see the dileptonic contamination
-                  if(!isData && !utils2::bootstrap){
-                    dilepton_all->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                    if(evt->GenMuPtVec_().size()>1 || evt->GenElecPtVec_().size()>0)dilepton_pass->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  }
-
-                  // Fill Search bin histogram 
-                  // the if condition will be effective only if 
-                  // MTCalc is on and mu is from nonW mom
-                  // otherwise it always pass
-                  if(Pass_MuMomForMT){
-		    searchH_evt->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],searchWeight);
-		    if (evt->nJets()==2)searchH_nb_njet2->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=3 && evt->nJets()<=4)searchH_nb_njet34->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=5 && evt->nJets()<=6)searchH_nb_njet56->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=7 && evt->nJets()<=8)searchH_nb_njet78->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=9)searchH_nb_njet9->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		  }
-                  if(fastsim){
-                    for(int iii=0;iii< prob.size();iii++){
-                      searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*prob[iii]);
-                      // Fill QCD histograms
-                      QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*prob[iii]);
-                    }
-                  }
-                  else{
-		    //if(searchWeight==0)
-		    //std::cout<<"search region "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;  
-		    
-		      if(isData && HTRatiocut>2.0){
-			std::cout<<"eventN "<<eventN<<" HTRatiocut "<<HTRatiocut<<"HT ratiocut satisfied"<<endl;
-			continue;
-		      }
-
-		      searchH_b_evt->Fill( binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight);
-		    
-		      //for (int i=1;i<=174;i++){
-		      //searchH_b->GetXaxis()->SetBinLabel(i,utils2::RenameBins(i));
-		      //}
-		    if(newNJet>=3 && newNJet<=4 && newHT>=350 && newHT<500 && newMHT>=350 && newMHT<500){
-		      MuPt_NJ34->Fill(muPt);
-		      MuEta_NJ34->Fill(muEta);
-		      MuPhi_NJ34->Fill(muPhi);
-		    }
-		    if(newNJet>=5 && newNJet<=6 && newHT>=350 && newHT<500 && newMHT>=350 && newMHT<500){
-		      MuPt_NJ56->Fill(muPt);
-		      MuEta_NJ56->Fill(muEta);
-		      MuPhi_NJ56->Fill(muPhi);
-		    }
-		    
-        //KH-Feb2016-starts
-		    double newHT_tmp,newMHT_tmp,newNJet_tmp,NewNB_tmp;
-		    newHT_tmp=newHT; newMHT_tmp=newMHT; newNJet_tmp=newNJet; NewNB_tmp=NewNB;
-                    if (newHT_tmp>1500.) newHT_tmp=1499.;
-		    if (newMHT_tmp>1200.) newMHT_tmp=1199.;
-		    if (newNJet_tmp>=13) newNJet_tmp=12;
-		    if (NewNB_tmp>=4) NewNB_tmp=3.;
-		    hSearchBinHT_evt->Fill( newHT_tmp , searchWeight);
-		    hSearchBinMHT_evt->Fill( newMHT_tmp , searchWeight);
-		    hSearchBinNjets_evt->Fill( newNJet_tmp , searchWeight);
-		    hSearchBinNb_evt->Fill( NewNB_tmp , searchWeight);
-		    //KH-Feb2016-ends
-		    
-		    // Fill QCD histograms
-		    //QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight);
-		    double checkNan=searchWeight*factor_Up_NjNb;	
-	//if(checkNan>1.)
-		    
-	//std::cout<<"QCD_Up "<<" eventN "<<eventN<<" searchWeight "<<searchWeight<<" factor_Up_NjNb "<<factor_Up_NjNb<<" IsoTrkWeight "<<IsoTrkWeight<<" mtWeight "<<mtWeight<<" Prob_Btag "<<Prob_Btag<< " METtrigEffCorr " << METtrigEffCorr<<" trigEffCorr "<<trigEffCorr<<" NjNbCorr "<<NjNbCorr<<" MuonPtMinCorr "<<MuonPtMinCorr<<endl;
-		    
-		    QCD_Up_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*factor_Up_NjNb);
-		  }//end of else
-                  if(NewNB==0)hPredHTMHT0b_evt->Fill( binMap_HTMHT[utils2::findBin_HTMHT(newHT,newMHT).c_str()],searchWeight);  
-                  if(NewNB >0)hPredHTMHTwb_evt->Fill( binMap_HTMHT[utils2::findBin_HTMHT(newHT,newMHT).c_str()],searchWeight);
-                  hPredNJetBins_evt->Fill(newNJet,searchWeight);
-                  hPredNbBins_evt->Fill( NewNB,searchWeight);
-
-
-                  
-                  // Fill correlation histograms
-                  hCorSearch_evt->Fill(binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],searchWeight);
-                  hCorHT_evt->Fill(evt->ht(),newHT,searchWeight);
-                  hCorMHT_evt->Fill(evt->mht(),newMHT,searchWeight);
-                  hCorNJet_evt->Fill(evt->nJets(),newNJet,searchWeight);
-                  hCorNBtag_evt->Fill(evt->nBtags(),NewNB,searchWeight);
-
-                  hCorSearch_b_evt->Fill(binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight);
-
-                  hCorSearch_noW_evt->Fill(binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()]);
-                  hCorHT_noW_evt->Fill(evt->ht(),newHT);
-                  hCorMHT_noW_evt->Fill(evt->mht(),newMHT);
-                  hCorNJet_noW_evt->Fill(evt->nJets(),newNJet);
-                  hCorNBtag_noW_evt->Fill(evt->nBtags(),NewNB);
-                  searchH_b_noWeight_evt->Fill( binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()]);
-                  hCorSearch_b_noW_evt->Fill(binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()]);
-
-                } // passIso2
-
-              }   // baseline cut
-
-
-              // Fill QCD histogram
-              // Fill the histogram in the inverted delta phi region
-              if(sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->Njet_4(newNJet) && sel->low_dphi(newNJet,newDphi1,newDphi2,newDphi3,newDphi4)  ){
-                double searchWeight = totWeight/(1-Prob_Tau_mu)*(1-Prob_Tau_mu_lowDelphi)*mtWeight/mtWeight_lowDphi;
-
-                // applyIsoTrk here 
-                if(utils2::applyIsoTrk){
-                  searchWeight = totWeight/(1-Prob_Tau_mu)*(1-Prob_Tau_mu_lowDelphi)*IsoTrkWeight_lowDphi*mtWeight/mtWeight_lowDphi*Acc/Acc_lowDphi;
-                }
-                else searchWeight = totWeight/(1-Prob_Tau_mu)*(1-Prob_Tau_mu_lowDelphi)*mtWeight/mtWeight_lowDphi*Acc/Acc_lowDphi;
-
-
-                if(PassIso2){
-
-                  // to see the dileptonic contamination
-                  if(!isData && !utils2::bootstrap){
-                    dilepton_all_lowDphi->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                    if(evt->GenMuPtVec_().size()>1 || evt->GenElecPtVec_().size()>0)dilepton_pass_lowDphi->Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eventWeight);
-                  }
-
-                  // Fill Search bin histogram
-                  // the if condition will be effective only if
-                  // MTCalc is on and mu is from nonW mom
-                  // otherwise it always pass
-                  if(Pass_MuMomForMT){
-		    searchH_evt_lowDphi->Fill( binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],searchWeight);
-		    if (evt->nJets()==2)searchH_nb_njet2_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=3 && evt->nJets()<=4)searchH_nb_njet34_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=5 && evt->nJets()<=6)searchH_nb_njet56_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=7 && evt->nJets()<=8)searchH_nb_njet78_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		    if (evt->nJets()>=9)searchH_nb_njet9_lowDphi->Fill( utils2::findBin_NBtag(evt->nBtags()),searchWeight);
-		  }
-		  if (searchWeight>10000.){
-		    std::cout << "searchWeight is too large." << std::endl;
-		    std::cout << eventWeight << " " << searchWeight << " " 
-			      << (1-Prob_Tau_mu)  << " " 
-			      << mtWeight_lowDphi << " " 
-			      << Acc_lowDphi      << " "
-			      << newHT << " " 
-			      << newMHT << " " 
-			      << newNJet << " " 
-			    << std::endl;
-		  }
-                  // Fill QCD histograms
-                  if(fastsim){
-                    for(int iii=0;iii< prob.size();iii++){
-		      QCD_Low_evt->Fill(binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*prob[0]);
-                    }
-                  }
-                  else QCD_Low_evt->Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],searchWeight*factor_Low_NjNb);
-                }
-
-              }
-
-
-              //load totWeightMap
-	      // no error propagation
-	      totWeightMap["allEvents"]=totWeight;
-	      totWeightMap_lowDphi["allEvents"]=totWeight_lowDphi;
-	      if(StudyErrorPropag){
-		// b mistag error propagation
-		totWeightMap["BMistagPlus"]=totWeight;
-		totWeightMap["BMistagMinus"]=totWeight;
-		if(utils2::bootstrap){
-		  totWeightMap["BMistagPlus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap["BMistagPlus"]*=Prob_Btag_Plus;
-		  totWeightMap["BMistagMinus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap["BMistagMinus"]*=Prob_Btag_Minus;
-		}
-		totWeightMap_lowDphi["BMistagPlus"]=totWeight_lowDphi;
-		totWeightMap_lowDphi["BMistagMinus"]=totWeight_lowDphi;
-		if(utils2::bootstrap){
-		  totWeightMap_lowDphi["BMistagPlus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap_lowDphi["BMistagPlus"]*=Prob_Btag_Plus;
-		  totWeightMap_lowDphi["BMistagMinus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap_lowDphi["BMistagMinus"]*=Prob_Btag_Minus;
-		}
-		// Acc 
-		totWeightMap["AccPlus"]=totWeight*Acc/AccPlus;
-		totWeightMap["AccMinus"]=totWeight*Acc/AccMinus;
-		totWeightMap_lowDphi["AccPlus"]=totWeight_lowDphi*Acc_lowDphi/AccPlus_lowDphi;
-		totWeightMap_lowDphi["AccMinus"]=totWeight_lowDphi*Acc_lowDphi/AccMinus_lowDphi;         
-		// Acc Systematics
-		totWeightMap["AccSysPlus"]=totWeight*Acc/AccSysPlus;
-		totWeightMap["AccSysMinus"]=totWeight*Acc/AccSysMinus;
-		totWeightMap_lowDphi["AccSysPlus"]=totWeight_lowDphi*Acc_lowDphi/AccSysPlus_lowDphi;
-		totWeightMap_lowDphi["AccSysMinus"]=totWeight_lowDphi*Acc_lowDphi/AccSysMinus_lowDphi; 
-		totWeightMap["ScaleAccSysPlus"]=totWeight*Acc/ScaleAccSysPlus;
-		totWeightMap["ScaleAccSysMinus"]=totWeight*Acc/ScaleAccSysMinus;
-		totWeightMap_lowDphi["ScaleAccSysPlus"]=totWeight_lowDphi*Acc_lowDphi/ScaleAccSysPlus_lowDphi;
-		totWeightMap_lowDphi["ScaleAccSysMinus"]=totWeight_lowDphi*Acc_lowDphi/ScaleAccSysMinus_lowDphi;
-		// Iso
-		totWeightMap["IsoPlus"]=totWeight;  
-		totWeightMap["IsoMinus"]=totWeight;
-		totWeightMap_lowDphi["IsoPlus"]=totWeight_lowDphi;
-		totWeightMap_lowDphi["IsoMinus"]=totWeight_lowDphi;
-		// MT
-		totWeightMap["MTPlus"]=totWeight*mtWeight/mtWeightPlus;
-		totWeightMap["MTMinus"]=totWeight*mtWeight/mtWeightMinus;
-		totWeightMap_lowDphi["MTPlus"]=totWeight_lowDphi*mtWeight_lowDphi/mtWeightPlus_lowDphi;
-		totWeightMap_lowDphi["MTMinus"]=totWeight_lowDphi*mtWeight_lowDphi/mtWeightMinus_lowDphi;
-		// MuFromTau
-		totWeightMap["MuFromTauPlus"]=totWeight/(1-Prob_Tau_mu)*(1-Prob_Tau_muPlus);
-		totWeightMap["MuFromTauMinus"]=totWeight/(1-Prob_Tau_mu)*(1-Prob_Tau_muMinus);
-		totWeightMap_lowDphi["MuFromTauPlus"]=totWeight_lowDphi/(1-Prob_Tau_mu_lowDelphi)*(1-Prob_Tau_muPlus_lowDelphi);
-		totWeightMap_lowDphi["MuFromTauMinus"]=totWeight_lowDphi/(1-Prob_Tau_mu_lowDelphi)*(1-Prob_Tau_muMinus_lowDelphi);
-		// Iso & Reco effieciency (From Arne)
-		totWeightMap["MuRecoIsoPlus"]=totWeight*Eff_Arne/Eff_ArnePlus;
-		totWeightMap["MuRecoIsoMinus"]=totWeight*Eff_Arne/Eff_ArneMinus;
-		totWeightMap_lowDphi["MuRecoIsoPlus"]=totWeight_lowDphi*Eff_Arne/Eff_ArnePlus;
-		totWeightMap_lowDphi["MuRecoIsoMinus"]=totWeight_lowDphi*Eff_Arne/Eff_ArneMinus;
-		// Mistag Rate
-		totWeightMap["BMistag_statPlus"]=totWeight;
-		totWeightMap["BMistag_statMinus"]=totWeight;
-		if(utils2::bootstrap){
-		  totWeightMap["BMistagPlus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap["BMistagPlus"]*=Prob_Btag_Plus_stat;
-		  totWeightMap["BMistagMinus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap["BMistagMinus"]*=Prob_Btag_Minus_stat;
-		}
-		totWeightMap_lowDphi["BMistag_statPlus"]=totWeight_lowDphi;
-		totWeightMap_lowDphi["BMistag_statMinus"]=totWeight_lowDphi;
-		if(utils2::bootstrap){
-		  totWeightMap_lowDphi["BMistag_statPlus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap_lowDphi["BMistag_statPlus"]*=Prob_Btag_Plus_stat;
-		  totWeightMap_lowDphi["BMistag_statMinus"]/=Prob_Btag;// Prob_Btag was multiplied before. This is to cancel it.
-		  totWeightMap_lowDphi["BMistag_statMinus"]*=Prob_Btag_Minus_stat;
-		}
-		// Tau branching ratio
-		totWeightMap["Tau_BrRatio_Plus"]=totWeight/0.64*0.65;
-		totWeightMap["Tau_BrRatio_Minus"]=totWeight/0.64*0.63;   
-		totWeightMap_lowDphi["Tau_BrRatio_Plus"]=totWeight_lowDphi/0.64*0.65;
-		totWeightMap_lowDphi["Tau_BrRatio_Minus"]=totWeight_lowDphi/0.64*0.63;
-		// Dileptonic
-		if(utils2::IsoTrkModel==0){
-		  totWeightMap["DileptonPlus"]=  totWeight* 1.02/1.04;
-		  totWeightMap["DileptonMinus"]=  totWeight* 1.02/1.0;
-		  totWeightMap_lowDphi["DileptonPlus"]=totWeight_lowDphi* 1.02/1.04;
-		  totWeightMap_lowDphi["DileptonMinus"]=totWeight_lowDphi* 1.02/1.0;
-		}
-		else{
-		  totWeightMap["DileptonPlus"]=totWeight;
-		  totWeightMap["DileptonMinus"]=totWeight;
-		  totWeightMap_lowDphi["DileptonPlus"]=totWeight_lowDphi;
-		  totWeightMap_lowDphi["DileptonMinus"]=totWeight_lowDphi;
-		}
-		// Reco & Iso systetmatics
-		totWeightMap["RecoSysPlus"]=totWeight/IdSFUp;// this is Eff_Arne/1.1*Eff_Arne
-		totWeightMap["RecoSysMinus"]=totWeight/IdSFDw;
-		totWeightMap_lowDphi["RecoSysPlus"]=totWeight_lowDphi/IdSFUp;
-		totWeightMap_lowDphi["RecoSysMinus"]=totWeight_lowDphi/IdSFDw;
-		totWeightMap["IsoSysPlus"]=totWeight/IsoSFUp;// this is Eff_Arne/1.1*Eff_Arne
-		totWeightMap["IsoSysMinus"]=totWeight/IsoSFDw;
-		totWeightMap_lowDphi["IsoSysPlus"]=totWeight_lowDphi/IsoSFUp;
-		totWeightMap_lowDphi["IsoSysMinus"]=totWeight_lowDphi/IsoSFDw;
-	      } // StudyErrorPropag ends
-
-
-              //build and array that contains the quantities we need a histogram for. Here order is important and must be the same as RA2nocutvec
-              double eveinfvec[] = {totWeight, 1. , newHT, newHT, evt->ht(), newMHT,newMHT, evt->mht()
-                                   ,newMet, evt->met(), mindpn,newDphi1, newDphi2, newDphi3, newDphi4
-                                   ,(double) newNJet, (double)NewNB, muPt
-                                   ,muEta, muPhi, simTauJetPt_xy,simTauJetPhi_ForPlotting,tauJet_mht_dlePhi_forPlotting};
-
-              bool pass0=false;
-              if(TauHadModel >= 1)pass0=true;
-              else if(MuFromTauVec[0]==0)pass0=true; // Ahmad33
-              if(pass0){
-
-                //loop over all the different backgrounds: "allEvents", "Wlv", "Zvv"
-                for(map<string, map<string , vector<TH1D> > >::iterator itt=map_map_evt.begin(); itt!=map_map_evt.end();itt++){//this will be terminated after the cuts
-                  eveinfvec[0] = totWeightMap[itt->first];
-                  ////determine what type of background should pass
-                  if(true){//we can apply extra selection for each eventType here
-
-                    //Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts//Cuts
-
-                    //////loop over cut names and fill the histograms
-                    for(map<string , vector<TH1D> >::iterator ite=cut_histvec_map.begin(); ite!=cut_histvec_map.end();ite++){
-                
-                      //To save time we only write few directories when calcing not main events
-                      //if(subSampleKey.find("template")!=string::npos && (ite->first!="delphi" && ite->first!="low_Dphi" ))continue; 
-
-                      //To save cpu we neglect some of early selections
-          /*
-                      if(ite->first=="PreSel" || ite->first=="nolep" || ite->first=="ht_500" 
-                          || ite->first=="Njet_4" || ite->first=="isoElec" || ite->first=="isoMu" || ite->first=="nolep"
-                        )continue;
-*/
-                      // Apply IsoTrkVeto after PreSel, nolep, Njet_4, ht_500 and mht_200
-                      if(ite->first!="PreSel" && ite->first!="nolep"&&ite->first!="ht_base"
-			 &&ite->first!="mht_base"&&ite->first!="Njet_base" 
-                         && utils2::applyIsoTrk){            
-                        if(!PassIso2)continue;
-
-                        if(itt->first=="IsoPlus") eveinfvec[0] = totWeightMap[itt->first]*IsoTrkWeightPlus;
-                        else if(itt->first=="IsoMinus") eveinfvec[0] = totWeightMap[itt->first]*IsoTrkWeightMinus;
-                        else eveinfvec[0] = totWeightMap[itt->first]*IsoTrkWeight; 
-             
-                      } 
-                      else eveinfvec[0] = totWeightMap[itt->first];
-
-                      if(ite->first=="low_Dphi"){
-                        if(utils2::applyIsoTrk){
-                          if(itt->first=="IsoPlus")eveinfvec[0] = totWeightMap_lowDphi[itt->first]*IsoTrkWeightPlus_lowDphi;
-                          else if(itt->first=="IsoMinus")eveinfvec[0] = totWeightMap_lowDphi[itt->first]*IsoTrkWeightMinus_lowDphi;
-                          else eveinfvec[0] = totWeightMap_lowDphi[itt->first]*IsoTrkWeight_lowDphi;
-                        }
-                        else eveinfvec[0] = totWeightMap_lowDphi[itt->first];
-                      }
-
-                      if(ite->first=="isoPion" || 
-			 ite->first=="NJet2" || ite->first=="NJet34" || ite->first=="NJet56" || 
-			 ite->first=="NJet7up" ||
-			 ite->first=="NJet34_MHT350" || ite->first=="NJet56_MHT350"){
-                        if(utils2::applyIsoTrk){
-                          eveinfvec[0] = totWeightMap[itt->first]*IsoTrkWeight;
-                          if(sel->low_dphi(newNJet,newDphi1,newDphi2,newDphi3,newDphi4))eveinfvec[0] = totWeightMap_lowDphi[itt->first]*IsoTrkWeight_lowDphi;
-                        }
-                        else{
-                          eveinfvec[0] = totWeightMap[itt->first];
-                          if(sel->low_dphi(newNJet,newDphi1,newDphi2,newDphi3,newDphi4))eveinfvec[0] = totWeightMap_lowDphi[itt->first];
-                        }
-                      }
-                      if(ite->first=="mht_base"){
-                        eveinfvec[0] = totWeightMap[itt->first];
-                        if(sel->low_dphi(newNJet,newDphi1,newDphi2,newDphi3,newDphi4))eveinfvec[0] = totWeightMap_lowDphi[itt->first];
-                      }
-
-                      if(sel->checkcut_HadTau(ite->first,newHT,newMHT,newDphi1,newDphi2,newDphi3,newDphi4,newNJet,NewNB,evt->nLeptons(),evt->nIsoElec(),evt->nIsoMu(),evt->nIsoPion())==true){
-
-                        histobjmap[ite->first].fill(Nhists,&eveinfvec[0] ,&itt->second[ite->first][0]);
-
-                        map_map_evt_search[itt->first][ite->first][0].Fill(binMap[utils2::findBin_NoB(newNJet,newHT,newMHT).c_str()],eveinfvec[0]);//searchH_
-                        map_map_evt_search[itt->first][ite->first][1].Fill( binMap_b[utils2::findBin(newNJet,NewNB,newHT,newMHT).c_str()],eveinfvec[0]);//searchH_b_
-                        map_map_evt_search[itt->first][ite->first][2].Fill( binMap_QCD[utils2::findBin_QCD(newNJet,NewNB,newHT,newMHT).c_str()],eveinfvec[0]);  // QCD_
-                        
-                        
-                      }
-
-                    }//end of loop over cut names
-
-                    ////EndOfCuts//EndOfCuts//EndOfCuts//EndOfCuts//EndOfCuts//EndOfCuts//EndOfCuts//EndOfCuts//EndOfCuts//EndOfCuts
-                    
-                  }//end of bg_type determination
-                }//end of loop over all the different backgrounds: "allEvents", "Wlv", "Zvv"
-              } //Ahmad33
+        
             } // end of Btag bootstrap
           } // end of bootstrapping
 
         } // End if exactly one muon
-
-        
-        // Studying weights
-        for (int ibin=0; ibin<searchH_b_evt->GetNbinsX()+2; ibin++){
-          if (searchH_b_evt->GetBinContent(ibin)>0.){
-            double fullWeight = searchH_b_evt->GetBinContent(ibin);
-            hWeightForSearchBin->Fill(weightEffAccForEvt,ibin,fullWeight);
-            hWeight2ForSearchBin->Fill(weightEffAccForEvt,ibin);
-            hWeight3ForSearchBin->Fill(fullWeight,ibin,fullWeight);
-            hWeight4ForSearchBin->Fill(fullWeight,ibin);
-            prWeightForSearchBin->Fill(ibin,weightEffAccForEvt,fullWeight);
-            prWeight2ForSearchBin->Fill(ibin,weightEffAccForEvt);
-            prWeight3ForSearchBin->Fill(ibin,fullWeight,fullWeight);
-            prWeight4ForSearchBin->Fill(ibin,fullWeight);
-          }
-        }
-
-  //KH-Feb2016-starts - add histograms for correlation studies
-  //These lines have to come before HistogramFillForEventTH1,
-  //because HistogramFillForEventTH1 resets XXXX_evt histograms
-        bootstrapUtils::HistogramFillForEventCorrelation(hSearchBinCorr, searchH_b_evt);
-        bootstrapUtils::HistogramFillForEventCorrelation(hSearchBinCorrHT, hSearchBinHT_evt);
-        bootstrapUtils::HistogramFillForEventCorrelation(hSearchBinCorrMHT, hSearchBinMHT_evt);
-        bootstrapUtils::HistogramFillForEventCorrelation(hSearchBinCorrNjets, hSearchBinNjets_evt);
-        bootstrapUtils::HistogramFillForEventCorrelation(hSearchBinCorrNb, hSearchBinNb_evt);
-  //KH-Feb2016-ends
-
-        // Correct the uncertainties
-        bootstrapUtils::HistogramFillForEventTH1(searchH, searchH_evt);
-        bootstrapUtils::HistogramFillForEventTH1(searchH_lowDphi, searchH_evt_lowDphi);
-        bootstrapUtils::HistogramFillForEventTH1(QCD_Up, QCD_Up_evt);
-        bootstrapUtils::HistogramFillForEventTH1(QCD_Low, QCD_Low_evt);
-        bootstrapUtils::HistogramFillForEventTH1(searchH_b, searchH_b_noWeight, searchH_b_evt, searchH_b_noWeight_evt);
-        bootstrapUtils::HistogramFillForEventTH1(hPredHTMHT0b, hPredHTMHT0b_evt);
-        bootstrapUtils::HistogramFillForEventTH1(hPredHTMHTwb, hPredHTMHTwb_evt);
-        bootstrapUtils::HistogramFillForEventTH1(hPredNJetBins, hPredNJetBins_evt);
-        bootstrapUtils::HistogramFillForEventTH1(hPredNbBins, hPredNbBins_evt);
-
-  //KH-Feb2016-starts - add new histograms
-        bootstrapUtils::HistogramFillForEventTH1(hSearchBinHT, hSearchBinHT_evt);
-        bootstrapUtils::HistogramFillForEventTH1(hSearchBinMHT, hSearchBinMHT_evt);
-        bootstrapUtils::HistogramFillForEventTH1(hSearchBinNjets, hSearchBinNjets_evt);
-        bootstrapUtils::HistogramFillForEventTH1(hSearchBinNb, hSearchBinNb_evt);
-  //KH-Feb2016-ends
-
-  // for correlation studies
-        bootstrapUtils::HistogramFillForEventTH2(hCorSearch_b, hCorSearch_b_noW, hCorSearch_b_evt, hCorSearch_b_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorHT,    hCorHT_noW,    hCorHT_evt,    hCorHT_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorMHT,   hCorMHT_noW,   hCorMHT_evt,   hCorMHT_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorNJet,  hCorNJet_noW,  hCorNJet_evt,  hCorNJet_noW_evt);
-        bootstrapUtils::HistogramFillForEventTH2(hCorNBtag, hCorNBtag_noW, hCorNBtag_evt, hCorNBtag_noW_evt);
-
-        // Correct the uncertainties
-        // Loop over differnt event types
-        for(map<string, map<string , vector<TH1D> > >::iterator itt=map_map.begin(); itt!=map_map.end();itt++){
-          // Loop over different cuts
-          for(map<string , vector<TH1D> >::iterator it=itt->second.begin(); it!=itt->second.end();it++){
-            //correct search hists first
-            int nHist_search = map_map_search[itt->first][it->first].size();
-            // Loop over different search histograms
-            for(int ii=0; ii<nHist_search; ii++){
-              bootstrapUtils::HistogramFillForEventTH1(&map_map_search[itt->first][it->first][ii],&map_map_evt_search[itt->first][it->first][ii]);
-            }
-            int nHist = it->second.size();
-            // Loop over different histograms
-            for(int ii=0; ii<nHist; ii++){
-
-              //KH--- for MaxWeight hisotgrams --- can be improved... starts
-              //std::cout << it->first << " " << itt->first << std::endl;
-              if (it->first=="delphi" && itt->first=="allEvents"){
-                if (isData){
-                if (ii==1){ // HT
-                  if (map_map_evt[itt->first][it->first][ii].GetSumOfWeights()>0.25){
-                    printf("run,event: %10d,%10d, Njet,Nbtag,HT,MHT: %8d,%8d,%10.1f,%10.1f, muon pt,eta,phi=%6.1f,%6.1f,%6.1f\n",
-                           evt->Runnum(),evt->Evtnum(),evt->nJets(),evt->nBtags(),evt->ht(),evt->mht(),
-                           muPt,muEta,muPhi);
-                  }
-                }
-                }
-                if (ii==1){ // HT
-                  //map_map_evt[itt->first][it->first][ii].Print();
-                  for (int ibin=0;ibin<map_map_evt[itt->first][it->first][ii].GetNbinsX()+2;ibin++) {
-                    if (hMaxWeight_HT->GetBinContent(ibin)<map_map_evt[itt->first][it->first][ii].GetBinContent(ibin)) 
-                      hMaxWeight_HT->SetBinContent(ibin,map_map_evt[itt->first][it->first][ii].GetBinContent(ibin));
-                  }
-                }
-                if (ii==2){ // HT2
-                  //map_map_evt[itt->first][it->first][ii].Print();
-                  for (int ibin=0;ibin<map_map_evt[itt->first][it->first][ii].GetNbinsX()+2;ibin++) {
-                    if (hMaxWeight_HT2->GetBinContent(ibin)<map_map_evt[itt->first][it->first][ii].GetBinContent(ibin)) 
-                      hMaxWeight_HT2->SetBinContent(ibin,map_map_evt[itt->first][it->first][ii].GetBinContent(ibin));
-                  }
-                }
-                if (ii==3){ // MHT
-                  //map_map_evt[itt->first][it->first][ii].Print();
-                  for (int ibin=0;ibin<map_map_evt[itt->first][it->first][ii].GetNbinsX()+2;ibin++) {
-                    if (hMaxWeight_MHT->GetBinContent(ibin)<map_map_evt[itt->first][it->first][ii].GetBinContent(ibin)) 
-                      hMaxWeight_MHT->SetBinContent(ibin,map_map_evt[itt->first][it->first][ii].GetBinContent(ibin));
-                  }
-                }
-                if (ii==4){ //MHT2
-                  //map_map_evt[itt->first][it->first][ii].Print();
-                  for (int ibin=0;ibin<map_map_evt[itt->first][it->first][ii].GetNbinsX()+2;ibin++) {
-                    if (hMaxWeight_MHT2->GetBinContent(ibin)<map_map_evt[itt->first][it->first][ii].GetBinContent(ibin)) 
-                      hMaxWeight_MHT2->SetBinContent(ibin,map_map_evt[itt->first][it->first][ii].GetBinContent(ibin));
-                  }
-                }
-                if (ii==10){ // NJet
-                  //map_map_evt[itt->first][it->first][ii].Print();
-                  for (int ibin=0;ibin<map_map_evt[itt->first][it->first][ii].GetNbinsX()+2;ibin++) {
-                    if (hMaxWeight_NJet->GetBinContent(ibin)<map_map_evt[itt->first][it->first][ii].GetBinContent(ibin)) 
-                      hMaxWeight_NJet->SetBinContent(ibin,map_map_evt[itt->first][it->first][ii].GetBinContent(ibin));
-                  }
-                }
-                if (ii==11){ // NBtag
-                  //map_map_evt[itt->first][it->first][ii].Print();
-                  for (int ibin=0;ibin<map_map_evt[itt->first][it->first][ii].GetNbinsX()+2;ibin++) {
-                    if (hMaxWeight_NBtag->GetBinContent(ibin)<map_map_evt[itt->first][it->first][ii].GetBinContent(ibin)) 
-                      hMaxWeight_NBtag->SetBinContent(ibin,map_map_evt[itt->first][it->first][ii].GetBinContent(ibin));
-                  }
-                }
-              }
-              //KH--ends
-
-              bootstrapUtils::HistogramFillForEventTH1( &it->second[ii] , &map_map_evt[itt->first][it->first][ii] );
-              
-            } // nHist
-          }   // 
-        }     // map_map
-
+	
       } // loop for uncertainties
     } // end of loop over events
-
-    double GenRecMu_rate = (double)GenRecMu_fail /((double)GenRecMu_all);
-    printf("GenRecMu_all: %d GenRecMu_fail: %d fail rate: %g \n ",GenRecMu_all,GenRecMu_fail,GenRecMu_rate);
-
-    if(!utils2::bootstrap){
-
-      // Calculate tau mistagged(btagged) rate
-      TH1D * TauBtaggedRate = static_cast<TH1D*>(B_rate_tagged->Clone("TauBtaggedRate"));
-      TauBtaggedRate->Divide(B_rate_tagged,B_rate_all,1,1,"B");
-      //*AR, Oct13,2016-Calculate mu jet mistagged(btagged) rate
-      TH1D * MuBtaggedRate = static_cast<TH1D*>(B_Mu_rate_tagged->Clone("MuBtaggedRate"));
-      MuBtaggedRate->Divide(B_Mu_rate_tagged,B_Mu_rate_all,1,1,"B");
-      // Write the histogram 
-      sprintf(tempname,"%s/TauBtaggedRate_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
-      TFile btagfile(tempname,"RECREATE");
-      TauBtaggedRate->Write();
-      B_rate_tagged->Write();
-      B_rate_all->Write();
-      MuBtaggedRate->Write();
-      B_Mu_rate_tagged->Write();
-      B_Mu_rate_all->Write();
-      btagfile.Close();
-   
-      // Compute iso efficiencies
-      TH1* IsoElecEff = static_cast<TH1*>(IsoElec_pass->Clone("IsoElecEff"));
-      IsoElecEff->Divide(IsoElec_pass,IsoElec_all,1,1,"B");
-      TH1* IsoMuEff = static_cast<TH1*>(IsoMu_pass->Clone("IsoMuEff"));
-      IsoMuEff->Divide(IsoMu_pass,IsoMu_all,1,1,"B");
-      TH1* IsoPionEff = static_cast<TH1*>(IsoPion_pass->Clone("IsoPionEff"));
-      IsoPionEff->Divide(IsoPion_pass,IsoPion_all,1,1,"B");
-      sprintf(tempname,"%s/IsoEfficiencies_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
-      TFile outFile3(tempname,"RECREATE");
-      IsoElecEff->Write();
-      IsoElec_pass->Write();
-      IsoElec_all->Write();
-      IsoMuEff->Write();
-      IsoMu_pass->Write();
-      IsoMu_all->Write();
-      IsoPionEff->Write();
-      IsoPion_pass->Write();
-      IsoPion_all->Write();
-      outFile3.Close();
-
-      // Calculate dilepton contamination
-      TH1* dilepton_rate = static_cast<TH1*>(dilepton_pass->Clone("dilepton_rate"));
-      dilepton_rate->Divide(dilepton_pass,dilepton_all,1,1,"B");
-      TH1* dilepton_rate_lowDphi = static_cast<TH1*>(dilepton_pass_lowDphi->Clone("dilepton_rate_lowDphi"));
-      dilepton_rate_lowDphi->Divide(dilepton_pass_lowDphi,dilepton_all_lowDphi,1,1,"B");
-      sprintf(tempname,"%s/DileptonRate_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
-      TFile DiFile(tempname,"RECREATE");
-      dilepton_rate->Write();
-      dilepton_all->Write();
-      dilepton_pass->Write();
-      dilepton_rate_lowDphi->Write();
-      dilepton_all_lowDphi->Write();
-      dilepton_pass_lowDphi->Write();
-      DiFile.Close();
-    
-
-      // Calculate probability of finding non-W muons
-      TH1* hNonWMuProb = static_cast<TH1*>(hNonW_mu->Clone("hProb_Tau_mu"));
-      hNonWMuProb->Divide(hNonW_mu,hAll_mu,1,1,"B");
-      TH1* hNonWMuProb_nb_njet2 = static_cast<TH1*>(hNonW_mu_nb_njet2->Clone("hProb_Tau_mu_nb_njet2"));
-      hNonWMuProb_nb_njet2->Divide(hNonW_mu_nb_njet2,hAll_mu_nb_njet2,1,1,"B");
-      if (hNonW_mu_nb_njet2->GetSumOfWeights()>0.) hNonWMuProb_nb_njet2->Scale(hAll_mu_nb_njet2->GetSumOfWeights()/hNonW_mu_nb_njet2->GetSumOfWeights());
-      TH1* hNonWMuProb_nb_njet34 = static_cast<TH1*>(hNonW_mu_nb_njet34->Clone("hProb_Tau_mu_nb_njet34"));
-      hNonWMuProb_nb_njet34->Divide(hNonW_mu_nb_njet34,hAll_mu_nb_njet34,1,1,"B");
-      if (hNonW_mu_nb_njet34->GetSumOfWeights()>0.) hNonWMuProb_nb_njet34->Scale(hAll_mu_nb_njet34->GetSumOfWeights()/hNonW_mu_nb_njet34->GetSumOfWeights());
-      TH1* hNonWMuProb_nb_njet56 = static_cast<TH1*>(hNonW_mu_nb_njet56->Clone("hProb_Tau_mu_nb_njet56"));
-      hNonWMuProb_nb_njet56->Divide(hNonW_mu_nb_njet56,hAll_mu_nb_njet56,1,1,"B");
-      if (hNonW_mu_nb_njet56->GetSumOfWeights()>0.) hNonWMuProb_nb_njet56->Scale(hAll_mu_nb_njet56->GetSumOfWeights()/hNonW_mu_nb_njet56->GetSumOfWeights());
-      TH1* hNonWMuProb_nb_njet78 = static_cast<TH1*>(hNonW_mu_nb_njet78->Clone("hProb_Tau_mu_nb_njet78"));
-      hNonWMuProb_nb_njet78->Divide(hNonW_mu_nb_njet78,hAll_mu_nb_njet78,1,1,"B");
-      if (hNonW_mu_nb_njet78->GetSumOfWeights()>0.) hNonWMuProb_nb_njet78->Scale(hAll_mu_nb_njet78->GetSumOfWeights()/hNonW_mu_nb_njet78->GetSumOfWeights());
-      TH1* hNonWMuProb_nb_njet9 = static_cast<TH1*>(hNonW_mu_nb_njet9->Clone("hProb_Tau_mu_nb_njet9"));
-      hNonWMuProb_nb_njet9->Divide(hNonW_mu_nb_njet9,hAll_mu_nb_njet9,1,1,"B");
-      if (hNonW_mu_nb_njet9->GetSumOfWeights()>0.) hNonWMuProb_nb_njet9->Scale(hAll_mu_nb_njet9->GetSumOfWeights()/hNonW_mu_nb_njet9->GetSumOfWeights());
-
-
-
-      TH1* hNonWMuProb_lowDelphi = static_cast<TH1*>(hNonW_mu_lowDelphi->Clone("hProb_Tau_mu_lowDelphi"));
-      hNonWMuProb_lowDelphi->Divide(hNonW_mu_lowDelphi,hAll_mu_lowDelphi,1,1,"B");
-      TH1* hNonWMuProb_nb_njet2_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet2_lowDelphi->Clone("hProb_Tau_mu_nb_njet2_lowDelphi"));
-      hNonWMuProb_nb_njet2_lowDelphi->Divide(hNonW_mu_nb_njet2_lowDelphi,hAll_mu_nb_njet2_lowDelphi,1,1,"B");
-      if (hNonW_mu_nb_njet2_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet2_lowDelphi->Scale(hAll_mu_nb_njet2_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet2_lowDelphi->GetSumOfWeights());
-
-      TH1* hNonWMuProb_nb_njet34_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet34_lowDelphi->Clone("hProb_Tau_mu_nb_njet34_lowDelphi"));
-      hNonWMuProb_nb_njet34_lowDelphi->Divide(hNonW_mu_nb_njet34_lowDelphi,hAll_mu_nb_njet34_lowDelphi,1,1,"B");
-      if (hNonW_mu_nb_njet34_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet34_lowDelphi->Scale(hAll_mu_nb_njet34_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet34_lowDelphi->GetSumOfWeights());
-
-      TH1* hNonWMuProb_nb_njet56_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet56_lowDelphi->Clone("hProb_Tau_mu_nb_njet56_lowDelphi"));
-      hNonWMuProb_nb_njet56_lowDelphi->Divide(hNonW_mu_nb_njet56_lowDelphi,hAll_mu_nb_njet56_lowDelphi,1,1,"B");
-      if (hNonW_mu_nb_njet56_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet56_lowDelphi->Scale(hAll_mu_nb_njet56_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet56_lowDelphi->GetSumOfWeights());
-
-      TH1* hNonWMuProb_nb_njet78_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet78_lowDelphi->Clone("hProb_Tau_mu_nb_njet78_lowDelphi"));
-      hNonWMuProb_nb_njet78_lowDelphi->Divide(hNonW_mu_nb_njet78_lowDelphi,hAll_mu_nb_njet78_lowDelphi,1,1,"B");
-      if (hNonW_mu_nb_njet78_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet78_lowDelphi->Scale(hAll_mu_nb_njet78_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet78_lowDelphi->GetSumOfWeights());
-
-      TH1* hNonWMuProb_nb_njet9_lowDelphi = static_cast<TH1*>(hNonW_mu_nb_njet9_lowDelphi->Clone("hProb_Tau_mu_nb_njet9_lowDelphi"));
-      hNonWMuProb_nb_njet9_lowDelphi->Divide(hNonW_mu_nb_njet9_lowDelphi,hAll_mu_nb_njet9_lowDelphi,1,1,"B");
-      if (hNonW_mu_nb_njet9_lowDelphi->GetSumOfWeights()>0.) hNonWMuProb_nb_njet9_lowDelphi->Scale(hAll_mu_nb_njet9_lowDelphi->GetSumOfWeights()/hNonW_mu_nb_njet9_lowDelphi->GetSumOfWeights());
-
-      sprintf(tempname,"%s/Probability_Tau_mu_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
-      TFile muProbFile(tempname,"RECREATE");     
-      hNonWMuProb->Write();
-      hNonWMuProb_nb_njet2->Write();
-      hNonWMuProb_nb_njet34->Write();
-      hNonWMuProb_nb_njet56->Write();
-      hNonWMuProb_nb_njet78->Write();
-      hNonWMuProb_nb_njet9->Write();
-
-      hAll_mu->Write();
-      hAll_mu_nb_njet2->Write();
-      hAll_mu_nb_njet34->Write();
-      hAll_mu_nb_njet56->Write();
-      hAll_mu_nb_njet78->Write();
-      hAll_mu_nb_njet9->Write();
-
-      hNonW_mu->Write();
-      hNonW_mu_nb_njet2->Write();
-      hNonW_mu_nb_njet34->Write();
-      hNonW_mu_nb_njet56->Write();
-      hNonW_mu_nb_njet78->Write();
-      hNonW_mu_nb_njet9->Write();
-
-      hNonWMuProb_lowDelphi->Write();
-      hNonWMuProb_nb_njet2_lowDelphi->Write();
-      hNonWMuProb_nb_njet34_lowDelphi->Write();
-      hNonWMuProb_nb_njet56_lowDelphi->Write();
-      hNonWMuProb_nb_njet78_lowDelphi->Write();
-      hNonWMuProb_nb_njet9_lowDelphi->Write();
-      hAll_mu_lowDelphi->Write();
-      hAll_mu_nb_njet2_lowDelphi->Write();
-      hAll_mu_nb_njet34_lowDelphi->Write();
-      hAll_mu_nb_njet56_lowDelphi->Write();
-      hAll_mu_nb_njet78_lowDelphi->Write();
-      hAll_mu_nb_njet9_lowDelphi->Write();
-      hNonW_mu_lowDelphi->Write();
-      hNonW_mu_nb_njet2_lowDelphi->Write();
-      hNonW_mu_nb_njet34_lowDelphi->Write();
-      hNonW_mu_nb_njet56_lowDelphi->Write();
-      hNonW_mu_nb_njet78_lowDelphi->Write();
-      hNonW_mu_nb_njet9_lowDelphi->Write();
-      muProbFile.Close();
-
-      // Calculate trigger efficiency 
-      TH1* trigEff = static_cast<TH1*>(trig_pass->Clone("trigEff"));
-      trigEff->Divide(trig_pass,trig_all,1,1,"B");
-      sprintf(tempname,"%s/TriggerEff_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
-      TFile trigFile(tempname,"RECREATE");
-      trigEff->Write();
-      trig_all->Write();
-      trig_pass->Write();
-      trigFile.Close();
-      
-    }
-
     // calculate muon_jet match failure and write the histograms
-    TH1D * MuJet_rate = static_cast<TH1D*>(MuJet_fail->Clone("MuJet_rate"));
-    MuJet_rate->Divide(MuJet_fail,MuJet_all,1,1,"B");
-    //Write
-    sprintf(tempname,"%s/MuJetMatchRate_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
-    TFile MuJetfile(tempname,"RECREATE");
-    MuJet_rate->Write();
-    MuJet_fail->Write();
-    MuJet_all->Write();
-    MuJetfile.Close();
-    TH2D * hAcc_Efficiency=(TH2D*) hAcc_Pass->Clone("hAcc_Efficiency");
-    //hAcc_Efficiency->Reset();
-    hAcc_Efficiency->Divide(hAcc_All);
-
-    TH2D * hMT_Efficiency=(TH2D*) hMT_Pass->Clone("hMT_Efficiency");
-    //hMT_Efficiency->Reset();
-    hMT_Efficiency->Divide(hMT_All);
-
-    TH2D * hMu_ProbNonW=(TH2D*) hMu_NonW->Clone("hMu_ProbNonW");
-    hMu_ProbNonW->Divide(hMu_All);
-
+    std::cout<<" end of loop over evt "<<endl;
+    
     // open a file to write the histograms
     sprintf(tempname,"%s/HadTauEstimation_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
     TFile *resFile = new TFile(tempname, "RECREATE");
@@ -3008,122 +1504,38 @@ using namespace std;
     cutflow_preselection->Write();
     searchH->Write();
     searchH_nb_njet2->Write();
-    searchH_nb_njet34->Write();
-    searchH_nb_njet56->Write();
-    searchH_nb_njet78->Write();
-    searchH_nb_njet9->Write();
-    searchH_lowDphi->Write();
-    searchH_nb_njet2_lowDphi->Write();
-    searchH_nb_njet34_lowDphi->Write();
-    searchH_nb_njet56_lowDphi->Write();
-    searchH_nb_njet78_lowDphi->Write();
-    searchH_nb_njet9_lowDphi->Write();
-    hAcc_All->Write();
-    hAcc_Pass->Write();
-    hAcc_Efficiency->Write();
-    hMT_All->Write();
-    hMT_Pass->Write();
-    hMT_Efficiency->Write();
-    hMu_All->Write();
-    hMu_NonW->Write();
-    hMu_ProbNonW->Write();
-    QCD_Up->Write();
-    QCD_Low->Write();
-    searchH_b->Write();
-    searchH_b_noWeight->Write();
-    MuPt_NJ34->Write();
-    MuEta_NJ34->Write();
-    MuPhi_NJ34->Write();
-    MuPt_NJ56->Write();
-    MuEta_NJ56->Write();
-    MuPhi_NJ56->Write();
-    hPredHTMHT0b->Write();
-    hPredHTMHTwb->Write();
-    hPredNJetBins->Write();
-    hPredNbBins->Write();
-    hCorSearch->Write();
-    hCorSearch_b->Write();
-    hCorHT->Write();
-    hCorMHT->Write();
-    hCorNJet->Write();
-    hCorNBtag->Write();
-    hCorSearch_noW->Write();
-    hCorSearch_b_noW->Write();
-    hCorHT_noW->Write();
-    hCorMHT_noW->Write();
-    hCorNJet_noW->Write();
-    hCorNBtag_noW->Write();
-    hWeightForSearchBin->Write(); 
-    hWeight2ForSearchBin->Write(); 
-    hWeight3ForSearchBin->Write(); 
-    hWeight4ForSearchBin->Write(); 
-    prWeightForSearchBin->Write(); 
-    prWeight2ForSearchBin->Write(); 
-    prWeight3ForSearchBin->Write(); 
-    prWeight4ForSearchBin->Write(); 
-    hMaxWeight_HT->Write();
-    hMaxWeight_HT2->Write();
-    hMaxWeight_MHT->Write();
-    hMaxWeight_MHT2->Write();
-    hMaxWeight_NJet->Write();
-    hMaxWeight_NBtag->Write();
+    h_HT_SearchStat->Write();
+    h_MHT_SearchStat->Write();
+    h_MET_SearchStat->Write();
+    h_NJet_SearchStat->Write();
+    h_NBTag_SearchStat->Write(); 
 
-    //KH-Feb2016-starts
-    hSearchBinHT->Write();
-    hSearchBinMHT->Write();
-    hSearchBinNjets->Write();
-    hSearchBinNb->Write();
-    hSearchBinCorr->Write();
-    hSearchBinCorrHT->Write();
-    hSearchBinCorrMHT->Write();
-    hSearchBinCorrNjets->Write();
-    hSearchBinCorrNb->Write();
-    //KH-Feb2016-ends
+    j1_eta->Write();
+    j2_eta->Write();
+    j3_eta->Write();
+    j4_eta->Write();
+    j_eta_inclusive->Write();
+    j1_phi->Write();
+    j2_phi->Write();
+    j3_phi->Write();
+    j4_phi->Write();
+    j_phi_inclusive->Write();
 
-    TDirectory *cdtoitt;
-    TDirectory *cdtoit;
+    DeltaPhi_j1MHT_SearchStat->Write();
+    DeltaPhi_j2MHT_SearchStat->Write();
+    DeltaPhi_j3MHT_SearchStat->Write();
+    DeltaPhi_j4MHT_SearchStat->Write();
+
+    DeltaPhi_j1MET_SearchStat->Write();
+    DeltaPhi_j2MET_SearchStat->Write();
+    DeltaPhi_j3MET_SearchStat->Write();
+    DeltaPhi_j4MET_SearchStat->Write();
+
     // Loop over different event categories (e.g. "All events, Wlnu, Zll, Zvv, etc")
-    for(int iet=0;iet<(int)eventType.size();iet++){
-      for(map<string, map<string , vector<TH1D> > >::iterator itt=map_map.begin(); itt!=map_map.end();itt++){
-        if (eventType[iet]==itt->first){
-          //KH
-          ////std::cout << (itt->first).c_str() << std::endl;
-          cdtoitt = resFile->mkdir((itt->first).c_str());
-          cdtoitt->cd();
-          for(int i=0; i< (int)sel->cutName().size();i++){
-            for(map<string , vector<TH1D> >::iterator it=itt->second.begin(); it!=itt->second.end();it++){
-              //To save time we only write few directories when calcing not main events
-              //if(subSampleKey.find("template")!=string::npos && (it->first!="delphi" && it->first!="low_Dphi" ))continue;
-
-              //To save cpu we neglect some of early selections
-        /*
-              if(it->first=="PreSel" || it->first=="nolep" || it->first=="ht_500" 
-                 || it->first=="Njet_4" || it->first=="isoElec" || it->first=="isoMu" || it->first=="nolep"
-                )continue;
-*/
-              if (sel->cutName()[i]==it->first){
-                cdtoit = cdtoitt->mkdir((it->first).c_str());
-                cdtoit->cd();
-                int nHist = it->second.size();
-                for(int ii=0; ii<nHist; ii++){//since we only have 4 type of histograms
-                  sprintf(tempname,"%s_%s_%s",it->second[ii].GetName(),(it->first).c_str(),(itt->first).c_str());
-                  it->second[ii].Write(tempname);
-                }
-                int nHist_search = map_map_search[itt->first][it->first].size();
-                for(int ii=0; ii<nHist_search; ii++){
-                  sprintf(tempname,"%s_%s_%s",map_map_search[itt->first][it->first][ii].GetName(),(it->first).c_str(),(itt->first).c_str());
-                  map_map_search[itt->first][it->first][ii].Write();
-                }
-                cdtoitt->cd();
-              }
-            }
-          }
-        }
-      }
-    }
-
+   
+    
     delete resp_file;
-
+    
   } // end of main
 
   double DeltaT(unsigned int i, vector<TVector3> Jet3vec ){

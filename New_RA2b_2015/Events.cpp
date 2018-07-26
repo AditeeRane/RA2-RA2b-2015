@@ -7,7 +7,7 @@
   Events::Events(TTree * ttree_, const std::string sampleKeyString, int verbose) : currentEntry_(-1) {
 
     // Data or MC ?
-    DataBool=false;
+    DataBool=true;
 
     // Study Tau ID
     StudyTauId=false;
@@ -24,6 +24,8 @@
      EvtNum=-1;
      NVtx=-1;
      isoElectronTracks=-1;
+     NMuons=-1;
+     NElectrons=-1;
      isoMuonTracks=-1;
      isoPionTracks=-1;
      NJets=-1;
@@ -134,6 +136,8 @@
      //
      fChain->SetBranchAddress("NJetsISR", &NJetsISR);
      //     fChain->SetBranchAddress("Leptons", &Leptons);
+     fChain->SetBranchAddress("NMuons", &NMuons);
+     fChain->SetBranchAddress("NElectrons", &NElectrons);
      fChain->SetBranchAddress("NJets", &NJets);
      fChain->SetBranchAddress("BTags", &BTags);
      fChain->SetBranchAddress("Weight", &Weight);
@@ -331,6 +335,8 @@
     return tempN; 
 //    return Leptons;
   }
+int Events::nMuons() const {return NMuons;}
+int Events::nElectrons() const {return NElectrons;}
 
   // Number of IsoTrk 
 //  int Events::nIso() const { return isoTracks; }
@@ -811,6 +817,13 @@ vector<double>  Events::Jets_jecUnc_() const {return *Jets_jecUnc;}
      vector<double> vec;
      for(int i=0;i < Electrons->size();i++){
        vec.push_back(Electrons->at(i).Phi());
+     }
+     return vec;
+   }
+   vector<double>  Events::ElecEVec_() const{ 
+     vector<double> vec;
+     for(int i=0;i < Electrons->size();i++){
+       vec.push_back(Electrons->at(i).E());
      }
      return vec;
    }
