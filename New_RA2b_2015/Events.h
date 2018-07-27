@@ -46,14 +46,14 @@ using namespace std;
    Int_t          HBHENoiseFilter;
    Int_t          HBHEIsoNoiseFilter;
    Int_t          CSCTightHaloFilter;
-   Int_t           eeBadScFilter;
+   Int_t           ecalBadCalibFilter;
    Int_t           EcalDeadCellTriggerPrimitiveFilter;
 
    // added on July 12, 2016
    Double_t        PFCaloMETRatio;
    Bool_t          BadChargedCandidateFilter;
    Bool_t          BadPFMuonFilter;
-   Int_t           globalTightHalo2016Filter;
+   Int_t           globalSuperTightHalo2016Filter;
 
    UInt_t          RunNum;
    UInt_t          LumiBlockNum;
@@ -128,10 +128,13 @@ using namespace std;
 
 //   vector<double>  *slimmedMuonsPtVec;
    vector<TLorentzVector> *Muons;
+   //   vector<bool> *Muons_passIso;
    vector<TLorentzVector> *selectedIDMuons;
 //   vector<double>  *selectedIDIsoMuonsPtVec;
 //   vector<double>  *slimmedElectronsPtVec;
    vector<TLorentzVector> *Electrons;
+   //   vector<bool> *Electron_passIso;
+
    vector<TLorentzVector> *selectedIDElectrons;
 //   vector<double>  *selectedIDIsoElectronsPtVec;
    //vector<TLorentzVector> *IsolatedElectronTracksVeto;
@@ -160,7 +163,8 @@ using namespace std;
 
    vector<int>     *TriggerPass;
    vector<string>  *TriggerNames;
-
+   vector<bool> *Muons_passIso;
+   vector<bool> * Electrons_passIso;
    vector<bool>     *GenMu_GenMuFromTau;
    vector<bool>     *GenElec_GenElecFromTau;
    vector<bool>     *GenTau_GenTauHad;
@@ -272,7 +276,6 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<int>    * Jets_partonFlavor_() const;
    vector<int>    * Jets_hadronFlavor_() const;
    vector<bool>   * HTJetsMask_() const;
-
    vector<int>     slimJetID_() const;
    vector<double>  slimJetjecFactor_() const;
    vector<double>  Jets_jecFactor_() const; 
@@ -333,11 +336,13 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
 
    vector<string>  TriggerNames_() const;
    vector<int>  PassTrigger_() const;
+   vector<bool> Muons_passIso_() const;
+   vector<bool> Electrons_passIso_() const;
    double csv_() const;
    
 //   int GoodVtx_() const; 
    int CSCTightHaloFilter_() const;
-   int eeBadScFilter_() const;
+   int ecalBadCalibFilter_() const;
    int HBHENoiseFilter_() const;
    int HBHEIsoNoiseFilter_() const;
    int EcalDeadCellTriggerPrimitiveFilter_() const;
@@ -346,7 +351,7 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    int PFCaloMETRatioFilter_() const;
    int BadChargedCandidateFilter_() const;
    int BadPFMuonFilter_() const;
-   int globalTightHalo2016Filter_() const;
+   int globalSuperTightHalo2016Filter_() const;
    int noMuonJet_() const;
    int noFakeJet_() const;
 

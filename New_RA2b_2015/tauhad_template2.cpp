@@ -216,7 +216,7 @@ using namespace std;
     cutflow_preselection->GetXaxis()->SetBinLabel(1,"All Events");
     cutflow_preselection->GetXaxis()->SetBinLabel(2,"Sample based gen-selection");
     cutflow_preselection->GetXaxis()->SetBinLabel(3,"HBHE(Iso)NoiseFilter");
-    cutflow_preselection->GetXaxis()->SetBinLabel(4,"eeBadScFilter");
+    cutflow_preselection->GetXaxis()->SetBinLabel(4,"ecalBadCalibFilter");
     cutflow_preselection->GetXaxis()->SetBinLabel(5,"CSCTightHalo/EcalDeadCellTriggerPrimitive");   
     cutflow_preselection->GetXaxis()->SetBinLabel(6,"GoodVtx"); 
     cutflow_preselection->GetXaxis()->SetBinLabel(7,"JetID Cleaning");
@@ -289,6 +289,7 @@ using namespace std;
     
     // Introduce search bin histogram with bTag bins
     map<string,int> binMap_b = utils2::BinMap();
+    
     //map<string,string> binMap_b = utils2::BinMap();
     int totNbins_b=binMap_b.size();
     TH1* searchH_b = new TH1D("searchH_b","search bin histogram",totNbins_b,1,totNbins_b+1);
@@ -303,6 +304,32 @@ using namespace std;
     h_NJet_SearchStat->Sumw2();
     TH1 * h_NBTag_SearchStat = new TH1D("h_NBTag_SearchStat","h_NBTag_SearchStat",10,0,10);
     h_NBTag_SearchStat->Sumw2();
+
+    TH1 * MuonCS_pt=new TH1D("MuonCS_pt","MuonCS_pt",100,0.0,1000.0); 
+    TH1 * MuonCS_eta=new TH1D("MuonCS_eta","MuonCS_eta",100,-5.0,5.0);
+    TH1 * MuonCS_phi=new TH1D("MuonCS_phi","MuonCS_phi",70,-3.5,3.5); 
+    MuonCS_pt->Sumw2();
+    MuonCS_eta->Sumw2();
+    MuonCS_phi->Sumw2();
+    TH1 * ElectronCS_pt=new TH1D("ElectronCS_pt","ElectronCS_pt",100,0.0,1000.0); 
+    TH1 * ElectronCS_eta=new TH1D("ElectronCS_eta","ElectronCS_eta",100,-5.0,5.0);
+    TH1 * ElectronCS_phi=new TH1D("ElectronCS_phi","ElectronCS_phi",70,-3.5,3.5); 
+    ElectronCS_pt->Sumw2();
+    ElectronCS_eta->Sumw2();
+    ElectronCS_phi->Sumw2();
+
+
+    TH1 * j1_pt=new TH1D("j1_pt","j1_pt",100,0.0,1000.0);
+    TH1 * j2_pt=new TH1D("j2_pt","j2_pt",100,0.0,1000.0);
+    TH1 * j3_pt=new TH1D("j3_pt","j3_pt",100,0.0,1000.0);
+    TH1 * j4_pt=new TH1D("j4_pt","j4_pt",100,0.0,1000.0);
+    TH1 * j_pt_inclusive=new TH1D("j_pt_inclusive","j_pt_inclusive",100,0.0,1000.0);
+    j1_pt->Sumw2(); 
+    j2_pt->Sumw2();
+    j3_pt->Sumw2();
+    j4_pt->Sumw2();
+    j_pt_inclusive->Sumw2();
+
 
     TH1 * j1_eta=new TH1D("j1_eta","j1_eta",100,-5.0,5.0);
     TH1 * j2_eta=new TH1D("j2_eta","j2_eta",100,-5.0,5.0);
@@ -1023,6 +1050,18 @@ using namespace std;
 
     double eventWeight = 1.0;
     int eventN=0;
+    int MuonCSevt=0;
+    int MuonPassAcc=0;
+    int MuonFailAcc=0;
+    int MuonPassmT=0;
+    int ElectronCSevt=0;
+    int ElectronFailAcc=0;
+    int ElectronPassAcc=0;
+    int ElectronPassmT=0;
+    int TriggerPass=0;
+    int noLepEvt=0;
+    int OneEleEvt=0;
+    int OneMuEvt=0;
     while( evt->loadNext() ){
       eventN++;
       //      std::cout<<" new event "<<endl;
@@ -1035,8 +1074,8 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      if(eventN>10000)break;
-      if(eventN%2000==0)
+      //if(eventN>10000)break;
+      if(eventN%5000==0)
 	std::cout<<" eventN "<<eventN<<endl;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
@@ -1063,7 +1102,7 @@ using namespace std;
       if( !fastsim && evt->HBHEIsoNoiseFilter_()==0)continue;
       if( !fastsim && evt->HBHENoiseFilter_()==0)continue;
       cutflow_preselection->Fill(2.,eventWeight);
-      if( !fastsim && evt->eeBadScFilter_()==0)continue;
+      if( !fastsim && evt->ecalBadCalibFilter_()==0)continue;
       cutflow_preselection->Fill(3.,eventWeight);
       //if(evt->DataBool_() && !fastsim && !filter.CheckEvent(evt->Runnum(),evt->LumiBlocknum(),evt->Evtnum()))continue;
       //if( !fastsim && evt->CSCTightHaloFilter_()==0)continue;
@@ -1090,7 +1129,7 @@ using namespace std;
       */
       if( evt->DataBool_() && evt->BadChargedCandidateFilter_()==0) continue;
       if( evt->DataBool_() && evt->BadPFMuonFilter_()==0) continue;
-      if( evt->DataBool_() && evt->globalTightHalo2016Filter_()==0) continue;
+      if( evt->DataBool_() && evt->globalSuperTightHalo2016Filter_()==0) continue;
       if( evt->PFCaloMETRatioFilter_()==0) continue;
       if( evt->noMuonJet_()==0) continue;
       if( !evt->DataBool_() && fastsim && evt->noFakeJet_()==0) continue;
@@ -1181,7 +1220,7 @@ using namespace std;
 	//std::cout<<" trigPass "<<trigPass<<endl;
         if(!trigPass)continue;
       }
-      
+      TriggerPass++;
       // to study some of the uncertainties we need to make some changes from
       // the very beginning and observe how that propagates
       
@@ -1209,14 +1248,20 @@ using namespace std;
 	vec_recoElectron4vec.clear();
 	vector<int> MuFromTauVec;//Ahmad33
 	MuFromTauVec.clear();//Ahmad33
+	if(evt->MuPtVec_().size()==0 && evt->ElecPtVec_().size()==0)
+	  noLepEvt++;
+	if(evt->MuPtVec_().size()==1)
+	  OneMuEvt++;
+	if(evt->ElecPtVec_().size()==1)
+	  OneEleEvt++;
 
         // Consistancy check
         if(isData==true && TauHadModel<3){
           cout << "Only TauHadModel>=3 is valid for Data \n ";
           return 2;
         }
-	if(evt->nMuons() !=evt->MuPtVec_().size())
-	  std::cout<<" nMuons "<< evt->nMuons() <<" size "<<evt->MuPtVec_().size()<<endl;
+	//	if(evt->nMuons() !=evt->MuPtVec_().size())
+	//std::cout<<" nMuons "<< evt->nMuons() <<" size "<<evt->MuPtVec_().size()<<endl;
         if(TauHadModel>=3){ // Use reco-level muon
 	  GetMuSize=evt->MuPtVec_().size();
 	  //	  std::cout<<" GetMuSize "<<GetMuSize<<endl;
@@ -1228,19 +1273,24 @@ using namespace std;
             double phi=evt->MuPhiVec_().at(i); // Ahmad33
 	    //std::cout<<" phi "<<phi<<endl;
             double energy=evt->MuEVec_().at(i); // Ahmad33
-	    std::cout<<" eventN "<<eventN<<" mu_pt "<<pt<<" mu_eta "<<eta<<endl;
-	    if(pt<10 || fabs(eta)>2.4)
-	      std::cout<< " muon beyond range "<<endl;
+	    bool passMini = evt->Muons_passIso_().at(i);
+	    //	    std::cout<<" passMini "<<passMini <<endl;
+	    //	    std::cout<<" eventN "<<eventN<<" mu_pt "<<pt<<" mu_eta "<<eta<<endl;
+	    if(pt<20 || fabs(eta)>2.1)
+	      MuonFailAcc++;
 
 	    //std::cout<<" energy "<<energy<<endl; 
 	    //            double activity_ = evt->MTActivityVec_().at(i);
 	    //std::cout<<" activity_ "<<activity_<<endl;
             double mu_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
 	    //std::cout<<" mu_mt_w "<<mu_mt_w<<endl;
-	    if( pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	    if( passMini && pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	      MuonPassAcc++;
 	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
               if(utils2::applyMT){
-                if(mu_mt_w < 100. ){vec_recoMuon4vec.push_back(temp4vec);
+                if(mu_mt_w < 100. ){
+		  MuonPassmT++;
+		  vec_recoMuon4vec.push_back(temp4vec);
 		  //vec_MTActivity.push_back(activity_);
 		}
               }
@@ -1253,8 +1303,8 @@ using namespace std;
 	 
 
 	  GetEleSize=evt->ElecPtVec_().size();
-	  if(evt->nElectrons() !=evt->ElecPtVec_().size())
-	    std::cout<<" nEles "<< evt->nElectrons() <<" size "<<evt->ElecPtVec_().size()<<endl;
+	  //	  if(evt->nElectrons() !=evt->ElecPtVec_().size())
+	  //std::cout<<" nEles "<< evt->nElectrons() <<" size "<<evt->ElecPtVec_().size()<<endl;
 
 	  //std::cout<<" GetEleSize "<<GetEleSize<<endl; 
 	  for(int i=0; i< evt->ElecPtVec_().size(); i++){ // Ahmad33
@@ -1262,14 +1312,17 @@ using namespace std;
             double eta=evt->ElecEtaVec_().at(i); // Ahmad33
             double phi=evt->ElecPhiVec_().at(i); // Ahmad33
             double energy=evt->ElecEVec_().at(i); // Ahmad33
+	    bool passMini = evt->Electrons_passIso_().at(i);
 	    //            double activity_ = evt->MTActivityVec_().at(i);
             double ele_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
-	    std::cout<<" eventN "<<eventN<<" ele_pt "<<pt<<" ele_eta "<<eta<<endl;
-	    if(pt<10 || fabs(eta)>2.4)
-	      std::cout<< " electron beyond range "<<endl;
-	    if( pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	    //	    std::cout<<" eventN "<<eventN<<" ele_pt "<<pt<<" ele_eta "<<eta<<endl;
+	    if(pt<20 || fabs(eta)>2.1)
+	      ElectronFailAcc++;
+	    if( passMini && pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	      ElectronPassAcc++;
 	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
               if(utils2::applyMT){
+		ElectronPassmT++;
                 if(ele_mt_w < 100. ){vec_recoElectron4vec.push_back(temp4vec);
 		  //vec_MTActivity.push_back(activity_);
 		}
@@ -1307,14 +1360,17 @@ using namespace std;
         bool pass1=false;
 	bool MuEvt=false;
 	bool EleEvt=false;
+
         if(TauHadModel>=2){
 
 	  if(vec_recoMuon4vec.size() == 1 && vec_recoElectron4vec.size() ==0){
 	    MuEvt=true;
+	    MuonCSevt++;
 	    //	    std::cout<<" eventN "<<eventN<<" this is muon event "<<endl;
 	  }
 	  if(vec_recoElectron4vec.size() == 1 && vec_recoMuon4vec.size() ==0){
 	    EleEvt=true;
+	    ElectronCSevt++;
 	    //std::cout<<" eventN "<<eventN<<" this is electron event "<<endl;
 	  }
 	  if(MuEvt || EleEvt){
@@ -1401,6 +1457,26 @@ using namespace std;
 
 
 	      //	      std::cout<<" j1 "<<evt->JetsPtVec_()[0]<<" j2 "<<evt->JetsPtVec_()[1]<<" j3 "<<evt->JetsPtVec_()[2]<<" j4 "<<evt->JetsPtVec_()[3]<<endl;
+	      if(MuEvt){
+		MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
+		MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
+		MuonCS_phi->Fill(vec_recoMuon4vec[0].Phi(),eventWeight);
+	      }
+
+	      if(EleEvt){
+		ElectronCS_pt->Fill(vec_recoElectron4vec[0].Pt(),eventWeight);
+		ElectronCS_eta->Fill(vec_recoElectron4vec[0].Eta(),eventWeight);
+		ElectronCS_phi->Fill(vec_recoElectron4vec[0].Phi(),eventWeight);
+	      }
+
+	      if(evt->JetsEtaVec_().size()>0)
+		j1_pt->Fill(evt->JetsPtVec_()[0],eventWeight);
+	      if(evt->JetsEtaVec_().size()>1)
+		j2_pt->Fill(evt->JetsPtVec_()[1],eventWeight);
+	      if(evt->JetsEtaVec_().size()>2)
+		j3_pt->Fill(evt->JetsPtVec_()[2],eventWeight);
+	      if(evt->JetsEtaVec_().size()>3)
+		j4_pt->Fill(evt->JetsPtVec_()[3],eventWeight);
 	      
 	      if(evt->JetsEtaVec_().size()>0)
 		j1_eta->Fill(evt->JetsEtaVec_()[0],eventWeight);
@@ -1420,7 +1496,8 @@ using namespace std;
 		j4_phi->Fill(evt->JetsPhiVec_()[3],eventWeight);
 
 	      for(unsigned j = 0; j < evt->JetsPtVec_().size(); ++j){
-		if(evt->JetsPtVec_()[j] > 30. && fabs(evt->JetsEtaVec_()[j]) < 5.0){
+		if(evt->JetsPtVec_()[j] > 30. && fabs(evt->JetsEtaVec_()[j]) < 5.0){ 
+		  j_pt_inclusive->Fill(evt->JetsPtVec_()[j],eventWeight);
 		  j_eta_inclusive->Fill(evt->JetsEtaVec_()[j],eventWeight);
 		  j_phi_inclusive->Fill(evt->JetsPhiVec_()[j],eventWeight);
 		}
@@ -1495,7 +1572,7 @@ using namespace std;
       } // loop for uncertainties
     } // end of loop over events
     // calculate muon_jet match failure and write the histograms
-    std::cout<<" end of loop over evt "<<endl;
+    std::cout<<" end of loop over evt "<<" eventN "<<eventN<<" nCleanEve "<<nCleanEve<<" TriggerPass "<<TriggerPass<<" noLepEvt "<<noLepEvt<<" OneMuEvt "<< OneMuEvt<<" OneEleEvt "<<OneEleEvt<<" MuonsFailAcc "<< MuonFailAcc<<" MuonPassAcc "<<MuonPassAcc<<" MuonPassmT "<<MuonPassmT<<" MuonCSevt "<<MuonCSevt<<" ElectronFailAcc "<< ElectronFailAcc<<" ElectronPassAcc "<<ElectronPassAcc<<" ElectronPassmT "<<ElectronPassmT<<" ElectronCSevt "<<ElectronCSevt<<endl;
     
     // open a file to write the histograms
     sprintf(tempname,"%s/HadTauEstimation_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
@@ -1509,6 +1586,21 @@ using namespace std;
     h_MET_SearchStat->Write();
     h_NJet_SearchStat->Write();
     h_NBTag_SearchStat->Write(); 
+
+    MuonCS_pt->Write();
+    MuonCS_eta->Write();
+    MuonCS_phi->Write();
+
+    ElectronCS_pt->Write();
+    ElectronCS_eta->Write();
+    ElectronCS_phi->Write();
+
+
+    j1_pt->Write();
+    j2_pt->Write();
+    j3_pt->Write();
+    j4_pt->Write();
+    j_pt_inclusive->Write();
 
     j1_eta->Write();
     j2_eta->Write();

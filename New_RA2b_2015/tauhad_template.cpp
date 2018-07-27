@@ -150,7 +150,7 @@ int main(int argc, char *argv[]){
   cutflow_preselection->GetXaxis()->SetBinLabel(1,"All Events");
   cutflow_preselection->GetXaxis()->SetBinLabel(2,"Sample based gen-selection");
   cutflow_preselection->GetXaxis()->SetBinLabel(3,"HBHE(Iso)NoiseFilter");
-  cutflow_preselection->GetXaxis()->SetBinLabel(4,"eeBadScFilter");
+  cutflow_preselection->GetXaxis()->SetBinLabel(4,"ecalBadCalibFilter");
   cutflow_preselection->GetXaxis()->SetBinLabel(5,"CSCTightHalo/EcalDeadCellTriggerPrimitive");
   cutflow_preselection->GetXaxis()->SetBinLabel(6,"GoodVtx");
   cutflow_preselection->GetXaxis()->SetBinLabel(7,"JetID Cleaning");
@@ -772,14 +772,14 @@ int main(int argc, char *argv[]){
     if(evt->HBHEIsoNoiseFilter_()==0)continue;
     if(evt->HBHENoiseFilter_()==0)continue;
     cutflow_preselection->Fill(2.,eventWeight);
-    if(evt->eeBadScFilter_()==0)continue;
+    if(evt->ecalBadCalibFilter_()==0)continue;
     cutflow_preselection->Fill(3.,eventWeight);
     //if(evt->CSCTightHaloFilter_()==0)continue;
     if(evt->EcalDeadCellTriggerPrimitiveFilter_()==0)continue;
       
     if( evt->DataBool_() && evt->BadChargedCandidateFilter_()==0) continue;
     if( evt->DataBool_() && evt->BadPFMuonFilter_()==0) continue;
-    if( evt->DataBool_() && evt->globalTightHalo2016Filter_()==0) continue;
+    if( evt->DataBool_() && evt->globalSuperTightHalo2016Filter_()==0) continue;
     if( evt->PFCaloMETRatioFilter_()==0) continue;
     if( evt->noMuonJet_()==0) continue;
     //if( !evt->DataBool_() && fastsim && evt->noFakeJet_()==0) continue;

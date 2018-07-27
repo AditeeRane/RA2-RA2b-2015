@@ -157,7 +157,7 @@ int main(int argc, char *argv[]){
   cutflow_preselection->GetXaxis()->SetBinLabel(1,"All Events");
   cutflow_preselection->GetXaxis()->SetBinLabel(2,"Sample based gen-selection");
   cutflow_preselection->GetXaxis()->SetBinLabel(3,"HBHEIsoNoiseFilter");
-  cutflow_preselection->GetXaxis()->SetBinLabel(4,"eeBadScFilter");
+  cutflow_preselection->GetXaxis()->SetBinLabel(4,"ecalBadCalibFilter");
   cutflow_preselection->GetXaxis()->SetBinLabel(5,"HBHENoiseFilter");
   cutflow_preselection->GetXaxis()->SetBinLabel(6,"GoodVtx");
   cutflow_preselection->GetXaxis()->SetBinLabel(7,"JetID Cleaning");
@@ -207,7 +207,7 @@ int main(int argc, char *argv[]){
     cutflow_preselection->Fill(1.,totWeight);
     if(evt->HBHEIsoNoiseFilter_()==0)continue;
     cutflow_preselection->Fill(2.,totWeight);
-    if(evt->eeBadScFilter_()==0)continue;
+    if(evt->ecalBadCalibFilter_()==0)continue;
     cutflow_preselection->Fill(3.,totWeight);
     if(evt->HBHENoiseFilter_()==0)continue;
     cutflow_preselection->Fill(4.,totWeight);

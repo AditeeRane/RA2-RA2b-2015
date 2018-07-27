@@ -88,6 +88,7 @@
      selectedIDMuons = 0;
 //     slimmedElectronsPtVec=new vector<double>();
      Electrons = 0;
+
 //     selectedIDIsoElectronsPtVec=new vector<double>();
      selectedIDElectrons = 0;
 //     selectedIDIsoElectronsPtVec=new vector<double>();
@@ -119,7 +120,8 @@
 
      TriggerNames=0;
      TriggerPass=0;
-
+     Electrons_passIso=0;
+     Muons_passIso=0;
      fChain = ttree_;
 
     /// the variables
@@ -157,12 +159,13 @@
        fChain->SetBranchAddress("HBHENoiseFilter", &HBHENoiseFilter);
        fChain->SetBranchAddress("HBHEIsoNoiseFilter", &HBHEIsoNoiseFilter);
        fChain->SetBranchAddress("CSCTightHaloFilter", &CSCTightHaloFilter);
-       fChain->SetBranchAddress("eeBadScFilter", &eeBadScFilter);
+       fChain->SetBranchAddress("ecalBadCalibFilter", &ecalBadCalibFilter);
+      
        fChain->SetBranchAddress("EcalDeadCellTriggerPrimitiveFilter", &EcalDeadCellTriggerPrimitiveFilter);
        fChain->SetBranchAddress("PFCaloMETRatio", &PFCaloMETRatio);
        fChain->SetBranchAddress("BadChargedCandidateFilter", &BadChargedCandidateFilter);
        fChain->SetBranchAddress("BadPFMuonFilter", &BadPFMuonFilter);
-       fChain->SetBranchAddress("globalTightHalo2016Filter", &globalTightHalo2016Filter);
+       fChain->SetBranchAddress("globalSuperTightHalo2016Filter", &globalSuperTightHalo2016Filter);
      }
      if(!DataBool){
        fChain->SetBranchAddress("GenMuons", &GenMus);
@@ -250,6 +253,8 @@
      
      fChain->SetBranchAddress("TriggerNames", &TriggerNames);
      fChain->SetBranchAddress("TriggerPass", &TriggerPass);
+     fChain->SetBranchAddress("Electrons_passIso", &Electrons_passIso);
+     fChain->SetBranchAddress("Muons_passIso", &Muons_passIso);
 
      // Number of total entries
      template_Entries = fChain->GetEntries();
@@ -942,6 +947,8 @@ vector<double>  Events::Jets_jecUnc_() const {return *Jets_jecUnc;}
 
    vector<string>  Events::TriggerNames_() const{ return *TriggerNames;}
    vector<int>     Events::PassTrigger_() const{ return *TriggerPass;}
+vector<bool> Events::Muons_passIso_() const{return *Muons_passIso;}
+vector<bool> Events::Electrons_passIso_() const{return *Electrons_passIso;}
 
 vector<int>     Events::GenMuFromTauVec_() const {
   vector <int> temp;
@@ -969,7 +976,7 @@ vector<int>     Events::GenTauHadVec_() const {
 
 //int Events::GoodVtx_() const {return GoodVtx;}
   int Events::CSCTightHaloFilter_() const {return CSCTightHaloFilter;}
-  int Events::eeBadScFilter_() const {return eeBadScFilter;}
+  int Events::ecalBadCalibFilter_() const {return ecalBadCalibFilter;}
   int Events::HBHENoiseFilter_() const {return HBHENoiseFilter;}
   int Events::HBHEIsoNoiseFilter_() const {return HBHEIsoNoiseFilter;}
   int Events::EcalDeadCellTriggerPrimitiveFilter_() const {return EcalDeadCellTriggerPrimitiveFilter;}
@@ -978,7 +985,7 @@ vector<int>     Events::GenTauHadVec_() const {
 int Events::PFCaloMETRatioFilter_() const{ return (PFCaloMETRatio<5); }
 int Events::BadChargedCandidateFilter_() const {return BadChargedCandidateFilter; }
 int Events::BadPFMuonFilter_() const { return BadPFMuonFilter; }
-int Events::globalTightHalo2016Filter_() const {return globalTightHalo2016Filter; }
+int Events::globalSuperTightHalo2016Filter_() const {return globalSuperTightHalo2016Filter; }
   int Events::noMuonJet_() const {
     Utils * utils = new Utils();
     bool noMuonJet = true;
