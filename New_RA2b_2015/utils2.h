@@ -33,7 +33,8 @@ namespace utils2{
   // the two search bin histograms, after and before applyMT. 
   // At the end, turn off CalcMT.
   bool CalcMT = false; // default false
-
+  bool GetHEMEvtMap=false;
+  bool UseHEMEvtMap= true;
   bool applyTrig = false;
 
   bool applyIsoTrk =true; // default true

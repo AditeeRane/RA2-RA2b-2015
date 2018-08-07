@@ -22,6 +22,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+//#include "splitString.h"
 #include <sstream>
 #include <stdio.h>
 #include "TFile.h"
@@ -123,7 +124,8 @@ using namespace std;
     TH2 * hAcc_Pass=new TH2D("hAcc_Pass","hAcc_Pass",400,0,400,50,-2.5,2.5);
     hAcc_All->Sumw2();
     hAcc_Pass->Sumw2();
-
+    double mu_mt_w=-999;
+            
     //sprintf(prefix,"/data3/");
     int GetMuSize=0;
     int GetEleSize=0;
@@ -289,7 +291,46 @@ using namespace std;
     
     // Introduce search bin histogram with bTag bins
     map<string,int> binMap_b = utils2::BinMap();
+
+    TH1 * HT_HEMiss_Phi_2Pt38_2Pt72 =new TH1D("HT_HEMiss_Phi_2Pt38_2Pt72","HT_HEMiss_Phi_2Pt38_2Pt72", 50,0,1000);
+    //    TH1 * MHT_HEMiss_Phi_2Pt38_2Pt72 =new TH1D("MHT_HEMiss_Phi_2Pt38_2Pt72","MHT_HEMiss_Phi_2Pt38_2Pt72", 60,0,3000);
+    //TH1 * MHT_HEMiss_Phi_2Pt38_2Pt72 =new TH1D("MHT_HEMiss_Phi_2Pt38_2Pt72","MHT_HEMiss_Phi_2Pt38_2Pt72", 60,0,3000);
+    TH1 * NJet_HEMiss_Phi_2Pt38_2Pt72 =new TH1D("NJet_HEMiss_Phi_2Pt38_2Pt72","NJet_HEMiss_Phi_2Pt38_2Pt72", 60,0,3000);
+
+    std::map<int,int>  EventNRunN;
+    std::map<double,double> MetPhiMT;
+
+    std::map<std::pair<std::pair<int,int>,std::pair<double,double>>,int> EventNRunNMetPhiMTLumiN;
+
+
+    std::map<int,int> EventNLumiN;
+    std::map<int,std::map<int,int>> EventNRunNLumiN;
+    std::map<int,string> LumiNRootFile;
+    std::map<std::pair<std::pair<int,int>, int>,double> EventNRunNLumiNMET;
+
+    std::map<std::pair<double,double>,double> MuEtaEleEtaMET;
+    std::map<std::pair<double,double>,double> HTMHTMET;
+    std::map<std::pair<std::pair<std::pair<std::pair<int,int>,std::pair<double,double>>,int>,std::pair<std::pair<std::pair<double,double>,std::pair<std::pair<double,double>,std::pair<double,double>>>,std::pair<std::pair<double,double>,std::pair<std::pair<double,double>,std::pair<double,double>>>>>,double> FinalMap;
+
     
+    vector<int> EventNHEMiss;
+    vector<int> RunNHEMiss;
+    vector<int> LumiBlockNHEMiss; 
+    vector<double> MuPtHEMiss;
+    vector<double> MuEtaHEMiss; 
+    vector<double> MuPhiHEMiss; 
+    vector<double> ElePtHEMiss;
+    vector<double> EleEtaHEMiss; 
+    vector<double> ElePhiHEMiss; 
+    vector<int> NJetHEMiss;
+    vector<int> NBTagHEMiss;
+    vector<double>HTHEMiss;
+    vector<double>MHTHEMiss;
+    vector<double>METHEMiss;
+    vector<double>MHTPhiHEMiss;
+    vector<double>DPhiOneHEMiss;
+    vector<double>METPhiHEMiss;
+    vector<double>MTHEMiss;
     //map<string,string> binMap_b = utils2::BinMap();
     int totNbins_b=binMap_b.size();
     TH1* searchH_b = new TH1D("searchH_b","search bin histogram",totNbins_b,1,totNbins_b+1);
@@ -304,6 +345,12 @@ using namespace std;
     h_NJet_SearchStat->Sumw2();
     TH1 * h_NBTag_SearchStat = new TH1D("h_NBTag_SearchStat","h_NBTag_SearchStat",10,0,10);
     h_NBTag_SearchStat->Sumw2();
+    TH2 * h_HT_SearchStat_TwoD = new TH2D("h_HT_SearchStat_TwoD","h_HT_SearchStat_TwoD",50, 0, 1000,50, 0, 1000);
+
+    TH2 * h_MHT_SearchStat_TwoD = new TH2D("h_MHT_SearchStat_TwoD","h_MHT_SearchStat_TwoD",60, 0, 3000,60, 0, 3000);
+    TH2 * h_MET_SearchStat_TwoD = new TH2D("h_MET_SearchStat_TwoD","h_MET_SearchStat_TwoD",60, 0, 3000,60, 0, 3000);
+    TH2 * h_NJet_SearchStat_TwoD = new TH2D("h_NJet_SearchStat_TwoD","h_NJet_SearchStat_TwoD",20, 0, 20,20, 0, 20);
+    TH2 * h_NBTag_SearchStat_TwoD = new TH2D("h_NBTag_SearchStat_TwoD","h_NBTag_SearchStat_TwoD",10, 0, 10,10, 0, 10);
 
     TH1 * MuonCS_pt=new TH1D("MuonCS_pt","MuonCS_pt",100,0.0,1000.0); 
     TH1 * MuonCS_eta=new TH1D("MuonCS_eta","MuonCS_eta",100,-5.0,5.0);
@@ -311,6 +358,12 @@ using namespace std;
     MuonCS_pt->Sumw2();
     MuonCS_eta->Sumw2();
     MuonCS_phi->Sumw2();
+
+    TH2 * MuonCS_TwoD_pt=new TH2D("MuonCS_TwoD_pt","MuonCS_TwoD_pt",100,0.0,1000.0,100,0.0,1000.0); 
+    TH2 * MuonCS_TwoD_eta=new TH2D("MuonCS_TwoD_eta","MuonCS_TwoD_eta",100,-5.0,5.0,100,-5.0,5.0);
+    TH2 * MuonCS_TwoD_phi=new TH2D("MuonCS_TwoD_phi","MuonCS_TwoD_phi",70,-3.5,3.5,70,-3.5,3.5); 
+
+
     TH1 * ElectronCS_pt=new TH1D("ElectronCS_pt","ElectronCS_pt",100,0.0,1000.0); 
     TH1 * ElectronCS_eta=new TH1D("ElectronCS_eta","ElectronCS_eta",100,-5.0,5.0);
     TH1 * ElectronCS_phi=new TH1D("ElectronCS_phi","ElectronCS_phi",70,-3.5,3.5); 
@@ -318,7 +371,12 @@ using namespace std;
     ElectronCS_eta->Sumw2();
     ElectronCS_phi->Sumw2();
 
+    TH2 * ElectronCS_TwoD_pt=new TH2D("ElectronCS_TwoD_pt","ElectronCS_TwoD_pt",100,0.0,1000.0,100,0.0,1000.0); 
+    TH2 * ElectronCS_TwoD_eta=new TH2D("ElectronCS_TwoD_eta","ElectronCS_TwoD_eta",100,-5.0,5.0,100,-5.0,5.0);
+    TH2 * ElectronCS_TwoD_phi=new TH2D("ElectronCS_TwoD_phi","ElectronCS_TwoD_phi",70,-3.5,3.5,70,-3.5,3.5); 
 
+    TH2 * MT_TwoD_SearchStat=new TH2D("MT_TwoD_SearchStat","MT_TwoD_SearchStat",100,0.0,1000.0,100,0.0,1000.0); 
+    
     TH1 * j1_pt=new TH1D("j1_pt","j1_pt",100,0.0,1000.0);
     TH1 * j2_pt=new TH1D("j2_pt","j2_pt",100,0.0,1000.0);
     TH1 * j3_pt=new TH1D("j3_pt","j3_pt",100,0.0,1000.0);
@@ -363,6 +421,11 @@ using namespace std;
     DeltaPhi_j3MHT_SearchStat->Sumw2();
     DeltaPhi_j4MHT_SearchStat->Sumw2();
 
+    TH2 * DeltaPhi_TwoD_j1MHT_SearchStat =  new TH2D("DeltaPhi_TwoD_j1MHT_SearchStat","DeltaPhi_TwoD_j1MHT_SearchStat",50,0,5,50,0,5);
+    //    TH2 * DeltaPhi_TwoD_j1MHT_SearchStat =  new TH2D("DeltaPhi_TwoD_j1MHT_SearchStat","DeltaPhi_TwoD_j1MHT_SearchStat",140,-7,7,140,-7,7);
+
+    TH2 * MHTPhi_TwoD_SearchStat =  new TH2D("MHTPhi_TwoD_SearchStat","MHTPhi_TwoD_SearchStat",70,-3.5,3.5,70,-3.5,3.5);
+    TH2 * METPhi_TwoD_SearchStat =  new TH2D("METPhi_TwoD_SearchStat","METPhi_TwoD_SearchStat",70,-3.5,3.5,70,-3.5,3.5);
 
     TH1 * DeltaPhi_j1MET_SearchStat =  new TH1D("DeltaPhi_j1MET_SearchStat","DeltaPhi_j1MET_SearchStat",50,0,5);
     TH1 * DeltaPhi_j2MET_SearchStat =  new TH1D("DeltaPhi_j2MET_SearchStat","DeltaPhi_j2MET_SearchStat",50,0,5);
@@ -603,7 +666,7 @@ using namespace std;
 
     // Interface to the event content
     Events * evt = new Events(sample_AUX, subSampleKey,verbose);
-    
+    std::cout<<" sample_AUX "<<sample_AUX<<endl;
     double fastsimWeight =1.0;
     if(subSampleKey.find("fast")!=string::npos){
       //f(filesVec.size()!=1){cout << " 1 skim file only \n"; return 2;}
@@ -1000,6 +1063,19 @@ using namespace std;
 
     // see how often there are two leptons in the the event
     int nCleanEve=0;
+    int PassHBHEIsoNoiseFilter=0;
+    int PassHBHENoiseFilter=0;
+    int PassecalBadCalibFilter=0;
+    int PassEcalDeadCellTriggerPrimitiveFilter=0;
+    int PassBadChargedCandidateFilter=0;
+    int PassBadPFMuonFilter=0;
+    int PassglobalSuperTightHalo2016Filter=0;
+    int PassPFCaloMETRatioFilter=0;
+    int PassnoMuonJet=0;
+    int PassNVtx=0;
+    int PassJetId=0;
+    int OneLepCSEvt=0;
+    int PassNoExtraEleOrMuWithIsoApplied=0;
     TH1D * dilepton_all = new TH1D("dilepton_all"," dilepton all -- search bin",totNbins,1,totNbins+1);
     dilepton_all->Sumw2();
     TH1D * dilepton_pass = new TH1D("dilepton_pass"," dilepton pass -- search bin",totNbins,1,totNbins+1);
@@ -1062,8 +1138,112 @@ using namespace std;
     int noLepEvt=0;
     int OneEleEvt=0;
     int OneMuEvt=0;
+    int HEMMapMatch=0;
     while( evt->loadNext() ){
       eventN++;
+      //      std::cout<<"  **** Before Matching ****"<<" evt "<<eventN<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
+      double NomMuPt=-99;
+      double NomMuEta=-99;
+      double NomMuPhi=-99;
+      double NomElePt=-99;
+      double NomEleEta=-99;
+      double NomElePhi=-99;
+      double NomNJet=-99;
+      double NomNBtag=-99;
+      double NomHT=-99;
+      double NomMHT=-99;
+      double NomMHTPhi=-99;
+      double NomDphiOne=-99;
+      double NomMET=-99;
+      double NomMETPhi=-99;
+      double NomMT=-999;
+      if(utils2::UseHEMEvtMap){
+	ifstream ifile("Map.txt");
+	vector<int> vecEvt;
+	vector<double> vecEvtDetails;
+	string line;
+	bool MatchEvt=false;
+	int CheckEvtNum=0;
+	int RefEvt=0;
+	int RefRun=0;
+	int RefLumi=0;
+
+	while(ifile.getline(filenames, 500) )
+	  {
+	    vecEvt.clear();
+	    char *p;
+	    const char s[2] = "|";
+	    int itrr=-1;
+	    
+	    p = strtok (filenames,s);
+	    //   std::cout<<" eventN "<<eventN<<" p"<<p<<" ****** seg vio****** "<<endl;
+
+	    CheckEvtNum=atoi(p);
+	    if(CheckEvtNum != evt->Evtnum()){
+	      // std::cout<<" evtN "<<evt->Evtnum()<<" p "<<p<<endl;
+	      continue;
+	    }
+
+	    while (p!= NULL){
+	      if(vecEvt.size()<3){	      
+		int number= atoi(p);
+		vecEvt.push_back(number);
+
+	      }	      
+	      else{
+		double d = atof(p);
+		vecEvtDetails.push_back(d);
+	      }
+
+	      p = strtok (NULL, "|");
+	    }
+	    // std::cout<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+	    if(vecEvt[0] == evt->Evtnum() && vecEvt[1]==evt->Runnum() && vecEvt[2]==evt->LumiBlocknum()){
+	      MatchEvt=true;
+	      break;
+	    } 
+	  }
+	
+	if(!MatchEvt){
+	  // if(CheckEvtNum == evt->Evtnum())
+	  //std::cout<<"****No match***** "<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
+	  continue;
+	}
+	
+	NomMuPt=vecEvtDetails[0];
+	if(NomMuPt==-99) NomMuPt=900;
+	NomElePt=vecEvtDetails[1];
+	if(NomElePt==-99) NomElePt=900;
+
+	NomMuEta=vecEvtDetails[2];
+	if(NomMuEta==-99) NomMuEta=4.;
+	NomEleEta=vecEvtDetails[3];
+	if(NomEleEta==-99) NomEleEta=4.;
+	
+	NomMuPhi=vecEvtDetails[4];
+	if(NomMuPhi==-99) NomMuPhi=3.4;
+	NomElePhi=vecEvtDetails[5];
+	if(NomElePhi==-99) NomElePhi=3.4;
+
+	NomNJet=vecEvtDetails[6];
+	NomNBtag=vecEvtDetails[7];
+	NomHT=vecEvtDetails[8];
+	NomMHT=vecEvtDetails[9];
+	NomMHTPhi=vecEvtDetails[10];
+	NomDphiOne=vecEvtDetails[11];
+	NomMET=vecEvtDetails[12];
+	NomMETPhi=vecEvtDetails[13];
+	if(NomMETPhi==-99) NomMETPhi=3.4;
+	NomMT=vecEvtDetails[14];
+	if(NomMT==-999) NomMT=800;
+	HEMMapMatch++;
+	//	std::cout<<"  ** matched found **"<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" muPt "<<NomMuPt<<" elePt "<<NomElePt<<" muEta "<<NomMuEta<<" eleeta "<<NomEleEta<<" muPhi "<<NomMuPhi<<" elePhi "<<NomElePhi<<" njet "<<NomNJet<<" nbtag "<<NomNBtag<<" ht "<<NomHT<<" mht "<<NomMHT<<" mhtphi "<<NomMHTPhi<<" dphi1 "<<NomDphiOne<<" met "<<NomMET<<endl;
+      } //end of use map
+      
+
+
+
+
       //      std::cout<<" new event "<<endl;
       eventWeight = evt->weight();
       double puWeight = 
@@ -1074,13 +1254,13 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //if(eventN>10000)break;
+      //      if(eventN>10000)break;
       if(eventN%5000==0)
 	std::cout<<" eventN "<<eventN<<endl;
       //if(eventN>50)break;
       //std::cout<<" eventN "<<eventN<<endl;
       cutflow_preselection->Fill(0.,eventWeight); // keep track of all events processed
-
+      
       // Meant to combine different ttbar samples exclusively
       if(!evt->DataBool_()){
       
@@ -1100,14 +1280,17 @@ using namespace std;
       
       cutflow_preselection->Fill(1.,eventWeight);
       if( !fastsim && evt->HBHEIsoNoiseFilter_()==0)continue;
+      PassHBHEIsoNoiseFilter++;
       if( !fastsim && evt->HBHENoiseFilter_()==0)continue;
+      PassHBHENoiseFilter++;
       cutflow_preselection->Fill(2.,eventWeight);
       if( !fastsim && evt->ecalBadCalibFilter_()==0)continue;
+      PassecalBadCalibFilter++;
       cutflow_preselection->Fill(3.,eventWeight);
       //if(evt->DataBool_() && !fastsim && !filter.CheckEvent(evt->Runnum(),evt->LumiBlocknum(),evt->Evtnum()))continue;
       //if( !fastsim && evt->CSCTightHaloFilter_()==0)continue;
       if( !fastsim && evt->EcalDeadCellTriggerPrimitiveFilter_()==0)continue;
-
+      PassEcalDeadCellTriggerPrimitiveFilter++;
       //added on July 12, 2016
       /*
       if( !fastsim && (evt->BadChargedCandidateFilter_()==0 || evt->BadPFMuonFilter_()==0 
@@ -1128,17 +1311,24 @@ using namespace std;
       }
       */
       if( evt->DataBool_() && evt->BadChargedCandidateFilter_()==0) continue;
+      PassBadChargedCandidateFilter++;
       if( evt->DataBool_() && evt->BadPFMuonFilter_()==0) continue;
+      PassBadPFMuonFilter++;
       if( evt->DataBool_() && evt->globalSuperTightHalo2016Filter_()==0) continue;
+      PassglobalSuperTightHalo2016Filter++;
       if( evt->PFCaloMETRatioFilter_()==0) continue;
+      PassPFCaloMETRatioFilter++;
       if( evt->noMuonJet_()==0) continue;
+      PassnoMuonJet++;
       if( !evt->DataBool_() && fastsim && evt->noFakeJet_()==0) continue;
 
       cutflow_preselection->Fill(4.,eventWeight);
       if(!(evt->NVtx_() >0))continue;
+      PassNVtx++;
       cutflow_preselection->Fill(5.,eventWeight); 
       // Through out an event that contains HTjets with bad id
       if( !fastsim && evt->JetId()==0)continue;
+      PassJetId++;
       cutflow_preselection->Fill(6.,eventWeight); // events passing JetID event cleaning
 
       nCleanEve++;
@@ -1282,18 +1472,16 @@ using namespace std;
 	    //std::cout<<" energy "<<energy<<endl; 
 	    //            double activity_ = evt->MTActivityVec_().at(i);
 	    //std::cout<<" activity_ "<<activity_<<endl;
-            double mu_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
+	    mu_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
 	    //std::cout<<" mu_mt_w "<<mu_mt_w<<endl;
-	    if( passMini && pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	    if( passMini ){
 	      MuonPassAcc++;
 	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
               if(utils2::applyMT){
-                if(mu_mt_w < 100. ){
-		  MuonPassmT++;
-		  vec_recoMuon4vec.push_back(temp4vec);
-		  //vec_MTActivity.push_back(activity_);
-		}
-              }
+		MuonPassmT++;
+		vec_recoMuon4vec.push_back(temp4vec);
+		//vec_MTActivity.push_back(activity_);
+	      }
               else {vec_recoMuon4vec.push_back(temp4vec);
 		//vec_MTActivity.push_back(activity_);
 	      }
@@ -1318,14 +1506,14 @@ using namespace std;
 	    //	    std::cout<<" eventN "<<eventN<<" ele_pt "<<pt<<" ele_eta "<<eta<<endl;
 	    if(pt<20 || fabs(eta)>2.1)
 	      ElectronFailAcc++;
-	    if( passMini && pt> LeptonAcceptance::muonPtMin()  && fabs(eta)< LeptonAcceptance::muonEtaMax()  ){
+	    if( passMini ){
 	      ElectronPassAcc++;
 	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
               if(utils2::applyMT){
 		ElectronPassmT++;
-                if(ele_mt_w < 100. ){vec_recoElectron4vec.push_back(temp4vec);
-		  //vec_MTActivity.push_back(activity_);
-		}
+                vec_recoElectron4vec.push_back(temp4vec);
+		//vec_MTActivity.push_back(activity_);
+		
               }
               else {vec_recoElectron4vec.push_back(temp4vec);
 		//	vec_MTActivity.push_back(activity_);
@@ -1333,11 +1521,11 @@ using namespace std;
               vec_recoEleMTW.push_back(ele_mt_w); 
             }
           }
-	 
- 
+	  
+	  
         }
 	//std::cout<<" vec_recoMuMTW "<<vec_recoMuMTW.size()<<" vec_recoEleMTW "<<vec_recoEleMTW.size()<<endl;
-
+	
 	
         ///select electrons with pt>10. eta<2.5 relIso<.2
         vec_recoElec3vec.clear();
@@ -1360,27 +1548,130 @@ using namespace std;
         bool pass1=false;
 	bool MuEvt=false;
 	bool EleEvt=false;
+	double GetMuPt=900;
+	double GetMuEta=4.;
+	double GetMuPhi=3.4;
+	double GetElePt=900;
+	double GetEleEta=4.;
+	double GetElePhi=3.4;
 
         if(TauHadModel>=2){
 
 	  if(vec_recoMuon4vec.size() == 1 && vec_recoElectron4vec.size() ==0){
 	    MuEvt=true;
+	    GetMuPt=vec_recoMuon4vec[0].Pt();
+	    GetMuEta=vec_recoMuon4vec[0].Eta();
+	    GetMuPhi=vec_recoMuon4vec[0].Phi();
 	    MuonCSevt++;
 	    //	    std::cout<<" eventN "<<eventN<<" this is muon event "<<endl;
 	  }
 	  if(vec_recoElectron4vec.size() == 1 && vec_recoMuon4vec.size() ==0){
 	    EleEvt=true;
+	    GetElePt=vec_recoElectron4vec[0].Pt();
+	    GetEleEta=vec_recoElectron4vec[0].Eta();
+	    GetElePhi=vec_recoElectron4vec[0].Phi();
 	    ElectronCSevt++;
 	    //std::cout<<" eventN "<<eventN<<" this is electron event "<<endl;
 	  }
 	  if(MuEvt || EleEvt){
 	    pass1=true;
+	    OneLepCSEvt++;
 	    //std::cout<<" eventN "<<eventN<<" pass1 "<<pass1<<endl;
 	  }
 	} // Number of reco-level muon=1
+
+	if(utils2::UseHEMEvtMap){
+	  h_HT_SearchStat->Fill(evt->ht(),eventWeight);
+	  h_MHT_SearchStat->Fill(evt->mht(),eventWeight);
+	  h_NJet_SearchStat->Fill(evt->nJets(),eventWeight); 
+	  h_NBTag_SearchStat->Fill(evt->nBtags(),eventWeight); 
+	  h_MET_SearchStat->Fill(evt->met(),eventWeight);
+	  
+	  h_HT_SearchStat_TwoD->Fill(NomHT,evt->ht(),eventWeight);
+	  h_MHT_SearchStat_TwoD->Fill(NomMHT,evt->mht(),eventWeight);
+	  h_NJet_SearchStat_TwoD->Fill(NomNJet,evt->nJets(),eventWeight);
+	  h_NBTag_SearchStat_TwoD->Fill(NomNBtag,evt->nBtags(),eventWeight);
+	  h_MET_SearchStat_TwoD->Fill(NomMET,evt->met(),eventWeight);
+	  
+	  DeltaPhi_j1MHT_SearchStat->Fill(evt->deltaPhi1(),eventWeight);
+	  DeltaPhi_j2MHT_SearchStat->Fill(evt->deltaPhi2(),eventWeight);
+	  DeltaPhi_j3MHT_SearchStat->Fill(evt->deltaPhi3(),eventWeight);
+	  DeltaPhi_j4MHT_SearchStat->Fill(evt->deltaPhi4(),eventWeight);
+	  
+	  DeltaPhi_TwoD_j1MHT_SearchStat->Fill(NomDphiOne,evt->deltaPhi1(),eventWeight);
+	  MHTPhi_TwoD_SearchStat->Fill(NomMHTPhi,evt->mhtphi(),eventWeight);
+	  METPhi_TwoD_SearchStat->Fill(NomMETPhi,evt->metphi(),eventWeight);
+	  MT_TwoD_SearchStat->Fill(NomMT,mu_mt_w,eventWeight);
+	  MuonCS_TwoD_pt->Fill(NomMuPt,GetMuPt,eventWeight);
+	  MuonCS_TwoD_eta->Fill(NomMuEta,GetMuEta,eventWeight);
+	  MuonCS_TwoD_phi->Fill(NomMuPhi,GetMuPhi,eventWeight);
+	  
+	  
+	  ElectronCS_TwoD_pt->Fill(NomElePt,GetElePt,eventWeight);
+	  ElectronCS_TwoD_eta->Fill(NomEleEta,GetEleEta,eventWeight);
+	  ElectronCS_TwoD_phi->Fill(NomElePhi,GetElePhi,eventWeight);
+	  
+	  if(MuEvt){
+	    MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
+	    MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
+	    MuonCS_phi->Fill(vec_recoMuon4vec[0].Phi(),eventWeight);
+	  }
+	  
+	  if(EleEvt){
+	    ElectronCS_pt->Fill(vec_recoElectron4vec[0].Pt(),eventWeight);
+	    ElectronCS_eta->Fill(vec_recoElectron4vec[0].Eta(),eventWeight);
+	    ElectronCS_phi->Fill(vec_recoElectron4vec[0].Phi(),eventWeight);
+	    
+	  }
+	}
+	
+	if(utils2::UseHEMEvtMap){
+	  if(evt->JetsEtaVec_().size()>0)
+	    j1_pt->Fill(evt->JetsPtVec_()[0],eventWeight);
+	  if(evt->JetsEtaVec_().size()>1)
+	    j2_pt->Fill(evt->JetsPtVec_()[1],eventWeight);
+	  if(evt->JetsEtaVec_().size()>2)
+	    j3_pt->Fill(evt->JetsPtVec_()[2],eventWeight);
+	  if(evt->JetsEtaVec_().size()>3)
+	    j4_pt->Fill(evt->JetsPtVec_()[3],eventWeight);
+	      
+	  if(evt->JetsEtaVec_().size()>0)
+	    j1_eta->Fill(evt->JetsEtaVec_()[0],eventWeight);
+	  if(evt->JetsEtaVec_().size()>1)
+	    j2_eta->Fill(evt->JetsEtaVec_()[1],eventWeight);
+	  if(evt->JetsEtaVec_().size()>2)
+	    j3_eta->Fill(evt->JetsEtaVec_()[2],eventWeight);
+	  if(evt->JetsEtaVec_().size()>3)
+	    j4_eta->Fill(evt->JetsEtaVec_()[3],eventWeight);
+	  if(evt->JetsEtaVec_().size()>0)
+	    j1_phi->Fill(evt->JetsPhiVec_()[0],eventWeight);
+	  if(evt->JetsEtaVec_().size()>1)
+	    j2_phi->Fill(evt->JetsPhiVec_()[1],eventWeight);
+	  if(evt->JetsEtaVec_().size()>2)
+	    j3_phi->Fill(evt->JetsPhiVec_()[2],eventWeight);
+	  if(evt->JetsEtaVec_().size()>3)
+	    j4_phi->Fill(evt->JetsPhiVec_()[3],eventWeight);
+
+	  for(unsigned j = 0; j < evt->JetsPtVec_().size(); ++j){
+	    if(evt->JetsPtVec_()[j] > 30. && fabs(evt->JetsEtaVec_()[j]) < 5.0){ 
+	      j_pt_inclusive->Fill(evt->JetsPtVec_()[j],eventWeight);
+	      j_eta_inclusive->Fill(evt->JetsEtaVec_()[j],eventWeight);
+	      j_phi_inclusive->Fill(evt->JetsPhiVec_()[j],eventWeight);
+	    }
+	  }
+	}
+
+
+
+
+
+
+
+
+
+
 	//std::cout<<" eventN "<<eventN<<endl;
 	if(pass1){ // pass muon selection
-	  //std::cout<<" eventN "<<eventN<<" ****** seg vio****** "<<endl;
 	
   /*
           muPt = vec_recoMuon4vec[0].Pt();
@@ -1400,12 +1691,25 @@ using namespace std;
 
 	  // for veto we have a lepton collection with softer requirements. pT > 10 not 20 and eta < 2.4 not 2.1 and also there is no 
 	  // mT cut applied. 
+	  /*	  
 	  if(TauHadModel>=2){if(evt->MuPtVec_().size()>1    || evt->ElecPtVec_().size()>1)pass1_1=true;}    // N(reco-muon)<=1, N(reco-ele)=0, 
 	  if(pass1_1){
 	    //	    std::cout<<" e/ mu > 1, skip evt "<<endl;
 	    continue;
 	  }
-  
+
+*/	  
+	  if(TauHadModel>=2){
+	    int nGetLepPassIso=evt->nElectrons()+evt->nMuons();
+	    if(nGetLepPassIso !=1)
+	      pass1_1=true;
+	  }    // N(reco-muon)<=1, N(reco-ele)=0, 
+	  if(pass1_1){
+	    //	    std::cout<<" e/ mu > 1, skip evt "<<endl;
+	    continue;
+	  }
+	  
+	  PassNoExtraEleOrMuWithIsoApplied++;
 	  //cutflow_preselection->Fill(8.,eventWeight); // Lepton vetos
 
           // The muon we are using is already part of a jet. (Note: the muon is isolated by 0.2 but jet is much wider.) And,
@@ -1436,71 +1740,57 @@ using namespace std;
             for(int m=0; m<nBtagsForHadTau;m++){
 	     
 	      //	      if( sel->ht_base(evt->ht()) && sel->mht_base(evt->mht()) && sel->Njet_base(evt->nJets()) ){
-
-	      h_HT_SearchStat->Fill(evt->ht(),eventWeight);
-	      h_MHT_SearchStat->Fill(evt->mht(),eventWeight);
-	      h_NJet_SearchStat->Fill(evt->nJets(),eventWeight); 
-	      h_NBTag_SearchStat->Fill(evt->nBtags(),eventWeight); 
-	      h_MET_SearchStat->Fill(evt->met(),eventWeight);
+	      bool FoundHEMiss_Phi_2Pt38_2Pt72 =false;
+	      bool FoundHEMiss_Phi_Minus1_Minus1Pt4=false;
 	      
-	      DeltaPhi_j1MHT_SearchStat->Fill(evt->deltaPhi1(),eventWeight);
-	      DeltaPhi_j2MHT_SearchStat->Fill(evt->deltaPhi2(),eventWeight);
-	      DeltaPhi_j3MHT_SearchStat->Fill(evt->deltaPhi3(),eventWeight);
-	      DeltaPhi_j4MHT_SearchStat->Fill(evt->deltaPhi4(),eventWeight);
-	      /*
-	      DeltaPhi_j1MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[0],evt->metphi())),eventWeight);
-	      DeltaPhi_j2MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[1],evt->metphi())),eventWeight);
-	      DeltaPhi_j3MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[2],evt->metphi())),eventWeight);
-	      DeltaPhi_j4MET_SearchStat->Fill(fabs(utils->deltaPhi(evt->JetsPhiVec_()[3],evt->metphi())),eventWeight);
+	      if(utils2::GetHEMEvtMap){
+		    //		    std::cout<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" eta "<<evt->JetsEtaVec_()[i]<<" phi "<<evt->JetsPhiVec_()[i]<<endl;
+		    EventNHEMiss.push_back(evt->Evtnum());
+		    RunNHEMiss.push_back(evt->Runnum());
+		    LumiBlockNHEMiss.push_back(evt->LumiBlocknum());
+		    MuPtHEMiss.push_back(GetMuPt);
+		    MuEtaHEMiss.push_back(GetMuEta);
+		    MuPhiHEMiss.push_back(GetMuPhi);
+		    ElePtHEMiss.push_back(GetElePt);
+		    EleEtaHEMiss.push_back(GetEleEta);
+		    ElePhiHEMiss.push_back(GetElePhi);
+		    NJetHEMiss.push_back(evt->nJets());
+		    NBTagHEMiss.push_back(evt->nBtags());
+		    HTHEMiss.push_back(evt->ht());
+		    MHTHEMiss.push_back(evt->mht());
+		    MHTPhiHEMiss.push_back(evt->mhtphi());
+		    DPhiOneHEMiss.push_back(evt->deltaPhi1());
+		    METHEMiss.push_back(evt->met());
+		    METPhiHEMiss.push_back(evt->metphi());
+		    MTHEMiss.push_back(mu_mt_w);
+		    //EventNRunN.emplace(evt->Evtnum(),evt->Runnum());
+		    //*AR: 180801: creates a map of (evt, run, lumiblock)
+		    
+		    EventNRunN[evt->Evtnum()]=evt->Runnum();
+		    EventNRunNLumiN[evt->Evtnum()][evt->Runnum()]=evt->LumiBlocknum();
 
-	      */
+		    EventNRunNLumiNMET[std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),evt->LumiBlocknum())]=evt->met();
 
+		    MuEtaEleEtaMET[std::make_pair(GetMuEta,GetEleEta)]=evt->met();
+		    HTMHTMET[std::make_pair(evt->ht(),evt->mht())]=evt->met();
+		    //		    std::make_pair(evt->Evtnum(),evt->Runnum())
+		    //std::make_pair(evt->metphi(),mu_mt_w)
+		    //		      std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),std::make_pair(evt->metphi(),mu_mt_w))
+		      
 
-	      //	      std::cout<<" j1 "<<evt->JetsPtVec_()[0]<<" j2 "<<evt->JetsPtVec_()[1]<<" j3 "<<evt->JetsPtVec_()[2]<<" j4 "<<evt->JetsPtVec_()[3]<<endl;
-	      if(MuEvt){
-		MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
-		MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
-		MuonCS_phi->Fill(vec_recoMuon4vec[0].Phi(),eventWeight);
-	      }
+		      FinalMap[std::make_pair(std::make_pair(std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),std::make_pair(evt->metphi(),mu_mt_w)),evt->LumiBlocknum()),std::make_pair(std::make_pair(std::make_pair(GetMuPt,GetElePt),std::make_pair(std::make_pair(GetMuEta,GetEleEta),std::make_pair(GetMuPhi,GetElePhi))),std::make_pair(std::make_pair(evt->nJets(),evt->nBtags()),std::make_pair(std::make_pair(evt->ht(),evt->mht()),std::make_pair(evt->mhtphi(),evt->deltaPhi1())))))]=evt->met();
+		    //		    std::cout<<" seg vio "<<endl;
 
-	      if(EleEvt){
-		ElectronCS_pt->Fill(vec_recoElectron4vec[0].Pt(),eventWeight);
-		ElectronCS_eta->Fill(vec_recoElectron4vec[0].Eta(),eventWeight);
-		ElectronCS_phi->Fill(vec_recoElectron4vec[0].Phi(),eventWeight);
-	      }
+		    
 
-	      if(evt->JetsEtaVec_().size()>0)
-		j1_pt->Fill(evt->JetsPtVec_()[0],eventWeight);
-	      if(evt->JetsEtaVec_().size()>1)
-		j2_pt->Fill(evt->JetsPtVec_()[1],eventWeight);
-	      if(evt->JetsEtaVec_().size()>2)
-		j3_pt->Fill(evt->JetsPtVec_()[2],eventWeight);
-	      if(evt->JetsEtaVec_().size()>3)
-		j4_pt->Fill(evt->JetsPtVec_()[3],eventWeight);
-	      
-	      if(evt->JetsEtaVec_().size()>0)
-		j1_eta->Fill(evt->JetsEtaVec_()[0],eventWeight);
-	      if(evt->JetsEtaVec_().size()>1)
-		j2_eta->Fill(evt->JetsEtaVec_()[1],eventWeight);
-	      if(evt->JetsEtaVec_().size()>2)
-		j3_eta->Fill(evt->JetsEtaVec_()[2],eventWeight);
-	      if(evt->JetsEtaVec_().size()>3)
-	      j4_eta->Fill(evt->JetsEtaVec_()[3],eventWeight);
-	      if(evt->JetsEtaVec_().size()>0)
-		j1_phi->Fill(evt->JetsPhiVec_()[0],eventWeight);
-	      if(evt->JetsEtaVec_().size()>1)
-		j2_phi->Fill(evt->JetsPhiVec_()[1],eventWeight);
-	      if(evt->JetsEtaVec_().size()>2)
-		j3_phi->Fill(evt->JetsPhiVec_()[2],eventWeight);
-	      if(evt->JetsEtaVec_().size()>3)
-		j4_phi->Fill(evt->JetsPhiVec_()[3],eventWeight);
-
-	      for(unsigned j = 0; j < evt->JetsPtVec_().size(); ++j){
-		if(evt->JetsPtVec_()[j] > 30. && fabs(evt->JetsEtaVec_()[j]) < 5.0){ 
-		  j_pt_inclusive->Fill(evt->JetsPtVec_()[j],eventWeight);
-		  j_eta_inclusive->Fill(evt->JetsEtaVec_()[j],eventWeight);
-		  j_phi_inclusive->Fill(evt->JetsPhiVec_()[j],eventWeight);
-		}
+		    //LumiNEventNRunN.emplace(evt->LumiBlocknum(),EventNRunN);
+		    //		    int Runj=evt->Runnum();
+		    
+		    
+		    //EventNLumiN[evt->Evtnum()]=evt->LumiBlocknum();
+		    //		    EventNRunNLumiN[evt->Evtnum(),evt->Runnum()]=evt->LumiBlocknum();
+		    //LumiNRootFile[evt->LumiBlocknum()]=InRootList.c_str();
+		    
 	      }
 
 	      //	      std::cout<<" eventN "<<eventN<<" ht "<<evt->ht()<<" mht "<<evt->mht()<<" njet "<<evt->nJets()<<" btag "<<evt->nBtags()<<" met "<<evt->met()<<endl;
@@ -1572,8 +1862,59 @@ using namespace std;
       } // loop for uncertainties
     } // end of loop over events
     // calculate muon_jet match failure and write the histograms
-    std::cout<<" end of loop over evt "<<" eventN "<<eventN<<" nCleanEve "<<nCleanEve<<" TriggerPass "<<TriggerPass<<" noLepEvt "<<noLepEvt<<" OneMuEvt "<< OneMuEvt<<" OneEleEvt "<<OneEleEvt<<" MuonsFailAcc "<< MuonFailAcc<<" MuonPassAcc "<<MuonPassAcc<<" MuonPassmT "<<MuonPassmT<<" MuonCSevt "<<MuonCSevt<<" ElectronFailAcc "<< ElectronFailAcc<<" ElectronPassAcc "<<ElectronPassAcc<<" ElectronPassmT "<<ElectronPassmT<<" ElectronCSevt "<<ElectronCSevt<<endl;
+    std::cout<<" end of loop over evt "<<" eventN "<<eventN<<" HEMMapMatch "<<HEMMapMatch<<" PassHBHEIsoNoiseFilter "<<PassHBHEIsoNoiseFilter<<" PassHBHENoiseFilter "<<PassHBHENoiseFilter<<" PassecalBadCalibFilter "<<PassecalBadCalibFilter<<" PassEcalDeadCellTriggerPrimitiveFilter "<<PassEcalDeadCellTriggerPrimitiveFilter<<" PassBadChargedCandidateFilter "<<PassBadChargedCandidateFilter<<" PassBadPFMuonFilter "<<PassBadPFMuonFilter<<" PassglobalSuperTightHalo2016Filter "<<PassglobalSuperTightHalo2016Filter<<" PassPFCaloMETRatioFilter "<<PassPFCaloMETRatioFilter<<" PassnoMuonJet "<<PassnoMuonJet<<" PassNVtx "<<PassNVtx<<" PassJetId "<<PassJetId<<" nCleanEve "<<nCleanEve<<" TriggerPass "<<TriggerPass<<" noLepEvt "<<noLepEvt<<" OneMuEvt "<< OneMuEvt<<" OneEleEvt "<<OneEleEvt<<" MuonsFailAcc "<< MuonFailAcc<<" MuonPassAcc "<<MuonPassAcc<<" MuonPassmT "<<MuonPassmT<<" MuonCSevt "<<MuonCSevt<<" ElectronFailAcc "<< ElectronFailAcc<<" ElectronPassAcc "<<ElectronPassAcc<<" ElectronPassmT "<<ElectronPassmT<<" ElectronCSevt "<<ElectronCSevt<<" OneLepCSEvt "<<OneLepCSEvt<<" PassNoExtraEleOrMuWithIsoApplied "<<PassNoExtraEleOrMuWithIsoApplied<<endl;
+    /*
+    for (map<int,int>::iterator itr=EventNRunN.begin(); itr != EventNRunN.end(); ++itr){
+      //if(itr->second == itt->first)
+      std::cout<<" itr->first "<<itr->first<<" itr->second "<<itr->second<<" lumi "<<endl;
+    }
+
+*/
+
+    std::cout<<" size_EventNRunNLumiN "<<EventNRunNLumiN.size()<<endl;
+    std::cout<<" size_EventNRunN "<<EventNRunN.size()<<endl;
     
+    
+    //*AR: 180801: Saves map(event, run, lumi) to a text file
+    if(utils2::GetHEMEvtMap){
+      ofstream newFile("Map.txt");
+      
+      for(std::map<std::pair<std::pair<std::pair<std::pair<int,int>,std::pair<double,double>>,int>,std::pair<std::pair<std::pair<double,double>,std::pair<std::pair<double,double>,std::pair<double,double>>>,std::pair<std::pair<double,double>,std::pair<std::pair<double,double>,std::pair<double,double>>>>>,double>::iterator itr2=FinalMap.begin(); itr2 !=FinalMap.end();itr2++){
+	  
+	  newFile<< itr2->first.first.first.first.first<<"|"<<itr2->first.first.first.first.second<<"|"<<itr2->first.first.second<<"|"<<itr2->first.second.first.first.first<<"|"<<itr2->first.second.first.first.second<<"|"<<itr2->first.second.first.second.first.first<<"|"<<itr2->first.second.first.second.first.second<<"|"<<itr2->first.second.first.second.second.first<<"|"<<itr2->first.second.first.second.second.second<<"|"<<itr2->first.second.second.first.first<<"|"<<itr2->first.second.second.first.second<<"|"<<itr2->first.second.second.second.first.first<<"|"<<itr2->first.second.second.second.first.second<< "|"<<itr2->first.second.second.second.second.first<<"|"<<itr2->first.second.second.second.second.second<<"|"<<itr2->second<<"|"<<itr2->first.first.first.second.first<<"|"<<itr2->first.first.first.second.second<<endl;
+	  
+	}
+	    
+	    
+	    newFile.close();
+	  std::cout<<" now print vector elements "<<endl;
+	  /*	  
+	  for(int i=0;i<EventNHEMiss.size();i++){
+	    std::cout<<" evt "<< EventNHEMiss[i]<<" run "<<RunNHEMiss[i]<<" lumi "<<LumiBlockNHEMiss[i]<<" muPt "<<MuPtHEMiss[i]<<" elePt "<<ElePtHEMiss[i]<<" muEta "<<MuEtaHEMiss[i]<<" eleEta "<<EleEtaHEMiss[i]<<" muPhi "<<MuPhiHEMiss[i]<<" elePhi "<<ElePhiHEMiss[i]<<" njet "<<NJetHEMiss[i]<<" btag "<<NBTagHEMiss[i]<<" ht "<<HTHEMiss[i]<<" mht "<<MHTHEMiss[i]<<" mhtphi "<<MHTPhiHEMiss[i]<<" dphi1 "<<DPhiOneHEMiss[i]<<" met "<<METHEMiss[i]<<" metphi "<<METPhiHEMiss[i]<< " mt "<<MTHEMiss[i]<<endl;
+	  }
+*/
+	    
+	  }
+      /*
+	for(std::map<int,std::map<int,int>>::iterator itr2 = EventNRunNLumiN.begin(); itr2 != EventNRunNLumiN.end(); itr2++){
+	
+	for (map<int,int>::iterator itr=itr2->first.begin(); itr != itr2->first.end(); ++itr){
+	//if(itr->second == itt->first)
+	std::cout<<" evt "<<itr->first<<" run "<<itr->second<<" lumi "<<itr2->second<<endl;
+      }
+      
+      }
+    
+*/
+      /*
+	for(int i=0;i<EventNHEMiss_Phi_Minus1_Minus1Pt4.size();i++){
+      std::cout<<"EVT "<<EventNHEMiss_Phi_Minus1_Minus1Pt4[i]<<" Run "<<RunNHEMiss_Phi_Minus1_Minus1Pt4[i]<< " lumi "<< LumiBlockNHEMiss_Phi_Minus1_Minus1Pt4[i]<<endl;
+    }
+*/
+
+
+
+
     // open a file to write the histograms
     sprintf(tempname,"%s/HadTauEstimation_%s_%s.root",Outdir.c_str(),subSampleKey.c_str(),inputnumber.c_str());
     TFile *resFile = new TFile(tempname, "RECREATE");
@@ -1587,6 +1928,12 @@ using namespace std;
     h_NJet_SearchStat->Write();
     h_NBTag_SearchStat->Write(); 
 
+    h_HT_SearchStat_TwoD->Write();
+    h_MHT_SearchStat_TwoD->Write();
+    h_MET_SearchStat_TwoD->Write();
+    h_NJet_SearchStat_TwoD->Write();
+    h_NBTag_SearchStat_TwoD->Write(); 
+
     MuonCS_pt->Write();
     MuonCS_eta->Write();
     MuonCS_phi->Write();
@@ -1595,7 +1942,16 @@ using namespace std;
     ElectronCS_eta->Write();
     ElectronCS_phi->Write();
 
+    MuonCS_TwoD_pt->Write();
+    MuonCS_TwoD_eta->Write();
+    MuonCS_TwoD_phi->Write();
 
+    //    EventNHEMiss->Write();
+    ElectronCS_TwoD_pt->Write();
+    ElectronCS_TwoD_eta->Write();
+    ElectronCS_TwoD_phi->Write();
+
+    //    EventNRunN.Write();
     j1_pt->Write();
     j2_pt->Write();
     j3_pt->Write();
@@ -1618,10 +1974,16 @@ using namespace std;
     DeltaPhi_j3MHT_SearchStat->Write();
     DeltaPhi_j4MHT_SearchStat->Write();
 
+
+    DeltaPhi_TwoD_j1MHT_SearchStat->Write(); 
+    MHTPhi_TwoD_SearchStat->Write();
+    METPhi_TwoD_SearchStat->Write();
+    MT_TwoD_SearchStat->Write();
     DeltaPhi_j1MET_SearchStat->Write();
     DeltaPhi_j2MET_SearchStat->Write();
     DeltaPhi_j3MET_SearchStat->Write();
     DeltaPhi_j4MET_SearchStat->Write();
+
 
     // Loop over different event categories (e.g. "All events, Wlnu, Zll, Zvv, etc")
    
