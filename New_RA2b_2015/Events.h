@@ -347,6 +347,7 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    int HBHEIsoNoiseFilter_() const;
    int EcalDeadCellTriggerPrimitiveFilter_() const;
    int NVtx_() const;
+   double PFCaloMETRatio_() const;
    // added on July 12, 2016
    int PFCaloMETRatioFilter_() const;
    int BadChargedCandidateFilter_() const;

@@ -981,6 +981,7 @@ vector<int>     Events::GenTauHadVec_() const {
   int Events::HBHEIsoNoiseFilter_() const {return HBHEIsoNoiseFilter;}
   int Events::EcalDeadCellTriggerPrimitiveFilter_() const {return EcalDeadCellTriggerPrimitiveFilter;}
   int Events::NVtx_() const {return NVtx;}
+double Events::PFCaloMETRatio_() const {return PFCaloMETRatio;}
   // added on July 12, 2016
 int Events::PFCaloMETRatioFilter_() const{ return (PFCaloMETRatio<5); }
 int Events::BadChargedCandidateFilter_() const {return BadChargedCandidateFilter; }
