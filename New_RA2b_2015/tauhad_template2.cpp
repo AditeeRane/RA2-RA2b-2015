@@ -1585,73 +1585,11 @@ using namespace std;
 
 		      FinalMap[std::make_pair(std::make_pair(std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),std::make_pair(evt->metphi(),lepton_mt_w)),evt->LumiBlocknum()),std::make_pair(std::make_pair(std::make_pair(GetMuPt,GetElePt),std::make_pair(std::make_pair(GetMuEta,GetEleEta),std::make_pair(GetMuPhi,GetElePhi))),std::make_pair(std::make_pair(evt->nJets(),evt->nBtags()),std::make_pair(std::make_pair(evt->ht(),evt->mht()),std::make_pair(evt->mhtphi(),evt->deltaPhi1())))))]=evt->met();
 		    
-	      }
-	
-	
-	
-	
-	//std::cout<<" eventN "<<eventN<<endl;
-	if(pass1){ // pass muon selection
-	
-  /*
-          muPt = vec_recoMuon4vec[0].Pt();
-          muEta = vec_recoMuon4vec[0].Eta();
-          muPhi = vec_recoMuon4vec[0].Phi();
-          muE  = vec_recoMuon4vec[0].E();
-*/
-	  //double activity= utils->MuActivity(muEta,muPhi,evt->JetsPtVec_(),evt->JetsEtaVec_(),evt->JetsPhiVec_(),evt->Jets_chargedEmEnergyFraction_(),evt->Jets_chargedHadronEnergyFraction_());
-	  
-	  //          double activity=vec_MTActivity[0]; 
+	}
 
-	  //          if(verbose!=0)cout << " activity: " << activity << endl;
-        
-	  //    cutflow_preselection->Fill(7.,eventWeight); // 1-mu selection
-   
-	  // for veto we have a lepton collection with softer requirements. pT > 10 not 20 and eta < 2.4 not 2.1 and also there is no 
-	  // mT cut applied. 
-	  /*	  
-	  if(TauHadModel>=2){if(evt->MuPtVec_().size()>1    || evt->ElecPtVec_().size()>1)pass1_1=true;}    // N(reco-muon)<=1, N(reco-ele)=0, 
-	  if(pass1_1){
-	    //	    std::cout<<" e/ mu > 1, skip evt "<<endl;
-	    continue;
-	  }
 
-*/	  
-	  //cutflow_preselection->Fill(8.,eventWeight); // Lepton vetos
 
-          // The muon we are using is already part of a jet. (Note: the muon is isolated by 0.2 but jet is much wider.) And,
-          // its momentum is used in HT and MHT calculation. We need to subtract this momentum and add the contribution from the simulated tau jet.
 
-          //Identify the jet containing the muon
-          const double deltaRMax = 0.4; // 0.4 is delR of jet
-
-          int JetIdx=-1;
-          GenRecMu_all++;
-	  
-          // If muon does not match a GenMuon, drop the event. We do this by applying some corrections 
-          int GenMuIdx=-1;
-	  /*
-          if(!isData && !utils->findMatchedObject(GenMuIdx,muEta,muPhi,evt->GenMuPtVec_(),evt->GenMuEtaVec_(),evt->GenMuPhiVec_(),deltaRMax,verbose)){
-            GenRecMu_fail++;
-            if(evt->DataBool_()==false && eventN < 100){
-              printf(" Warning! There is no Gen Muon \n ");
-              printf("@@@@@@@@@@@@@@@@@@\n eventN: %d \n MuPt: %g MuEta: %g MuPhi: %g \n ",eventN,muPt,muEta,muPhi);
-            }
-            
-          }
-*/
-          // start of bootstrapping ( if is on ) 
-          for(int l=1; l<=nLoops;l++){
-
-            // start of btag on/off for had tau jets ( if is on ) 
-            for(int m=0; m<nBtagsForHadTau;m++){
-	     
-	      //	      if( sel->ht_base(evt->ht()) && sel->mht_base(evt->mht()) && sel->Njet_base(evt->nJets()) ){
-	      bool FoundHEMiss_Phi_2Pt38_2Pt72 =false;
-	      bool FoundHEMiss_Phi_Minus1_Minus1Pt4=false;
-	      //std::cout<<" this is a lepton event "<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
-
-	      
 	if(utils2::UseHEMEvtMap){
 	ifstream ifile("Map.txt");
 	vector<int> vecEvt;
@@ -1680,7 +1618,7 @@ using namespace std;
 	      //std::cout<<" evtN not matched, go to next line"<<" ReadLine "<<ReadLine<<" evt "<<evt->Evtnum()<<" p "<<p<<endl;
 	      continue;
 	    }
-	    std::cout<<" found event with same evt number "<<" RefEvt "<<CheckEvtNum<<" nevt "<<eventN<<endl;
+	    //	    std::cout<<" found event with same evt number "<<" RefEvt "<<CheckEvtNum<<" nevt "<<eventN<<endl;
 	    while (p!= NULL){
 	      if(vecEvt.size()<3){	      
 		int number= atoi(p);
@@ -1763,32 +1701,28 @@ using namespace std;
 	} //end of use map
 
 
-
-
-
-	
 	if(utils2::UseHEMEvtMap){
 	  h_HT_SearchStat->Fill(evt->ht(),eventWeight);
 	  h_MHT_SearchStat->Fill(evt->mht(),eventWeight);
 	  h_NJet_SearchStat->Fill(evt->nJets(),eventWeight); 
 	  h_NBTag_SearchStat->Fill(evt->nBtags(),eventWeight); 
 	  h_MET_SearchStat->Fill(evt->met(),eventWeight);
-	  /*
+	  
 	  h_HT_SearchStat_TwoD->Fill(NomHT,evt->ht(),eventWeight);
 	  h_MHT_SearchStat_TwoD->Fill(NomMHT,evt->mht(),eventWeight);
 	  h_NJet_SearchStat_TwoD->Fill(NomNJet,evt->nJets(),eventWeight);
 	  h_NBTag_SearchStat_TwoD->Fill(NomNBtag,evt->nBtags(),eventWeight);
 	  h_MET_SearchStat_TwoD->Fill(NomMET,evt->met(),eventWeight);
-	  */
+	  
 	  DeltaPhi_j1MHT_SearchStat->Fill(evt->deltaPhi1(),eventWeight);
 	  DeltaPhi_j2MHT_SearchStat->Fill(evt->deltaPhi2(),eventWeight);
 	  DeltaPhi_j3MHT_SearchStat->Fill(evt->deltaPhi3(),eventWeight);
 	  DeltaPhi_j4MHT_SearchStat->Fill(evt->deltaPhi4(),eventWeight);
-	  /*
+	  
 	  DeltaPhi_TwoD_j1MHT_SearchStat->Fill(NomDphiOne,evt->deltaPhi1(),eventWeight);
 	  MHTPhi_TwoD_SearchStat->Fill(NomMHTPhi,evt->mhtphi(),eventWeight);
 	  METPhi_TwoD_SearchStat->Fill(NomMETPhi,evt->metphi(),eventWeight);
-	  MT_TwoD_SearchStat->Fill(NomMT,mu_mt_w,eventWeight);
+	  MT_TwoD_SearchStat->Fill(NomMT,lepton_mt_w,eventWeight);
 	  MuonCS_TwoD_pt->Fill(NomMuPt,GetMuPt,eventWeight);
 	  MuonCS_TwoD_eta->Fill(NomMuEta,GetMuEta,eventWeight);
 	  MuonCS_TwoD_phi->Fill(NomMuPhi,GetMuPhi,eventWeight);
@@ -1797,7 +1731,7 @@ using namespace std;
 	  ElectronCS_TwoD_pt->Fill(NomElePt,GetElePt,eventWeight);
 	  ElectronCS_TwoD_eta->Fill(NomEleEta,GetEleEta,eventWeight);
 	  ElectronCS_TwoD_phi->Fill(NomElePhi,GetElePhi,eventWeight);
-	  */
+	  
 	  if(MuEvt){
 	    MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
 	    MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
@@ -1848,6 +1782,78 @@ using namespace std;
 	    }
 	  }
 	}
+	
+	
+	
+	
+	//std::cout<<" eventN "<<eventN<<endl;
+	if(pass1){ // pass muon selection
+	
+  /*
+          muPt = vec_recoMuon4vec[0].Pt();
+          muEta = vec_recoMuon4vec[0].Eta();
+          muPhi = vec_recoMuon4vec[0].Phi();
+          muE  = vec_recoMuon4vec[0].E();
+*/
+	  //double activity= utils->MuActivity(muEta,muPhi,evt->JetsPtVec_(),evt->JetsEtaVec_(),evt->JetsPhiVec_(),evt->Jets_chargedEmEnergyFraction_(),evt->Jets_chargedHadronEnergyFraction_());
+	  
+	  //          double activity=vec_MTActivity[0]; 
+
+	  //          if(verbose!=0)cout << " activity: " << activity << endl;
+        
+	  //    cutflow_preselection->Fill(7.,eventWeight); // 1-mu selection
+   
+	  // for veto we have a lepton collection with softer requirements. pT > 10 not 20 and eta < 2.4 not 2.1 and also there is no 
+	  // mT cut applied. 
+	  /*	  
+	  if(TauHadModel>=2){if(evt->MuPtVec_().size()>1    || evt->ElecPtVec_().size()>1)pass1_1=true;}    // N(reco-muon)<=1, N(reco-ele)=0, 
+	  if(pass1_1){
+	    //	    std::cout<<" e/ mu > 1, skip evt "<<endl;
+	    continue;
+	  }
+
+*/	  
+	  //cutflow_preselection->Fill(8.,eventWeight); // Lepton vetos
+
+          // The muon we are using is already part of a jet. (Note: the muon is isolated by 0.2 but jet is much wider.) And,
+          // its momentum is used in HT and MHT calculation. We need to subtract this momentum and add the contribution from the simulated tau jet.
+
+          //Identify the jet containing the muon
+          const double deltaRMax = 0.4; // 0.4 is delR of jet
+
+          int JetIdx=-1;
+          GenRecMu_all++;
+	  
+          // If muon does not match a GenMuon, drop the event. We do this by applying some corrections 
+          int GenMuIdx=-1;
+	  /*
+          if(!isData && !utils->findMatchedObject(GenMuIdx,muEta,muPhi,evt->GenMuPtVec_(),evt->GenMuEtaVec_(),evt->GenMuPhiVec_(),deltaRMax,verbose)){
+            GenRecMu_fail++;
+            if(evt->DataBool_()==false && eventN < 100){
+              printf(" Warning! There is no Gen Muon \n ");
+              printf("@@@@@@@@@@@@@@@@@@\n eventN: %d \n MuPt: %g MuEta: %g MuPhi: %g \n ",eventN,muPt,muEta,muPhi);
+            }
+            
+          }
+*/
+          // start of bootstrapping ( if is on ) 
+          for(int l=1; l<=nLoops;l++){
+
+            // start of btag on/off for had tau jets ( if is on ) 
+            for(int m=0; m<nBtagsForHadTau;m++){
+	     
+	      //	      if( sel->ht_base(evt->ht()) && sel->mht_base(evt->mht()) && sel->Njet_base(evt->nJets()) ){
+	      bool FoundHEMiss_Phi_2Pt38_2Pt72 =false;
+	      bool FoundHEMiss_Phi_Minus1_Minus1Pt4=false;
+	      //std::cout<<" this is a lepton event "<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
+
+	      
+
+
+
+
+
+	
 
 
 
