@@ -127,7 +127,8 @@ using namespace std;
     hAcc_All->Sumw2();
     hAcc_Pass->Sumw2();
     double mu_mt_w=-999;
-            
+    double ele_mt_w=-999;
+    double lepton_mt_w=-999;  
     //sprintf(prefix,"/data3/");
     int GetMuSize=0;
     int GetEleSize=0;
@@ -1171,13 +1172,6 @@ using namespace std;
       //      std::cout<<" new event "<<end
       eventWeight = evt->weight();
 
-      if(evt->Evtnum()==7286689 || evt->Evtnum()==8807529 || evt->Evtnum()==14896134 || evt->Evtnum()==13953729 || evt->Evtnum()==15032179 || evt->Evtnum()==23353873 || evt->Evtnum()==33196870 || evt->Evtnum()==36389072 || evt->Evtnum()==41717397 || evt->Evtnum()==53056746 || evt->Evtnum()==59044044 || evt->Evtnum()==59151392 || evt->Evtnum()==58428850 || evt->Evtnum()==61692024 || evt->Evtnum()==61249338 || evt->Evtnum()==63020488 || evt->Evtnum()==62135409 || evt->Evtnum()==66750128 || evt->Evtnum()==66419751 || evt->Evtnum()==66621296 || evt->Evtnum()==68433567 || evt->Evtnum()==71333238 || evt->Evtnum()==80930990 || evt->Evtnum()==80416101 || evt->Evtnum()==81939318 || evt->Evtnum()==82234847 || evt->Evtnum()==83381598 || evt->Evtnum()==84171013 || evt->Evtnum()==91240103 || evt->Evtnum()==91288363 || evt->Evtnum()==91293803 || evt->Evtnum()==90134295 || evt->Evtnum()==91117353 || evt->Evtnum()==91002569 || evt->Evtnum()==93905275 || evt->Evtnum()==98778317 || evt->Evtnum()==101993249 || evt->Evtnum()==102095604 || evt->Evtnum()==102264861 || evt->Evtnum()==109125978 || evt->Evtnum()==108765778 || evt->Evtnum()==115662987 || evt->Evtnum()==117737411 || evt->Evtnum()==118365907 || evt->Evtnum()==121701051 || evt->Evtnum()==122276775 || evt->Evtnum()==127919647 || evt->Evtnum()==5005701 || evt->Evtnum()==4088463 || evt->Evtnum()==18763090 || evt->Evtnum()==19970618 || evt->Evtnum()==28451569 || evt->Evtnum()==27677768 || evt->Evtnum()==29374776 || evt->Evtnum()==29591121 || evt->Evtnum()==30079150 || evt->Evtnum()==32429067 || evt->Evtnum()==34152246 || evt->Evtnum()==35146868 || evt->Evtnum()==42254968 || evt->Evtnum()==43212156 || evt->Evtnum()==43756109 || evt->Evtnum()==49926802 || evt->Evtnum()==51451471 || evt->Evtnum()==54877239 || evt->Evtnum()==60204594 || evt->Evtnum()==73882448 || evt->Evtnum()==74212786 || evt->Evtnum()==73872369 || evt->Evtnum()==74000362 || evt->Evtnum()==75502840 || evt->Evtnum()==96349242 || evt->Evtnum()==99670300 || evt->Evtnum()==103737002 || evt->Evtnum()==105358504 || evt->Evtnum()==107831525 || evt->Evtnum()==110825023 || evt->Evtnum()==112492199 || evt->Evtnum()==120307062 || evt->Evtnum()==124103765 || evt->Evtnum()==651154 || evt->Evtnum()==3828703 || evt->Evtnum()==3846596 || evt->Evtnum()==72802563 || evt->Evtnum()==72978711 || evt->Evtnum()==95276232 || evt->Evtnum()==117660209 || evt->Evtnum()==116379414 || evt->Evtnum()==119261176 || evt->Evtnum()==119051342 || evt->Evtnum()==130118883)
-	std::cout<<"****event of interest***** "<<" evt "<<evt->Evtnum()<<" PFCaloMetRatio "<<evt->PFCaloMETRatio_()<<endl;
-      else
-	continue;
-      
-
-
 
       double puWeight = 
 	puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
@@ -1440,7 +1434,7 @@ using namespace std;
             double energy=evt->ElecEVec_().at(i); // Ahmad33
 	    bool passMini = evt->Electrons_passIso_().at(i);
 	    //            double activity_ = evt->MTActivityVec_().at(i);
-            double ele_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
+	    ele_mt_w =utils->calcMT(pt,phi,evt->met(),evt->metphi());  
 	    //	    std::cout<<" eventN "<<eventN<<" ele_pt "<<pt<<" ele_eta "<<eta<<endl;
 	    if(pt<20 || fabs(eta)>2.1)
 	      ElectronFailAcc++;
@@ -1500,6 +1494,21 @@ using namespace std;
 	int MuonFailIso=999;
 	int ElectronBeforeIso=999;
 	int MuonBeforeIso=999;
+
+
+	bool pass1_1=false;
+
+	if(TauHadModel>=2){
+	  int nGetLepPassIso=evt->nElectrons()+evt->nMuons();
+	  if(nGetLepPassIso !=1)
+	    pass1_1=true;
+	}    // N(reco-muon)<=1, N(reco-ele)=0, 
+	
+
+
+
+
+
         if(TauHadModel>=2){
 	  if(vec_recoMuonWithoutIsolation4vec.size() == 1 && vec_recoElectronWithoutIsolation4vec.size() ==0){
 	    MuonFailIso=1;
@@ -1513,19 +1522,21 @@ using namespace std;
 	  if(GetMuSize==0 && GetEleSize==1) 
 	    ElectronBeforeIso=1;
 
-	  if(vec_recoMuon4vec.size() == 1 && vec_recoElectron4vec.size() ==0){
+	  if(vec_recoMuon4vec.size() == 1 && vec_recoElectron4vec.size() ==0 && !pass1_1){
 	    MuEvt=true;
 	    GetMuPt=vec_recoMuon4vec[0].Pt();
 	    GetMuEta=vec_recoMuon4vec[0].Eta();
 	    GetMuPhi=vec_recoMuon4vec[0].Phi();
+	    lepton_mt_w=vec_recoMuMTW[0];
 	    MuonCSevt++;
 	    //	    std::cout<<" eventN "<<eventN<<" this is muon event "<<endl;
 	  }
-	  if(vec_recoElectron4vec.size() == 1 && vec_recoMuon4vec.size() ==0){
+	  if(vec_recoElectron4vec.size() == 1 && vec_recoMuon4vec.size() ==0 && !pass1_1){
 	    EleEvt=true;
 	    GetElePt=vec_recoElectron4vec[0].Pt();
 	    GetEleEta=vec_recoElectron4vec[0].Eta();
 	    GetElePhi=vec_recoElectron4vec[0].Phi();
+	    lepton_mt_w=vec_recoEleMTW[0];
 	    ElectronCSevt++;
 	    //std::cout<<" eventN "<<eventN<<" this is electron event "<<endl;
 	  }
@@ -1536,31 +1547,49 @@ using namespace std;
 	  }
 	} // Number of reco-level muon=1
 
+	
+	if(utils2::GetHEMEvtMap){
+		    //		    std::cout<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" eta "<<evt->JetsEtaVec_()[i]<<" phi "<<evt->JetsPhiVec_()[i]<<endl;
+		    EventNHEMiss.push_back(evt->Evtnum());
+		    RunNHEMiss.push_back(evt->Runnum());
+		    LumiBlockNHEMiss.push_back(evt->LumiBlocknum());
+		    MuPtHEMiss.push_back(GetMuPt);
+		    MuEtaHEMiss.push_back(GetMuEta);
+		    MuPhiHEMiss.push_back(GetMuPhi);
+		    ElePtHEMiss.push_back(GetElePt);
+		    EleEtaHEMiss.push_back(GetEleEta);
+		    ElePhiHEMiss.push_back(GetElePhi);
+		    NJetHEMiss.push_back(evt->nJets());
+		    NBTagHEMiss.push_back(evt->nBtags());
+		    HTHEMiss.push_back(evt->ht());
+		    MHTHEMiss.push_back(evt->mht());
+		    MHTPhiHEMiss.push_back(evt->mhtphi());
+		    DPhiOneHEMiss.push_back(evt->deltaPhi1());
+		    METHEMiss.push_back(evt->met());
+		    METPhiHEMiss.push_back(evt->metphi());
+		    MTHEMiss.push_back(lepton_mt_w);
+		    //EventNRunN.emplace(evt->Evtnum(),evt->Runnum());
+		    //*AR: 180801: creates a map of (evt, run, lumiblock)
+		    
+		    EventNRunN[evt->Evtnum()]=evt->Runnum();
+		    EventNRunNLumiN[evt->Evtnum()][evt->Runnum()]=evt->LumiBlocknum();
 
-	if(evt->Evtnum()==7286689 || evt->Evtnum()==8807529 || evt->Evtnum()==14896134 || evt->Evtnum()==13953729 || evt->Evtnum()==15032179 || evt->Evtnum()==23353873 || evt->Evtnum()==33196870 || evt->Evtnum()==36389072 || evt->Evtnum()==41717397 || evt->Evtnum()==53056746 || evt->Evtnum()==59044044 || evt->Evtnum()==59151392 || evt->Evtnum()==58428850 || evt->Evtnum()==61692024 || evt->Evtnum()==61249338 || evt->Evtnum()==63020488 || evt->Evtnum()==62135409 || evt->Evtnum()==66750128 || evt->Evtnum()==66419751 || evt->Evtnum()==66621296 || evt->Evtnum()==68433567 || evt->Evtnum()==71333238 || evt->Evtnum()==80930990 || evt->Evtnum()==80416101 || evt->Evtnum()==81939318 || evt->Evtnum()==82234847 || evt->Evtnum()==83381598 || evt->Evtnum()==84171013 || evt->Evtnum()==91240103 || evt->Evtnum()==91288363 || evt->Evtnum()==91293803 || evt->Evtnum()==90134295 || evt->Evtnum()==91117353 || evt->Evtnum()==91002569 || evt->Evtnum()==93905275 || evt->Evtnum()==98778317 || evt->Evtnum()==101993249 || evt->Evtnum()==102095604 || evt->Evtnum()==102264861 || evt->Evtnum()==109125978 || evt->Evtnum()==108765778 || evt->Evtnum()==115662987 || evt->Evtnum()==117737411 || evt->Evtnum()==118365907 || evt->Evtnum()==121701051 || evt->Evtnum()==122276775 || evt->Evtnum()==127919647 || evt->Evtnum()==5005701 || evt->Evtnum()==4088463 || evt->Evtnum()==18763090 || evt->Evtnum()==19970618 || evt->Evtnum()==28451569 || evt->Evtnum()==27677768 || evt->Evtnum()==29374776 || evt->Evtnum()==29591121 || evt->Evtnum()==30079150 || evt->Evtnum()==32429067 || evt->Evtnum()==34152246 || evt->Evtnum()==35146868 || evt->Evtnum()==42254968 || evt->Evtnum()==43212156 || evt->Evtnum()==43756109 || evt->Evtnum()==49926802 || evt->Evtnum()==51451471 || evt->Evtnum()==54877239 || evt->Evtnum()==60204594 || evt->Evtnum()==73882448 || evt->Evtnum()==74212786 || evt->Evtnum()==73872369 || evt->Evtnum()==74000362 || evt->Evtnum()==75502840 || evt->Evtnum()==96349242 || evt->Evtnum()==99670300 || evt->Evtnum()==103737002 || evt->Evtnum()==105358504 || evt->Evtnum()==107831525 || evt->Evtnum()==110825023 || evt->Evtnum()==112492199 || evt->Evtnum()==120307062 || evt->Evtnum()==124103765 || evt->Evtnum()==651154 || evt->Evtnum()==3828703 || evt->Evtnum()==3846596 || evt->Evtnum()==72802563 || evt->Evtnum()==72978711 || evt->Evtnum()==95276232 || evt->Evtnum()==117660209 || evt->Evtnum()==116379414 || evt->Evtnum()==119261176 || evt->Evtnum()==119051342 || evt->Evtnum()==130118883){
-	  if(GetMuPt!=900){
-	    LeptonCS_MisReco_pt->Fill(GetMuPt,eventWeight);
-	    LeptonCS_MisReco_eta->Fill(GetMuEta,eventWeight);
-	    LeptonCS_MisReco_phi->Fill(GetMuPhi,eventWeight);
-	  }
-	  if(GetElePt!=900){
-	    LeptonCS_MisReco_pt->Fill(GetElePt,eventWeight);
-	    LeptonCS_MisReco_eta->Fill(GetEleEta,eventWeight);
-	    LeptonCS_MisReco_phi->Fill(GetElePhi,eventWeight);
-	  }
-	  
+		    EventNRunNLumiNMET[std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),evt->LumiBlocknum())]=evt->met();
 
-	  std::cout<<"****nominal evt with no match to 1L HEM***** "<<" nevt "<<eventN<<" evt "<< evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" MuonBeforeIso "<<MuonBeforeIso<<" ElectronBeforeIso "<<ElectronBeforeIso<<" GetMuPt "<<GetMuPt<<" GetMuEta "<<GetMuEta<<" GetMuPhi "<<GetMuPhi<<" GetElePt "<<GetElePt<<" GetEleEta "<<GetEleEta<<" GetElePhi "<<GetElePhi<<endl;
-	}
-	else
-	  continue;
+		    MuEtaEleEtaMET[std::make_pair(GetMuEta,GetEleEta)]=evt->met();
+		    HTMHTMET[std::make_pair(evt->ht(),evt->mht())]=evt->met();
+		    //		    std::make_pair(evt->Evtnum(),evt->Runnum())
+		    //std::make_pair(evt->metphi(),mu_mt_w)
+		    //		      std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),std::make_pair(evt->metphi(),mu_mt_w))
+		      
 
-
-
-
-
-
-
+		      FinalMap[std::make_pair(std::make_pair(std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),std::make_pair(evt->metphi(),lepton_mt_w)),evt->LumiBlocknum()),std::make_pair(std::make_pair(std::make_pair(GetMuPt,GetElePt),std::make_pair(std::make_pair(GetMuEta,GetEleEta),std::make_pair(GetMuPhi,GetElePhi))),std::make_pair(std::make_pair(evt->nJets(),evt->nBtags()),std::make_pair(std::make_pair(evt->ht(),evt->mht()),std::make_pair(evt->mhtphi(),evt->deltaPhi1())))))]=evt->met();
+		    
+	      }
+	
+	
+	
+	
 	//std::cout<<" eventN "<<eventN<<endl;
 	if(pass1){ // pass muon selection
 	
@@ -1578,8 +1607,6 @@ using namespace std;
         
 	  //    cutflow_preselection->Fill(7.,eventWeight); // 1-mu selection
    
-	  bool pass1_1=false;
-
 	  // for veto we have a lepton collection with softer requirements. pT > 10 not 20 and eta < 2.4 not 2.1 and also there is no 
 	  // mT cut applied. 
 	  /*	  
@@ -1590,17 +1617,6 @@ using namespace std;
 	  }
 
 */	  
-	  if(TauHadModel>=2){
-	    int nGetLepPassIso=evt->nElectrons()+evt->nMuons();
-	    if(nGetLepPassIso !=1)
-	      pass1_1=true;
-	  }    // N(reco-muon)<=1, N(reco-ele)=0, 
-	  if(pass1_1){
-	    //	    std::cout<<" e/ mu > 1, skip evt "<<endl;
-	    continue;
-	  }
-	  
-	  PassNoExtraEleOrMuWithIsoApplied++;
 	  //cutflow_preselection->Fill(8.,eventWeight); // Lepton vetos
 
           // The muon we are using is already part of a jet. (Note: the muon is isolated by 0.2 but jet is much wider.) And,
@@ -1750,7 +1766,7 @@ using namespace std;
 
 
 
-
+	
 	if(utils2::UseHEMEvtMap){
 	  h_HT_SearchStat->Fill(evt->ht(),eventWeight);
 	  h_MHT_SearchStat->Fill(evt->mht(),eventWeight);
@@ -1795,6 +1811,7 @@ using namespace std;
 	    
 	  }
 	}
+
 	
 	if(utils2::UseHEMEvtMap){
 	  if(evt->JetsEtaVec_().size()>0)
@@ -1835,55 +1852,6 @@ using namespace std;
 
 
 	      
-	      if(utils2::GetHEMEvtMap){
-		    //		    std::cout<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" eta "<<evt->JetsEtaVec_()[i]<<" phi "<<evt->JetsPhiVec_()[i]<<endl;
-		    EventNHEMiss.push_back(evt->Evtnum());
-		    RunNHEMiss.push_back(evt->Runnum());
-		    LumiBlockNHEMiss.push_back(evt->LumiBlocknum());
-		    MuPtHEMiss.push_back(GetMuPt);
-		    MuEtaHEMiss.push_back(GetMuEta);
-		    MuPhiHEMiss.push_back(GetMuPhi);
-		    ElePtHEMiss.push_back(GetElePt);
-		    EleEtaHEMiss.push_back(GetEleEta);
-		    ElePhiHEMiss.push_back(GetElePhi);
-		    NJetHEMiss.push_back(evt->nJets());
-		    NBTagHEMiss.push_back(evt->nBtags());
-		    HTHEMiss.push_back(evt->ht());
-		    MHTHEMiss.push_back(evt->mht());
-		    MHTPhiHEMiss.push_back(evt->mhtphi());
-		    DPhiOneHEMiss.push_back(evt->deltaPhi1());
-		    METHEMiss.push_back(evt->met());
-		    METPhiHEMiss.push_back(evt->metphi());
-		    MTHEMiss.push_back(mu_mt_w);
-		    //EventNRunN.emplace(evt->Evtnum(),evt->Runnum());
-		    //*AR: 180801: creates a map of (evt, run, lumiblock)
-		    
-		    EventNRunN[evt->Evtnum()]=evt->Runnum();
-		    EventNRunNLumiN[evt->Evtnum()][evt->Runnum()]=evt->LumiBlocknum();
-
-		    EventNRunNLumiNMET[std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),evt->LumiBlocknum())]=evt->met();
-
-		    MuEtaEleEtaMET[std::make_pair(GetMuEta,GetEleEta)]=evt->met();
-		    HTMHTMET[std::make_pair(evt->ht(),evt->mht())]=evt->met();
-		    //		    std::make_pair(evt->Evtnum(),evt->Runnum())
-		    //std::make_pair(evt->metphi(),mu_mt_w)
-		    //		      std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),std::make_pair(evt->metphi(),mu_mt_w))
-		      
-
-		      FinalMap[std::make_pair(std::make_pair(std::make_pair(std::make_pair(evt->Evtnum(),evt->Runnum()),std::make_pair(evt->metphi(),mu_mt_w)),evt->LumiBlocknum()),std::make_pair(std::make_pair(std::make_pair(GetMuPt,GetElePt),std::make_pair(std::make_pair(GetMuEta,GetEleEta),std::make_pair(GetMuPhi,GetElePhi))),std::make_pair(std::make_pair(evt->nJets(),evt->nBtags()),std::make_pair(std::make_pair(evt->ht(),evt->mht()),std::make_pair(evt->mhtphi(),evt->deltaPhi1())))))]=evt->met();
-		    //		    std::cout<<" seg vio "<<endl;
-
-		    
-
-		    //LumiNEventNRunN.emplace(evt->LumiBlocknum(),EventNRunN);
-		    //		    int Runj=evt->Runnum();
-		    
-		    
-		    //EventNLumiN[evt->Evtnum()]=evt->LumiBlocknum();
-		    //		    EventNRunNLumiN[evt->Evtnum(),evt->Runnum()]=evt->LumiBlocknum();
-		    //LumiNRootFile[evt->LumiBlocknum()]=InRootList.c_str();
-		    
-	      }
 
 	      //	      std::cout<<" eventN "<<eventN<<" ht "<<evt->ht()<<" mht "<<evt->mht()<<" njet "<<evt->nJets()<<" btag "<<evt->nBtags()<<" met "<<evt->met()<<endl;
 	      
@@ -1986,7 +1954,7 @@ using namespace std;
 	  }
 */
 	    
-	  }
+    }
       /*
 	for(std::map<int,std::map<int,int>>::iterator itr2 = EventNRunNLumiN.begin(); itr2 != EventNRunNLumiN.end(); itr2++){
 	
