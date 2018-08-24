@@ -1157,8 +1157,7 @@ using namespace std;
       double NomMET=-99;
       double NomMETPhi=-99;
       double NomMT=-999;
-      /*  
-    if(utils2::UseHEMEvtMap){
+      if(utils2::UseHEMEvtMap){
 	ifstream ifile("Map.txt");
 	vector<int> vecEvt;
 	vector<double> vecEvtDetails;
@@ -1242,7 +1241,7 @@ using namespace std;
       } //end of use map
       
 
-*/
+
 
 
       //      std::cout<<" new event "<<endl;
@@ -1671,23 +1670,22 @@ using namespace std;
 	  h_NJet_SearchStat->Fill(evt->nJets(),eventWeight); 
 	  h_NBTag_SearchStat->Fill(evt->nBtags(),eventWeight); 
 	  h_MET_SearchStat->Fill(evt->met(),eventWeight);
-	  /*
+	  
 	  h_HT_SearchStat_TwoD->Fill(NomHT,evt->ht(),eventWeight);
 	  h_MHT_SearchStat_TwoD->Fill(NomMHT,evt->mht(),eventWeight);
 	  h_NJet_SearchStat_TwoD->Fill(NomNJet,evt->nJets(),eventWeight);
 	  h_NBTag_SearchStat_TwoD->Fill(NomNBtag,evt->nBtags(),eventWeight);
 	  h_MET_SearchStat_TwoD->Fill(NomMET,evt->met(),eventWeight);
-	  */
+	  
 	  DeltaPhi_j1MHT_SearchStat->Fill(evt->deltaPhi1(),eventWeight);
 	  DeltaPhi_j2MHT_SearchStat->Fill(evt->deltaPhi2(),eventWeight);
 	  DeltaPhi_j3MHT_SearchStat->Fill(evt->deltaPhi3(),eventWeight);
 	  DeltaPhi_j4MHT_SearchStat->Fill(evt->deltaPhi4(),eventWeight);
-	  /*	  
+	  
 	  DeltaPhi_TwoD_j1MHT_SearchStat->Fill(NomDphiOne,evt->deltaPhi1(),eventWeight);
 	  MHTPhi_TwoD_SearchStat->Fill(NomMHTPhi,evt->mhtphi(),eventWeight);
 	  METPhi_TwoD_SearchStat->Fill(NomMETPhi,evt->metphi(),eventWeight);
 	  MT_TwoD_SearchStat->Fill(NomMT,mu_mt_w,eventWeight);
-
 	  MuonCS_TwoD_pt->Fill(NomMuPt,GetMuPt,eventWeight);
 	  MuonCS_TwoD_eta->Fill(NomMuEta,GetMuEta,eventWeight);
 	  MuonCS_TwoD_phi->Fill(NomMuPhi,GetMuPhi,eventWeight);
@@ -1696,7 +1694,7 @@ using namespace std;
 	  ElectronCS_TwoD_pt->Fill(NomElePt,GetElePt,eventWeight);
 	  ElectronCS_TwoD_eta->Fill(NomEleEta,GetEleEta,eventWeight);
 	  ElectronCS_TwoD_phi->Fill(NomElePhi,GetElePhi,eventWeight);
-	  */	  
+	  
 	  if(MuEvt){
 	    MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
 	    MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
