@@ -98,8 +98,10 @@ using namespace std;
     vector<double> vec_recoMuMTW;
     vector<double> vec_MTActivity;
     vector<TLorentzVector> vec_recoMuon4vec;
+    vector<TLorentzVector> vec_recoMuonWithoutIsolation4vec;
     vector<double> vec_recoEleMTW;
     vector<TLorentzVector> vec_recoElectron4vec;
+    vector<TLorentzVector> vec_recoElectronWithoutIsolation4vec;
 
     vector<TVector3> vec_recoElec3vec;
     TVector3 temp3vec;
@@ -358,6 +360,13 @@ using namespace std;
     MuonCS_pt->Sumw2();
     MuonCS_eta->Sumw2();
     MuonCS_phi->Sumw2();
+
+    TH1 * LeptonCS_MisReco_pt=new TH1D("LeptonCS_MisReco_pt","LeptonCS_MisReco_pt",100,0.0,1000.0); 
+    TH1 * LeptonCS_MisReco_eta=new TH1D("LeptonCS_MisReco_eta","LeptonCS_MisReco_eta",100,-5.0,5.0);
+    TH1 * LeptonCS_MisReco_phi=new TH1D("LeptonCS_MisReco_phi","LeptonCS_MisReco_phi",70,-3.5,3.5); 
+    LeptonCS_MisReco_pt->Sumw2();
+    LeptonCS_MisReco_eta->Sumw2();
+    LeptonCS_MisReco_phi->Sumw2();
 
     TH2 * MuonCS_TwoD_pt=new TH2D("MuonCS_TwoD_pt","MuonCS_TwoD_pt",100,0.0,1000.0,100,0.0,1000.0); 
     TH2 * MuonCS_TwoD_eta=new TH2D("MuonCS_TwoD_eta","MuonCS_TwoD_eta",100,-5.0,5.0,100,-5.0,5.0);
@@ -1141,7 +1150,7 @@ using namespace std;
     int HEMMapMatch=0;
     while( evt->loadNext() ){
       eventN++;
-      //      std::cout<<"  **** Before Matching ****"<<" evt "<<eventN<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
+      //      std::cout<<"  **** Before Matching ****"<<" evt "<<eventN<<" "<< evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
       double NomMuPt=-99;
       double NomMuEta=-99;
       double NomMuPhi=-99;
@@ -1157,95 +1166,19 @@ using namespace std;
       double NomMET=-99;
       double NomMETPhi=-99;
       double NomMT=-999;
-      if(utils2::UseHEMEvtMap){
-	ifstream ifile("Map.txt");
-	vector<int> vecEvt;
-	vector<double> vecEvtDetails;
-	string line;
-	bool MatchEvt=false;
-	int CheckEvtNum=0;
-	int RefEvt=0;
-	int RefRun=0;
-	int RefLumi=0;
+  
+      
+      //      std::cout<<" new event "<<end
+      eventWeight = evt->weight();
 
-	while(ifile.getline(filenames, 500) )
-	  {
-	    vecEvt.clear();
-	    char *p;
-	    const char s[2] = "|";
-	    int itrr=-1;
-	    
-	    p = strtok (filenames,s);
-	    //   std::cout<<" eventN "<<eventN<<" p"<<p<<" ****** seg vio****** "<<endl;
-
-	    CheckEvtNum=atoi(p);
-	    if(CheckEvtNum != evt->Evtnum()){
-	      // std::cout<<" evtN "<<evt->Evtnum()<<" p "<<p<<endl;
-	      continue;
-	    }
-
-	    while (p!= NULL){
-	      if(vecEvt.size()<3){	      
-		int number= atoi(p);
-		vecEvt.push_back(number);
-
-	      }	      
-	      else{
-		double d = atof(p);
-		vecEvtDetails.push_back(d);
-	      }
-
-	      p = strtok (NULL, "|");
-	    }
-	    // std::cout<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
-	    if(vecEvt[0] == evt->Evtnum() && vecEvt[1]==evt->Runnum() && vecEvt[2]==evt->LumiBlocknum()){
-	      MatchEvt=true;
-	      break;
-	    } 
-	  }
-	
-	if(!MatchEvt){
-	  // if(CheckEvtNum == evt->Evtnum())
-	  //std::cout<<"****No match***** "<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
-	  continue;
-	}
-	
-	NomMuPt=vecEvtDetails[0];
-	if(NomMuPt==-99) NomMuPt=900;
-	NomElePt=vecEvtDetails[1];
-	if(NomElePt==-99) NomElePt=900;
-
-	NomMuEta=vecEvtDetails[2];
-	if(NomMuEta==-99) NomMuEta=4.;
-	NomEleEta=vecEvtDetails[3];
-	if(NomEleEta==-99) NomEleEta=4.;
-	
-	NomMuPhi=vecEvtDetails[4];
-	if(NomMuPhi==-99) NomMuPhi=3.4;
-	NomElePhi=vecEvtDetails[5];
-	if(NomElePhi==-99) NomElePhi=3.4;
-
-	NomNJet=vecEvtDetails[6];
-	NomNBtag=vecEvtDetails[7];
-	NomHT=vecEvtDetails[8];
-	NomMHT=vecEvtDetails[9];
-	NomMHTPhi=vecEvtDetails[10];
-	NomDphiOne=vecEvtDetails[11];
-	NomMET=vecEvtDetails[12];
-	NomMETPhi=vecEvtDetails[13];
-	if(NomMETPhi==-99) NomMETPhi=3.4;
-	NomMT=vecEvtDetails[14];
-	if(NomMT==-999) NomMT=800;
-	HEMMapMatch++;
-	//	std::cout<<"  ** matched found **"<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" muPt "<<NomMuPt<<" elePt "<<NomElePt<<" muEta "<<NomMuEta<<" eleeta "<<NomEleEta<<" muPhi "<<NomMuPhi<<" elePhi "<<NomElePhi<<" njet "<<NomNJet<<" nbtag "<<NomNBtag<<" ht "<<NomHT<<" mht "<<NomMHT<<" mhtphi "<<NomMHTPhi<<" dphi1 "<<NomDphiOne<<" met "<<NomMET<<endl;
-      } //end of use map
+      if(evt->Evtnum()==7286689 || evt->Evtnum()==8807529 || evt->Evtnum()==14896134 || evt->Evtnum()==13953729 || evt->Evtnum()==15032179 || evt->Evtnum()==23353873 || evt->Evtnum()==33196870 || evt->Evtnum()==36389072 || evt->Evtnum()==41717397 || evt->Evtnum()==53056746 || evt->Evtnum()==59044044 || evt->Evtnum()==59151392 || evt->Evtnum()==58428850 || evt->Evtnum()==61692024 || evt->Evtnum()==61249338 || evt->Evtnum()==63020488 || evt->Evtnum()==62135409 || evt->Evtnum()==66750128 || evt->Evtnum()==66419751 || evt->Evtnum()==66621296 || evt->Evtnum()==68433567 || evt->Evtnum()==71333238 || evt->Evtnum()==80930990 || evt->Evtnum()==80416101 || evt->Evtnum()==81939318 || evt->Evtnum()==82234847 || evt->Evtnum()==83381598 || evt->Evtnum()==84171013 || evt->Evtnum()==91240103 || evt->Evtnum()==91288363 || evt->Evtnum()==91293803 || evt->Evtnum()==90134295 || evt->Evtnum()==91117353 || evt->Evtnum()==91002569 || evt->Evtnum()==93905275 || evt->Evtnum()==98778317 || evt->Evtnum()==101993249 || evt->Evtnum()==102095604 || evt->Evtnum()==102264861 || evt->Evtnum()==109125978 || evt->Evtnum()==108765778 || evt->Evtnum()==115662987 || evt->Evtnum()==117737411 || evt->Evtnum()==118365907 || evt->Evtnum()==121701051 || evt->Evtnum()==122276775 || evt->Evtnum()==127919647 || evt->Evtnum()==5005701 || evt->Evtnum()==4088463 || evt->Evtnum()==18763090 || evt->Evtnum()==19970618 || evt->Evtnum()==28451569 || evt->Evtnum()==27677768 || evt->Evtnum()==29374776 || evt->Evtnum()==29591121 || evt->Evtnum()==30079150 || evt->Evtnum()==32429067 || evt->Evtnum()==34152246 || evt->Evtnum()==35146868 || evt->Evtnum()==42254968 || evt->Evtnum()==43212156 || evt->Evtnum()==43756109 || evt->Evtnum()==49926802 || evt->Evtnum()==51451471 || evt->Evtnum()==54877239 || evt->Evtnum()==60204594 || evt->Evtnum()==73882448 || evt->Evtnum()==74212786 || evt->Evtnum()==73872369 || evt->Evtnum()==74000362 || evt->Evtnum()==75502840 || evt->Evtnum()==96349242 || evt->Evtnum()==99670300 || evt->Evtnum()==103737002 || evt->Evtnum()==105358504 || evt->Evtnum()==107831525 || evt->Evtnum()==110825023 || evt->Evtnum()==112492199 || evt->Evtnum()==120307062 || evt->Evtnum()==124103765 || evt->Evtnum()==651154 || evt->Evtnum()==3828703 || evt->Evtnum()==3846596 || evt->Evtnum()==72802563 || evt->Evtnum()==72978711 || evt->Evtnum()==95276232 || evt->Evtnum()==117660209 || evt->Evtnum()==116379414 || evt->Evtnum()==119261176 || evt->Evtnum()==119051342 || evt->Evtnum()==130118883)
+	std::cout<<"****event of interest***** "<<" evt "<<evt->Evtnum()<<" PFCaloMetRatio "<<evt->PFCaloMETRatio_()<<endl;
+      else
+	continue;
       
 
 
 
-
-      //      std::cout<<" new event "<<endl;
-      eventWeight = evt->weight();
       double puWeight = 
 	puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
       //std::cout<<" interactions "<<evt->TrueNumInteractions_()<<" findbin "<<puhist->GetXaxis()->FindBin(evt->TrueNumInteractions_())<<" lastbin "<<puhist->GetBinLowEdge(puhist->GetNbinsX()+1)<<" puweight "<<puWeight<<endl;    
@@ -1254,7 +1187,7 @@ using namespace std;
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
       //eventWeight = evt->weight()/evt->puweight();
-      //      if(eventN>20000)break;
+      //      if(eventN>10000)break;
       if(eventN%5000==0)
 	std::cout<<" eventN "<<eventN<<endl;
       //if(eventN>50)break;
@@ -1433,16 +1366,17 @@ using namespace std;
         vec_recoMuMTW.clear(); 
         vec_recoMuon4vec.clear();
         vec_MTActivity.clear();  
-
+	vec_recoMuonWithoutIsolation4vec.clear();
 	vec_recoEleMTW.clear();
 	vec_recoElectron4vec.clear();
+	vec_recoElectronWithoutIsolation4vec.clear();
 	vector<int> MuFromTauVec;//Ahmad33
 	MuFromTauVec.clear();//Ahmad33
 	if(evt->MuPtVec_().size()==0 && evt->ElecPtVec_().size()==0)
 	  noLepEvt++;
-	if(evt->MuPtVec_().size()==1)
+	if(evt->MuPtVec_().size()==1 && evt->ElecPtVec_().size()==0)
 	  OneMuEvt++;
-	if(evt->ElecPtVec_().size()==1)
+	if(evt->ElecPtVec_().size()==1 && evt->MuPtVec_().size()==0)
 	  OneEleEvt++;
 
         // Consistancy check
@@ -1487,6 +1421,10 @@ using namespace std;
 	      }
               vec_recoMuMTW.push_back(mu_mt_w); 
             }
+	    else{
+	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
+	      vec_recoMuonWithoutIsolation4vec.push_back(temp4vec);
+	    }
           }
 	 
 
@@ -1520,6 +1458,10 @@ using namespace std;
 	      }
               vec_recoEleMTW.push_back(ele_mt_w); 
             }
+	    else{
+	      temp4vec.SetPtEtaPhiE(pt,eta,phi,energy);
+	      vec_recoElectronWithoutIsolation4vec.push_back(temp4vec);
+	    }
           }
 	  
 	  
@@ -1554,8 +1496,22 @@ using namespace std;
 	double GetElePt=900;
 	double GetEleEta=4.;
 	double GetElePhi=3.4;
-
+	int ElectronFailIso=999;
+	int MuonFailIso=999;
+	int ElectronBeforeIso=999;
+	int MuonBeforeIso=999;
         if(TauHadModel>=2){
+	  if(vec_recoMuonWithoutIsolation4vec.size() == 1 && vec_recoElectronWithoutIsolation4vec.size() ==0){
+	    MuonFailIso=1;
+	  }
+	  if(vec_recoMuonWithoutIsolation4vec.size() == 0 && vec_recoElectronWithoutIsolation4vec.size() ==1){
+	    ElectronFailIso=1;
+	  }
+
+	  if(GetMuSize==1 && GetEleSize==0)
+	    MuonBeforeIso=1;
+	  if(GetMuSize==0 && GetEleSize==1) 
+	    ElectronBeforeIso=1;
 
 	  if(vec_recoMuon4vec.size() == 1 && vec_recoElectron4vec.size() ==0){
 	    MuEvt=true;
@@ -1581,8 +1537,23 @@ using namespace std;
 	} // Number of reco-level muon=1
 
 
+	if(evt->Evtnum()==7286689 || evt->Evtnum()==8807529 || evt->Evtnum()==14896134 || evt->Evtnum()==13953729 || evt->Evtnum()==15032179 || evt->Evtnum()==23353873 || evt->Evtnum()==33196870 || evt->Evtnum()==36389072 || evt->Evtnum()==41717397 || evt->Evtnum()==53056746 || evt->Evtnum()==59044044 || evt->Evtnum()==59151392 || evt->Evtnum()==58428850 || evt->Evtnum()==61692024 || evt->Evtnum()==61249338 || evt->Evtnum()==63020488 || evt->Evtnum()==62135409 || evt->Evtnum()==66750128 || evt->Evtnum()==66419751 || evt->Evtnum()==66621296 || evt->Evtnum()==68433567 || evt->Evtnum()==71333238 || evt->Evtnum()==80930990 || evt->Evtnum()==80416101 || evt->Evtnum()==81939318 || evt->Evtnum()==82234847 || evt->Evtnum()==83381598 || evt->Evtnum()==84171013 || evt->Evtnum()==91240103 || evt->Evtnum()==91288363 || evt->Evtnum()==91293803 || evt->Evtnum()==90134295 || evt->Evtnum()==91117353 || evt->Evtnum()==91002569 || evt->Evtnum()==93905275 || evt->Evtnum()==98778317 || evt->Evtnum()==101993249 || evt->Evtnum()==102095604 || evt->Evtnum()==102264861 || evt->Evtnum()==109125978 || evt->Evtnum()==108765778 || evt->Evtnum()==115662987 || evt->Evtnum()==117737411 || evt->Evtnum()==118365907 || evt->Evtnum()==121701051 || evt->Evtnum()==122276775 || evt->Evtnum()==127919647 || evt->Evtnum()==5005701 || evt->Evtnum()==4088463 || evt->Evtnum()==18763090 || evt->Evtnum()==19970618 || evt->Evtnum()==28451569 || evt->Evtnum()==27677768 || evt->Evtnum()==29374776 || evt->Evtnum()==29591121 || evt->Evtnum()==30079150 || evt->Evtnum()==32429067 || evt->Evtnum()==34152246 || evt->Evtnum()==35146868 || evt->Evtnum()==42254968 || evt->Evtnum()==43212156 || evt->Evtnum()==43756109 || evt->Evtnum()==49926802 || evt->Evtnum()==51451471 || evt->Evtnum()==54877239 || evt->Evtnum()==60204594 || evt->Evtnum()==73882448 || evt->Evtnum()==74212786 || evt->Evtnum()==73872369 || evt->Evtnum()==74000362 || evt->Evtnum()==75502840 || evt->Evtnum()==96349242 || evt->Evtnum()==99670300 || evt->Evtnum()==103737002 || evt->Evtnum()==105358504 || evt->Evtnum()==107831525 || evt->Evtnum()==110825023 || evt->Evtnum()==112492199 || evt->Evtnum()==120307062 || evt->Evtnum()==124103765 || evt->Evtnum()==651154 || evt->Evtnum()==3828703 || evt->Evtnum()==3846596 || evt->Evtnum()==72802563 || evt->Evtnum()==72978711 || evt->Evtnum()==95276232 || evt->Evtnum()==117660209 || evt->Evtnum()==116379414 || evt->Evtnum()==119261176 || evt->Evtnum()==119051342 || evt->Evtnum()==130118883){
+	  if(GetMuPt!=900){
+	    LeptonCS_MisReco_pt->Fill(GetMuPt,eventWeight);
+	    LeptonCS_MisReco_eta->Fill(GetMuEta,eventWeight);
+	    LeptonCS_MisReco_phi->Fill(GetMuPhi,eventWeight);
+	  }
+	  if(GetElePt!=900){
+	    LeptonCS_MisReco_pt->Fill(GetElePt,eventWeight);
+	    LeptonCS_MisReco_eta->Fill(GetEleEta,eventWeight);
+	    LeptonCS_MisReco_phi->Fill(GetElePhi,eventWeight);
+	  }
+	  
 
-
+	  std::cout<<"****nominal evt with no match to 1L HEM***** "<<" nevt "<<eventN<<" evt "<< evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" MuonBeforeIso "<<MuonBeforeIso<<" ElectronBeforeIso "<<ElectronBeforeIso<<" GetMuPt "<<GetMuPt<<" GetMuEta "<<GetMuEta<<" GetMuPhi "<<GetMuPhi<<" GetElePt "<<GetElePt<<" GetEleEta "<<GetEleEta<<" GetElePhi "<<GetElePhi<<endl;
+	}
+	else
+	  continue;
 
 
 
@@ -1640,7 +1611,7 @@ using namespace std;
 
           int JetIdx=-1;
           GenRecMu_all++;
-
+	  
           // If muon does not match a GenMuon, drop the event. We do this by applying some corrections 
           int GenMuIdx=-1;
 	  /*
@@ -1662,6 +1633,122 @@ using namespace std;
 	      //	      if( sel->ht_base(evt->ht()) && sel->mht_base(evt->mht()) && sel->Njet_base(evt->nJets()) ){
 	      bool FoundHEMiss_Phi_2Pt38_2Pt72 =false;
 	      bool FoundHEMiss_Phi_Minus1_Minus1Pt4=false;
+	      //std::cout<<" this is a lepton event "<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<endl;
+
+	      
+	if(utils2::UseHEMEvtMap){
+	ifstream ifile("Map.txt");
+	vector<int> vecEvt;
+	vector<double> vecEvtDetails;
+	string line;
+	bool MatchEvt=false;
+	int CheckEvtNum=0;
+	int RefEvt=0;
+	int RefRun=0;
+	int RefLumi=0;
+	int ReadLine=0;
+	while(ifile.getline(filenames, 500) )
+	  {
+	    ReadLine++;
+	    vecEvt.clear();
+	    char *p;
+	    const char s[2] = "|";
+	    int itrr=-1;
+	    
+	    p = strtok (filenames,s);
+	    //std::cout<<" new line in file "<<" ReadLine "<<ReadLine<<" p "<<p<<endl;
+
+	    CheckEvtNum=atoi(p);
+	    
+	    if(CheckEvtNum != evt->Evtnum()){
+	      //std::cout<<" evtN not matched, go to next line"<<" ReadLine "<<ReadLine<<" evt "<<evt->Evtnum()<<" p "<<p<<endl;
+	      continue;
+	    }
+	    std::cout<<" found event with same evt number "<<" RefEvt "<<CheckEvtNum<<" nevt "<<eventN<<endl;
+	    while (p!= NULL){
+	      if(vecEvt.size()<3){	      
+		int number= atoi(p);
+		vecEvt.push_back(number);
+
+	      }	      
+	      else{
+		double d = atof(p);
+		vecEvtDetails.push_back(d);
+	      }
+
+	      p = strtok (NULL, "|");
+	    }
+	    // std::cout<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+	    /*
+	    if(vecEvt[0] == evt->Evtnum() && vecEvt[1]==evt->Runnum() && vecEvt[2]!=evt->LumiBlocknum())
+	      std::cout<<" no lumi match "<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+
+	    else if(vecEvt[0] == evt->Evtnum() && vecEvt[1]!=evt->Runnum() && vecEvt[2]==evt->LumiBlocknum())
+	      std::cout<<" no run match "<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+	    else if(vecEvt[0] != evt->Evtnum() && vecEvt[1]==evt->Runnum() && vecEvt[2]==evt->LumiBlocknum())
+	      std::cout<<" no evt match "<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+
+	    else if(vecEvt[0] != evt->Evtnum() && vecEvt[1]!=evt->Runnum() && vecEvt[2]==evt->LumiBlocknum())
+	      std::cout<<" no evt run match "<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+
+	    else if(vecEvt[0] != evt->Evtnum() && vecEvt[1]==evt->Runnum() && vecEvt[2]!=evt->LumiBlocknum())
+	      std::cout<<" no evt lumi match "<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+
+	    else if(vecEvt[0] == evt->Evtnum() && vecEvt[1]!=evt->Runnum() && vecEvt[2]!=evt->LumiBlocknum())
+	      std::cout<<" no run lumi match "<<" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+	    else if(vecEvt[0] != evt->Evtnum() && vecEvt[1]!=evt->Runnum() && vecEvt[2]!=evt->LumiBlocknum())
+	      std::cout<<" no evt lumi run match "" evt "<<vecEvt[0]<<" run "<<vecEvt[1]<<" lumi "<<vecEvt[2]<<endl;
+	    else
+	      std::cout<<" found matched event "<<endl;
+*/
+	    if(vecEvt[0] == evt->Evtnum() && vecEvt[1]==evt->Runnum() && vecEvt[2]==evt->LumiBlocknum()){
+	      //std::cout<<" actually a matched event, skip a loop over file lines "<<endl;
+	      MatchEvt=true;
+
+	      break;
+
+	    } 
+	  } //end of while(ifile.getline)
+	
+	if(!MatchEvt){
+	  //	  if(CheckEvtNum == evt->Evtnum())
+	  std::cout<<"****No match***** "<<" nevt "<<eventN<<" evt "<< evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" GetMuPt "<<GetMuPt<<" GetMuEta "<<GetMuEta<<" GetMuPhi "<<GetMuPhi<<" GetElePt "<<GetElePt<<" GetEleEta "<<GetEleEta<<" GetElePhi "<<GetElePhi<<endl;
+	  continue;
+	}
+	
+	NomMuPt=vecEvtDetails[0];
+	if(NomMuPt==-99) NomMuPt=900;
+	NomElePt=vecEvtDetails[1];
+	if(NomElePt==-99) NomElePt=900;
+
+	NomMuEta=vecEvtDetails[2];
+	if(NomMuEta==-99) NomMuEta=4.;
+	NomEleEta=vecEvtDetails[3];
+	if(NomEleEta==-99) NomEleEta=4.;
+	
+	NomMuPhi=vecEvtDetails[4];
+	if(NomMuPhi==-99) NomMuPhi=3.4;
+	NomElePhi=vecEvtDetails[5];
+	if(NomElePhi==-99) NomElePhi=3.4;
+
+	NomNJet=vecEvtDetails[6];
+	NomNBtag=vecEvtDetails[7];
+	NomHT=vecEvtDetails[8];
+	NomMHT=vecEvtDetails[9];
+	NomMHTPhi=vecEvtDetails[10];
+	NomDphiOne=vecEvtDetails[11];
+	NomMET=vecEvtDetails[12];
+	NomMETPhi=vecEvtDetails[13];
+	if(NomMETPhi==-99) NomMETPhi=3.4;
+	NomMT=vecEvtDetails[14];
+	if(NomMT==-999) NomMT=800;
+	HEMMapMatch++;
+	//	std::cout<<"  ** matched found **"<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" muPt "<<NomMuPt<<" elePt "<<NomElePt<<" muEta "<<NomMuEta<<" eleeta "<<NomEleEta<<" muPhi "<<NomMuPhi<<" elePhi "<<NomElePhi<<" njet "<<NomNJet<<" nbtag "<<NomNBtag<<" ht "<<NomHT<<" mht "<<NomMHT<<" mhtphi "<<NomMHTPhi<<" dphi1 "<<NomDphiOne<<" met "<<NomMET<<endl;
+	} //end of use map
+
+
+
+
 
 
 	if(utils2::UseHEMEvtMap){
@@ -1670,18 +1757,18 @@ using namespace std;
 	  h_NJet_SearchStat->Fill(evt->nJets(),eventWeight); 
 	  h_NBTag_SearchStat->Fill(evt->nBtags(),eventWeight); 
 	  h_MET_SearchStat->Fill(evt->met(),eventWeight);
-	  
+	  /*
 	  h_HT_SearchStat_TwoD->Fill(NomHT,evt->ht(),eventWeight);
 	  h_MHT_SearchStat_TwoD->Fill(NomMHT,evt->mht(),eventWeight);
 	  h_NJet_SearchStat_TwoD->Fill(NomNJet,evt->nJets(),eventWeight);
 	  h_NBTag_SearchStat_TwoD->Fill(NomNBtag,evt->nBtags(),eventWeight);
 	  h_MET_SearchStat_TwoD->Fill(NomMET,evt->met(),eventWeight);
-	  
+	  */
 	  DeltaPhi_j1MHT_SearchStat->Fill(evt->deltaPhi1(),eventWeight);
 	  DeltaPhi_j2MHT_SearchStat->Fill(evt->deltaPhi2(),eventWeight);
 	  DeltaPhi_j3MHT_SearchStat->Fill(evt->deltaPhi3(),eventWeight);
 	  DeltaPhi_j4MHT_SearchStat->Fill(evt->deltaPhi4(),eventWeight);
-	  
+	  /*
 	  DeltaPhi_TwoD_j1MHT_SearchStat->Fill(NomDphiOne,evt->deltaPhi1(),eventWeight);
 	  MHTPhi_TwoD_SearchStat->Fill(NomMHTPhi,evt->mhtphi(),eventWeight);
 	  METPhi_TwoD_SearchStat->Fill(NomMETPhi,evt->metphi(),eventWeight);
@@ -1694,7 +1781,7 @@ using namespace std;
 	  ElectronCS_TwoD_pt->Fill(NomElePt,GetElePt,eventWeight);
 	  ElectronCS_TwoD_eta->Fill(NomEleEta,GetEleEta,eventWeight);
 	  ElectronCS_TwoD_phi->Fill(NomElePhi,GetElePhi,eventWeight);
-	  
+	  */
 	  if(MuEvt){
 	    MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
 	    MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
@@ -1938,6 +2025,9 @@ using namespace std;
     h_MET_SearchStat_TwoD->Write();
     h_NJet_SearchStat_TwoD->Write();
     h_NBTag_SearchStat_TwoD->Write(); 
+    LeptonCS_MisReco_pt->Write();
+    LeptonCS_MisReco_eta->Write();
+    LeptonCS_MisReco_phi->Write();
 
     MuonCS_pt->Write();
     MuonCS_eta->Write();
