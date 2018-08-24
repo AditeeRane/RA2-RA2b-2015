@@ -1220,6 +1220,10 @@ using namespace std;
       
       //      std::cout<<" eventN "<<eventN<<" eventWeight "<<eventWeight<<endl;
       if(evt->DataBool_())eventWeight = 1.;
+      if(evt->Evtnum()==631307 || evt->Evtnum()==2020962 || evt->Evtnum()==6046723)
+	std::cout<<" evt "<<evt->Evtnum()<<" total_ele "<<evt->ElecPtVec_().size()<<" total_mu "<<evt->MuPtVec_().size()<<" ele_passIsolation "<<evt->nElectrons()<<" mu_passIsolation "<<evt->nMuons()<<endl;
+      else
+	continue;
       //eventWeight = evt->weight()/evt->puweight();
       //if(eventN>10000)break;
       if(eventN%5000==0)
