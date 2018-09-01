@@ -186,6 +186,83 @@ vector<TVector3> Utils::Order_the_Vec(vector<TVector3> vec){
   return vecjvec;
 }
 
+/*
+
+vector<TVector3>SFMaker::Order_the_Vec(vector<TVector3> vec)
+{
+  vector<TVector3> vecjvec=vec;
+  vector<int> vecIndex;
+  for(unsigned int i=0; i<vecjvec.size();i++){
+    for(unsigned int j=i+1; j<vecjvec.size();j++){
+      if(vecjvec[j].Pt()>vecjvec[i].Pt()){
+	swap(vecjvec[i],vecjvec[j]);
+      }
+    }
+  }
+  return vecjvec;
+}
+*/
+vector<double>Utils::Order_the_Vec(vector<TVector3> vec,vector<double> vecTwo)
+{
+  vector<TVector3> vecjvec=vec;
+  vector<double> vecjTwovec=vecTwo;
+  for(unsigned int i=0; i<vecjvec.size();i++){
+    for(unsigned int j=i+1; j<vecjvec.size();j++){
+      if(vecjvec[j].Pt()>vecjvec[i].Pt()){
+	swap(vecjvec[i],vecjvec[j]);
+	swap(vecjTwovec[i],vecjTwovec[j]);
+      }
+    }
+  }
+  return vecjTwovec;
+}
+
+vector<bool>Utils::Order_the_Vec(vector<TVector3> vec,vector<bool> vecTwo)
+{
+  vector<TVector3> vecjvec=vec;
+  vector<bool> vecjTwovec=vecTwo;
+  for(unsigned int i=0; i<vecjvec.size();i++){
+    for(unsigned int j=i+1; j<vecjvec.size();j++){
+      if(vecjvec[j].Pt()>vecjvec[i].Pt()){
+	swap(vecjvec[i],vecjvec[j]);
+	swap(vecjTwovec[i],vecjTwovec[j]);
+      }
+    }
+  }
+  return vecjTwovec;
+}
+
+vector<int>Utils::Order_the_Vec(vector<TVector3> vec,vector<int> vecTwo)
+{
+  vector<TVector3> vecjvec=vec;
+  vector<int> vecjTwovec=vecTwo;
+  for(unsigned int i=0; i<vecjvec.size();i++){
+    for(unsigned int j=i+1; j<vecjvec.size();j++){
+      if(vecjvec[j].Pt()>vecjvec[i].Pt()){
+	swap(vecjvec[i],vecjvec[j]);
+	swap(vecjTwovec[i],vecjTwovec[j]);
+      }
+    }
+  }
+  return vecjTwovec;
+}
+
+vector<TLorentzVector>Utils::Order_the_Vec(vector<TVector3> vec,vector<TLorentzVector> vecTwo)
+{
+  vector<TVector3> vecjvec=vec;
+  vector<TLorentzVector> vecjTwovec=vecTwo;
+  for(unsigned int i=0; i<vecjvec.size();i++){
+    for(unsigned int j=i+1; j<vecjvec.size();j++){
+      if(vecjvec[j].Pt()>vecjvec[i].Pt()){
+	swap(vecjvec[i],vecjvec[j]);
+	swap(vecjTwovec[i],vecjTwovec[j]);
+      }
+    }
+  }
+  return vecjTwovec;
+}
+
+
 double Utils::calcMT(const double objPt, const double objPhi, const double met, const double metphi ){
 
   double mt = sqrt(  2* ( met*objPt -( met*cos(metphi)*objPt*cos(objPhi) + met*sin(metphi)*objPt*sin(objPhi) ) ) );

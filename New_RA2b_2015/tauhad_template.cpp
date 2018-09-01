@@ -1,3 +1,4 @@
+
 #include "LeptonAcceptance.h"
 #include "Events.h"
 #include "Selection.h"
@@ -58,8 +59,16 @@ int main(int argc, char *argv[]){
   BTagCorrector *btagcorr = 0;
   std::vector<double> bTagProb;
   std::vector<unsigned int> bTagBins;
-  const bool doBTagCorr = false; 
+  const bool doBTagCorr = true; 
   const bool BtagSys=false;
+  int Scalesize=9;
+  int PDFsize=101;
+  bool ScaleAccSys = false;
+  bool PDFAccSys = false;
+  bool JECSys=false;
+  bool SysUp=false;
+  bool SysDn=false;
+
 //some varaibles
   char filenames[500];
   vector<string> filesVec;
@@ -179,16 +188,18 @@ int main(int argc, char *argv[]){
   map<string,int> binMap_b = utils2::BinMap();
 
   int totNbins_b=binMap_b.size();
-  int Scalesize=9;
-  int PDFsize=101;
-  bool ScaleAccSys = false;
-  bool PDFAccSys = false;
-  bool JECSys=false;
-  bool SysUp=false;
-  bool SysDn=true;
 
   TH1* searchH_b = new TH1D("searchH_b","search bin histogram",totNbins_b,1,totNbins_b+1); 
   searchH_b->Sumw2();
+
+  TH1*  h_HT_Exp =new TH1D("h_HT_Exp","h_HT_Exp",12,100,2500);
+  TH1*  h_MHT_Exp =new TH1D("h_MHT_Exp","h_MHT_Exp",16,200,1000);
+  TH1*  h_NJet_Exp =new TH1D("h_NJet_Exp","h_NJet_Exp",10,2,12);
+  TH1*  h_NBtag_Exp =new TH1D("h_NBtag_Exp","h_NBtag_Exp",5,0,5);
+  h_HT_Exp->Sumw2();
+  h_MHT_Exp->Sumw2();
+  h_NJet_Exp->Sumw2();
+  h_NBtag_Exp->Sumw2();
   std::vector<TH1*> QCD_Up_Scale(Scalesize);
   std::vector<TH1*> QCD_Up_PDF(PDFsize);
   QCD_Up_Scale.clear();
@@ -703,7 +714,6 @@ int main(int argc, char *argv[]){
     std::cout<<" skimName "<<skimName<<endl;
     btagcorr->SetCalib(path_bTagCalib); //*AR-180324:[1]Calls for a method BTagCalibrationS, which reads csv file "CSVv2_Moriond17_B_H_mod.csv"[2] Creates instance of class BTagCalibrationReaderS, with input parameters as "medium(1)" operating point, "central" systematics and vector for other systematics {"up","down"}.[3] On this instance of a class "load" method is called thrice. First with input parameters(csv file from [1],flav B, measurement"comb"), secondly with input parameters (csv file from [1],flav C, measurement"comb") and thirdly with input parameters (csv file from [1],flav udsg, measurement"incl")          
     if(BtagSys){
-      //std::cout<<" btag sys true "<<endl;
       btagcorr->SetBtagSFunc(-1);
       btagcorr->SetCtagSFunc(-1);
       btagcorr->SetMistagSFunc(-1);
@@ -1010,20 +1020,33 @@ int main(int argc, char *argv[]){
 	  newPt=evt->JetsPtVec_()[i]*(1+evt->Jets_jecUnc_()[i]);
 	if(SysDn)
 	  newPt=evt->JetsPtVec_()[i]*(1-evt->Jets_jecUnc_()[i]);
-	jetCSV=evt->csvVec()[i];
+	jetCSV= evt->csvVec()[i];
+	jet_HTMask= evt->HTJetsMask_()->at(i);
+	jet_hadronFlavor= evt->Jets_hadronFlavor_()->at(i);
 	temp3Vec.SetPtEtaPhi(newPt,evt->JetsEtaVec_()[i],evt->JetsPhiVec_()[i]);
 	NewJets.push_back(temp3Vec);
 	if(newPt>30. && fabs(evt->JetsEtaVec_()[i])<2.4){
 	  HT3JetVec.push_back(temp3Vec);
 	  HT3JetCSVvec.push_back(jetCSV);
+	  HT3JetHTMaskvec.push_back(jet_HTMask);
+	  HT3JetHadronFlavorvec.push_back(jet_hadronFlavor);
 	}
 	if(newPt>30. && fabs(evt->JetsEtaVec_()[i])<5.){
 	  MHT3JetVec.push_back(temp3Vec);
 	  MHT3JetLorentzVec.push_back(temp3LorentzVec);
 	  MHT3JetCSVvec.push_back(jetCSV);
+	  MHT3JetHTMaskvec.push_back(jet_HTMask);
+	  MHT3JetHadronFlavorvec.push_back(jet_hadronFlavor);
 	}
       } //end of for loop
-      
+      HT3JetHTMaskvec= utils->Order_the_Vec(HT3JetVec,HT3JetHTMaskvec);
+      HT3JetHadronFlavorvec=utils->Order_the_Vec(HT3JetVec,HT3JetHadronFlavorvec);
+      HT3JetCSVvec=utils->Order_the_Vec(HT3JetVec,HT3JetCSVvec);
+
+      MHT3JetHTMaskvec= utils->Order_the_Vec(MHT3JetVec,MHT3JetHTMaskvec);
+      MHT3JetHadronFlavorvec=utils->Order_the_Vec(MHT3JetVec,MHT3JetHadronFlavorvec);
+      MHT3JetCSVvec=utils->Order_the_Vec(MHT3JetVec,MHT3JetCSVvec);
+
       
       HT3JetVec= utils->Order_the_Vec(HT3JetVec);
       MHT3JetVec= utils->Order_the_Vec(MHT3JetVec);      
@@ -1052,6 +1075,11 @@ int main(int argc, char *argv[]){
       }
     } //end of if(JECSys)
     
+    if(JECSys && doBTagCorr){
+      nLoops = (newNJets == 2 ? 3 : 4);
+      bTagProb = btagcorr->GetCorrections(MHT3JetLorentzVec,MHT3JetHadronFlavorvec,MHT3JetHTMaskvec);
+    }
+
     if(pass3){
       cutflow_preselection->Fill(9.,eventWeight); // We may ask genTau within muon acceptance
       
@@ -1063,29 +1091,44 @@ int main(int argc, char *argv[]){
       }// end of sel for lowDphi
        // Apply baseline cuts
       if(JECSys){
+	//	std::cout<<" fill with jecsys "<<endl;
 	if(sel->nolep(evt->nLeptons())&&sel->Njet_4(newNJets)&&sel->ht_500(newHT)
 	   &&sel->mht_200(newMHT)&&sel->dphi(newNJets,newDphi1,newDphi2,newDphi3,newDphi4) 
 	   ){
 	  if(passIso){
 	    // Fill Search bin histogram
 	    searchH->Fill( binMap[utils2::findBin_NoB(newNJets,newHT,newMHT).c_str()],totWeight);
-	    QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(newNJets,newBTags,newHT,newMHT).c_str()],totWeight);
-	    //	      if(!(newNJets>=7 && newMHT<500 && newHT<500))              
-	    searchH_b->Fill( binMap_b[utils2::findBin(newNJets,newBTags,newHT,newMHT).c_str()],totWeight);
+	    for(int i = 0; i < nLoops; i++){
+	      if(nLoops==1){
+		QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(newNJets,newBTags,newHT,newMHT).c_str()],totWeight*bTagProb.at(i));
+	      }
+	      else{
+		QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(newNJets,newBTags,newHT,newMHT).c_str()],totWeight*bTagProb.at(i));
+	      }
+	    }
+
+	    for(int i = 0; i < nLoops; i++){
+	      if(nLoops==1){
+		searchH_b->Fill( binMap_b[utils2::findBin(newNJets,newBTags,newHT,newMHT).c_str()],totWeight*bTagProb.at(i));
+	      }
+	      else
+		searchH_b->Fill( binMap_b[utils2::findBin(newNJets,newBTags,newHT,newMHT).c_str()],totWeight*bTagProb.at(i));
+	    }
 	    if(newBTags==0)hPredHTMHT0b->Fill( binMap_HTMHT[utils2::findBin_HTMHT(newHT,newMHT).c_str()],totWeight);
 	    if(newBTags >0)hPredHTMHTwb->Fill( binMap_HTMHT[utils2::findBin_HTMHT(newHT,newMHT).c_str()],totWeight);
 	    hPredNJetBins->Fill(newNJets,totWeight);
 	    hPredNbBins->Fill( newBTags,totWeight);
 	  } //end of passIso
 	} //end of Apply baseline cuts
-      }
+      } //end of if(JECSys)
       else{
+	//	std::cout<<" fill with jecref "<<endl;
 	if(sel->nolep(evt->nLeptons())&&sel->Njet_4(evt->nJets())&&sel->ht_500(evt->ht())&&sel->mht_200(evt->mht())&&sel->dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4())){
 	  if(passIso){
 	    searchH->Fill( binMap[utils2::findBin_NoB(evt->nJets(),evt->ht(),evt->mht()).c_str()],totWeight);
 	    for(int i = 0; i < nLoops; i++){
 	      if(nLoops==1){
-		std::cout<<"evt "<<eventN<<" i "<<i<<" prob0 "<<bTagProb.at(i)<<endl;
+		//	std::cout<<"evt "<<eventN<<" i "<<i<<" prob0 "<<bTagProb.at(i)<<endl;
 		QCD_Up->Fill( binMap_QCD[utils2::findBin_QCD(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight*bTagProb.at(i));
 	      }
 	      else{
@@ -1112,6 +1155,11 @@ int main(int argc, char *argv[]){
 	    }  
 
 	    for(int i = 0; i < nLoops; i++){
+	      h_HT_Exp->Fill(evt->ht(),totWeight*bTagProb.at(i));
+	      h_MHT_Exp->Fill(evt->mht(),totWeight*bTagProb.at(i));
+	      h_NJet_Exp->Fill(evt->nJets(),totWeight*bTagProb.at(i));
+	      h_NBtag_Exp->Fill(evt->nBtags(),totWeight*bTagProb.at(i));
+
 	      if(nLoops==1)
 		searchH_b->Fill( binMap_b[utils2::findBin(evt->nJets(),evt->nBtags(),evt->ht(),evt->mht()).c_str()],totWeight*bTagProb.at(i));
 	      else
@@ -1137,7 +1185,12 @@ int main(int argc, char *argv[]){
 	if(sel->ht_500(newHT) && sel->mht_200(newMHT) && sel->Njet_4(newNJets) && sel->low_dphi(newNJets,newDphi1,newDphi2,newDphi3,newDphi4) ){
 	  // Fill QCD histograms
 	  if(passIso){
-	    QCD_Low->Fill( binMap_QCD[utils2::findBin_QCD(newNJets,newBTags,newHT,newMHT).c_str()],totWeight);
+	    for(int i = 0; i < nLoops; i++){ 
+	      if(nLoops==1)
+		QCD_Low->Fill( binMap_QCD[utils2::findBin_QCD(newNJets,newBTags,newHT,newMHT).c_str()],totWeight*bTagProb.at(i));
+	      else
+		QCD_Low->Fill( binMap_QCD[utils2::findBin_QCD(newNJets,newBTags,newHT,newMHT).c_str()],totWeight*bTagProb.at(i));
+	    }
 	    searchH_lowDphi->Fill(binMap[utils2::findBin_NoB(newNJets,newHT,newMHT).c_str()],totWeight);
 	    
 	  }//end of if(passIso)
@@ -1691,6 +1744,12 @@ int main(int argc, char *argv[]){
   searchH_lowDphi->Write();
   QCD_Up->Write();
   searchH_b->Write();
+
+  h_HT_Exp->Write();
+  h_MHT_Exp->Write();
+  h_NJet_Exp->Write();
+  h_NBtag_Exp->Write();
+  
   if(ScaleAccSys){
     for(int iacc=0; iacc < Scalesize; iacc++){
       QCD_Up_Scale.at(iacc)->Write();

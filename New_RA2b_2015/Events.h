@@ -231,7 +231,7 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<double> * PDFweights_() const;
    vector<double> * ScaleWeights_() const;
    vector<TLorentzVector>      *jets_() const;
-   vector<int>  JetsHadronFlavor() const;  
+   vector<int>  * JetsHadronFlavor() const;  
    vector<double>  JetsPtVec_() const;
    vector<double>  JetsEtaVec_() const;
    vector<double>  JetsPhiVec_() const;
@@ -266,7 +266,7 @@ Events(TTree * ttree_, const std::string sampleKeyString="ttbar", int verbose=0)
    vector<double>  GenJetPhiVec_() const;
 
    vector<int>    * Jets_partonFlavor_() const;
-   vector<int>    * Jets_hadronFlavor_() const;
+   vector<int>   * Jets_hadronFlavor_() const;
    vector<bool>   * HTJetsMask_() const;
 
    vector<int>     slimJetID_() const;

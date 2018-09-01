@@ -9,7 +9,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
-
+#include "TLorentzVector.h"
 using namespace std;
 
 class Utils{
@@ -48,7 +48,10 @@ public:
     double MuActivity(double muEta, double muPhi, vector<double> JetPtVec,vector<double> JetEtaVec, vector<double> JetPhiVec,vector<double> JetChargedEmEnergyFraction, vector<double> JetChargedHadronEnergyFraction);
 
     vector<TVector3> Order_the_Vec(vector<TVector3> vec);
-    
+    vector<double> Order_the_Vec(vector<TVector3> vec,vector<double> vecTwo);
+    vector<bool> Order_the_Vec(vector<TVector3> vec,vector<bool> vecTwo);
+    vector<int> Order_the_Vec(vector<TVector3> vec,vector<int> vecTwo);
+    vector<TLorentzVector> Order_the_Vec(vector<TVector3> vec,vector<TLorentzVector> vecTwo);
     void getRandom2(double muPt_,vector<TH2*> vec_resp_xy,Double_t & scale_x,Double_t & scale_y);
     
     double GetBinValue(double muPt_,vector<TH1*> vec_resp, int l );
