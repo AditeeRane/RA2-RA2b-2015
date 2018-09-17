@@ -614,7 +614,7 @@ using namespace std;
     TH1* MuPhi_NJ56 = new TH1D("MuPhi_NJ56","MuPhiDistribution_HTMHT=[350,500]",80,-4.,4.);
 
     // *AR, Mar3,2017-Objective is to check impact of PU reweighting on efficiencies.
-    TFile * pileupFile = new TFile("Inputs/PileupHistograms_0121_69p2mb_pm4p6.root","R");
+    TFile * pileupFile = new TFile("Inputs/PileupHistograms_0328_63mb_pm5.root","R");
     TH1D * puhist = (TH1D*)pileupFile->Get("pu_weights_down");
 
 
@@ -1170,9 +1170,9 @@ using namespace std;
   
       
       //      std::cout<<" new event "<<end
-      eventWeight = evt->weight();
-
-
+      //      eventWeight = evt->weight();
+      //std::cout<<" wt "<<eventWeight<<" tot evt "<<evt->TotNEve()<<endl;
+      eventWeight =1;
       double puWeight = 
 	puhist->GetBinContent(puhist->GetXaxis()->FindBin(min(evt->TrueNumInteractions_(),puhist->GetBinLowEdge(puhist->GetNbinsX()+1))));  
       //std::cout<<" interactions "<<evt->TrueNumInteractions_()<<" findbin "<<puhist->GetXaxis()->FindBin(evt->TrueNumInteractions_())<<" lastbin "<<puhist->GetBinLowEdge(puhist->GetNbinsX()+1)<<" puweight "<<puWeight<<endl;    
@@ -1336,7 +1336,7 @@ using namespace std;
         //if(eventN < 100 )cout<< "A temporary selection is in effect \n\n\nA temporary selection is in effect \n\n\nA temporary selection is in effect ";
 	//std::cout<<" trigPass "<<trigPass<<endl;
         if(!trigPass)continue;
-      }
+      } //end of isData
       TriggerPass++;
       // to study some of the uncertainties we need to make some changes from
       // the very beginning and observe how that propagates
@@ -1547,7 +1547,7 @@ using namespace std;
 	  }
 	} // Number of reco-level muon=1
 
-	
+	/*	
 	if(utils2::GetHEMEvtMap){
 		    //		    std::cout<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" eta "<<evt->JetsEtaVec_()[i]<<" phi "<<evt->JetsPhiVec_()[i]<<endl;
 		    EventNHEMiss.push_back(evt->Evtnum());
@@ -1587,8 +1587,8 @@ using namespace std;
 		    
 	}
 
-
-
+*/
+	/*
 
 	if(utils2::UseHEMEvtMap){
 	ifstream ifile("Map.txt");
@@ -1655,6 +1655,7 @@ using namespace std;
 	    else
 	      std::cout<<" found matched event "<<endl;
 */
+	/*
 	    if(vecEvt[0] == evt->Evtnum() && vecEvt[1]==evt->Runnum() && vecEvt[2]==evt->LumiBlocknum()){
 	      //std::cout<<" actually a matched event, skip a loop over file lines "<<endl;
 	      MatchEvt=true;
@@ -1700,6 +1701,14 @@ using namespace std;
 	//	std::cout<<"  ** matched found **"<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" muPt "<<NomMuPt<<" elePt "<<NomElePt<<" muEta "<<NomMuEta<<" eleeta "<<NomEleEta<<" muPhi "<<NomMuPhi<<" elePhi "<<NomElePhi<<" njet "<<NomNJet<<" nbtag "<<NomNBtag<<" ht "<<NomHT<<" mht "<<NomMHT<<" mhtphi "<<NomMHTPhi<<" dphi1 "<<NomDphiOne<<" met "<<NomMET<<endl;
 	} //end of use map
 
+*/
+	
+	
+	
+	//std::cout<<" eventN "<<eventN<<endl;
+	if(pass1){ // pass muon selection
+	  //std::cout<<" baseline condition "<<endl;
+
 
 	if(utils2::UseHEMEvtMap){
 	  h_HT_SearchStat->Fill(evt->ht(),eventWeight);
@@ -1718,7 +1727,7 @@ using namespace std;
 	  DeltaPhi_j2MHT_SearchStat->Fill(evt->deltaPhi2(),eventWeight);
 	  DeltaPhi_j3MHT_SearchStat->Fill(evt->deltaPhi3(),eventWeight);
 	  DeltaPhi_j4MHT_SearchStat->Fill(evt->deltaPhi4(),eventWeight);
-	  
+	  /*	  
 	  DeltaPhi_TwoD_j1MHT_SearchStat->Fill(NomDphiOne,evt->deltaPhi1(),eventWeight);
 	  MHTPhi_TwoD_SearchStat->Fill(NomMHTPhi,evt->mhtphi(),eventWeight);
 	  METPhi_TwoD_SearchStat->Fill(NomMETPhi,evt->metphi(),eventWeight);
@@ -1731,7 +1740,7 @@ using namespace std;
 	  ElectronCS_TwoD_pt->Fill(NomElePt,GetElePt,eventWeight);
 	  ElectronCS_TwoD_eta->Fill(NomEleEta,GetEleEta,eventWeight);
 	  ElectronCS_TwoD_phi->Fill(NomElePhi,GetElePhi,eventWeight);
-	  
+*/	  
 	  if(MuEvt){
 	    MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
 	    MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
@@ -1783,11 +1792,10 @@ using namespace std;
 	  }
 	}
 	
-	
-	
-	
-	//std::cout<<" eventN "<<eventN<<endl;
-	if(pass1){ // pass muon selection
+
+
+
+
 	
   /*
           muPt = vec_recoMuon4vec[0].Pt();
@@ -1993,12 +2001,13 @@ using namespace std;
     h_MET_SearchStat->Write();
     h_NJet_SearchStat->Write();
     h_NBTag_SearchStat->Write(); 
-
+    /*
     h_HT_SearchStat_TwoD->Write();
     h_MHT_SearchStat_TwoD->Write();
     h_MET_SearchStat_TwoD->Write();
     h_NJet_SearchStat_TwoD->Write();
     h_NBTag_SearchStat_TwoD->Write(); 
+*/
     LeptonCS_MisReco_pt->Write();
     LeptonCS_MisReco_eta->Write();
     LeptonCS_MisReco_phi->Write();
@@ -2010,7 +2019,7 @@ using namespace std;
     ElectronCS_pt->Write();
     ElectronCS_eta->Write();
     ElectronCS_phi->Write();
-
+    /*
     MuonCS_TwoD_pt->Write();
     MuonCS_TwoD_eta->Write();
     MuonCS_TwoD_phi->Write();
@@ -2019,7 +2028,7 @@ using namespace std;
     ElectronCS_TwoD_pt->Write();
     ElectronCS_TwoD_eta->Write();
     ElectronCS_TwoD_phi->Write();
-
+*/
     //    EventNRunN.Write();
     j1_pt->Write();
     j2_pt->Write();
@@ -2043,11 +2052,12 @@ using namespace std;
     DeltaPhi_j3MHT_SearchStat->Write();
     DeltaPhi_j4MHT_SearchStat->Write();
 
-
+    /*
     DeltaPhi_TwoD_j1MHT_SearchStat->Write(); 
     MHTPhi_TwoD_SearchStat->Write();
     METPhi_TwoD_SearchStat->Write();
     MT_TwoD_SearchStat->Write();
+*/
     DeltaPhi_j1MET_SearchStat->Write();
     DeltaPhi_j2MET_SearchStat->Write();
     DeltaPhi_j3MET_SearchStat->Write();
