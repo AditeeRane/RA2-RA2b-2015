@@ -342,6 +342,9 @@ using namespace std;
     h_HT_SearchStat->Sumw2();
     TH1 * h_MHT_SearchStat = new TH1D("h_MHT_SearchStat","h_MHT_SearchStat",60, 0, 3000);
     h_MHT_SearchStat->Sumw2(); 
+    TH1 * h_MHTPhi_SearchStat=new TH1D("h_MHTPhi_SearchStat","h_MHTPhi_SearchStat",70,-3.5,3.5); 
+    h_MHTPhi_SearchStat->Sumw2();
+
     TH1 * h_MET_SearchStat = new TH1D("h_MET_SearchStat","h_MET_SearchStat",60, 0, 3000);
     h_MET_SearchStat->Sumw2(); 
     TH1 * h_NJet_SearchStat = new TH1D("h_NJet_SearchStat","h_NJet_SearchStat",20,0,20);
@@ -1500,13 +1503,14 @@ using namespace std;
 
 	if(TauHadModel>=2){
 	  int nGetLepPassIso=evt->nElectrons()+evt->nMuons();
-	  if(nGetLepPassIso !=1)
+	  if(nGetLepPassIso !=0)
 	    pass1_1=true;
 	}    // N(reco-muon)<=1, N(reco-ele)=0, 
 	
+	if(vec_recoMuon4vec.size() == 0 && vec_recoElectron4vec.size() ==0 && !pass1_1)
+	  pass1=true;
 
-
-
+	/*
 
 
         if(TauHadModel>=2){
@@ -1546,7 +1550,7 @@ using namespace std;
 	    //std::cout<<" eventN "<<eventN<<" pass1 "<<pass1<<endl;
 	  }
 	} // Number of reco-level muon=1
-
+*/
 	/*	
 	if(utils2::GetHEMEvtMap){
 		    //		    std::cout<<" evt "<<evt->Evtnum()<<" run "<<evt->Runnum()<<" lumi "<<evt->LumiBlocknum()<<" eta "<<evt->JetsEtaVec_()[i]<<" phi "<<evt->JetsPhiVec_()[i]<<endl;
@@ -1706,13 +1710,14 @@ using namespace std;
 	
 	
 	//std::cout<<" eventN "<<eventN<<endl;
-	if(pass1){ // pass muon selection
+	if(pass1 && sel->dphi(evt->nJets(),evt->deltaPhi1(),evt->deltaPhi2(),evt->deltaPhi3(),evt->deltaPhi4())){ // pass muon selection
 	  //std::cout<<" baseline condition "<<endl;
 
 
 	if(utils2::UseHEMEvtMap){
 	  h_HT_SearchStat->Fill(evt->ht(),eventWeight);
 	  h_MHT_SearchStat->Fill(evt->mht(),eventWeight);
+	  h_MHTPhi_SearchStat->Fill(evt->mhtphi(),eventWeight);
 	  h_NJet_SearchStat->Fill(evt->nJets(),eventWeight); 
 	  h_NBTag_SearchStat->Fill(evt->nBtags(),eventWeight); 
 	  h_MET_SearchStat->Fill(evt->met(),eventWeight);
@@ -1740,7 +1745,8 @@ using namespace std;
 	  ElectronCS_TwoD_pt->Fill(NomElePt,GetElePt,eventWeight);
 	  ElectronCS_TwoD_eta->Fill(NomEleEta,GetEleEta,eventWeight);
 	  ElectronCS_TwoD_phi->Fill(NomElePhi,GetElePhi,eventWeight);
-*/	  
+*/
+	  /*	  
 	  if(MuEvt){
 	    MuonCS_pt->Fill(vec_recoMuon4vec[0].Pt(),eventWeight);
 	    MuonCS_eta->Fill(vec_recoMuon4vec[0].Eta(),eventWeight);
@@ -1753,6 +1759,7 @@ using namespace std;
 	    ElectronCS_phi->Fill(vec_recoElectron4vec[0].Phi(),eventWeight);
 	    
 	  }
+*/
 	}
 
 	
@@ -1998,6 +2005,7 @@ using namespace std;
     searchH_nb_njet2->Write();
     h_HT_SearchStat->Write();
     h_MHT_SearchStat->Write();
+    h_MHTPhi_SearchStat->Write();
     h_MET_SearchStat->Write();
     h_NJet_SearchStat->Write();
     h_NBTag_SearchStat->Write(); 
