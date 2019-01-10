@@ -744,7 +744,7 @@ int main(int argc, char *argv[]){
       CalcAccSys = false;
     }
     
-    //    if(eventN>10000)break;
+    if(eventN>10000)break;
     //if(eventN>5000)break;
      
     eventWeight = evt->weight();
